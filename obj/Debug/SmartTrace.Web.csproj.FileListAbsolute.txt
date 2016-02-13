@@ -1,6 +1,0 @@
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\bin\SmartTrace.Web.dll.config
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\bin\SmartTrace.Web.dll
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\bin\SmartTrace.Web.pdb
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\obj\Debug\SmartTrace.Web.csprojResolveAssemblyReference.cache
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\obj\Debug\SmartTrace.Web.dll
-F:\NodeJS\smartTrace\freshyesui\SmartTrace.Web\obj\Debug\SmartTrace.Web.pdb
