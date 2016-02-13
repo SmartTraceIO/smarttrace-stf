@@ -1,8 +1,9 @@
-﻿appCtrls.controller('ViewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'Api', 'localDbSvc', '$filter', function ($scope, rootSvc, $resource, Api, localDbSvc, $filter) {
+﻿appCtrls.controller('ViewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'Api', 'localDbSvc', '$filter', '$rootScope',
+function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var resourceApi = $resource(Api.url + ':action/:token');
     $scope.specificDates = false;
     $scope.ViewShipment = {
@@ -20,8 +21,8 @@
         shipmentDescription:null,
         pageIndex: 1,
         pageSize: "20",
-        so: 'shipmentDate',
-        sc: 'asc'
+        sc: 'shipmentId',
+        so: 'asc'
     };
 
     $scope.SearchBasic = function () {
@@ -34,15 +35,18 @@
     }
 
     $scope.SearchAdvance = function () {
+        if($scope.ViewShipment.status == "")
+            $scope.ViewShipment.status = null;
         $scope.BindCards();
     }
 
     $scope.AdvanceSearch = false;
     $scope.LocationOptions = { multiple: true };
 
-    var url = Api.url + 'getShipments/' + $scope.AuthToken
+    var url = Api.url + 'getShipments/' + $scope.AuthToken;
     
     var BindShipmentList = function () {
+        var url = Api.url + 'getShipments/' + localDbSvc.getToken();
         $scope.loading = true;
         //if ($scope.ViewShipment.shipmentDateFrom) {
         //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateFrom).toDateString();
@@ -53,6 +57,7 @@
         //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateTo).toDateString();
         //    $scope.ViewShipment.shipmentDateTo = shippedDateFrom;
         //}
+
         $.ajax({
             type: "POST",
             datatype: "json",
@@ -65,8 +70,11 @@
                     // debugger;
                     $scope.ShipmentList = data.response;
                     $scope.ShipmentList.totalCount = data.totalCount;
+                } else if(data.status.code == 1){
+                    $rootScope.redirectUrl = "/view-shipment";
+                    $rootScope.go("login");
                 };
-
+                
                 $scope.loading = false;
 
                 $scope.$apply();
@@ -108,7 +116,6 @@
     resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
         if (data.status.code == 0) {
             $scope.LocationList = data.response;
-            console.log(data.response);
             angular.forEach($scope.LocationList, function (val, key) {
                 if (val.companyName) {
                     var dots = val.companyName.length > 20 ? '...' : '';
@@ -124,15 +131,25 @@
     resourceApi.get({ action: "getDevices", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
         if (data.status.code == 0) {
             $scope.TrackerList = data.response;
-            console.log(data.response);
+            // console.log(data.response);
         }
     });
-
+    $scope.SortOptionChanged = function(){
+        var order = $scope.ViewShipment.sc.substr(-1);
+        if(order == '1'){
+            $scope.ViewShipment.so = "asc";
+        } else{
+            $scope.ViewShipment.so = "desc";
+        }
+        // console.log($scope.ViewShipment);
+        BindShipmentList();
+    }
     $scope.PageSizeChanged = function () {
         BindShipmentList();
     }
     $scope.PageChanged = function (page) {
         $scope.PageIndex = page;
+        console.log("PAGE", page);
         BindShipmentList();
     }
 

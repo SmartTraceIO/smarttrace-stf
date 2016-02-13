@@ -2,7 +2,7 @@
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var userApi = $resource(Api.url + ':action/:token');
     var BindUserList = function () {
         userApi.get({ action: "getUsers", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
@@ -61,7 +61,7 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     $scope.InternalCompany = localDbSvc.get("InternalCompany");
     var userApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Add";
@@ -113,7 +113,7 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
         $scope.User.user.timeZone = "Antarctica/Casey";
         $scope.User.user.external = false;
         $scope.User.resetOnLogin = false;
-        $scope.User.user.active = false;
+        $scope.User.user.active = true;
         if ($scope.InternalCompany)
             $scope.User.user.externalCompany = $scope.InternalCompany;
     }
@@ -156,7 +156,7 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var userApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Edit";
     $scope.AddUser = false;

@@ -1,16 +1,17 @@
-﻿appCtrls.controller('NewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$filter', '$timeout', '$rootScope', '$state', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout, $rootScope, $state) {
+﻿appCtrls.controller('NewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$filter', '$timeout', '$rootScope', '$state', 
+function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout, $rootScope, $state) {
     rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
     rootSvc.SetPageHeader("New Shipment");
     var resourceApi = $resource(Api.url + ':action/:token');
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     // resourceApi.get({ action: 'login', email: 'developer@visfresh.com', password: 'password' }, function (data) {
     //     if (data.status.code == 0) {
     //         localDbSvc.set("AuthToken", data.response.token);
     //         localDbSvc.set("TokenExpiredOn", data.response.expired);
     //         $scope.AuthToken = data.response.token;
 
-            resourceApi.get({ action: 'getUser', token: localDbSvc.get("AuthToken") }, function (userData) {
+            resourceApi.get({ action: 'getUser', token: localDbSvc.getToken() }, function (userData) {
                 if (userData.status.code == 0) {
                     localDbSvc.set("CurrentUSerTimeZone", userData.response.timeZone);
                     localDbSvc.set("CurrentUserTempUnits", userData.response.temperatureUnits);
@@ -176,11 +177,13 @@
     };
 
     $scope.$watch('NewShipment.shipment.shipmentDate', function (nVal, oVal) {
+        // console.log(nVal, oVal, $scope.NewShipment.shipment.shipmentDate);
         if (nVal) {
             if (angular.isDate(nVal)) {
                 var date = $filter('date')(nVal, 'dd-MMM-yyyy');
                 var time = $filter('date')($scope.time1, 'shortTime');
                 $scope.NewShipment.shipment.DiscriptionDateTime = date + " " + time + " " + $scope.timeZone;
+                // console.log(date, time, $scope.NewShipment.shipment.DiscriptionDateTime);
             }
         }
     })
@@ -228,6 +231,16 @@
     }
 
     $scope.SaveData = function (isValid) {
+        
+
+        var date = $filter('date')($scope.NewShipment.shipment.shipmentDate, 'dd-MMM-yyyy');
+        var time = $filter('date')($scope.time1, 'shortTime');
+
+        $scope.NewShipment.shipment.shipmentDate.setUTCHours($filter('date')($scope.time1, 'hh'));
+        $scope.NewShipment.shipment.shipmentDate.setUTCMinutes($filter('date')($scope.time1, 'mm'));
+        // console.log($scope.NewShipment.shipment.shipmentDate);
+
+
         if (isValid) {
             if (!$scope.NewShipment.shipment.shutdownDeviceAfterMinutes)
                 $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = null
@@ -244,7 +257,9 @@
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
 
-            var url = Api.url + 'saveShipment/' + $scope.AuthToken
+            var url = Api.url + 'saveShipment/' + $scope.AuthToken;
+            
+
             $.ajax({
                 type: "POST",
                 datatype: "json",

@@ -3,29 +3,32 @@
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
     $scope.ShipmentId = $stateParams.vsId;
     var shipmentApi = $resource(Api.url + ':action/:token');
     var plotLines = new Array();
-    var vm = this;
+    $scope.vm = this;
     $scope.specialMarkers = new Array();
     $scope.normalMarkers = new Array();
     $scope.previousActiveMarker = -1;
     //includes all tracker info here
     $scope.trackers = new Array();
+    var trackerRoute = null;
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
     $scope.xMin = 0;
     $scope.xMax = 0;
     $scope.mapInfo = {};
 
-
-    NgMap.getMap().then(function(map){
-        vm.map = map;
-        if(bounds != null)
-            vm.map.fitBounds(bounds); 
-        vm.map.shapes.route.setOptions({strokeColor:rootSvc.getTrackerColor($scope.MI)});
+    $scope.$on('mapInitialized', function(event, m) {
+        $scope.vm.map = m;
+        if(bounds != null){
+            $scope.vm.map.fitBounds(bounds); 
+        }
+        if(trackerRoute != null){
+            trackerRoute.setMap($scope.vm.map);
+        }
     });
 
     var bounds= null;
@@ -43,14 +46,16 @@
             $scope.normalMarkers.pop();
         }
 
-        // console.log(vm.map);
+        // console.log($scope.vm.map);
         bounds = new google.maps.LatLngBounds;
 
         for(i = 0 ; i < locations.length; i ++){
 
             bounds.extend(new google.maps.LatLng(locations[i].lat, locations[i].long));
 
-            $scope.trackerPath.push(new Array(locations[i].lat, locations[i].long));
+            $scope.trackerPath.push({
+                lat: locations[i].lat, 
+                lng: locations[i].long});
             //markers
             if(locations[i].alerts.length > 0){
                 if(locations[i].alerts[0].type == 'LastReading'){
@@ -66,16 +71,25 @@
         bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
         bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
         
-        console.log(vm.map, bounds);
-        // console.log(vm.map);
-        if(vm.map != undefined){
-            vm.map.fitBounds(bounds); 
+        console.log($scope.trackerPath);
+        if(trackerRoute != null){
+            trackerRoute.setMap(null);
+        }
+        trackerRoute = new google.maps.Polyline({
+            path: $scope.trackerPath,
+            strokeColor: $scope.trackers[index].siblingColor,
+            strokeOpacity: 0.5,
+            strokeWeight: 5
+        });
+        // console.log($scope.vm.map, bounds);
+        // console.log($scope.vm.map);
+        if($scope.vm.map != undefined){
+            console.log("Fitted");
+            $scope.vm.map.fitBounds(bounds); 
+            trackerRoute.setMap($scope.vm.map);
             //Apply Shape route first
             if(!$scope.$$phase) {
                 $scope.$apply();
-            }
-            if(vm.map.shapes.route != undefined){
-                vm.map.shapes.route.setOptions({strokeColor:$scope.trackers[index].siblingColor});
             }
         }
     }
@@ -109,6 +123,7 @@
         mainTrackerPeriod /= 25;
         var color = "#000";
         var width = 2;
+        // <b class="bold-font">' + $scope.mapInfo.startLocation + '</b>
         plotLines.push({
             color: color, // Color value
             dashStyle: 'solid', // Style of the plot line. Default to solid
@@ -116,7 +131,7 @@
             width: width, // Width of the line    
             label: {
                 text: '<table><tr><td style="vertical-align:top;"><img src="theme/img/locationStart.png"></td>' + 
-                        '<td><b class="bold-font">' + $scope.mapInfo.startLocation + '</b><br/>' + 
+                        '<td><br/>' + 
                         '</td></tr></table>',
                 rotation: 0,
                 useHTML: true,
@@ -125,9 +140,17 @@
                 x: -10
             }
         });
-        var time = parseDate($scope.mapInfo.etaISO);
+
+        
         var dottext = "";
-        if(parseDate($scope.mapInfo.etaISO) > parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod){
+        if($scope.trackers[$scope.MI].status.toLowerCase() == "arrived"){
+            time = parseDate($scope.trackerInfo.arrivalTimeISO);
+        } else {
+            var time = new Date();
+        }
+
+        if(time > parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod ||
+            $scope.trackers[$scope.MI].status.toLowerCase() != "arrived"){
             color = "#ccc";
             width = 1;
             time = parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod + 1;
@@ -255,15 +278,18 @@
     //google map first point
     $scope.firstPoint = {};
     $scope.currentPoint = {};
-    $scope.trackerPath = new Array();
+    $scope.trackerPath = [];
     $scope.trackerColor = rootSvc.getTrackerColor(0);
     $scope.trackerMsg = new Array();
     shipmentApi.get({ action: "getSingleShipment", token: $scope.AuthToken, shipmentId: $scope.ShipmentId }, function (graphData) {
-
-        if(graphData.status.code !=0) return;
+        console.log(graphData);
+        if(graphData.status.code !=0){
+            toastr.error(graphData.status.message, "Error");
+            return;
+        }
 
         var info = graphData.response;
-        console.log(info);
+        // console.log(info);
 
         //Map start and end location info
         $scope.mapInfo.startLocationForMap = info.startLocationForMap;
@@ -272,6 +298,10 @@
         $scope.mapInfo.endLocationForMap = info.endLocationForMap;
         $scope.mapInfo.endLocation = info.endLocation;
         $scope.mapInfo.etaISO = info.etaISO;
+        $scope.mapInfo.arrivalTimeISO = info.arrivalTimeISO;
+        $scope.mapInfo.lastReadingTimeISO = info.lastReadingTimeISO;
+
+        // console.log("******", info.locations.length);
 
         //------------PREPARE TRACKERS INFO  BEGIN-------------
         var tempObj = {};
@@ -345,16 +375,15 @@
                         point: {
                             events: {
                                 mouseOver: function () {
-                                    idx = this.index;
-                                    if(idx == 0){
-                                        for(i = 0; i < subSeries[$scope.MI].length; i++){
-                                            if(subSeries[$scope.MI][i][0] == this.x){
-                                                idx = i;
-                                                break;
-                                            }
+                                    var idx;
+                                    for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
+                                        if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x){
+                                            idx = index;
+                                            break;
                                         }
                                     }
                                     // $scope.firstPoint = $scope.trackers[$scope.MI].locations[idx];
+                                    // console.log(idx);
                                     $scope.showAlerts(idx);
                                 },
                                 mouseOut: function () {
@@ -394,10 +423,11 @@
                     style: {
                         padding: '0px',
                     },
+                    shadow: false,
                     backgroundColor: 'rgba(249, 249, 249, 0)',
-                    borderWidth: 2,
+                    borderWidth: 0,
                     useHTML: true,
-                    hideDelay: 60000,
+                    hideDelay: 500,
                     formatter: function () {
                         
                         var s = "";
@@ -413,10 +443,10 @@
                         // console.log(subSeries);
                         // console.log($scope.MI);
                         var index;
-                        for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                            if(subSeries[$scope.MI][index][0] == this.x) break;
+                        for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
+                            if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x) break;
                         }
-                        console.log(this.x, this.y, index);
+                        // console.log(this.x, this.y, index);
                         // console.log(this.x);
                         // console.log($scope.trackers[$scope.MI].locations[index].timeISO);
                         $.each(this.points, function () {
@@ -625,7 +655,7 @@
         while(alertData.length > 0){
             alertData.pop();
         }
-        console.log($scope.MI);
+        // console.log($scope.MI);
         // debugger;
         for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
             if($scope.trackers[$scope.MI].locations[i].alerts.length > 0){
@@ -655,7 +685,7 @@
         lastPoint = subSeries[$scope.MI].length - 1;
         //Destination
         obj = {};
-        console.log(subSeries, $scope.MI, lastPoint);
+        // console.log(subSeries, $scope.MI, lastPoint);
         obj.x = subSeries[$scope.MI][lastPoint][0];
         obj.y = subSeries[$scope.MI][lastPoint][1];
         obj.z = 30;
@@ -725,15 +755,26 @@
                 continue;
             }
             var locations = $scope.trackers[i].locations;
+            var skipCnt = locations.length / 300;
+            var tmpCnt = 0;
             var series = new Array();
             for(j = 0; j < locations.length; j++){
+                if(j != 0){
+                    if(++tmpCnt <= skipCnt) {
+                        if(locations[j].alerts.length == 0) continue;
+                    } else {
+                        tmpCnt = 0;
+                    }
+                }
                 temp = new Array();
                 temp.push(parseDate(locations[j].timeISO));
                 temp.push(locations[j].temperature);
                 if(startTime <= temp[0] && temp[0] <= endTime){
                     series.push(temp);
                 }
+
             }
+            // console.log("--------",series.length);
             subSeries.push(series);
         }
         // console.log(subSeries);

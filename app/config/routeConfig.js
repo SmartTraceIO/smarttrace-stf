@@ -16,6 +16,36 @@ appConstants.constant('routes', [
           ]
       },
       {
+          name: 'preference',
+          config: {
+              url: "/preference"
+              , views: {
+                  "content": {
+                      templateUrl: "app/preference/preference.html"
+                       , controller: 'PreferenceCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/preference/preference.js?v=' + tick,
+          ]
+      },
+      {
+          name: 'user-update',
+          config: {
+              url: "/user-update"
+              , views: {
+                  "content": {
+                      templateUrl: "app/user-update/user-update.html"
+                       , controller: 'UserUpdateCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/user-update/user-update.js?v=' + tick,
+          ]
+      },
+      {
           name: 'forgetpassword',
           config: {
               url: "/forget-password"
@@ -328,7 +358,7 @@ appConstants.constant('routes', [
           dependencies: [
               'app/manage-user/manage-user.js?v=' + tick,
           ]
-      },
+      }
 ]);
 
 //#endregion Register Routes Here

@@ -30,7 +30,7 @@
     <link href="Scripts/tipsy/tipsy.css" rel="stylesheet" />
 </head>
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
-    <div class="page-header navbar navbar-fixed-top green" ng-controller="reloadCtrl">
+    <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green" ng-controller="reloadCtrl">
         <div class="page-header-inner ">
             <div class="page-logo">
                 <a href="index.html">
@@ -84,73 +84,63 @@
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-bell"></i>
-                            <span class="badge badge-default"> 7 </span>
+                            <span class="badge badge-default" ng-cloak> {{unreadNotification.length}} </span>
                         </a>
-                        <ul class="dropdown-menu notification-body">
+                        <ul class="dropdown-menu notification-body" ng-cloak>
+                        
                             <li class="external">
                                 <h3>
                                     <span class="bold">Notifications</span>
                                 </h3>
                             </li>
-                            <li>
-                                <div class="alert alert-block alert-notification fade in">
-                                    <button type="button" class="close" data-dismiss="alert"></button>
-                                    <img src="theme/img/alertHot.png">
-                                    <h5 class="alert-heading">Too Hot Alert</h5>
-                                    <p>3hrs 15min from coles DC Perth</p>
-                                    <p class="notification-time">13 days ago</p>
+                            <li class="scrollable-menu" style="max-height:{{height - 150}}px;">
+                                <div class="alert alert-block alert-notification fade in" ng-repeat="data in unreadNotification">
+                                    <button type="button" class="close" data-dismiss="alert" ng-click="readNotify(data.notificationId)"></button>
+                                    <img src="theme/img/alert{{data.alertType}}.png">
+                                    <h5 class="alert-heading">{{data.title}}</h5>
+                                    <p>{{data.Line1}}</p>
+                                    <p>{{data.Line2}}</p>
+                                    <p>{{data.Line3}}</p>
+                                    <p class="notification-time">{{data.date}}</p>
                                 </div>
-                                <div class="alert alert-block alert-notification fade in">
-                                    <button type="button" class="close" data-dismiss="alert"></button>
-                                    <img src="theme/img/alertHot.png">
-                                    <h5 class="alert-heading">Too Hot Alert</h5>
-                                    <p>12hrs 5min from Coles DC Melbourne</p>
-                                    <p class="notification-time">14 days ago</p>
+                                <p>{{closeText}}</p>
+                                <div ng-show={{showRead}} class="alert alert-block alert-notification alert-read fade in" ng-repeat="data in closedNotification">
+                                    <img src="theme/img/alert{{data.alertType}}.png">
+                                    <h5 class="alert-heading">{{data.title}}</h5>
+                                    <p>{{data.Line1}}</p>
+                                    <p>{{data.Line2}}</p>
+                                    <p>{{data.Line3}}</p>
+                                    <p class="notification-time">{{data.date}}</p>
                                 </div>
                             </li>
                             <li class="external bottom">
-                                <button type="button">Close All</button>
-                                <div class="input-group pull-right">
-                                    <label>
-                                        Include Closed Notifications<input type="checkbox" class="icheck">
-                                    </label>
-                                </div>
+                                <button type="button" ng-click="closeAll()">Close All</button>
+                                <label class="checkbox pull-right">
+                                    
+                                    <div class="checker">
+                                        <span  ng-class="{'checked' : showRead}">
+                                            <input name="remember" value="1" type="checkbox" ng-change="test()" ng-model="showRead">
+                                        </span>
+                                    </div>
+                                    Include Closed Notifications
+                                </label>
                             </li>
                         </ul>
                     </li>
                     <li class="dropdown dropdown-user">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <img src="theme/img/avtar.jpg" alt="" class="img-circle" />
-                            <span class="username username-hide-on-mobile"> Nick </span>
+                            <span class="username username-hide-on-mobile" ng-cloak> {{User.firstName}}</span>
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
                             <li>
-                                <a href="page_user_profile_1.html">
-                                    <i class="icon-user"></i> My Profile
+                                <a href="#/user-update">
+                                    <i class="icon-user"></i> Change Password
                                 </a>
                             </li>
                             <li>
-                                <a href="app_calendar.html">
-                                    <i class="icon-calendar"></i> My Calendar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="app_inbox.html">
-                                    <i class="icon-envelope-open"></i> My Inbox
-                                    <span class="badge badge-danger"> 3 </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="app_todo.html">
-                                    <i class="icon-rocket"></i> My Tasks
-                                    <span class="badge badge-success"> 7 </span>
-                                </a>
-                            </li>
-                            <li class="divider"> </li>
-                            <li>
-                                <a href="page_user_lock_1.html">
-                                    <i class="icon-lock"></i> Lock Screen
+                                <a href="#/preference">
+                                    <i class="fa fa-gear"></i> Edit Preferences
                                 </a>
                             </li>
                             <li>
@@ -264,8 +254,8 @@
     <script src="Scripts/chart/d3.min.js"></script>
     <script src="Scripts/angular.js"></script>
     <script src="Scripts/google-map/ng-map.min.js"></script>
-    <script src="http://code.highcharts.com/stock/highstock.src.js"></script>
-    <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+    <script src="Scripts/highcharts-ng/dist/highstock.js"></script>
+    <script src="Scripts/highcharts-ng/dist/standalone-framework.js"></script>
     <script src="Scripts/highcharts-ng/dist/highcharts-ng.js"></script>
     <script src="theme/assets/global/plugins/angularjs/angular.min.js"></script>
     <script src="Scripts/require.js"></script>

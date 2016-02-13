@@ -2,7 +2,7 @@
     rootSvc.SetPageTitle('List Notification');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Notifications Schedules");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var notiApi = $resource(Api.url + ':action/:token');
     var BindNotificationList = function () {
         notiApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
@@ -67,7 +67,7 @@ appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
     $scope.Action = "Add";
 
     var notiApi = $resource(Api.url + ':action/:token');
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
 
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
@@ -236,7 +236,7 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
         $scope.PageHeader = "Notifications Schedules";
     }
     $scope.Action = "Edit";
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var notiApi = $resource(Api.url + ':action/:token');
 
     if ($rootScope.modalInstance) {
@@ -313,7 +313,7 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     }
     $scope.SaveNoti = function (isValid, closeModalPopup) {
         if (isValid) {
-            $scope.AuthToken = localDbSvc.get("AuthToken");
+            $scope.AuthToken = localDbSvc.getToken();
             var url = Api.url + 'saveNotificationSchedule/' + $scope.AuthToken
             $.ajax({
                 type: "POST",

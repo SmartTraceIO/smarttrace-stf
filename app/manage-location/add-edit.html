@@ -62,16 +62,16 @@
                                 <label>Radius&nbsp;<i tooltip="Radius in Meters" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
                                 <div class="btn-group " role="group" aria-label="...">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="radious btn btn-default" ng-click="ChangeRadious(500)">500m</button>
+                                        <button type="button" class="radious btn btn-default" ng-class="{'active': radious == 500}" ng-click="ChangeRadious(500)">500m</button>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="radious btn btn-default" ng-click="ChangeRadious(1000)">1000m</button>
+                                        <button type="button" class="radious btn btn-default" ng-class="{'active': radious == 1000}" ng-click="ChangeRadious(1000)">1000m</button>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="radious btn btn-default active" ng-click="ChangeRadious(3000)">3000m</button>
+                                        <button type="button" class="radious btn btn-default" ng-class="{'active': radious == 3000}" ng-click="ChangeRadious(3000)">3000m</button>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="radious btn btn-default" ng-click="ChangeRadious(5000)">5000m</button>
+                                        <button type="button" class="radious btn btn-default" ng-class="{'active': radious == 5000}" ng-click="ChangeRadious(5000)">5000m</button>
                                     </div>
                                 </div>
                             </div>

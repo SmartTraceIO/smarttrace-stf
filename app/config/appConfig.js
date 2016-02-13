@@ -1,11 +1,19 @@
 ﻿app.constant("Api", { url: "http://139.162.3.8:8080/web/vf/rest/" });
 
 // executes only once for an app, calls evertime when page refreshed by user
-app.run(['$state', '$rootScope', 'Api', '$resource', 'localDbSvc', '$timeout', function ($state, $rootScope, Api, $resource, localDbSvc, $timeout) {
+app.run(['$state', '$rootScope', 'Api', '$resource', 'localDbSvc', '$timeout', '$templateCache',
+function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $templateCache) {
   
     $rootScope.go = function(url){
         $state.go(url);
     }
+
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+        if (typeof(current) !== 'undefined'){
+            $templateCache.remove(current.templateUrl);
+            console.log("Cleared cache");
+        }
+    });
 
     $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
@@ -22,18 +30,18 @@ app.run(['$state', '$rootScope', 'Api', '$resource', 'localDbSvc', '$timeout', f
                 $rootScope.modalInstance.close('cancel');
 
             //call every time when route changed
-            if (!localDbSvc.get("AuthToken")) {
-                resourceApi.get({ action: 'login', email: 'developer@visfresh.com', password: 'password' }, function (data) {
-                    if (data.status.code == 0) {
-                        localDbSvc.set("AuthToken", data.response.token);
-                        localDbSvc.set("TokenExpiredOn", data.response.expired);
+            // if (!localDbSvc.getToken()) {
+            //     resourceApi.get({ action: 'login', email: 'developer@visfresh.com', password: 'password' }, function (data) {
+            //         if (data.status.code == 0) {
+            //             localDbSvc.set("AuthToken", data.response.token);
+            //             localDbSvc.set("TokenExpiredOn", data.response.expired);
 
-                    }
-                });
-            }
+            //         }
+            //     });
+            // }
 
 
-            // resourceApi.get({ action: 'getUserTime', token: localDbSvc.get("AuthToken") }, function (timeData) {
+            // resourceApi.get({ action: 'getUserTime', token: localDbSvc.getToken() }, function (timeData) {
             //     if (timeData.status.code == 0) {
             //         var tickInterval = 1000 //ms
             //         $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);

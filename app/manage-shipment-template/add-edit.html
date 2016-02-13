@@ -142,7 +142,7 @@
                         <br /><select style="width:100%" ng-change="ChangeNotiScheduleForAlert()" multiple ui-select2="NotificationScheduleOption" ng-model="ShipmentTemplate.alertsNotificationSchedules" data-placeholder="Select Notification Schedule For Alert Profile">
                             <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
                         </select><br />
-                        <small class="text-muted">
+                        <small class="text-muted control-label">
                             {{AlertNotiRule}}
                         </small>
                     </div>
@@ -192,7 +192,7 @@
                     </div>
                     <div class="col-sm-1 control-label" style="text-align:left">
                         <br />
-$scope.                       $scope<a href=""><i class="fa fa-pencil" ng-click="openEditNoti(ShipmentTemplate.arrivalNotificationSchedules)" tooltip="Edit this Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
+                        <a href=""><i class="fa fa-pencil" ng-click="openEditNoti(ShipmentTemplate.arrivalNotificationSchedules)" tooltip="Edit this Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
                         &nbsp;
                         <a href=""><i class="fa fa-plus" ng-click="openAddNoti()" tooltip="Add new Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
                     </div>

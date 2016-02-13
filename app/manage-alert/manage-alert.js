@@ -3,7 +3,7 @@
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
 
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var alertApi = $resource(Api.url + ':action/:token');
     var BindAlertList = function () {
         alertApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
@@ -195,7 +195,7 @@ appCtrls.controller('AddAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
                 $scope.Alert.temperatureIssues.push(val);
             });
 
-            $scope.AuthToken = localDbSvc.get("AuthToken");
+            $scope.AuthToken = localDbSvc.getToken();
             var url = Api.url + 'saveAlertProfile/' + $scope.AuthToken
             $.ajax({
                 type: "POST",
@@ -235,7 +235,7 @@ appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDb
     }
 
     var alertApi = $resource(Api.url + ':action/:token');
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
 
     if ($rootScope.modalInstance) {
@@ -341,7 +341,7 @@ appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDb
             angular.forEach($scope.hotAlerts, function (val, key) {
                 $scope.Alert.temperatureIssues.push(val);
             });
-            $scope.AuthToken = localDbSvc.get("AuthToken");
+            $scope.AuthToken = localDbSvc.getToken();
             var url = Api.url + 'saveAlertProfile/' + $scope.AuthToken
             $.ajax({
                 type: "POST",

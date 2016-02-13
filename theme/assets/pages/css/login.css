@@ -10,7 +10,7 @@ Login page
 .login .logo {
   width: 351px;
   margin: 0 auto;   
-  margin-top:60px;
+  /*margin-top:60px;*/
   padding: 15px 30px;
   text-align: center;
 }  

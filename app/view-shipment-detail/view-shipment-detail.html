@@ -93,14 +93,16 @@
                                 <td><img src="theme/img/tinyLocationStart.png"></td>
                                 <td>
                                     <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
-                                    <b>START</b> {{trackerInfo.startTimeISO}}
+                                    <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTimeISO}}</span>
                                 </td>
                             </tr><tr>
                                 <td><img src="theme/img/tinyLocationStop.png"></td>
                                 <td>
                                     <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
-                                    <span ng-show="trackerInfo.status == 'Complete'"><b>ARRIVED AT</b> {{trackerInfo.arrivalTimeISO}}</span>
-                                    <span ng-show="trackerInfo.status != 'Complete'"><b>ETA</b> {{trackerInfo.etaISO}}</span>
+                                    <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTimeISO}}</span>
+                                    <span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.etaISO}}</span>
+                                    <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTimeISO}}</span>
+                                    <span ng-show="trackerInfo.status == 'Default'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                                 </td>
                             </tr></table>
                             <b class="bold-font" style="padding-right:15px; padding-top:20px;">Status:</b>{{trackerInfo.status}}
@@ -190,6 +192,7 @@
                 </div>
                 <div class="col-sm-9">
                     <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+
                     <ng-map 
                         style="height:300px"
                         disable-default-u-i="true"
@@ -197,14 +200,20 @@
                             mapTypeIds: ['ROADMAP']
                         }"
                     >
-                        <shape name="polyline"
-                            id="route" 
-                            path={{trackerPath}}
-                            stroke-color="#FF0000"
-                            stroke-opacity="0.5"
-                            stroke-weight="5"
-                            on-mouseover="showPathInfo();"
-                        ></shape>
+
+                        <!-- end marker -->
+                        <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}" optimized="false" z-index="101"> 
+                            <div class="end-loc-box">
+                                <table class="end-marker-content"><tr>
+                                    <td>
+                                        <b>{{mapInfo.endLocation}}</b><br/>
+                                        <!-- {{mapInfo.etaISO}} -->
+                                    </td>
+                                    <td><img src="theme/img/locationStop.png"></td>
+                                </tr></table>
+                            </div>
+                        </custom-marker>
+
                         <!-- normal markers -->
                         <!-- <marker ng-repeat="p in normalMarkers"
                             position="{{p.data.lat}}, {{p.data.long}}"
@@ -249,20 +258,10 @@
                                 scaledSize:[{{currentPoint.len}}, {{currentPoint.len}}],
                                 anchor:[{{currentPoint.len / 2}}, {{currentPoint.len / 2}}]
                             }"
+                             optimized="false" z-index="102">
                         ></marker>
 
-                        <!-- end marker -->
-                        <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}">
-                            <div class="end-loc-box">
-                                <table class="end-marker-content"><tr>
-                                    <td>
-                                        <b>{{mapInfo.endLocation}}</b><br/>
-                                        <!-- {{mapInfo.etaISO}} -->
-                                    </td>
-                                    <td><img src="theme/img/locationStop.png"></td>
-                                </tr></table>
-                            </div>
-                        </custom-marker>
+                        
                        <!--  <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.long}}">
                             <div>
                                 <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}}>

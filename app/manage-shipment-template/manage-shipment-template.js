@@ -2,7 +2,7 @@
     rootSvc.SetPageTitle('List Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var shipmentApi = $resource(Api.url + ':action/:token');
     var BindShipmentList = function () {
         shipmentApi.get({ action: "getShipmentTemplates", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
@@ -53,7 +53,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
     rootSvc.SetPageTitle('Add Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var shipmentApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Add";
     var BindLocations = function (cb) {
@@ -216,7 +216,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            $scope.AuthToken = localDbSvc.get("AuthToken");
+            $scope.AuthToken = localDbSvc.getToken();
             var url = Api.url + 'saveShipmentTemplate/' + $scope.AuthToken
             $.ajax({
                 type: "POST",
@@ -373,10 +373,11 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
     }
 
     $scope.ChangeNotiScheduleForAlert = function () {
+        console.log($scope.ShipmentTemplate.alertsNotificationSchedules);
         if ($scope.ShipmentTemplate && $scope.ShipmentTemplate.alertsNotificationSchedules) {
             $scope.AlertNotiRule = '';
             for (var i = 0; i < $scope.ShipmentTemplate.alertsNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: $scope.ShipmentTemplate.alertsNotificationSchedules[i] }, true)
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.ShipmentTemplate.alertsNotificationSchedules[i]) }, true)
                 if (shipment && shipment.length > 0) {
                     shipment = shipment[0];
                     var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
@@ -390,6 +391,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
     }
 
     $scope.ChangeNotiScheduleForArrival = function () {
+        arrivalNotificationSchedules
         if ($scope.ShipmentTemplate && $scope.ShipmentTemplate.arrivalNotificationSchedules) {
             $scope.ArrivalNotiRule = '';
             for (var i = 0; i < $scope.ShipmentTemplate.arrivalNotificationSchedules.length; i++) {
@@ -414,7 +416,7 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
     rootSvc.SetPageTitle('Edit Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var shipmentApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Edit";
     var BindLocations = function (cb) {
@@ -622,7 +624,7 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            $scope.AuthToken = localDbSvc.get("AuthToken");
+            $scope.AuthToken = localDbSvc.getToken();
             var url = Api.url + 'saveShipmentTemplate/' + $scope.AuthToken
             $.ajax({
                 type: "POST",
@@ -788,7 +790,7 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
         if ($scope.ShipmentTemplate && $scope.ShipmentTemplate.alertsNotificationSchedules) {
             $scope.AlertNotiRule = '';
             for (var i = 0; i < $scope.ShipmentTemplate.alertsNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: $scope.ShipmentTemplate.alertsNotificationSchedules[i] }, true)
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.ShipmentTemplate.alertsNotificationSchedules[i]) }, true)
                 if (shipment) {
                     if (shipment.length > 0) {
                         shipment = shipment[0];

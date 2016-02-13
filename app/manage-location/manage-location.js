@@ -2,7 +2,7 @@
     rootSvc.SetPageTitle('Manage Location');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Locations");
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     var locationApi = $resource(Api.url + ':action/:token');
     var BindLocationList = function () {
         locationApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
@@ -144,7 +144,6 @@ appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc
             $scope.cityCircle.setMap(null);
 
         $scope.cityCircle = new google.maps.Circle({
-
             strokeColor: '#62BDE3',
             strokeOpacity: 0.8,
             strokeWeight: 1,
@@ -223,7 +222,7 @@ appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
-                $scope.AuthToken = localDbSvc.get("AuthToken");
+                $scope.AuthToken = localDbSvc.getToken();
                 var url = Api.url + 'saveLocation/' + $scope.AuthToken
                 $.ajax({
                     type: "POST",
@@ -264,7 +263,7 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
         $scope.PageHeader = "Locations";
     }
     $scope.Action = "Edit";
-    $scope.AuthToken = localDbSvc.get("AuthToken");
+    $scope.AuthToken = localDbSvc.getToken();
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
@@ -280,10 +279,12 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
         locationApi.get({ action: "getLocation", token: $scope.AuthToken, locationId: locId }, function (data) {
             if (data.status.code == 0) {
                 $scope.Location = data.response;
+                console.log(data.response);
                 $scope.myLatLng = {};
                 $scope.myLatLng.lat = data.response.location.lat;
                 $scope.myLatLng.lng = data.response.location.lon;
-
+                $scope.radious = data.response.radiusMeters;
+                console.log($scope.radious);
                 $scope.Location.startFlag = $scope.Location.startFlag == "Y" ? true : false;
                 $scope.Location.interimFlag = $scope.Location.interimFlag == "Y" ? true : false;
                 $scope.Location.endFlag = $scope.Location.endFlag == "Y" ? true : false;
@@ -298,6 +299,7 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
                         }, 300);
                     })
                 }
+                $scope.ChangeRadious($scope.radious);
             }
         })
     }
@@ -320,7 +322,7 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
             labelContent: '<i class="fa fa-home fa-lg" style="color:rgba(153,102,102,0.8);"></i>',
         });
         $scope.marker.setMap($scope.map);
-        $scope.ChangeRadious($scope.radious)
+        
         google.maps.event.addListener($scope.map, "click", function (e) {
             $scope.myLatLng.lat = e.latLng.lat();
             $scope.myLatLng.lng = e.latLng.lng();
@@ -414,7 +416,7 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
-                $scope.AuthToken = localDbSvc.get("AuthToken");
+                $scope.AuthToken = localDbSvc.getToken();
                 var url = Api.url + 'saveLocation/' + $scope.AuthToken
                 $.ajax({
                     type: "POST",

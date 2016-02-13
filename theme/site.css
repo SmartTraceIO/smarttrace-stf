@@ -1,4 +1,16 @@
-﻿.page-header.navbar .page-logo {
+﻿body{
+    background: #EEE;
+}
+.show-block{
+    display: block !important;
+}
+.hide-block{
+    display: none;
+}
+i{
+    margin: 0 5px;
+}
+.page-header.navbar .page-logo {
     padding-left: 0;
     height: 59px;
 }
@@ -90,6 +102,14 @@
 .link {
     cursor: pointer;
 }
+.link img{
+    display: inline;
+}
+.link > h5{
+    color: #5BCA45;
+    display: inline;
+    text-decoration: underline;
+}
 
 .portlet > .portlet-title > .caption > i {
     margin-top: 3px;
@@ -115,7 +135,9 @@ p.no-padding {
 .c3-region.regionY2 {
     fill: green;
 }
-
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+ }
 @media (min-width:768px) {
     .remove-left-padding {
         padding-left: 0;
@@ -143,8 +165,9 @@ p.no-padding {
     padding-top: 1px !important;
 }
 .page-title{
-    font-size: 20px !important;
+    font-size: 16px !important;
     margin: 5px 0 !important;
+    font-weight: 400;
 }
 
 .page-header.navbar {
@@ -343,6 +366,7 @@ h3 span.info {
 .ttbox{
     border: 3px solid;
     /*margin: -9px;*/
+    display: block;
     background-color: #fff;
     position: relative;
     white-space: nowrap;
@@ -360,7 +384,7 @@ h3 span.info {
     /*padding-left: 6px;*/
 }
 .tt_body{
-    padding: 3px;
+    /*padding: 3px;*/
 }
 .tt_body span{
     padding: 3px 10px;
@@ -466,6 +490,9 @@ ng-map{
 .bold-font{
     font-weight: 700;
 }
+.light-bold-font{
+    font-weight: 600;
+}
 .load-icon{
     width: 15px;
     float: right;
@@ -515,6 +542,8 @@ ng-map{
     background-color: #e3e3e3;
     border-color: #ccc !important;
     border-radius: 3px !important;
+    max-width: 375px !important;
+    width: 375px !important;
 }
 .notification-body .external .bold{
     color: #000;
@@ -537,4 +566,46 @@ ng-map{
 }
 .notification-body .external.bottom button:hover{
     color: #45ab31;
+}
+.notification-body .scrollable-menu {
+    height: auto;
+    max-height: 400px;
+    overflow-x: hidden;
+}
+.notification-body .scrollable-menu > p{
+    text-align: center;
+    margin: 0 !important;
+}
+.notification-body li.external > label{
+    margin: 0 !important;
+}
+.notification-body .alert-read{
+    background: #eee;
+}
+.shipment-marker{
+    padding:3px;
+    overflow:hidden;
+    position:absolute;
+    bottom:0;
+    border-top-left-radius:15px !important;
+    border-top-right-radius:15px !important;
+    border:1px solid #5BCA45;
+    color:white;
+    background-color:#5BCA45;
+    width: 40%;
+    margin-left: 30%;
+}
+.bottom-margin{
+    margin-bottom: 40px;
+}
+.user-detail .portlet-body{
+    padding: 25px !important;
+}
+.user-detail h5{
+    font-weight: 700;
+    display: inline;
+    margin-right: 10px;
+}
+.user-detail p{
+    font-style: italic;
 }
