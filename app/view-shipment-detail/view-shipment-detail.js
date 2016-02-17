@@ -1,11 +1,15 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', ['$scope', 'rootSvc', '$timeout', 'Api', 'localDbSvc', '$stateParams', '$resource', '$filter', 'NgMap', '$sce', '$rootScope', function ($scope, rootSvc, $timeout, Api, localDbSvc, $stateParams, $resource, $filter, NgMap, $sce, $rootScope) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, $timeout, Api, localDbSvc, $stateParams, $resource, $filter, NgMap, $sce, $rootScope, $templateCache) {
+
+    $templateCache.remove('/view-shipment-detail');
+    console.log("cleared view-shipment-detail cache");
+
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
     $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
-    $scope.ShipmentId = $stateParams.vsId;
+    $scope.ShipmentId = $stateParams.vsId; 
     var shipmentApi = $resource(Api.url + ':action/:token');
     var plotLines = new Array();
     $scope.vm = this;
@@ -20,6 +24,8 @@
     $scope.xMin = 0;
     $scope.xMax = 0;
     $scope.mapInfo = {};
+    var bounds= null;
+
 
     $scope.$on('mapInitialized', function(event, m) {
         $scope.vm.map = m;
@@ -30,8 +36,6 @@
             trackerRoute.setMap($scope.vm.map);
         }
     });
-
-    var bounds= null;
 
     function updateMapData(index){
         var locations = $scope.trackers[index].locations;
@@ -68,7 +72,9 @@
         }
         //map bound part
         // console.log($scope.mapInfo);
-        bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
+        if($scope.mapInfo.endLocationForMap != null)
+            bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
+        if($scope.mapInfo.startLocationForMap != null)
         bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
         
         console.log($scope.trackerPath);
@@ -102,6 +108,12 @@
     $scope.changeActiveTracker = function(index){
 
         $scope.MI = index;
+
+        if($scope.trackers[index].locations.length == 0){
+            toastr.warning("No data recorded yet!", "Empty Track");
+            return;
+        }
+
         $scope.trackerInfo = $scope.trackers[index];
         prepareMainHighchartSeries();
         prepareTrackerMessage();
@@ -220,12 +232,21 @@
     $scope.showPathInfo = function(){
         // console.log(this);
     }
-    // $scope.showAlertsUI = function(){
-    //     // console.log("UI");
-    //     // console.log(this.data);
-    //     $scope.markerData = this.data;
-    //     updateMapMarker();
-    // }
+    $scope.showAlertsUI = function(){
+        // console.log("UI");
+        $scope.markerData = this.data;
+        $scope.ttShow = true;
+        $scope.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi].title);
+        $scope.diagColor = $scope.trackerColor;
+        $scope.mapMarkerMessage = $scope.trackerMsg[this.data.oi].lines;
+        // if($scope.markerData.data.alerts[0].type == "LastReading"){
+            // $scope.diagColor = $scope.trackerColor;
+        // }
+        // updateMapMarker();
+    }
+    $scope.hideAlertsUI = function(){
+        $scope.ttShow = false;
+    }
     $scope.showAlerts = function(index){
         //mouse out
         if(index == -1){
@@ -359,7 +380,7 @@
         //google map data
         $scope.firstPoint = locations[0];
         $scope.currentPoint.loc = locations[0];
-        $scope.currentPoint.iconUrl = "theme/edot.png";
+        $scope.currentPoint.iconUrl = "theme/img/edot.png";
         
         updateMapData(0);
 
@@ -511,6 +532,10 @@
                         offset: 40,
                         text: 'Temperature °C',
                         y: -10
+                    },
+                    labels:{
+                        align:'right',
+                        x:-10
                     },
                     tickInterval: 5,
                     plotBands: [{
@@ -856,4 +881,4 @@
     }
 
     
-}]);
+});

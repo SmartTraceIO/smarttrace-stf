@@ -46,6 +46,9 @@ i{
     color: #888 !important;
     border-bottom: 1px solid #ddd;
 }
+.panel-heading.portlet-page{
+    padding: 12px 10px;
+}
 .portlet > .portlet-body.green, .portlet.green {
     background-color: #5BCA45;
 }
@@ -84,9 +87,11 @@ i{
 }
 .portlet.sub-portlet .portlet-title .tools > a.expand{
     background-image: url(img/plus.png);
+    background-size: 12px;
 }
 .portlet.sub-portlet .portlet-title .tools > a.collapse{
     background-image: url(img/minus.png);
+    background-size: 12px;
 }
 
 .page-header.navbar {
@@ -416,7 +421,7 @@ ng-map{
 }
 .start-loc-box b,
 .end-loc-box b{
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.6);
     padding: 2px;
 }
 .start-loc-box{

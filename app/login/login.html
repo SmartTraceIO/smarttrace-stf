@@ -18,7 +18,7 @@
 			<div class="controls">
 				<div class="input-icon left">
 					<i class="icon-user"></i>
-					<input class="m-wrap placeholder-no-fix" type="text" autocomplete="off" placeholder="E-mail" name="username" ng-model="username"/>
+					<input class="m-wrap placeholder-no-fix" type="text" autocomplete="off" placeholder="E-mail" name="username" ng-model="username" ng-keyup="$event.keyCode == 13 && login()"/>
 				</div>
 			</div>
 		</div>
@@ -27,7 +27,7 @@
 			<div class="controls">
 				<div class="input-icon left">
 					<i class="icon-lock"></i>
-					<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" ng-model="password"/>
+					<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" ng-model="password" ng-keyup="$event.keyCode == 13 && login()"/>
 				</div>
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 			<label class="checkbox">
 				<div class="checker">
 					<span  ng-class="{'checked' : toggle}">
-						<input name="remember" value="1" type="checkbox" ng-change="test()" ng-model="toggle">
+						<input name="remember" value="1" type="checkbox" ng-model="toggle">
 					</span>
 				</div>
 				Remember me

@@ -1,5 +1,4 @@
-﻿appCtrls.controller('reloadCtrl', ['$scope', '$state', '$resource', '$rootScope', '$location', 'Api','localDbSvc', '$timeout', '$document',
-function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $timeout, $document) {
+﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, webSvc, $timeout, $document, $templateCache) {
 	
 	var resourceApi = $resource(Api.url + ':action/:token');
     $rootScope.readNotification = [];
@@ -10,13 +9,19 @@ function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $ti
     $scope.showRead = false;
     
     // $rootScope.showRead= false;
-    resourceApi.get({ action: 'getUser', token: localDbSvc.getToken() }, function (data) {
+    webSvc.getUser().success(function (data) {
         if(data.status.code == 0){
             $rootScope.User = data.response;    
             loadNotifications();
         }
-    
     });
+
+    $scope.clearCache = function() { 
+        $templateCache.removeAll();
+        toastr.info("Cleared cache");
+    }
+
+    // $scope.clearCache();
 
     $rootScope.height = $document.height();
 
@@ -32,6 +37,12 @@ function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $ti
 
     markAsRead = function(data){
         var url = Api.url + 'markNotificationsAsRead/' + localDbSvc.getToken()
+        // webSvc.markNotificationsAsRead(data).success(function(data){
+        //     console.log(data);
+        //     if(data.status.code != 0){
+        //         toastr.warning(data.status.message);
+        //     }
+        // });
         $.ajax({
             type: "POST",
             datatype: "json",
@@ -89,9 +100,9 @@ function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $ti
                 }
 
                 for(i = 0; i < data.response.length; i++){
-                    var diff = daydiff(data.response[i].date);
-                    if(diff == 0) data.response[i].date = "Today";
-                    else if(diff == 1) data.response[i].date = "Yesterday";
+                    var diff = hourdiff(data.response[i].date);
+                    if(parseInt(diff/24) == 0) data.response[i].date = (diff % 24)  + " hrs ago";
+                    else if(parseInt(diff/24) == 1) data.response[i].date = "Yesterday";
                     else data.response[i].date = diff + " days ago";
 
                     if(data.response[i].closed){
@@ -149,10 +160,10 @@ function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $ti
 	
     $rootScope.updateUserTime();
 
-    function daydiff(alertDate) {
+    function hourdiff(alertDate) {
         var first = new Date(alertDate);
         var second = new Date();
-        return Math.round((second-first)/(1000*60*60*24));
+        return Math.round((second-first)/(1000*60*60));
     }
 
     //Get Notifications
@@ -167,4 +178,4 @@ function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, $ti
     $('.dropdown-notification > ul').click(function(e) {
         e.stopPropagation();
     });
-}]);
+});

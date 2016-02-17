@@ -24,6 +24,8 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
         sc: 'shipmentId',
         so: 'asc'
     };
+    var bounds = null;
+    $scope.vm = this;
 
     $scope.SearchBasic = function () {
         $scope.ViewShipment.shipmentDescription = null;
@@ -68,6 +70,7 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
             success: function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
                     // debugger;
+                    console.log("GetShipment", data);
                     $scope.ShipmentList = data.response;
                     $scope.ShipmentList.totalCount = data.totalCount;
                 } else if(data.status.code == 1){
@@ -113,8 +116,25 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
     }
 
     BindShipmentList();
+
+    $scope.$on('mapInitialized', function(event, m) {
+        $scope.vm.map = m;
+        if(bounds != null){
+            $scope.vm.map.fitBounds(bounds); 
+        }
+    });
+
     resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+    
+        bounds = new google.maps.LatLngBounds;
+        
         if (data.status.code == 0) {
+            for(i = 0 ; i < data.response.length; i ++){
+                bounds.extend(new google.maps.LatLng(data.response[i].location.lat, data.response[i].location.lon));
+            }
+            if($scope.vm.map != undefined){
+                $scope.vm.map.fitBounds(bounds);
+            }
             $scope.LocationList = data.response;
             angular.forEach($scope.LocationList, function (val, key) {
                 if (val.companyName) {

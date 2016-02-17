@@ -18,6 +18,8 @@
     }
     //get token from the cookie
     this.getToken = function(){
+        if($cookies.get('Token') == undefined)
+            return "_";
         return $cookies.get('Token');
     }
     //set username

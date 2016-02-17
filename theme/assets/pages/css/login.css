@@ -97,7 +97,8 @@ Login page
 }
 
 .login .checker input{
-  display: none;
+  /*display: none;*/
+  margin-left: -10px;
 }
 
 .login .content .forget-form .form-actions {

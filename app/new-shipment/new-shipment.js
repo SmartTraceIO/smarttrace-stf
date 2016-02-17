@@ -11,86 +11,88 @@ function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout
     //         localDbSvc.set("TokenExpiredOn", data.response.expired);
     //         $scope.AuthToken = data.response.token;
 
-            resourceApi.get({ action: 'getUser', token: localDbSvc.getToken() }, function (userData) {
-                if (userData.status.code == 0) {
-                    localDbSvc.set("CurrentUSerTimeZone", userData.response.timeZone);
-                    localDbSvc.set("CurrentUserTempUnits", userData.response.temperatureUnits);
-                    localDbSvc.set("InternalCompany", userData.response.internalCompany);
+    console.log("New Shipment Call", localDbSvc.getToken());
+    resourceApi.get({ action: 'getUser', token: localDbSvc.getToken() }, function (userData) {
+        console.log("UserData", userData);
+        if (userData.status.code == 0) {
+            localDbSvc.set("CurrentUSerTimeZone", userData.response.timeZone);
+            localDbSvc.set("CurrentUserTempUnits", userData.response.temperatureUnits);
+            localDbSvc.set("InternalCompany", userData.response.internalCompany);
+        }
+    })
+
+    
+
+    resourceApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
+        if (data.status.code == 0) {
+            $scope.AlertList = data.response;
+        }
+    });
+
+    resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+        if (data.status.code == 0) {
+            $scope.FromLocationList = [];
+            $scope.ToLocationList = [];
+            $scope.LocationList = data.response;
+            angular.forEach($scope.LocationList, function (val, key) {
+                if (val.companyName) {
+                    var dots = val.companyName.length > 20 ? '...' : '';
+                    var companyName = $filter('limitTo')(val.companyName, 20) + dots;
+                    $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
                 }
+                else {
+                    $scope.LocationList[key].DisplayText = val.locationName;
+                }
+
+
+                if (val.startFlag == "Y")
+                    $scope.FromLocationList.push(val);
+                if (val.endFlag == "Y")
+                    $scope.ToLocationList.push(val);
             })
+        }
+    });
 
-            
+    $scope.ResetForm = function () {
+        $state.go($state.current, {}, { reload: true });
+        $scope.frmAddNewShipment.$setPristine()
+    }
 
-            resourceApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
-                if (data.status.code == 0) {
-                    $scope.AlertList = data.response;
-                }
-            });
+    $scope.GetShippedFromAddress = function () {
+        var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.NewShipment.shipment.shippedFrom })[0];
+        if (shippedFrom) {
+            $scope.shippedFromAddress = shippedFrom.address;
+        }
+    }
 
-            resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
-                if (data.status.code == 0) {
-                    $scope.FromLocationList = [];
-                    $scope.ToLocationList = [];
-                    $scope.LocationList = data.response;
-                    angular.forEach($scope.LocationList, function (val, key) {
-                        if (val.companyName) {
-                            var dots = val.companyName.length > 20 ? '...' : '';
-                            var companyName = $filter('limitTo')(val.companyName, 20) + dots;
-                            $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
-                        }
-                        else {
-                            $scope.LocationList[key].DisplayText = val.locationName;
-                        }
+    $scope.GetShippedToAddress = function () {
+        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.NewShipment.shipment.shippedTo })[0];
+        if (shippedTo) {
+            $scope.shippedToAddress = shippedTo.address;
+        }
+    }
 
+    resourceApi.get({ action: "getDevices", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+        if(data.status.code != 0) return;
+        $scope.TrackerList = data.response;
+    });
 
-                        if (val.startFlag == "Y")
-                            $scope.FromLocationList.push(val);
-                        if (val.endFlag == "Y")
-                            $scope.ToLocationList.push(val);
-                    })
-                }
-            });
+    resourceApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
+        if(data.status.code != 0) return;
+        $scope.NotificationList = data.response;
+    });
 
-            $scope.ResetForm = function () {
-                $state.go($state.current, {}, { reload: true });
-                $scope.frmAddNewShipment.$setPristine()
-            }
+    resourceApi.get({ action: 'getShipmentTemplates', token: $scope.AuthToken, pageIndex: 1, pageSize: 1000000 }, function (data) {
+        if(data.status.code != 0) return;
+        $scope.ShipmentTemplates = data.response;
+    })
 
-            $scope.GetShippedFromAddress = function () {
-                var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.NewShipment.shipment.shippedFrom })[0];
-                if (shippedFrom) {
-                    $scope.shippedFromAddress = shippedFrom.address;
-                }
-            }
-
-            $scope.GetShippedToAddress = function () {
-                var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.NewShipment.shipment.shippedTo })[0];
-                if (shippedTo) {
-                    $scope.shippedToAddress = shippedTo.address;
-                }
-            }
-
-            resourceApi.get({ action: "getDevices", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
-                if(data.status.code != 0) return;
-                $scope.TrackerList = data.response;
-            });
-
-            resourceApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
-                if(data.status.code != 0) return;
-                $scope.NotificationList = data.response;
-            });
-
-            resourceApi.get({ action: 'getShipmentTemplates', token: $scope.AuthToken, pageIndex: 1, pageSize: 1000000 }, function (data) {
-                if(data.status.code != 0) return;
-                $scope.ShipmentTemplates = data.response;
-            })
-
-            resourceApi.get({ action: 'getUserTime', token: $scope.AuthToken }, function (data) {
-                if(data.status.code != 0) return;
-                $scope.Time = data.response;
-                $scope.time1 = new Date($scope.Time.dateTimeIso);
-                $scope.timeZone = data.response.timeZoneId;
-            })
+    resourceApi.get({ action: 'getUserTime', token: $scope.AuthToken }, function (data) {
+        if(data.status.code != 0) return;
+        $scope.Time = data.response;
+        $scope.time1 = new Date($scope.Time.dateTimeIso);
+        $scope.timeZone = data.response.timeZoneId;
+    })
     //     }
     // });
 

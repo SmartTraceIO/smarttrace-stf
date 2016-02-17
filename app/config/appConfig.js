@@ -1,19 +1,23 @@
 ﻿app.constant("Api", { url: "http://139.162.3.8:8080/web/vf/rest/" });
 
 // executes only once for an app, calls evertime when page refreshed by user
-app.run(['$state', '$rootScope', 'Api', '$resource', 'localDbSvc', '$timeout', '$templateCache',
-function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $templateCache) {
+app.run(function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $templateCache) {
   
     $rootScope.go = function(url){
         $state.go(url);
     }
 
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {
-        if (typeof(current) !== 'undefined'){
-            $templateCache.remove(current.templateUrl);
-            console.log("Cleared cache");
-        }
-    });
+    $rootScope.$on('$routeChangeStart', function (event, next, current) { 
+        $rootScope.$storage = $localStorage; 
+        console.log("Before clear");
+        if (typeof (current) !== 'undefined') { 
+            $templateCache.remove(current.templateUrl); 
+            console.log("Cleared");
+        } 
+    }); 
+    
+    // $templateCache.removeAll();
+    
 
     $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
@@ -57,7 +61,7 @@ function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $templateCac
             //     }
             // })
         });
-}]);
+});
 
 app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$provide', '$httpProvider', '$compileProvider', '$filterProvider', '$injector', function ($locationProvider, $stateProvider, $controllerProvider, $provide, $httpProvider, $compileProvider, $filterProvider, $injector) {
     ////register controller,service,factory,value,constant etc....
@@ -73,7 +77,7 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['Access-Control-Allow-Methods'];
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
+    
     $httpProvider.interceptors.push([
         '$injector',
         function ($injector){

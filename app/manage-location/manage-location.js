@@ -73,6 +73,22 @@ appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc
         $scope.fromModalPopup = true
     }
 
+    function geocodeLatLng(map, latlng) {
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                    $scope.Location.address = results[0].formatted_address;
+                } else {
+                    $scope.Location.address = "";
+                    console.log('No results found');
+                }
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+            }
+        });
+    }
+
     function fixInfoWindow() {
         //Here we redefine set() method.
         //If it is called for map option, we hide InfoWindow, if "noSupress" option isnt true.
@@ -116,6 +132,7 @@ appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc
             labelContent: '<i class="fa fa-home fa-lg" style="color:rgba(153,102,102,0.8);"></i>',
         });
         $scope.marker.setMap($scope.map);
+        geocodeLatLng($scope.map, $scope.myLatLng);
         $scope.ChangeRadious($scope.radious)
         google.maps.event.addListener($scope.map, "click", function (e) {
             $scope.myLatLng.lat = e.latLng.lat();
@@ -303,7 +320,21 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
             }
         })
     }
-
+    function geocodeLatLng(map, latlng) {
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                    $scope.Location.address = results[0].formatted_address;
+                } else {
+                    $scope.Location.address = "";
+                    console.log('No results found');
+                }
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+            }
+        });
+    }
     //this function is to ready map with ll functionality like center at given lat lang and draw circle of 3000m by default
     $scope.SetMap = function () {
         if (!$scope.radious)
@@ -322,7 +353,8 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
             labelContent: '<i class="fa fa-home fa-lg" style="color:rgba(153,102,102,0.8);"></i>',
         });
         $scope.marker.setMap($scope.map);
-        
+        geocodeLatLng($scope.map, $scope.myLatLng);
+        $scope.ChangeRadious($scope.radious);
         google.maps.event.addListener($scope.map, "click", function (e) {
             $scope.myLatLng.lat = e.latLng.lat();
             $scope.myLatLng.lng = e.latLng.lng();
