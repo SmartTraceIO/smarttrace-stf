@@ -1,12 +1,12 @@
-﻿appCtrls.controller('ListAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', function ($scope, rootSvc, $resource, localDbSvc, Api) {
+﻿appCtrls.controller('ListAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
 
     $scope.AuthToken = localDbSvc.getToken();
-    var alertApi = $resource(Api.url + ':action/:token');
+    
     var BindAlertList = function () {
-        alertApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
+        webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
                 $scope.AlertList.totalCount = data.totalCount;
@@ -66,16 +66,16 @@
 
     $scope.DeleteAlertProfile = function () {
         $("#confirmModel").modal("hide");
-        alertApi.get({ action: "deleteAlertProfile", token: $scope.AuthToken, alertProfileId: $scope.AlertIdToDeleteAlertProfile }, function (data) {
+        webSvc.deleteAlertProfile($scope.AlertIdToDeleteAlertProfile).success(function (data) {
             if (data.status.code == 0) {
                 toastr.success("Alert profile deleted successfully");
                 BindAlertList();
             }
         });
     }
-}]);
+});
 
-appCtrls.controller('AddAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$rootScope', '$timeout', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $rootScope, $timeout) {
+appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Alert');
         rootSvc.SetActiveMenu('Setup');
@@ -87,7 +87,6 @@ appCtrls.controller('AddAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
         $scope.PageHeader = "Alert Profiles";
     }
 
-    var alertApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Add";
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
@@ -195,34 +194,24 @@ appCtrls.controller('AddAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
                 $scope.Alert.temperatureIssues.push(val);
             });
 
-            $scope.AuthToken = localDbSvc.getToken();
-            var url = Api.url + 'saveAlertProfile/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.Alert),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Alert profile saved successfully")
-                    if (closeModalPopup) {
-                        $rootScope.modalInstance.close('cancel');
-                        $scope.fromModalPopup = false;
-                    }
-                    else {
-                        $state.go('manage.alert')
-                    }
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Alert profile saved successfully")
+                if (closeModalPopup) {
+                    $rootScope.modalInstance.close('cancel');
+                    $scope.fromModalPopup = false;
                 }
+                else {
+                    $state.go('manage.alert')
+                }
+            }).error(function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+                
             });
         }
     }
-}]);
+});
 
-appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', '$stateParams', 'Api', '$state', '$rootScope', '$timeout', function ($scope, rootSvc, $resource, localDbSvc, $stateParams, Api, $state, $rootScope, $timeout) {
+appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Alert');
         rootSvc.SetActiveMenu('Setup');
@@ -234,7 +223,6 @@ appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDb
         $scope.PageHeader = "Alert Profiles";
     }
 
-    var alertApi = $resource(Api.url + ':action/:token');
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
 
@@ -282,7 +270,7 @@ appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDb
             else
                 alertId = $rootScope.alertIdForModalPopup;
 
-            alertApi.get({ action: "getAlertProfile", token: $scope.AuthToken, alertProfileId: alertId }, function (data) {
+            webSvc.getAlertProfile(alertId).success(function (data) {
                 if (data.status.code == 0) {
                     $scope.Alert = data.response;
                     $scope.coldAlerts = [];
@@ -341,29 +329,19 @@ appCtrls.controller('EditAlertCtrl', ['$scope', 'rootSvc', '$resource', 'localDb
             angular.forEach($scope.hotAlerts, function (val, key) {
                 $scope.Alert.temperatureIssues.push(val);
             });
-            $scope.AuthToken = localDbSvc.getToken();
-            var url = Api.url + 'saveAlertProfile/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.Alert),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Alert profile updated successfully")
-                    if (closeModalPopup) {
-                        $rootScope.modalInstance.close('cancel');
-                        $scope.fromModalPopup = false;
-                    }
-                    else {
-                        $state.go('manage.alert')
-                    }
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+
+            webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Alert profile updated successfully")
+                if (closeModalPopup) {
+                    $rootScope.modalInstance.close('cancel');
+                    $scope.fromModalPopup = false;
                 }
+                else {
+                    $state.go('manage.alert')
+                }
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
-}]);
+});

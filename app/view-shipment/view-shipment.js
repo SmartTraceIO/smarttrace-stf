@@ -1,10 +1,8 @@
-﻿appCtrls.controller('ViewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'Api', 'localDbSvc', '$filter', '$rootScope',
-function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, $rootScope) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
     $scope.AuthToken = localDbSvc.getToken();
-    var resourceApi = $resource(Api.url + ':action/:token');
     $scope.specificDates = false;
     $scope.ViewShipment = {
         alertsOnly: false,
@@ -22,8 +20,9 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
         pageIndex: 1,
         pageSize: "20",
         sc: 'shipmentId',
-        so: 'asc'
+        so: 'desc'
     };
+    $scope.sc = 'shipmentId1';
     var bounds = null;
     $scope.vm = this;
 
@@ -45,10 +44,8 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
     $scope.AdvanceSearch = false;
     $scope.LocationOptions = { multiple: true };
 
-    var url = Api.url + 'getShipments/' + $scope.AuthToken;
     
     var BindShipmentList = function () {
-        var url = Api.url + 'getShipments/' + localDbSvc.getToken();
         $scope.loading = true;
         //if ($scope.ViewShipment.shipmentDateFrom) {
         //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateFrom).toDateString();
@@ -60,32 +57,25 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
         //    $scope.ViewShipment.shipmentDateTo = shippedDateFrom;
         //}
 
-        $.ajax({
-            type: "POST",
-            datatype: "json",
-            processData: false,
-            contentType: "text/plain",
-            data: JSON.stringify($scope.ViewShipment),
-            url: url,
-            success: function (data, textStatus, XmlHttpRequest) {
-                if (data.status.code == 0) {
-                    // debugger;
-                    console.log("GetShipment", data);
-                    $scope.ShipmentList = data.response;
-                    $scope.ShipmentList.totalCount = data.totalCount;
-                } else if(data.status.code == 1){
-                    $rootScope.redirectUrl = "/view-shipment";
-                    $rootScope.go("login");
-                };
-                
-                $scope.loading = false;
-
+        webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
+            console.log("GETSHI", data, textStatus, XmlHttpRequest);
+            if (data.status.code == 0) {
+                // debugger;
+                console.log("GetShipment", data);
+                $scope.ShipmentList = data.response;
+                $scope.ShipmentList.totalCount = data.totalCount;
+            } else if(data.status.code == 1){
+                $rootScope.redirectUrl = "/view-shipment";
+                $rootScope.go("login");
+            };
+            
+            $scope.loading = false;
+            if(!$scope.$$phase) {
                 $scope.$apply();
-            },
-            error: function (xmlHttpRequest, textStatus, errorThrown) {
-                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                $scope.loading = false;
             }
+        }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            $scope.loading = false;
         });
     }
 
@@ -104,9 +94,10 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
             status: null,
             pageIndex: 1,
             PageSize: "20",
-            so: 'shipmentDate',
-            sc: 'asc'
+            so: 'desc',
+            sc: 'shipmentDate'
         };
+        $scope.sc = "shipmentDate1";
 
         BindShipmentList();
     }
@@ -124,8 +115,8 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
         }
     });
 
-    resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
-    
+    webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
+        // console.log("Location", data);
         bounds = new google.maps.LatLngBounds;
         
         if (data.status.code == 0) {
@@ -148,14 +139,16 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
             })
         }
     });
-    resourceApi.get({ action: "getDevices", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+    webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
+        // console.log("Devi", data);
         if (data.status.code == 0) {
             $scope.TrackerList = data.response;
             // console.log(data.response);
         }
     });
     $scope.SortOptionChanged = function(){
-        var order = $scope.ViewShipment.sc.substr(-1);
+        var order = $scope.sc.substr(-1);
+        $scope.ViewShipment.sc = $scope.sc.substr(0, $scope.sc.length - 1);
         if(order == '1'){
             $scope.ViewShipment.so = "asc";
         } else{
@@ -205,4 +198,4 @@ function ($scope, rootSvc, $resource, Api, localDbSvc, $filter, $rootScope) {
             $scope.ViewShipment.lastMonth = nVal;
         }
     })
-}]);
+});

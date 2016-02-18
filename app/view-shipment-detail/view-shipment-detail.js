@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, $timeout, Api, localDbSvc, $stateParams, $resource, $filter, NgMap, $sce, $rootScope, $templateCache) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, $timeout, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache) {
 
     $templateCache.remove('/view-shipment-detail');
     console.log("cleared view-shipment-detail cache");
@@ -10,7 +10,6 @@
     $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
     $scope.ShipmentId = $stateParams.vsId; 
-    var shipmentApi = $resource(Api.url + ':action/:token');
     var plotLines = new Array();
     $scope.vm = this;
     $scope.specialMarkers = new Array();
@@ -302,8 +301,9 @@
     $scope.trackerPath = [];
     $scope.trackerColor = rootSvc.getTrackerColor(0);
     $scope.trackerMsg = new Array();
-    shipmentApi.get({ action: "getSingleShipment", token: $scope.AuthToken, shipmentId: $scope.ShipmentId }, function (graphData) {
-        console.log(graphData);
+
+    webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
+        // console.log("Success", graphData);
         if(graphData.status.code !=0){
             toastr.error(graphData.status.message, "Error");
             return;
@@ -341,7 +341,7 @@
             $scope.trackers.push(info.siblings[i]);
             $scope.trackers[i + 1].loaded = false;
 
-            shipmentApi.get({ action: "getSingleShipment", token: $scope.AuthToken, shipmentId: info.siblings[i].shipmentId }, function (graphData) {
+            webSvc.getSingleShipment(info.siblings[i].shipmentId).success( function (graphData) {
                 if(graphData.status.code != 0) return;
                 dt = graphData.response;
                 // console.log(dt.shipmentId);

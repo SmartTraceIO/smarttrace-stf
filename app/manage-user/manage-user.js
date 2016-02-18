@@ -1,11 +1,10 @@
-﻿appCtrls.controller('ListUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', function ($scope, rootSvc, $resource, localDbSvc, Api) {
+﻿appCtrls.controller('ListUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc) {
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
-    var userApi = $resource(Api.url + ':action/:token');
     var BindUserList = function () {
-        userApi.get({ action: "getUsers", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
+        webSvc.getUsers($scope.pageSize, $scope.pageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.UserList = data.response;
                 angular.forEach(data.response, function (val, key) {
@@ -47,27 +46,28 @@
 
     $scope.DeleteUser = function () {
         $("#confirmModel").modal("hide");
-        userApi.get({ action: "deleteUser", token: $scope.AuthToken, userId: $scope.UserIdToDeleteUser }, function (data) {
+        webSvc.deleteUser($scope.UserIdToDeleteUser).success(function(data){
             if (data.status.code == 0) {
                 toastr.success("User deleted successfully")
                 BindUserList();
+            } else {
+                toastr.success(data.status.message);
             }
         });
     }
 
-}]);
+});
 
-appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$filter', '$modal', '$rootScope', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $modal, $rootScope) {
+appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.InternalCompany = localDbSvc.get("InternalCompany");
-    var userApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Add";
     $scope.AddUser = true;
     var BindRoles = function () {
-        userApi.get({ action: "getRoles", token: $scope.AuthToken }, function (data) {
+        webSvc.getRoles().success(function(data){
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
@@ -76,7 +76,7 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
 
 
     var BindLanguages = function () {
-        userApi.get({ action: "getLanguages", token: $scope.AuthToken }, function (data) {
+        webSvc.getLanguages().success(function(data){
             if (data.status.code == 0) {
                 $scope.LanguageList = data.response;
             }
@@ -85,7 +85,7 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
 
 
     var BindTimezones = function () {
-        userApi.get({ action: "getTimeZones ", token: $scope.AuthToken }, function (data) {
+        webSvc.getTimeZones().success(function(data){
             if (data.status.code == 0) {
                 $scope.TimezoneList = data.response;
             }
@@ -93,7 +93,7 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
     }
 
     var BindDeviceGroups = function () {
-        userApi.get({ action: "getDeviceGroups ", token: $scope.AuthToken }, function (data) {
+        webSvc.getDeviceGroups().success(function(data){
             if (data.status.code == 0) {
                 $scope.DeviceGroupList = data.response;
             }
@@ -131,37 +131,27 @@ appCtrls.controller('AddUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
-            var url = Api.url + 'saveUser/' + $scope.AuthToken
-            $scope.User.user.deviceGroup = 'All Devices';
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.User),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("User added successfully")
-                    $state.go('manage.user')
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                }
+            webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("User added successfully");
+                $state.go('manage.user');
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
-}]);
+});
 
-appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', '$stateParams', 'Api', '$state', '$filter', '$rootScope', function ($scope, rootSvc, $resource, localDbSvc, $stateParams, Api, $state, $filter, $rootScope) {
+appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $rootScope) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
-    var userApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Edit";
     $scope.AddUser = false;
     var BindRoles = function () {
-        userApi.get({ action: "getRoles", token: $scope.AuthToken }, function (data) {
+        webSvc.getRoles().success(function(data){
+            console.log("TEST", data);
+        // .get({ action: "getRoles", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
@@ -170,7 +160,8 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
 
 
     var BindLanguages = function () {
-        userApi.get({ action: "getLanguages", token: $scope.AuthToken }, function (data) {
+        webSvc.getLanguages().success(function(data){
+        // .get({ action: "getLanguages", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.LanguageList = data.response;
             }
@@ -179,7 +170,8 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
 
 
     var BindTimezones = function () {
-        userApi.get({ action: "getTimeZones ", token: $scope.AuthToken }, function (data) {
+        webSvc.getTimeZones().success(function(data){
+        // .get({ action: "getTimeZones ", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.TimezoneList = data.response;
             }
@@ -187,7 +179,8 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     }
 
     var BindDeviceGroups = function () {
-        userApi.get({ action: "getDeviceGroups ", token: $scope.AuthToken }, function (data) {
+        webSvc.getDeviceGroups().success(function(data){
+        // .get({ action: "getDeviceGroups ", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.DeviceGroupList = data.response;
             }
@@ -200,18 +193,24 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     BindDeviceGroups();
     $scope.Init = function () {
 
-        $scope.UId = $stateParams.uId
+        $scope.UId = $stateParams.uId;
+        console.log($scope.UId);
         $scope.User = {};
         if ($scope.UId) {
 
-            userApi.get({ action: "getUser", token: $scope.AuthToken, userId: $scope.UId }, function (data) {
+            var param = {
+                userId: $scope.UId
+            };
+            webSvc.getUser(param).success(function(data){
+                // console.log("TEST", data);
+                // .get({ action: "getUser", token: $scope.AuthToken, userId: $scope.UId }, function (data) {
                 if (data.status.code == 0) {
                     $scope.User = {};
                     $scope.User.user = data.response;
                     $scope.externalCompany = data.response.externalCompany;
                     console.log($scope.User.user)
                 }
-            })
+            });
 
 
             //$scope.$watch("User.user.external", function (nVal, oVal) {
@@ -239,22 +238,12 @@ appCtrls.controller('EditUserCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
-            var url = Api.url + 'saveUser/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.User),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("User updated successfully")
-                    $state.go('manage.user')
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                }
+            webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("User updated successfully")
+                $state.go('manage.user')
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
-}]);
+});

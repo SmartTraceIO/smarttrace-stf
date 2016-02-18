@@ -1,11 +1,10 @@
-﻿appCtrls.controller('ListNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', function ($scope, rootSvc, $resource, localDbSvc, Api) {
+﻿appCtrls.controller('ListNotiCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
     rootSvc.SetPageTitle('List Notification');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Notifications Schedules");
-    $scope.AuthToken = localDbSvc.getToken();
-    var notiApi = $resource(Api.url + ':action/:token');
     var BindNotificationList = function () {
-        notiApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
+        webSvc.getNotificationSchedules($scope.pageSize, $scope.pageIndex, $scope.Sc, $scope.So).success(function(data){
+            
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
                 $scope.NotificationList.totalCount = data.totalCount;
@@ -39,16 +38,16 @@
 
     $scope.DeleteNotification = function () {
         $("#confirmModel").modal("hide");
-        notiApi.get({ action: "deleteNotificationSchedule", token: $scope.AuthToken, notificationScheduleId: $scope.NotificationToDeleteNotificationSchedule }, function (data) {
+        webSvc.deleteNotificationSchedule($scope.NotificationToDeleteNotificationSchedule).success(function(data){
             if (data.status.code == 0) {
                 toastr.success("Notification schedule deleted successfully");
                 BindNotificationList();
             }
         });
     }
-}]);
+});
 
-appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$rootScope', '$timeout', '$filter', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $rootScope, $timeout, $filter) {
+appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state, $rootScope, $timeout, $filter, webSvc) {
 
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Notification');
@@ -66,7 +65,6 @@ appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
     $scope.Noti.schedules = [];
     $scope.Action = "Add";
 
-    var notiApi = $resource(Api.url + ':action/:token');
     $scope.AuthToken = localDbSvc.getToken();
 
     if ($rootScope.modalInstance) {
@@ -131,7 +129,7 @@ appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
             })
         }
 
-        notiApi.get({ action: "listUsers", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: "asc", sc: "fullName" }, function (data) {
+        webSvc.listUsers(1000000, 1, "fullName", "asc").success(function(data){
             if (data.status.code == 0) {
                 $scope.UserList = data.response;
             }
@@ -166,30 +164,19 @@ appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
 
     $scope.SaveNoti = function (isValid, closeModalPopUp) {
 
-        if (isValid) {
-            var url = Api.url + 'saveNotificationSchedule/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                //data: JSON.stringify($scope.Noti),
-                data: angular.toJson($scope.Noti),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Notification added successfully")
-                    if (closeModalPopUp) {
-                        $rootScope.modalInstance.close('cancel');
-                        $scope.fromModalPopup = false;
-                    }
-                    else {
-                        $state.go('manage.noti')
-                    }
-
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+        if (isValid) {    
+            webSvc.saveNotificationSchedule($scope.Noti).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Notification added successfully")
+                if (closeModalPopUp) {
+                    $rootScope.modalInstance.close('cancel');
+                    $scope.fromModalPopup = false;
                 }
+                else {
+                    $state.go('manage.noti')
+                }
+
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
@@ -222,9 +209,9 @@ appCtrls.controller('AddNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
             $state.go('manage.noti')
         }, 200)
     }
-}]);
+});
 
-appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', '$stateParams', 'Api', '$state', '$rootScope', '$timeout', '$filter', function ($scope, rootSvc, $resource, localDbSvc, $stateParams, Api, $state, $rootScope, $timeout, $filter) {
+appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $stateParams, $state, $rootScope, $timeout, $filter) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Notification');
         rootSvc.SetActiveMenu('Setup');
@@ -237,8 +224,7 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     }
     $scope.Action = "Edit";
     $scope.AuthToken = localDbSvc.getToken();
-    var notiApi = $resource(Api.url + ':action/:token');
-
+    
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
@@ -313,28 +299,17 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
     }
     $scope.SaveNoti = function (isValid, closeModalPopup) {
         if (isValid) {
-            $scope.AuthToken = localDbSvc.getToken();
-            var url = Api.url + 'saveNotificationSchedule/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.Noti),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Notification updated successfully")
-                    if (closeModalPopup) {
-                        $scope.fromModalPopup = false;
-                        $rootScope.modalInstance.close('cancel');
-                    }
-                    else {
-                        $state.go('manage.noti')
-                    }
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            webSvc.saveNotificationSchedule($scope.Noti).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Notification updated successfully")
+                if (closeModalPopup) {
+                    $scope.fromModalPopup = false;
+                    $rootScope.modalInstance.close('cancel');
                 }
+                else {
+                    $state.go('manage.noti')
+                }
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
@@ -385,7 +360,7 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
 
     angular.element(document).ready(function () {
 
-        notiApi.get({ action: "getNotificationSchedule", token: $scope.AuthToken, notificationScheduleId: notiId }, function (data) {
+        webSvc.getNotificationSchedule(notiId).success(function(data){
             if (data.status.code == 0) {
                 $scope.Noti = data.response;
                 if (data.response.schedules.length == 0) {
@@ -432,7 +407,8 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
                     })
                 }
 
-                notiApi.get({ action: "listUsers", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: "asc", sc: "fullName" }, function (data) {
+
+                webSvc.listUsers(1000000, 1, "fullName", "asc").success(function(data){
                     if (data.status.code == 0) {
                         $scope.UserList = data.response;
                         angular.forEach($scope.Noti.schedules, function (val, key) {
@@ -450,4 +426,4 @@ appCtrls.controller('EditNotiCtrl', ['$scope', 'rootSvc', '$resource', 'localDbS
             $scope.Noti.schedules.splice(index, 1);
         }
     }
-}]);
+});

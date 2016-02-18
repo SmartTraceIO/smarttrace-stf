@@ -1,11 +1,10 @@
-﻿appCtrls.controller('ListLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', function ($scope, rootSvc, $resource, localDbSvc, Api) {
+﻿appCtrls.controller('ListLocCtrl', function ($scope, webSvc, rootSvc, localDbSvc) {
     rootSvc.SetPageTitle('Manage Location');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Locations");
     $scope.AuthToken = localDbSvc.getToken();
-    var locationApi = $resource(Api.url + ':action/:token');
     var BindLocationList = function () {
-        locationApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
+        webSvc.getLocations($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
                 $scope.LocationList.totalCount = data.totalCount;
@@ -39,7 +38,7 @@
 
     $scope.DeleteLocation = function () {
         $("#confirmModel").modal("hide");
-        locationApi.get({ action: "deleteLocation", token: $scope.AuthToken, locationId: $scope.LocationIdToDeleteLocation }, function (data) {
+        webSvc.deleteLocation($scope.LocationIdToDeleteLocation).success(function(data){
             if (data.status.code == 0) {
                 toastr.success("Location deleted successfully");
                 BindLocationList();
@@ -49,9 +48,9 @@
             }
         });
     }
-}]);
+});
 
-appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$rootScope', '$timeout', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $rootScope, $timeout) {
+appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Location');
         rootSvc.SetActiveMenu('Setup');
@@ -239,36 +238,25 @@ appCtrls.controller('AddLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
-                $scope.AuthToken = localDbSvc.getToken();
-                var url = Api.url + 'saveLocation/' + $scope.AuthToken
-                $.ajax({
-                    type: "POST",
-                    datatype: "json",
-                    processData: false,
-                    contentType: "text/plain",
-                    data: JSON.stringify($scope.Location),
-                    url: url,
-                    success: function (data, textStatus, XmlHttpRequest) {
-                        toastr.success("Location added successfully")
-                        if (closeModalPopup) {
-                            $scope.fromModalPopup = false;
-                            $rootScope.modalInstance.close('cancel');
-                        }
-                        else {
-                            $state.go('manage.loc')
-                        }
-                    },
-                    error: function (xmlHttpRequest, textStatus, errorThrown) {
-                        alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+                webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
+                    toastr.success("Location added successfully")
+                    if (closeModalPopup) {
+                        $scope.fromModalPopup = false;
+                        $rootScope.modalInstance.close('cancel');
                     }
+                    else {
+                        $state.go('manage.loc')
+                    }
+                }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
                 });
-                //call api
+                //call 
             }
         }
     }
-}]);
+});
 
-appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', '$stateParams', 'Api', '$state', '$rootScope', '$timeout', function ($scope, rootSvc, $resource, localDbSvc, $stateParams, Api, $state, $rootScope, $timeout) {
+appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Location');
         rootSvc.SetActiveMenu('Setup');
@@ -285,7 +273,6 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
         $scope.fromModalPopup = true;
     }
     $scope.locationId = $stateParams.lId
-    var locationApi = $resource(Api.url + ':action/:token');
     if ($scope.locationId || $rootScope.locationIdForModalPopup) {
         var locId;
         if ($scope.locationId)
@@ -293,7 +280,7 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
         else
             locId = $rootScope.locationIdForModalPopup;
 
-        locationApi.get({ action: "getLocation", token: $scope.AuthToken, locationId: locId }, function (data) {
+        webSvc.getLocation(locId).success(function(data){
             if (data.status.code == 0) {
                 $scope.Location = data.response;
                 console.log(data.response);
@@ -448,31 +435,19 @@ appCtrls.controller('EditLocCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSv
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
-                $scope.AuthToken = localDbSvc.getToken();
-                var url = Api.url + 'saveLocation/' + $scope.AuthToken
-                $.ajax({
-                    type: "POST",
-                    datatype: "json",
-                    processData: false,
-                    contentType: "text/plain",
-                    data: JSON.stringify($scope.Location),
-                    url: url,
-                    success: function (data, textStatus, XmlHttpRequest) {
-                        toastr.success("Location updated successfully")
-                        if (closeModalPopup) {
-                            $scope.fromModalPopup = false;
-                            $rootScope.modalInstance.close('cancel');
-                        }
-                        else {
-                            $state.go('manage.loc')
-                        }
-                    },
-                    error: function (xmlHttpRequest, textStatus, errorThrown) {
-                        alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+                webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
+                    toastr.success("Location updated successfully")
+                    if (closeModalPopup) {
+                        $scope.fromModalPopup = false;
+                        $rootScope.modalInstance.close('cancel');
                     }
+                    else {
+                        $state.go('manage.loc')
+                    }
+                }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
                 });
-                //call api
             }
         }
     }
-}]);
+});

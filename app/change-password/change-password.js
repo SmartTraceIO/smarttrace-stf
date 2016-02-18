@@ -1,13 +1,13 @@
-appCtrls.controller('ChangePWCtrl', ['$scope', 'rootSvc', 'Api', 'localDbSvc', '$stateParams', '$resource', '$state', '$location',
-function ($scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $location) {
+appCtrls.controller('ChangePWCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $location) {
 	$scope.usermail = $location.search().email;
 	$scope.password;
 	$scope.token = $location.search().token;
 	
-	var resourceApi = $resource(Api.url + ':action/');
+	
 	$scope.changePassword = function(){
 		if(isValidPassword($scope.password)){
-			resourceApi.get({ action: 'resetPassword', token: $scope.token, email: $scope.usermail, password: $scope.password }, function (data) {
+			webSvc.resetPassword($scope.token, $scope.usermail, $scope.password).success(function(data){
+			
 			    if (data.status.code == 0) {
 			        toastr.success(data.status.message);
 			    } else {
@@ -31,4 +31,4 @@ function ($scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $lo
 	// $scope.back = function(){
 	// 	$state.go("login");
 	// }
-}]);
+});

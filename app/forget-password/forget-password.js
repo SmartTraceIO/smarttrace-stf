@@ -1,9 +1,7 @@
-appCtrls.controller('ForgetCtrl', ['$scope', 'rootSvc', 'Api', 'localDbSvc', '$stateParams', '$resource', '$state', '$location',
-function ($scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $location) {
+appCtrls.controller('ForgetCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $location) {
 	$scope.toggle = false;
 	$scope.usermail;
 	
-	var resourceApi = $resource(Api.url + ':action/');
 	$scope.forget = function(){
 		var absUrl = $location.absUrl();
 		absUrl = absUrl.replace('?', '');
@@ -12,7 +10,7 @@ function ($scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $lo
 		baseUrl = baseUrl + "/change-password?";
 		baseUrl = baseUrl + "email=" + $scope.usermail + "&";
 
-		resourceApi.get({ action: 'forgetRequest', baseUrl: baseUrl, email: $scope.usermail }, function (data) {
+		webSvc.forgetRequest(baseUrl, $scope.usermail).success(function(data){
 		    if (data.status.code == 0) {
 		        toastr.success("An email has been sent to <b>" + $scope.usermail + "</b>", "Success!");
 		    } else {
@@ -27,4 +25,4 @@ function ($scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $lo
 		$state.go("login");
 	}
 
-}]);
+});

@@ -1,4 +1,4 @@
-appCtrls.controller('LoginCtrl', function ($scope, rootSvc, Api, webSvc, localDbSvc, $stateParams, $resource, $state, $rootScope, $location, $templateCache) {
+appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache) {
 
 	$templateCache.remove('/login');
 	console.log("cleared cache");

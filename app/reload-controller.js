@@ -1,6 +1,5 @@
-﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $resource, $rootScope, $location, Api, localDbSvc, webSvc, $timeout, $document, $templateCache) {
+﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, localDbSvc, webSvc, $timeout, $document, $templateCache) {
 	
-	var resourceApi = $resource(Api.url + ':action/:token');
     $rootScope.readNotification = [];
     $rootScope.unreadNotification = [];
     $rootScope.closedNotification = [];
@@ -36,25 +35,9 @@
     }
 
     markAsRead = function(data){
-        var url = Api.url + 'markNotificationsAsRead/' + localDbSvc.getToken()
-        // webSvc.markNotificationsAsRead(data).success(function(data){
-        //     console.log(data);
-        //     if(data.status.code != 0){
-        //         toastr.warning(data.status.message);
-        //     }
-        // });
-        $.ajax({
-            type: "POST",
-            datatype: "json",
-            processData: false,
-            contentType: "text/plain",
-            data: JSON.stringify(data),
-            url: url,
-            success: function (data, textStatus, XmlHttpRequest) {
-                if(data.status.code != 0){
-                    toastr.warning(data.status.message);
-                }
-                
+        webSvc.markNotificationsAsRead(data).success(function(data){
+            if(data.status.code != 0){
+                toastr.warning(data.status.message);
             }
         });
     }
@@ -89,8 +72,7 @@
     }
 
     loadNotifications = function(){
-        resourceApi.get({ action: 'getNotifications', token: localDbSvc.getToken(), includeRead: true  }, function (data) {  
-            // console.log(data);
+        webSvc.getNotifications(true).success(function (data) {  
             if(data.status.code == 0){
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
@@ -112,13 +94,12 @@
                     }
                 }
             }
-            
         });
     }
 
 
     $rootScope.updateUserTime = function() {
-        resourceApi.get({ action: 'getUserTime', token: localDbSvc.getToken() }, function (timeData) {
+        webSvc.getUserTime().success( function (timeData) {
             if (timeData.status.code == 0) {
                 $scope.tickInterval = 1000 //ms
                 $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);

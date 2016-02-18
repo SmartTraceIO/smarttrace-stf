@@ -1,35 +1,28 @@
-﻿appCtrls.controller('NewShipmentCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$filter', '$timeout', '$rootScope', '$state', 
-function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout, $rootScope, $state) {
+﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $state) {
     rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
     rootSvc.SetPageHeader("New Shipment");
-    var resourceApi = $resource(Api.url + ':action/:token');
+    
     $scope.AuthToken = localDbSvc.getToken();
-    // resourceApi.get({ action: 'login', email: 'developer@visfresh.com', password: 'password' }, function (data) {
-    //     if (data.status.code == 0) {
-    //         localDbSvc.set("AuthToken", data.response.token);
-    //         localDbSvc.set("TokenExpiredOn", data.response.expired);
-    //         $scope.AuthToken = data.response.token;
 
     console.log("New Shipment Call", localDbSvc.getToken());
-    resourceApi.get({ action: 'getUser', token: localDbSvc.getToken() }, function (userData) {
-        console.log("UserData", userData);
+    webSvc.getUser().success( function (userData) {
+        // console.log("USERDATA", userData);
         if (userData.status.code == 0) {
             localDbSvc.set("CurrentUSerTimeZone", userData.response.timeZone);
             localDbSvc.set("CurrentUserTempUnits", userData.response.temperatureUnits);
             localDbSvc.set("InternalCompany", userData.response.internalCompany);
         }
-    })
+    });
 
-    
-
-    resourceApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
+    webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success( function (data) {
+        
         if (data.status.code == 0) {
             $scope.AlertList = data.response;
         }
     });
 
-    resourceApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+    webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
         if (data.status.code == 0) {
             $scope.FromLocationList = [];
             $scope.ToLocationList = [];
@@ -72,22 +65,26 @@ function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout
         }
     }
 
-    resourceApi.get({ action: "getDevices", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+    webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
         if(data.status.code != 0) return;
         $scope.TrackerList = data.response;
     });
 
-    resourceApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
+    webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success( function (data) {
         if(data.status.code != 0) return;
         $scope.NotificationList = data.response;
     });
 
-    resourceApi.get({ action: 'getShipmentTemplates', token: $scope.AuthToken, pageIndex: 1, pageSize: 1000000 }, function (data) {
+    var param = {
+        pageSize: 1000000,
+        pageIndex: 1
+    };
+    webSvc.getShipmentTemplates(param).success(function(data){
         if(data.status.code != 0) return;
         $scope.ShipmentTemplates = data.response;
     })
 
-    resourceApi.get({ action: 'getUserTime', token: $scope.AuthToken }, function (data) {
+    webSvc.getUserTime().success( function (data) {
         if(data.status.code != 0) return;
         $scope.Time = data.response;
         $scope.time1 = new Date($scope.Time.dateTimeIso);
@@ -208,9 +205,19 @@ function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout
 
         if (!$scope.ShipmentTemplate.selectedShipmentTemplateId)
             $scope.ShipmentTemplate.selectedShipmentTemplateId = $scope.SelectedTemplateId;
-        resourceApi.get({ action: 'getShipmentTemplate', token: $scope.AuthToken, shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId }, function (data) {
+
+        var param = {
+            shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
+        };
+        webSvc.getShipmentTemplates(param).success(function(data){
             if (data.status.code == 0) {
-                $scope.NewShipment.shipment = data.response;
+                for(i = 0; i < data.response.length; i ++){
+                    if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
+                        $scope.NewShipment.shipment = data.response[i];
+                        data.response = data.response[i];
+                        break;
+                    }
+                }
 
                 if (data.response) {
                     $scope.SelectedTemplateId = data.response.shipmentTemplateId;
@@ -259,42 +266,24 @@ function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $timeout
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
 
-            var url = Api.url + 'saveShipment/' + $scope.AuthToken;
-            
-
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.NewShipment),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    if ($scope.NewShipment.saveAsNewTemplate)
-                        toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
-                    else
-                        toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page.")
-
-                    resourceApi.get({ action: 'getShipmentTemplates', token: $scope.AuthToken, pageIndex: 1, pageSize: 1000000 }, function (tempData) {
-                        $scope.ShipmentTemplates = tempData.response;
-                        $scope.ChangeSelectedShipmentTemplate();
-                    })
-
-                    //$scope.ShipmentTemplate.selectedShipmentTemplateId = $scope.SelectedTemplateId;
-                    //if (data.response) {
-                    //    resourceApi.get({ action: 'getShipmentTemplate', token: $scope.AuthToken, shipmentTemplateId: data.response.templateId }, function (subData) {
-                    //        if (subData.status.code == 0) {
-                    //            $scope.NewShipment.shipment = subData.response;
-                    //            $scope.ShipmentTemplate.selectedShipmentTemplateId = subData.response.templateId;
-                    //        }
-                    //    })
-                    //}
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                }
+            webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
+                console.log("TEST", data);
+                if ($scope.NewShipment.saveAsNewTemplate)
+                    toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
+                else
+                    toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page.")
+                var param = {
+                    pageSize: 1000000,
+                    pageIndex: 1
+                };
+                webSvc.getShipmentTemplates(param).success(function(tempData){
+                    $scope.ShipmentTemplates = tempData.response;
+                    $scope.ChangeSelectedShipmentTemplate();
+                });
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
 
-}]);
+});

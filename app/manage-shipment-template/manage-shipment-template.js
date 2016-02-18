@@ -1,11 +1,16 @@
-﻿appCtrls.controller('ListShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', function ($scope, rootSvc, $resource, localDbSvc, Api) {
+﻿appCtrls.controller('ListShipTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
     rootSvc.SetPageTitle('List Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
-    var shipmentApi = $resource(Api.url + ':action/:token');
     var BindShipmentList = function () {
-        shipmentApi.get({ action: "getShipmentTemplates", token: $scope.AuthToken, pageSize: $scope.PageSize, pageIndex: $scope.PageIndex, so: $scope.So, sc: $scope.Sc }, function (data) {
+        var param = {
+            pageSize: $scope.PageSize, 
+            pageIndex: $scope.PageIndex, 
+            so: $scope.So, 
+            sc: $scope.Sc
+        };
+        webSvc.getShipmentTemplates(param).success(function(data){
             if (data.status.code == 0) {
                 $scope.ShipmentTemplateList = data.response;
                 $scope.ShipmentTemplateList.totalCount = data.totalCount;
@@ -39,7 +44,7 @@
 
     $scope.DeleteShipment = function () {
         $("#confirmModel").modal("hide");
-        shipmentApi.get({ action: "deleteShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STemplateToDeleteShipTemp }, function (data) {
+        webSvc.deleteShipmentTemplate($scope.STemplateToDeleteShipTemp).success(function(data){
             if (data.status.code == 0) {
                 toastr.success("Shipment template deleted successfully")
                 BindShipmentList();
@@ -47,17 +52,16 @@
         });
     }
 
-}]);
+});
 
-appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', 'Api', '$state', '$filter', '$modal', '$rootScope', function ($scope, rootSvc, $resource, localDbSvc, Api, $state, $filter, $modal, $rootScope) {
+appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
     rootSvc.SetPageTitle('Add Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
-    var shipmentApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Add";
     var BindLocations = function (cb) {
-        shipmentApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+        webSvc.getLocations(1000000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
 
@@ -87,7 +91,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
         });
     }
     var BindAlertProfiles = function (cb) {
-        shipmentApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
+        webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
             }
@@ -97,7 +101,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
         });
     }
     var BindNotificationSchedules = function (cb) {
-        shipmentApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
+        webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
             }
@@ -216,22 +220,28 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            $scope.AuthToken = localDbSvc.getToken();
-            var url = Api.url + 'saveShipmentTemplate/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.ShipmentTemplate),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Shipment template added successfully")
-                    $state.go('manage.shiptemp')
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                }
+            // $scope.AuthToken = localDbSvc.getToken();
+            // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
+            // $.ajax({
+            //     type: "POST",
+            //     datatype: "json",
+            //     processData: false,
+            //     contentType: "text/plain",
+            //     data: JSON.stringify($scope.ShipmentTemplate),
+            //     url: url,
+            //     success: function (data, textStatus, XmlHttpRequest) {
+            //         toastr.success("Shipment template added successfully")
+            //         $state.go('manage.shiptemp')
+            //     },
+            //     error: function (xmlHttpRequest, textStatus, errorThrown) {
+            //         alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            //     }
+            // });
+            webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Shipment template added successfully")
+                $state.go('manage.shiptemp')
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
         }
     }
@@ -391,7 +401,7 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
     }
 
     $scope.ChangeNotiScheduleForArrival = function () {
-        arrivalNotificationSchedules
+        
         if ($scope.ShipmentTemplate && $scope.ShipmentTemplate.arrivalNotificationSchedules) {
             $scope.ArrivalNotiRule = '';
             for (var i = 0; i < $scope.ShipmentTemplate.arrivalNotificationSchedules.length; i++) {
@@ -410,20 +420,20 @@ appCtrls.controller('AddShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'local
             }
         }
     }
-}]);
+});
 
-appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'localDbSvc', '$stateParams', 'Api', '$state', '$filter', '$rootScope', '$modal', function ($scope, rootSvc, $resource, localDbSvc, $stateParams, Api, $state, $filter, $rootScope, $modal) {
+appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, $state, $filter, $rootScope, $modal, webSvc) {
     rootSvc.SetPageTitle('Edit Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
-    var shipmentApi = $resource(Api.url + ':action/:token');
     $scope.Action = "Edit";
     var BindLocations = function (cb) {
 
     }
     var BindAlertProfiles = function (cb) {
-        shipmentApi.get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
+        webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
+        // .get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
                 $scope.CreateAlertRule();
@@ -434,7 +444,8 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
         });
     }
     var BindNotificationSchedules = function (cb) {
-        shipmentApi.get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
+        webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
+        // .get({ action: "getNotificationSchedules", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'notificationScheduleName', sc: 'asc' }, function (data) {
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
             }
@@ -452,7 +463,11 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
         $scope.STId = $stateParams.stId
         $scope.ShipmentTemplate = {};
         if ($scope.STId) {
-            shipmentApi.get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
+            var param = {
+                shipmentTemplateId: $scope.STId
+            };
+            webSvc.getShipmentTemplates(param).success(function(data){
+            // .get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
                 if (data.status.code == 0) {
                     $scope.ShipmentTemplate = data.response;
                     if (data.response) {
@@ -471,7 +486,7 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
                         else
                             $scope.ShipmentTemplate.arrivalNotificationWithinKm = "";
 
-                        shipmentApi.get({ action: "getLocations", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'locationName', sc: 'asc' }, function (data) {
+                        webSvc.getLocations(1000000, 1, 'locationName', 'asc').success(function(data){
                             if (data.status.code == 0) {
                                 $scope.LocationList = data.response;
                                 $scope.FromLocationList = [];
@@ -624,23 +639,31 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            $scope.AuthToken = localDbSvc.getToken();
-            var url = Api.url + 'saveShipmentTemplate/' + $scope.AuthToken
-            $.ajax({
-                type: "POST",
-                datatype: "json",
-                processData: false,
-                contentType: "text/plain",
-                data: JSON.stringify($scope.ShipmentTemplate),
-                url: url,
-                success: function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Shipment template updated successfully")
-                    $state.go('manage.shiptemp')
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-                }
+            // $scope.AuthToken = localDbSvc.getToken();
+            // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
+            // $.ajax({
+            //     type: "POST",
+            //     datatype: "json",
+            //     processData: false,
+            //     contentType: "text/plain",
+            //     data: JSON.stringify($scope.ShipmentTemplate),
+            //     url: url,
+            //     success: function (data, textStatus, XmlHttpRequest) {
+            //         toastr.success("Shipment template updated successfully")
+            //         $state.go('manage.shiptemp')
+            //     },
+            //     error: function (xmlHttpRequest, textStatus, errorThrown) {
+            //         alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            //     }
+            // });
+            
+            webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Shipment template added successfully")
+                $state.go('manage.shiptemp')
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
+
         }
     }
     $scope.openAddLocation = function () {
@@ -822,4 +845,4 @@ appCtrls.controller('EditShipTempCtrl', ['$scope', 'rootSvc', '$resource', 'loca
             }
         }
     }
-}]);
+});

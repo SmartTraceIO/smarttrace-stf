@@ -1,12 +1,10 @@
-appCtrls.controller('UserUpdateCtrl', ['$cookies', '$scope', 'rootSvc', 'Api', 'localDbSvc', '$stateParams', '$resource', '$state','$rootScope', '$location', 
-function ($cookies, $scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $state, $rootScope, $location) {
+appCtrls.controller('UserUpdateCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location) {
 
-	var resourceApi = $resource(Api.url + ':action/:token');
 	$scope.AuthToken = localDbSvc.getToken();
 	$scope.User = $rootScope.User;
 
     if($scope.User == undefined){
-        resourceApi.get({ action: 'getUser', token: $scope.AuthToken }, function (data) {
+        webSvc.getUser().success( function (data) {
             $rootScope.User = data.response;
             $scope.User = data.response;
         });
@@ -29,26 +27,16 @@ function ($cookies, $scope, rootSvc, Api, localDbSvc, $stateParams, $resource, $
     		var userData = {};
 	    	userData.user = $scope.User.id;
 	    	userData.password = $scope.password1;
-    		var url = Api.url + 'updateUserDetails/' + $scope.AuthToken;
-	    	$.ajax({
-	            type: "POST",
-	            datatype: "json",
-	            processData: false,
-	            contentType: "text/plain",
-	            data: JSON.stringify(userData),
-	            url: url,
-	            success: function (data, textStatus, XmlHttpRequest) {
-	                if(data.status.code == 0)
-	                    toastr.success("Successfully updated the password");
-	                else
-	                    toastr.warning(data.status.message);
-	            },
-	            error: function (xmlHttpRequest, textStatus, errorThrown) {
-	                toastr.warning("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-	            }
-	        });
+	     	webSvc.updateUserDetails(userData).success( function (data, textStatus, XmlHttpRequest) {
+                if(data.status.code == 0)
+                    toastr.success("Successfully updated the password");
+                else
+                    toastr.warning(data.status.message);
+            }).error( function (xmlHttpRequest, textStatus, errorThrown) {
+                toastr.warning("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            });
     	}
     	
     }
     
-}]);
+});

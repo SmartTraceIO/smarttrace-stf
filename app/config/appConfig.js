@@ -1,7 +1,7 @@
 ﻿app.constant("Api", { url: "http://139.162.3.8:8080/web/vf/rest/" });
 
 // executes only once for an app, calls evertime when page refreshed by user
-app.run(function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $templateCache) {
+app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $templateCache) {
   
     $rootScope.go = function(url){
         $state.go(url);
@@ -21,7 +21,6 @@ app.run(function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $tem
 
     $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
-            var resourceApi = $resource(Api.url + ':action/:token');
 
             if (toState) {
                 $rootScope.previousState = toState
@@ -33,33 +32,6 @@ app.run(function ($state, $rootScope, Api, $resource, localDbSvc, $timeout, $tem
             if ($rootScope.modalInstance)
                 $rootScope.modalInstance.close('cancel');
 
-            //call every time when route changed
-            // if (!localDbSvc.getToken()) {
-            //     resourceApi.get({ action: 'login', email: 'developer@visfresh.com', password: 'password' }, function (data) {
-            //         if (data.status.code == 0) {
-            //             localDbSvc.set("AuthToken", data.response.token);
-            //             localDbSvc.set("TokenExpiredOn", data.response.expired);
-
-            //         }
-            //     });
-            // }
-
-
-            // resourceApi.get({ action: 'getUserTime', token: localDbSvc.getToken() }, function (timeData) {
-            //     if (timeData.status.code == 0) {
-            //         var tickInterval = 1000 //ms
-            //         $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);
-
-            //         var tick = function () {
-            //             $rootScope.RunningTime.setSeconds($rootScope.RunningTime.getSeconds() + 1);
-            //             $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
-            //             $timeout(tick, tickInterval); // reset the timer
-            //         }
-
-            //         // Start the timer
-            //         $timeout(tick, tickInterval);
-            //     }
-            // })
         });
 });
 
