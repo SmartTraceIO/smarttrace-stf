@@ -6,7 +6,6 @@
     $rootScope.closeText = "";
     $rootScope.loading = false;
     $scope.showRead = false;
-    
     // $rootScope.showRead= false;
     webSvc.getUser().success(function (data) {
         if(data.status.code == 0){

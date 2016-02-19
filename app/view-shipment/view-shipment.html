@@ -172,8 +172,6 @@
             </h4>
             <span class="text-error" style="vertical-align:middle" ng-if="loading">Retrieving your shipment data...</span>
             <h4 class="pull-right">
-                <button class="btn default btn-sm uppercase" type="button"><i class="fa fa-print"></i>&nbsp;Csv</button>
-                <button class="btn default btn-sm uppercase" type="button"><i class="fa fa-search"></i>&nbsp;Pdf</button>
                 <button class="btn default btn-sm uppercase" type="button"><i class="fa fa-times"></i>&nbsp;Print</button>
             </h4>
             <div class="clearfix"></div>
@@ -195,21 +193,19 @@
                         <select class="form-control" style="width:auto;display:inline-block" ng-change="SortOptionChanged()" ng-model="sc">
                             <option value="shipmentId1">CreationDate (Newest at top)</option>
                             <option value="shipmentId">CreationDate (Oldest at top)</option>
-                            <option value="actualArrivalDate">Date of Arrival (Newest at top)</option>
-                            <option value="actualArrivalDate1">Date of Arrival (Oldest at top)</option>
+                            <option value="actualArrivalDate1">Date of Arrival (Newest at top)</option>
+                            <option value="actualArrivalDate">Date of Arrival (Oldest at top)</option>
                             <option value="shipmentDate1">Date Shipped (Newest at top)</option>
                             <option value="shipmentDate">Date Shipped (Oldest at top)</option>
                             <option value="shipmentDescription">Description (A-Z)</option>
                             <option value="shipmentDescription1">Description (Z-A)</option>
-                            <option value="estArrivalDate">ETA (Newest at top)</option>
-                            <option value="estArrivalDate1">ETA (Oldest at top)</option>
                             <option value="shippedFrom">Shipped From (A-Z)</option>
                             <option value="shippedFrom1">Shipped From (Z-A)</option>
                             <option value="shippedTo">Shipped To (A-Z)</option>
                             <option value="shippedTo1">Shipped To (Z-A)</option>
                             <option value="status">Status</option>
-                            <option value="deviceSN1">Tracker Num (1-9)</option>
-                            <option value="deviceSN">Tracker Num (9-1)</option>
+                            <option value="deviceSN">Tracker Num (1-9)</option>
+                            <option value="deviceSN1">Tracker Num (9-1)</option>
                         </select>
                     </div>
                 </div>

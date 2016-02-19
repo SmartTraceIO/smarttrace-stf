@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, $timeout, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout) {
 
     $templateCache.remove('/view-shipment-detail');
     console.log("cleared view-shipment-detail cache");
@@ -25,6 +25,34 @@
     $scope.mapInfo = {};
     var bounds= null;
 
+    //------CHART SERIES DATA  ------
+    var chartSeries = new Array();
+    var subSeries = new Array();
+    var endSeries = new Array();
+    var trackerArrival = new Array();
+    var trackerDest = new Array();
+    var alertData = new Array();
+
+    //google map first point
+    $scope.firstPoint = {};
+    $scope.currentPoint = {};
+    $scope.trackerPath = [];
+    $scope.trackerColor = rootSvc.getTrackerColor(0);
+    $scope.trackerMsg = new Array();
+
+    //------Reload data every 10 min BEGIN-------
+    var refreshTimer;
+    function refreshData(){
+        loadTrackerData();
+        // console.log("Updating tracker data...");
+        refreshTimer = $timeout(refreshData, 300000);
+    }
+
+    refreshTimer = $timeout(refreshData, 300000);
+    $scope.$on("$destroy", function(event){
+        $timeout.cancel(refreshTimer);
+    });
+    //------Reload data every 10 min END-------
 
     $scope.$on('mapInitialized', function(event, m) {
         $scope.vm.map = m;
@@ -76,7 +104,6 @@
         if($scope.mapInfo.startLocationForMap != null)
         bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
         
-        console.log($scope.trackerPath);
         if(trackerRoute != null){
             trackerRoute.setMap(null);
         }
@@ -89,7 +116,6 @@
         // console.log($scope.vm.map, bounds);
         // console.log($scope.vm.map);
         if($scope.vm.map != undefined){
-            console.log("Fitted");
             $scope.vm.map.fitBounds(bounds); 
             trackerRoute.setMap($scope.vm.map);
             //Apply Shape route first
@@ -98,12 +124,13 @@
             }
         }
     }
-    $scope.levels="change";
+
     $scope.switchTracker = function(index){
         $scope.chartConfig.redraw= true;
         updateMapData(index);
         $scope.changeActiveTracker(index);
     }
+
     $scope.changeActiveTracker = function(index){
 
         $scope.MI = index;
@@ -203,6 +230,7 @@
         }
         // console.log($scope.trackerMsg.length);
     }
+
     function updateMapMarker(){
         // $scope.ttShow = true;
         // var data = $scope.markerData;
@@ -228,6 +256,7 @@
         //     }
         // }
     }
+    
     $scope.showPathInfo = function(){
         // console.log(this);
     }
@@ -295,298 +324,307 @@
         // updateMapMarker();
     }
 
-    //google map first point
-    $scope.firstPoint = {};
-    $scope.currentPoint = {};
-    $scope.trackerPath = [];
-    $scope.trackerColor = rootSvc.getTrackerColor(0);
-    $scope.trackerMsg = new Array();
+    loadTrackerData();    
 
-    webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
-        // console.log("Success", graphData);
-        if(graphData.status.code !=0){
-            toastr.error(graphData.status.message, "Error");
-            return;
-        }
+    function loadTrackerData(){
 
-        var info = graphData.response;
-        // console.log(info);
-
-        //Map start and end location info
-        $scope.mapInfo.startLocationForMap = info.startLocationForMap;
-        $scope.mapInfo.startTimeISO = info.startTimeISO;
-        $scope.mapInfo.startLocation = info.startLocation;
-        $scope.mapInfo.endLocationForMap = info.endLocationForMap;
-        $scope.mapInfo.endLocation = info.endLocation;
-        $scope.mapInfo.etaISO = info.etaISO;
-        $scope.mapInfo.arrivalTimeISO = info.arrivalTimeISO;
-        $scope.mapInfo.lastReadingTimeISO = info.lastReadingTimeISO;
-
-        // console.log("******", info.locations.length);
-
-        //------------PREPARE TRACKERS INFO  BEGIN-------------
-        var tempObj = {};
-        for(var k in info){
-            if(info.hasOwnProperty(k)){
-                tempObj[k] = info[k];
+        webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
+            // console.log("Success", graphData);
+            if(graphData.status.code !=0){
+                toastr.error(graphData.status.message, "Error");
+                return;
             }
-        }
-        if(tempObj.alertYetToFire != null)
-            tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
-        tempObj.loaded = true;
-        //Load Sibling Shipment details
-        
-        $scope.trackers.push(tempObj);
-        for(i = 0; i < info.siblings.length; i++){
-            $scope.trackers.push(info.siblings[i]);
-            $scope.trackers[i + 1].loaded = false;
 
-            webSvc.getSingleShipment(info.siblings[i].shipmentId).success( function (graphData) {
-                if(graphData.status.code != 0) return;
-                dt = graphData.response;
-                // console.log(dt.shipmentId);
-                // debugger;
-                for(j = 1; j < $scope.trackers.length; j++){
-                    if($scope.trackers[j].shipmentId == dt.shipmentId){
-                        for(var k in dt){
-                            if(dt.hasOwnProperty(k)){
-                                $scope.trackers[j][k] = dt[k];
-                            }
-                        }
-                        if($scope.trackers[j].alertYetToFire != null)
-                            $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
-                        $scope.trackers[j].loaded = true;
-                        prepareMainHighchartSeries();
-                        refreshHighchartSeries();
-                        break;
-                    }
+            var info = graphData.response;
+            // console.log(info);
+
+            //Map start and end location info
+            $scope.mapInfo.startLocationForMap = info.startLocationForMap;
+            $scope.mapInfo.startTimeISO = info.startTimeISO;
+            $scope.mapInfo.startLocation = info.startLocation;
+            $scope.mapInfo.endLocationForMap = info.endLocationForMap;
+            $scope.mapInfo.endLocation = info.endLocation;
+            $scope.mapInfo.etaISO = info.etaISO;
+            $scope.mapInfo.arrivalTimeISO = info.arrivalTimeISO;
+            $scope.mapInfo.lastReadingTimeISO = info.lastReadingTimeISO;
+
+            // console.log("******", info.locations.length);
+
+            //------------PREPARE TRACKERS INFO  BEGIN-------------
+            var tempObj = {};
+            for(var k in info){
+                if(info.hasOwnProperty(k)){
+                    tempObj[k] = info[k];
                 }
+            }
+            if(tempObj.alertYetToFire != null)
+                tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
+            tempObj.loaded = true;
+            tempObj.loadedForIcon = true;
+            console.log("MainTracker", tempObj.locations.length);
+            //$scope.trackers[0] is the main tracker here.
+            //at the first time, it addes new tracker info to the $scope.trackers
+            //next time, it only updates the main tracker info, not insert it to $scope.trackers
+            if($scope.trackers.length == 0){
+                $scope.trackers.push(tempObj);
+                for(i = 0; i < info.siblings.length; i++){
+                    $scope.trackers.push(info.siblings[i]);
+                    $scope.trackers[i + 1].loaded = false;
+                }
+            }
+            else
+                $scope.trackers[0] = tempObj;
+
+            //Load Sibling Shipment details
+            
+            //refresh siblings
+            
+            //reload sibling info
+            for(i = 0; i < info.siblings.length; i++){
+                $scope.trackers[i + 1].loadedForIcon = false;
+
+
+                webSvc.getSingleShipment(info.siblings[i].shipmentId).success( function (graphData) {
+                    if(graphData.status.code != 0) return;
+                    dt = graphData.response;
+                    // console.log(dt.shipmentId);
+                    // debugger;
+                    for(j = 1; j < $scope.trackers.length; j++){
+                        if($scope.trackers[j].shipmentId == dt.shipmentId){
+                            for(var k in dt){
+                                if(dt.hasOwnProperty(k)){
+                                    $scope.trackers[j][k] = dt[k];
+                                }
+                            }
+                            if($scope.trackers[j].alertYetToFire != null)
+                                $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
+                            $scope.trackers[j].loaded = true;
+                            $scope.trackers[j].loadedForIcon = true;
+                            prepareMainHighchartSeries();
+                            refreshHighchartSeries();
+                            break;
+                        }
+                    }
+                });
+            }
+            for(i = 0; i < $scope.trackers.length; i++){
+                $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
+                $scope.trackers[i].index = i;
+            }
+            //------------PREPARE TRACKERS INFO    END-------------
+
+            //set tracker information
+            angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
+                child.index = index;
             });
-        }
-        for(i = 0; i < $scope.trackers.length; i++){
-            $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
-            $scope.trackers[i].index = i;
-        }
-        //------------PREPARE TRACKERS INFO    END-------------
 
-        //set tracker information
-        angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
-            child.index = index;
-        });
+            //start and end location info
 
-        //start and end location info
+            var locations = info.locations;
+            //google map data
+            $scope.firstPoint = locations[0];
+            $scope.currentPoint.loc = locations[0];
+            $scope.currentPoint.iconUrl = "theme/img/edot.png";
+            
+            updateMapData($scope.MI);
 
-        var locations = info.locations;
-        //google map data
-        $scope.firstPoint = locations[0];
-        $scope.currentPoint.loc = locations[0];
-        $scope.currentPoint.iconUrl = "theme/img/edot.png";
-        
-        updateMapData(0);
-
-        // console.log($scope.trackerPath);
-        
-        $scope.changeActiveTracker(0);
-        
-        $scope.chartConfig = {
-            redraw: false,
-            options:{
-                plotOptions: {
-                    series: {
-                        point: {
-                            events: {
-                                mouseOver: function () {
-                                    var idx;
-                                    for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
-                                        if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x){
-                                            idx = index;
-                                            break;
+            // console.log($scope.trackerPath);
+            
+            $scope.changeActiveTracker($scope.MI);
+            
+            $scope.chartConfig = {
+                redraw: false,
+                options:{
+                    plotOptions: {
+                        series: {
+                            point: {
+                                events: {
+                                    mouseOver: function () {
+                                        var idx;
+                                        for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
+                                            if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x){
+                                                idx = index;
+                                                break;
+                                            }
                                         }
+                                        // $scope.firstPoint = $scope.trackers[$scope.MI].locations[idx];
+                                        // console.log(idx);
+                                        $scope.showAlerts(idx);
+                                    },
+                                    mouseOut: function () {
+                                        $scope.showAlerts(-1);
                                     }
-                                    // $scope.firstPoint = $scope.trackers[$scope.MI].locations[idx];
-                                    // console.log(idx);
-                                    $scope.showAlerts(idx);
-                                },
-                                mouseOut: function () {
-                                    $scope.showAlerts(-1);
                                 }
                             }
                         }
-                    }
-                },
-                scrollbar : {
-                    enabled : false,
-                },
-                credits: {
-                    enabled: false
-                },
-                rangeSelector: {
-                    selected: 2,
-                    enabled: true,
-                    inputEnabled: false,
-                    buttonTheme: {
-                        visibility: 'hidden'
                     },
-                    labelStyle: {
-                        visibility: 'hidden'
-                    }
-                },
-                navigator: {
-                    enabled: true
-                },
-                // yAxis: {
-                //  title: {
-                //      align: 'left',
-                //      text: "Temperature <sup>o</sup>C"
-                //  }
-                // },
-                tooltip: {
-                    style: {
-                        padding: '0px',
+                    scrollbar : {
+                        enabled : false,
                     },
-                    shadow: false,
-                    backgroundColor: 'rgba(249, 249, 249, 0)',
-                    borderWidth: 0,
-                    useHTML: true,
-                    hideDelay: 500,
-                    formatter: function () {
-                        
-                        var s = "";
-                        var titles = new Array();
-                        var title;
-                        var color;
-                        var symbol;
-                        color = this.points[this.points.length - 1].series.color;
-                        var isAlert = false;
-                        symbol = this.points[this.points.length - 1].series.symbol;
-                        // var index = this.points[0].point.index;
-                        // console.log("INDEX:", index);
-                        // console.log(subSeries);
-                        // console.log($scope.MI);
-                        var index;
-                        for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
-                            if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x) break;
-                        }
-                        // console.log(this.x, this.y, index);
-                        // console.log(this.x);
-                        // console.log($scope.trackers[$scope.MI].locations[index].timeISO);
-                        $.each(this.points, function () {
-                            titles.push(this.series.name);
-                            color = this.series.color;
-                            symbol = this.series.symbol;
-                            // console.log(this.series);
-                            // if(this.series.name == 'Destination'){
-                            //     s = '<div><span>' + this.y.toFixed(1) + '<sup>o</sup>C at ' + formatDate(this.x) + '</span></div>';
-                            //     s += "<div style='color:#888;'><span>ABC Store for last 1hr 30min</span></div>";
-                            //     s += "<div><span>Tracker shuts down in 20min</span></div>";
-                            // } else if(this.series.name == 'Arrival'){
-                            //     s = '<div><span><20kms away at ' + formatDate(this.x) + '</span></div>';
-                            //     s += "<div style='color:#888;'><span>Fred sparks, Joe turner, Sue smith</span></div>";
-                            // } else{
-                            s = "";
-                            for(i = 0; i < $scope.trackerMsg[index].lines.length; i++)
-                                s += "<div>" + $scope.trackerMsg[index].lines[i] + "</div>";
-                            // if(i > 1) color = "#b3bcbf";
-                            if(i > 1) isAlert = true;
-                            // }
-                        });
-
-                        // return title + s;
-                        // if(titles[titles.length - 1] == "Destination"){
-                        //     var imgurl = symbol.substr(4, symbol.length - 5);
-                        //     title = "<img src='" + imgurl + "'/><span>Last Reading for " + titles[0] + "</span>";
-                        // } else if(titles[titles.length - 1] == "Arrival"){
-                        //     var imgurl = symbol.substr(4, symbol.length - 5);
-                        //     title = "<img src='" + imgurl + "'/><span>Arrival Notification for " + titles[0] + "</span>";
-                        // } else 
-                        title = $scope.trackerMsg[index].title;
-
-                        var cont = "";
-                        cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
-                        if(isAlert){
-                            cont += "    <div class='tt_title' style='background-color:" + color + "'>";
-                            cont +=          title;
-                            cont += "        <div style='clear:both;'></div>";
-                            cont += "    </div>";
-                        }
-                        cont += "    <div class='tt_body'>";
-                        cont +=          s;
-                        cont += "    </div>";
-                        cont += "</div>";
-                        return cont;
-                    }
-                    // headerFormat: "<div style='background-color:#0f0;color:#ccc;'>{series.name}</div><br/><table>",
-                    // pointFormat: "<tr><td>{point.y:,.1f}</td><td>{point.x}</td></tr>",
-                    // footerFormat: "</table>"
-                },
-                yAxis:{
-                    labelAlign: 'left',
-                    opposite: false,
-                    gridLineColor: '#CCC',
-                    lineColor:"#000",
-                    tickColor:"#000",
-                    lineWidth:1,
-                    tickWidth: 1,
-                    title: {
-                        align: 'middle',
-                        offset: 40,
-                        text: 'Temperature °C',
-                        y: -10
-                    },
-                    labels:{
-                        align:'right',
-                        x:-10
-                    },
-                    tickInterval: 5,
-                    plotBands: [{
-                        from: 0,
-                        to: 5,
-                        color: 'rgba(0, 255, 0, 0.2)',
-                    }, {
-                        from: -25,
-                        to: -18,
-                        color: 'rgba(0, 0, 255, 0.2)',
-                    }]
-                },
-                xAxis:{
-                    type: 'datetime',
-                    labels: {
-                        formatter: function() {
-                            // return this.value + "Date";
-                            return formatDateAxis(this.value);
-                        },
-                    },
-                    // dateTimeLabelFormats: {
-                    //     minute: '%H:%M<br/>%e.%b.%Y',
-                    //     hour: '%H:%M<br/>%e.%b.%Y',
-                    //     day: '%H:%M<br/>%e.%b.%Y'
-                    // },
-                    lineWidth:1,
-                    ordinal: false,
-                    lineColor:"#000",
-                    tickColor:"#000",
-                    gridLineDashStyle: "Solid",
-                    gridLineWidth: 1,
-                    plotLines: plotLines
-                },
-                navigation: {
-                    buttonOptions: {
+                    credits: {
                         enabled: false
+                    },
+                    rangeSelector: {
+                        selected: 2,
+                        enabled: true,
+                        inputEnabled: false,
+                        buttonTheme: {
+                            visibility: 'hidden'
+                        },
+                        labelStyle: {
+                            visibility: 'hidden'
+                        }
+                    },
+                    navigator: {
+                        enabled: true
+                    },
+                    // yAxis: {
+                    //  title: {
+                    //      align: 'left',
+                    //      text: "Temperature <sup>o</sup>C"
+                    //  }
+                    // },
+                    tooltip: {
+                        style: {
+                            padding: '0px',
+                        },
+                        shadow: false,
+                        backgroundColor: 'rgba(249, 249, 249, 0)',
+                        borderWidth: 0,
+                        useHTML: true,
+                        hideDelay: 500,
+                        formatter: function () {
+                            
+                            var s = "";
+                            var titles = new Array();
+                            var title;
+                            var color;
+                            var symbol;
+                            color = this.points[this.points.length - 1].series.color;
+                            var isAlert = false;
+                            symbol = this.points[this.points.length - 1].series.symbol;
+                            // var index = this.points[0].point.index;
+                            // console.log("INDEX:", index);
+                            // console.log(subSeries);
+                            // console.log($scope.MI);
+                            var index;
+                            for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
+                                if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x) break;
+                            }
+                            // console.log(this.x, this.y, index);
+                            // console.log(this.x);
+                            // console.log($scope.trackers[$scope.MI].locations[index].timeISO);
+                            $.each(this.points, function () {
+                                titles.push(this.series.name);
+                                color = this.series.color;
+                                symbol = this.series.symbol;
+                                // console.log(this.series);
+                                // if(this.series.name == 'Destination'){
+                                //     s = '<div><span>' + this.y.toFixed(1) + '<sup>o</sup>C at ' + formatDate(this.x) + '</span></div>';
+                                //     s += "<div style='color:#888;'><span>ABC Store for last 1hr 30min</span></div>";
+                                //     s += "<div><span>Tracker shuts down in 20min</span></div>";
+                                // } else if(this.series.name == 'Arrival'){
+                                //     s = '<div><span><20kms away at ' + formatDate(this.x) + '</span></div>';
+                                //     s += "<div style='color:#888;'><span>Fred sparks, Joe turner, Sue smith</span></div>";
+                                // } else{
+                                s = "";
+                                for(i = 0; i < $scope.trackerMsg[index].lines.length; i++)
+                                    s += "<div>" + $scope.trackerMsg[index].lines[i] + "</div>";
+                                // if(i > 1) color = "#b3bcbf";
+                                if(i > 1) isAlert = true;
+                                // }
+                            });
+
+                            // return title + s;
+                            // if(titles[titles.length - 1] == "Destination"){
+                            //     var imgurl = symbol.substr(4, symbol.length - 5);
+                            //     title = "<img src='" + imgurl + "'/><span>Last Reading for " + titles[0] + "</span>";
+                            // } else if(titles[titles.length - 1] == "Arrival"){
+                            //     var imgurl = symbol.substr(4, symbol.length - 5);
+                            //     title = "<img src='" + imgurl + "'/><span>Arrival Notification for " + titles[0] + "</span>";
+                            // } else 
+                            title = $scope.trackerMsg[index].title;
+
+                            var cont = "";
+                            cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
+                            if(isAlert){
+                                cont += "    <div class='tt_title' style='background-color:" + color + "'>";
+                                cont +=          title;
+                                cont += "        <div style='clear:both;'></div>";
+                                cont += "    </div>";
+                            }
+                            cont += "    <div class='tt_body'>";
+                            cont +=          s;
+                            cont += "    </div>";
+                            cont += "</div>";
+                            return cont;
+                        }
+                        // headerFormat: "<div style='background-color:#0f0;color:#ccc;'>{series.name}</div><br/><table>",
+                        // pointFormat: "<tr><td>{point.y:,.1f}</td><td>{point.x}</td></tr>",
+                        // footerFormat: "</table>"
+                    },
+                    yAxis:{
+                        labelAlign: 'left',
+                        opposite: false,
+                        gridLineColor: '#CCC',
+                        lineColor:"#000",
+                        tickColor:"#000",
+                        lineWidth:1,
+                        tickWidth: 1,
+                        title: {
+                            align: 'middle',
+                            offset: 40,
+                            text: 'Temperature °C',
+                            y: -10
+                        },
+                        labels:{
+                            align:'right',
+                            x:-10
+                        },
+                        tickInterval: 5,
+                        plotBands: [{
+                            from: 0,
+                            to: 5,
+                            color: 'rgba(0, 255, 0, 0.2)',
+                        }, {
+                            from: -25,
+                            to: -18,
+                            color: 'rgba(0, 0, 255, 0.2)',
+                        }]
+                    },
+                    xAxis:{
+                        type: 'datetime',
+                        labels: {
+                            formatter: function() {
+                                // return this.value + "Date";
+                                return formatDateAxis(this.value);
+                            },
+                        },
+                        // dateTimeLabelFormats: {
+                        //     minute: '%H:%M<br/>%e.%b.%Y',
+                        //     hour: '%H:%M<br/>%e.%b.%Y',
+                        //     day: '%H:%M<br/>%e.%b.%Y'
+                        // },
+                        lineWidth:1,
+                        ordinal: false,
+                        lineColor:"#000",
+                        tickColor:"#000",
+                        gridLineDashStyle: "Solid",
+                        gridLineWidth: 1,
+                        plotLines: plotLines
+                    },
+                    navigation: {
+                        buttonOptions: {
+                            enabled: false
+                        }
                     }
-                }
-            },
-            series: chartSeries,
-            useHighStocks: true
-        }
-        
-    });
-    //------CHART SERIES DATA  ------
-    var chartSeries = new Array();
-    var subSeries = new Array();
-    var endSeries = new Array();
-    var trackerArrival = new Array();
-    var trackerDest = new Array();
-    var alertData = new Array();
+                },
+                series: chartSeries,
+                useHighStocks: true
+            }
+            
+        });
+    }   
 
     function refreshHighchartSeries(){
 
@@ -637,7 +675,7 @@
             data: gap,
             enableMouseTracking: false,
             color: gapColor
-        })
+        });
 
         for(i = 0; i < alertData.length; i++){
             chartSeries.push({
@@ -648,32 +686,6 @@
                 data: alertData[i]
             });
         }
-        // chartSeries.push({
-        //     name: "Alerts",
-        //     enableMouseTracking: false,
-        //     color: "#b3bcbf",
-        //     lineWidth: 3,
-        //     data: endSeries
-        // });
-
-        // chartSeries.push({
-        //     name: 'Destination',
-        //     marker: {
-        //         symbol: 'url(theme/img/tracker'+ ($scope.MI + 1) + '.png)'
-        //     },
-        //     color: $scope.trackers[$scope.MI].siblingColor,
-        //     lineWidth: 3,
-        //     data: trackerDest
-        // });
-        // chartSeries.push({
-        //     name: 'Arrival',
-        //     marker: {
-        //         symbol: 'url(theme/img/alertArrival.png)'
-        //     },
-        //     color: $scope.trackerColor,
-        //     lineWidth: 3,
-        //     data: trackerArrival
-        // });
     }
 
     function prepareAlertHighchartSeries(){
@@ -722,6 +734,7 @@
         trackerDest.pop();
         trackerDest.push(obj);
     }
+
     $scope.generatePDF = function(){
 
         console.log("clicked pdf button");
@@ -755,6 +768,7 @@
             alert('Error 0xE001BADF');
         }
     }
+
     function prepareMainHighchartSeries(){
         
         while(subSeries.length > 0){
@@ -771,9 +785,8 @@
 
         startTime -= gap;
         endTime += gap;
-        // console.log(gap, startTime, endTime);
+
         //Add siblings tracker data to the subSeries
-        
         for(i = 0; i < $scope.trackers.length; i++){
             if(!$scope.trackers[i].loaded) {
                 subSeries.push(new Array());
@@ -802,31 +815,6 @@
             // console.log("--------",series.length);
             subSeries.push(series);
         }
-        // console.log(subSeries);
-        // var lastPoint = mainData.length - 1;
-        // //End Series
-        // obj = {};
-        // obj.x = parseDate(info.etaISO);
-        // obj.y = locations[lastPoint].temperature;
-        // obj.marker = {
-        //     enabled: false,
-        //     symbol: 'url(theme/img/dot.png)'
-        // };
-        // endSeries.pop();
-        // endSeries.push(obj);
-
-        // //Arrival Series
-        // obj = {};
-        // obj.x = mainData[12][0];
-        // obj.y = mainData[12][1];
-        // obj.z = 20;
-        // obj.marker = {
-        //     enabled: true,
-        //     symbol: 'url(theme/img/alertArrival.png)'
-        // };
-        // trackerArrival.pop();
-        // trackerArrival.push(obj);
-
     }
 
     function parseDate(date){
@@ -855,14 +843,11 @@
     }
 
     function formatDateAxis(date){
-        // console.log(date);
         var m_names = new Array("Jan", "Feb", "Mar", 
             "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
             "Oct", "Nov", "Dec");
         var d = new Date(date);
-        // var offset = d.getTimezoneOffset();
-        // d.setHours(d.getHours() + offset);
-        
+  
         var curr_date = d.getDate();
         var curr_month = d.getMonth();
         var curr_year = d.getFullYear();
@@ -874,8 +859,6 @@
         curr_hour = curr_hour ? curr_hour : 12;
         curr_hour = ("00" + curr_hour).slice(-2);
         curr_min = ("00" + curr_min).slice(-2);
-        
-        // console.log(curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year);
 
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
     }
