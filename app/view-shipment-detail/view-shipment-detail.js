@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
 
     $templateCache.remove('/view-shipment-detail');
     console.log("cleared view-shipment-detail cache");
@@ -63,6 +63,10 @@
             trackerRoute.setMap($scope.vm.map);
         }
     });
+
+    $scope.Print = function(){
+        $window.print();
+    }
 
     function updateMapData(index){
         var locations = $scope.trackers[index].locations;

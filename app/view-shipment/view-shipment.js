@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, $rootScope) {
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, $rootScope, $window) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -41,6 +41,10 @@
         $scope.BindCards();
     }
 
+    $scope.Print = function(){
+        $window.print();
+    }
+
     $scope.AdvanceSearch = false;
     $scope.LocationOptions = { multiple: true };
 
@@ -58,10 +62,8 @@
         //}
 
         webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
-            console.log("GETSHI", data, textStatus, XmlHttpRequest);
+            
             if (data.status.code == 0) {
-                // debugger;
-                console.log("GetShipment", data);
                 $scope.ShipmentList = data.response;
                 $scope.ShipmentList.totalCount = data.totalCount;
             } else if(data.status.code == 1){
@@ -148,12 +150,15 @@
     });
     $scope.SortOptionChanged = function(){
         var order = $scope.sc.substr(-1);
-        $scope.ViewShipment.sc = $scope.sc.substr(0, $scope.sc.length - 1);
         if(order == '1'){
+            $scope.ViewShipment.sc = $scope.sc.substr(0, $scope.sc.length - 1);
             $scope.ViewShipment.so = "asc";
         } else{
+            $scope.ViewShipment.sc = $scope.sc;
             $scope.ViewShipment.so = "desc";
         }
+        console.log($scope.ViewShipment.sc);
+        console.log($scope.ViewShipment.so);
         // console.log($scope.ViewShipment);
         BindShipmentList();
     }

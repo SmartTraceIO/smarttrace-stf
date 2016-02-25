@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-1 col-md-4">
                         <label class="control-label">Email:&nbsp;<i tooltip="Email" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <input type="email" name="Email" maxlength="30" placeholder="Enter an Email" class="form-control" ng-model="User.user.email" required />
+                        <input type="email" name="Email" maxlength="60" placeholder="Enter an Email" class="form-control" ng-model="User.user.email" required />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Email.$error.required">Please enter email</span>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Email.$error.maxlength">Email must be less than or equal to 30 chars</span>

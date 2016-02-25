@@ -239,14 +239,30 @@
         })
     }
 
+    $scope.formatDate = function(d){
+        var m_names = new Array("Jan", "Feb", "Mar", 
+        "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
+        "Oct", "Nov", "Dec");
+
+        
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth();
+        var curr_year = d.getFullYear();
+
+        return curr_date + "-" + m_names[curr_month] + "-" + curr_year;
+    }
+
     $scope.SaveData = function (isValid) {
         
 
         var date = $filter('date')($scope.NewShipment.shipment.shipmentDate, 'dd-MMM-yyyy');
         var time = $filter('date')($scope.time1, 'shortTime');
 
+        var date = $scope.NewShipment.shipment.shipmentDate.getDate();
         $scope.NewShipment.shipment.shipmentDate.setUTCHours($filter('date')($scope.time1, 'hh'));
         $scope.NewShipment.shipment.shipmentDate.setUTCMinutes($filter('date')($scope.time1, 'mm'));
+        $scope.NewShipment.shipment.shipmentDate.setDate(date);
+        // console.log($scope.NewShipment.shipment.shipmentDate);
         // console.log($scope.NewShipment.shipment.shipmentDate);
 
 
@@ -265,7 +281,7 @@
             if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
-
+            console.log("NEW", $scope.NewShipment);
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
                 console.log("TEST", data);
                 if ($scope.NewShipment.saveAsNewTemplate)

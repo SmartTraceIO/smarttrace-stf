@@ -51,15 +51,15 @@
                             <span class="selected"> </span>
                         </a>
                     </li>
-                    <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Report'}">
+                    <!-- <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Report'}">
                         <a href="javascript:void(0)">
                             Report
                             <span class="selected"> </span>
                         </a>
-                    </li>
-                    <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Device'}">
-                        <a href="javascript:void(0)">
-                            Devices
+                    </li> -->
+                    <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Tracker'}">
+                        <a href="#/tracker">
+                            Trackers
                             <span class="selected"> </span>
                         </a>
                     </li>
@@ -74,6 +74,7 @@
                             <li class="menu-li"><a href="#/manage/location">Locations</a></li>
                             <li class="menu-li"><a href="#/manage/shipment-template">Shipment Templates</a></li>
                             <li class="menu-li"><a href="#/manage/user">Users</a></li>
+                            <!-- <li class="menu-li"><a href="#/manage/autostart-template">AutoStart Templates</a></li> -->
                         </ul>
                     </li>
                 </ul>
@@ -97,8 +98,7 @@
                                 <div class="alert alert-block alert-notification fade in" ng-repeat="data in unreadNotification">
                                     <button type="button" class="close" data-dismiss="alert" ng-click="readNotify(data.notificationId)"></button>
                                     <img src="theme/img/alert{{data.alertType}}.png">
-                                    <h5 class="alert-heading">{{data.title}}</h5>
-                                    <p>{{data.Line1}}</p>
+                                    <h5 class="alert-heading"><a href="{{data.link}}">{{data.Line1}}</a></h5>
                                     <p>{{data.Line2}}</p>
                                     <p>{{data.Line3}}</p>
                                     <p class="notification-time">{{data.date}}</p>
@@ -106,8 +106,7 @@
                                 <p>{{closeText}}</p>
                                 <div ng-show={{showRead}} class="alert alert-block alert-notification alert-read fade in" ng-repeat="data in closedNotification">
                                     <img src="theme/img/alert{{data.alertType}}.png">
-                                    <h5 class="alert-heading">{{data.title}}</h5>
-                                    <p>{{data.Line1}}</p>
+                                    <h5 class="alert-heading">{{data.Line1}}</h5>
                                     <p>{{data.Line2}}</p>
                                     <p>{{data.Line3}}</p>
                                     <p class="notification-time">{{data.date}}</p>
@@ -172,16 +171,16 @@
                                 <span class="title">View Shipments</span>
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <!-- <li class="nav-item ">
                             <a href="javascript:void(0)" class="nav-link">
                                 <i class="icon-home"></i>
                                 <span class="title">Report</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item ">
-                            <a href="javascript:void(0)" class="nav-link">
+                            <a href="#/tracker" class="nav-link">
                                 <i class="icon-home"></i>
-                                <span class="title">Device</span>
+                                <span class="title">Trackers</span>
                             </a>
                         </li>
                         <li class="nav-item ">
@@ -216,6 +215,11 @@
                                         <span class="title">Users</span>
                                     </a>
                                 </li>
+                                <!-- <li class="nav-item  ">
+                                    <a href="#/manage/autostart-template" class="nav-link">
+                                        <span class="title">AutoStart Templates</span>
+                                    </a>
+                                </li> -->
                             </ul>
                         </li>
                     </ul>

@@ -1,4 +1,4 @@
-appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache) {
+appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache, $timeout) {
 
 	$templateCache.remove('/login');
 	console.log("cleared cache");
@@ -9,6 +9,11 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	$scope.password = localDbSvc.getPassword();
 	localDbSvc.setToken("_");
 	$scope.AuthToken = "_";
+	var loginTimer;
+
+	function loginTimeOut(){
+		toastr.error("Login timeout! Please try again");
+	}
 
 	$scope.login = function(){
 
@@ -16,12 +21,14 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 			localDbSvc.setUsername($scope.username);
 			localDbSvc.setPassword($scope.password);
 		}
+        // console.log("Updating tracker data...");
+        loginTimer = $timeout(loginTimeOut, 5000);
 		webSvc.login($scope.username, $scope.password).success(function(data){
+			$timeout.cancel(loginTimer);
 		    if (data.status.code == 0) {
 		    	localDbSvc.setToken(data.response.token, data.response.expired);
 		    	console.log(data.response);
 				console.log(localDbSvc.getToken());
-				
 		        $scope.AuthToken = data.response.token;
 		        $rootScope.AuthToken = data.response.token;
 		        if($rootScope.redirectUrl == "" || $rootScope.redirectUrl == undefined){

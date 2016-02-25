@@ -121,6 +121,21 @@ appConstants.constant('routes', [
           ]
       },
       {
+          name: 'tracker',
+          config: {
+              url: "/tracker"
+              , views: {
+                  "content": {
+                      templateUrl: "app/manage-tracker/list.html"
+                       , controller: 'ListTrackerCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/manage-tracker/manage-tracker.js?v=' + tick,
+          ]
+      },
+      {
           name: 'manage',
           config: {
               url: "/manage",
@@ -357,6 +372,51 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-user/manage-user.js?v=' + tick,
+          ]
+      },
+      {
+          name: 'manage.autotemp',
+          config: {
+              url: "/autostart-template"
+              , views: {
+                  "sub-content": {
+                      templateUrl: "app/autostart-template/list.html"
+                       , controller: 'ListAutoTempCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/autostart-template/autostart-template.js?v=' + tick,
+          ]
+      },
+      {
+          name: 'manage.addautotemp',
+          config: {
+              url: "/add-autostart-template"
+              , views: {
+                  "sub-content": {
+                      templateUrl: "app/autostart-template/add-edit.html"
+                       , controller: 'AddAutoTempCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/autostart-template/autostart-template.js?v=' + tick
+          ]
+      },
+      {
+          name: 'manage.editautotemp',
+          config: {
+              url: "/edit-autostart-template/:stId"
+              , views: {
+                  "sub-content": {
+                      templateUrl: "app/autostart-template/add-edit.html"
+                       , controller: 'EditAutoTempCtrl'
+                  }
+              }
+          },
+          dependencies: [
+              'app/autostart-template/autostart-template.js?v=' + tick,
           ]
       }
 ]);

@@ -73,6 +73,7 @@
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {  
             if(data.status.code == 0){
+                console.log("Noti", data);
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
                 }
@@ -81,6 +82,15 @@
                 }
 
                 for(i = 0; i < data.response.length; i++){
+                    var lnk = data.response[i].link;
+                    lnk = lnk.substr("http://stf.smarttrace.com.au".length);
+                    lnk = lnk.substr(0, lnk.length - "{shipmentId}".length);
+                    lnk = lnk + data.response[i].shipmentId;
+                    data.response[i].link = lnk;
+                    
+                    if(data.response[i].Line3 != undefined)
+                        data.response[i].Line3 = data.response[i].Line3.replace("Description", "Desc");
+
                     var diff = hourdiff(data.response[i].date);
                     if(parseInt(diff/24) == 0) data.response[i].date = (diff % 24)  + " hrs ago";
                     else if(parseInt(diff/24) == 1) data.response[i].date = "Yesterday";
