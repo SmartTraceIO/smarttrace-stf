@@ -60,7 +60,12 @@
         //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateTo).toDateString();
         //    $scope.ViewShipment.shipmentDateTo = shippedDateFrom;
         //}
-
+        console.log("VIEW-SHIPMENT");
+        console.log("    pageIndex", $scope.ViewShipment.pageIndex);
+        console.log("    pageSize", $scope.ViewShipment.pageSize);
+        console.log("    SC", $scope.ViewShipment.sc);
+        console.log("    SO", $scope.ViewShipment.so);
+        console.log("---------------");
         webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
@@ -152,21 +157,18 @@
         var order = $scope.sc.substr(-1);
         if(order == '1'){
             $scope.ViewShipment.sc = $scope.sc.substr(0, $scope.sc.length - 1);
-            $scope.ViewShipment.so = "asc";
+            $scope.ViewShipment.so = "desc";
         } else{
             $scope.ViewShipment.sc = $scope.sc;
-            $scope.ViewShipment.so = "desc";
+            $scope.ViewShipment.so = "asc";
         }
-        console.log($scope.ViewShipment.sc);
-        console.log($scope.ViewShipment.so);
-        // console.log($scope.ViewShipment);
         BindShipmentList();
     }
     $scope.PageSizeChanged = function () {
         BindShipmentList();
     }
     $scope.PageChanged = function (page) {
-        $scope.PageIndex = page;
+        $scope.ViewShipment.pageIndex = page;
         console.log("PAGE", page);
         BindShipmentList();
     }

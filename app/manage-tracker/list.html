@@ -29,7 +29,7 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="15%" class="text-center" ng-click="Sorting('sn')">
+                    <th class="text-center" ng-click="Sorting('sn')">
                         <span class="pull-left">Tracker Num
                             <i tooltip="The unique 6 digit number on each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </span>
@@ -38,7 +38,7 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('name')">
+                    <th ng-click="Sorting('name')">
                         <span class="pull-left">Tracker Name
                             <i tooltip="A meaningful short name you assign to each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </span>
@@ -47,7 +47,7 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="25%" ng-click="Sorting('description')">
+                    <th ng-click="Sorting('description')">
                         <span class="pull-left">Description
                             <i tooltip="A meaningful description you assign to each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </span>
@@ -56,7 +56,7 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='description'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" class="text-center" ng-click="Sorting('imei')">
+                    <th class="text-center" ng-click="Sorting('imei')">
                         <span class="pull-left">IMEI
                             <i tooltip="The unique international identify of each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </span>
@@ -65,8 +65,17 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='imei'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" class="text-center" ng-click="Sorting('active')">
+                    <th class="text-center" ng-click="Sorting('active')">
                         <span class="pull-left">Active
+                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                        </span>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
+                    <th class="text-center" ng-click="Sorting('active')">
+                        <span class="pull-left">Last Reading
                             <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
@@ -80,6 +89,7 @@
                     <td ng-bind="tracker.name"></td>
                     <td ng-bind="tracker.description"></td>
                     <td ng-bind="tracker.imei"></td>
+                    <td></td>
                     <td></td>
                 </tr>
             </table>

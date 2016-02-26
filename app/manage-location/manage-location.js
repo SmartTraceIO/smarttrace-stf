@@ -50,7 +50,7 @@
     }
 });
 
-appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout) {
+appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $resource) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Location');
         rootSvc.SetActiveMenu('Setup');

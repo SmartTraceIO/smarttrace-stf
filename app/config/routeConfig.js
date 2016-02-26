@@ -1,4 +1,5 @@
 ﻿var tick = (new Date()).getTime();
+console.log(tick);
 appConstants.constant('routes', [
       {
           name: 'login',

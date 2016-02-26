@@ -251,7 +251,9 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
 
     $scope.GetSelectedUserPositionCompany = function (person) {
         var selectedUser = $filter('filter')($scope.UserList, { id: person.userId }, true)[0];
-        person.selectedUserPositionCompany = selectedUser.positionCompany;
+        if(selectedUser != undefined){
+            person.selectedUserPositionCompany = selectedUser.positionCompany;
+        }
     }
     $scope.SelectHour = function (filter, $event, person, index) {
         var name = "valToTime" + index;

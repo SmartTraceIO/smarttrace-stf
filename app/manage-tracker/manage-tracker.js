@@ -7,6 +7,7 @@
 
     var BindTrackerList = function () {
         webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
+            console.log("TRACKER", data);
             if (data.status.code == 0) {
                 $scope.TrackerList = data.response;
                 $scope.TrackerList.totalCount = data.totalCount;

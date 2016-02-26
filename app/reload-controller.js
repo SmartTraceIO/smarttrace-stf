@@ -73,7 +73,7 @@
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {  
             if(data.status.code == 0){
-                console.log("Noti", data);
+                
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
                 }

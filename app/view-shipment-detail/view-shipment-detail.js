@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
 
-    $templateCache.remove('/view-shipment-detail');
-    console.log("cleared view-shipment-detail cache");
+    // $templateCache.remove('/view-shipment-detail');
+    // console.log("cleared view-shipment-detail cache");
 
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');

@@ -253,18 +253,10 @@
     }
 
     $scope.SaveData = function (isValid) {
-        
-
-        var date = $filter('date')($scope.NewShipment.shipment.shipmentDate, 'dd-MMM-yyyy');
-        var time = $filter('date')($scope.time1, 'shortTime');
-
-        var date = $scope.NewShipment.shipment.shipmentDate.getDate();
-        $scope.NewShipment.shipment.shipmentDate.setUTCHours($filter('date')($scope.time1, 'hh'));
-        $scope.NewShipment.shipment.shipmentDate.setUTCMinutes($filter('date')($scope.time1, 'mm'));
-        $scope.NewShipment.shipment.shipmentDate.setDate(date);
+        var date = new Date($scope.NewShipment.shipment.shipmentDate);
+        $scope.NewShipment.shipment.shipmentDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), $filter('date')($scope.time1, 'hh'), $filter('date')($scope.time1, 'mm')));
+        console.log($scope.NewShipment.shipment.shipmentDate);
         // console.log($scope.NewShipment.shipment.shipmentDate);
-        // console.log($scope.NewShipment.shipment.shipmentDate);
-
 
         if (isValid) {
             if (!$scope.NewShipment.shipment.shutdownDeviceAfterMinutes)
