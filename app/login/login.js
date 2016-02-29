@@ -10,7 +10,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	localDbSvc.setToken("_");
 	$scope.AuthToken = "_";
 	var loginTimer;
-	toastr.success("Login test");
+	
 	function loginTimeOut(){
 		toastr.error("Login timeout! Please try again");
 	}

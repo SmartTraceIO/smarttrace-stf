@@ -263,22 +263,16 @@
                             }"
                              optimized="false" z-index="102">
                         </marker>
-
                         
                         <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.long}}">
                             <div>
-                                <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}}>
+                                <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
                                     <div class="tt_title" style="background-color:{{diagColor}}">
-                                        <!-- <span ng-hide={{!markerData.normal}}>{{mapMarkerMessage.title}}</span> -->
-                                        <span ng-bind-html="mkttl" ng-hide={{markerData.normal}}></span>
+                                        <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
                                     </div>
-                                    <!-- <div class="tt_body" ng-hide={{markerData.normal}}>
-                                        <div ng-bind-html="mkcnt"></div>
-                                    </div> -->
                                     <div class="tt_body" ng-hide={{markerData.normal}}>
-                                        <div ng-repeat="msg in mapMarkerMessage">{{msg}}</div>
+                                        <div ng-repeat="msg in message.mapMarkerMessage">{{msg}}</div>
                                     </div>
-                                    <!-- <div class="mark" style="background-color:{{diagColor}}"></div> -->
                                 </div>
                             </div>
                         </custom-marker>

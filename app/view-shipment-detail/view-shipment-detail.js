@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
 
     // $templateCache.remove('/view-shipment-detail');
     // console.log("cleared view-shipment-detail cache");
@@ -7,8 +7,6 @@
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
-    $scope.AuthToken = localDbSvc.getToken();
-    //$scope.ShipmentId = $stateParams.vsId;
     $scope.ShipmentId = $stateParams.vsId; 
     var plotLines = new Array();
     $scope.vm = this;
@@ -20,17 +18,12 @@
     var trackerRoute = null;
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
-    $scope.xMin = 0;
-    $scope.xMax = 0;
     $scope.mapInfo = {};
     var bounds= null;
 
     //------CHART SERIES DATA  ------
     var chartSeries = new Array();
     var subSeries = new Array();
-    var endSeries = new Array();
-    var trackerArrival = new Array();
-    var trackerDest = new Array();
     var alertData = new Array();
 
     //google map first point
@@ -230,35 +223,12 @@
             var obj = {};
             obj.title = "Tracker " + info.deviceSN + "(" + info.tripCount + ")";
             obj.lines = ['<div><span class="tt_temperature">' + info.locations[i].temperature.toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(parseDate(info.locations[i].timeISO)) + '</span></div>'];
-            $scope.trackerMsg.push(obj);
+            $scope.trackerMsg.push([obj]);
         }
         // console.log($scope.trackerMsg.length);
     }
 
     function updateMapMarker(){
-        // $scope.ttShow = true;
-        // var data = $scope.markerData;
-        // // console.log(data);
-        // $scope.diagColor = "#b3bcbf";
-        // if($scope.previousActiveMarker != -1){
-        //     $scope.normalMarkers[$scope.previousActiveMarker].iconUrl = "theme/img/edot.png";
-        //     $scope.normalMarkers[$scope.previousActiveMarker].len = 12;
-        // }
-        //     $scope.normalMarkers[data.oi].iconUrl = "theme/img/dot.png";
-        //     $scope.normalMarkers[data.oi].len = 35;
-        //     $scope.previousActiveMarker = data.oi;
-        // $scope.mapMarkerMessage = $scope.trackerMsg[data.oi];
-        // if(data.normal){
-        //     $scope.normalMarkers[data.index].iconUrl = "theme/img/dot.png";
-        //     $scope.normalMarkers[data.index].len = 64;
-        //     $scope.mkcnt = $sce.trustAsHtml($scope.trackerMsg[data.oi].lines[0]);
-        //     $scope.diagColor = $scope.trackerColor;
-        // } else {
-        //     $scope.mkttl = $sce.trustAsHtml($scope.trackerMsg[data.oi].title);
-        //     if($scope.markerData.data.alerts[0].type == "LastReading"){
-        //         $scope.diagColor = $scope.trackerColor;
-        //     }
-        // }
     }
     
     $scope.showPathInfo = function(){
@@ -268,9 +238,19 @@
         // console.log("UI");
         $scope.markerData = this.data;
         $scope.ttShow = true;
-        $scope.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi].title);
+        $scope.msgForMap = [];
+        for(var i = 0; i < $scope.trackerMsg[this.data.oi].length; i++){
+            var tmp = {};
+            tmp.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi][i].title);    
+            tmp.mapMarkerMessage = $scope.trackerMsg[this.data.oi][i].lines;
+            $scope.msgForMap.push(tmp);
+        }
+        
         $scope.diagColor = $scope.trackerColor;
-        $scope.mapMarkerMessage = $scope.trackerMsg[this.data.oi].lines;
+        
+        if(!$scope.$$phase) {
+            $scope.$apply();
+        }
         // if($scope.markerData.data.alerts[0].type == "LastReading"){
             // $scope.diagColor = $scope.trackerColor;
         // }
@@ -284,14 +264,6 @@
         if(index == -1){
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
             $scope.currentPoint.len = 12;
-            // if($scope.previousActiveMarker != -1){
-            //     $scope.normalMarkers[$scope.previousActiveMarker].iconUrl = "theme/img/edot.png";
-            //     $scope.normalMarkers[$scope.previousActiveMarker].len = 12;
-            // }
-            // $scope.previousActiveMarker = index;
-            // $scope.ttShow = false;
-            // console.log(typeof $scope.ttShow);
-            // return;
         } else {
             //For alerts, only black circle without point in it.
             $scope.currentPoint.iconUrl = "theme/img/dot.png";
@@ -308,24 +280,6 @@
         if(!$scope.$$phase) {
             $scope.$apply();
         }
-        
-        // $scope.ttShow = true;
-        //find marker data(normal or special)
-        // for(i = 0; i < $scope.specialMarkers.length; i++){
-        //     if($scope.specialMarkers[i].oi == index){
-        //         $scope.markerData = $scope.specialMarkers[i];
-        //         break;
-        //     }
-        // }
-        // if(i == $scope.specialMarkers.length){
-        //     for(i = 0; i < $scope.normalMarkers.length; i++){
-        //         if($scope.normalMarkers[i].oi == index){
-        //             $scope.markerData = $scope.normalMarkers[i];
-        //             break;
-        //         }
-        //     }    
-        // }
-        // updateMapMarker();
     }
 
     loadTrackerData();    
@@ -499,73 +453,33 @@
                         hideDelay: 500,
                         formatter: function () {
                             
-                            var s = "";
-                            var titles = new Array();
-                            var title;
-                            var color;
-                            var symbol;
-                            color = this.points[this.points.length - 1].series.color;
-                            var isAlert = false;
-                            symbol = this.points[this.points.length - 1].series.symbol;
-                            // var index = this.points[0].point.index;
-                            // console.log("INDEX:", index);
-                            // console.log(subSeries);
-                            // console.log($scope.MI);
                             var index;
                             for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
                                 if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x) break;
                             }
-                            // console.log(this.x, this.y, index);
-                            // console.log(this.x);
-                            // console.log($scope.trackers[$scope.MI].locations[index].timeISO);
-                            $.each(this.points, function () {
-                                titles.push(this.series.name);
-                                color = this.series.color;
-                                symbol = this.series.symbol;
-                                // console.log(this.series);
-                                // if(this.series.name == 'Destination'){
-                                //     s = '<div><span>' + this.y.toFixed(1) + '<sup>o</sup>C at ' + formatDate(this.x) + '</span></div>';
-                                //     s += "<div style='color:#888;'><span>ABC Store for last 1hr 30min</span></div>";
-                                //     s += "<div><span>Tracker shuts down in 20min</span></div>";
-                                // } else if(this.series.name == 'Arrival'){
-                                //     s = '<div><span><20kms away at ' + formatDate(this.x) + '</span></div>';
-                                //     s += "<div style='color:#888;'><span>Fred sparks, Joe turner, Sue smith</span></div>";
-                                // } else{
-                                s = "";
-                                for(i = 0; i < $scope.trackerMsg[index].lines.length; i++)
-                                    s += "<div>" + $scope.trackerMsg[index].lines[i] + "</div>";
-                                // if(i > 1) color = "#b3bcbf";
-                                if(i > 1) isAlert = true;
-                                // }
-                            });
-
-                            // return title + s;
-                            // if(titles[titles.length - 1] == "Destination"){
-                            //     var imgurl = symbol.substr(4, symbol.length - 5);
-                            //     title = "<img src='" + imgurl + "'/><span>Last Reading for " + titles[0] + "</span>";
-                            // } else if(titles[titles.length - 1] == "Arrival"){
-                            //     var imgurl = symbol.substr(4, symbol.length - 5);
-                            //     title = "<img src='" + imgurl + "'/><span>Arrival Notification for " + titles[0] + "</span>";
-                            // } else 
-                            title = $scope.trackerMsg[index].title;
-
+                            var color = this.points[0].series.color;
+                            msg = $scope.trackerMsg[index];
+                            var message = "";
+                            
+                            for(var j = 0; j < msg.length; j ++){
+                                //if this message is for alert show title
+                                if(msg[j].title.indexOf(".png") != -1){
+                                    message += "<div class='tt_title' style='background-color:" + color + "'>" 
+                                        + msg[j].title + "<div style='clear:both;'></div></div>";
+                                }
+                                message += "<div class='tt_body'>";    
+                                for(var k = 0; k < msg[j].lines.length; k ++){
+                                    message += "<div>" + msg[j].lines[k] + "</div>";
+                                }
+                                message += "</div>";
+                            }
+                            
                             var cont = "";
                             cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
-                            if(isAlert){
-                                cont += "    <div class='tt_title' style='background-color:" + color + "'>";
-                                cont +=          title;
-                                cont += "        <div style='clear:both;'></div>";
-                                cont += "    </div>";
-                            }
-                            cont += "    <div class='tt_body'>";
-                            cont +=          s;
-                            cont += "    </div>";
+                            cont += message;
                             cont += "</div>";
                             return cont;
                         }
-                        // headerFormat: "<div style='background-color:#0f0;color:#ccc;'>{series.name}</div><br/><table>",
-                        // pointFormat: "<tr><td>{point.y:,.1f}</td><td>{point.x}</td></tr>",
-                        // footerFormat: "</table>"
                     },
                     yAxis:{
                         labelAlign: 'left',
@@ -604,11 +518,6 @@
                                 return formatDateAxis(this.value);
                             },
                         },
-                        // dateTimeLabelFormats: {
-                        //     minute: '%H:%M<br/>%e.%b.%Y',
-                        //     hour: '%H:%M<br/>%e.%b.%Y',
-                        //     day: '%H:%M<br/>%e.%b.%Y'
-                        // },
                         lineWidth:1,
                         ordinal: false,
                         lineColor:"#000",
@@ -656,10 +565,6 @@
         var color = Highcharts.getOptions().colors[0];
         var gapColor = new Highcharts.Color(color).setOpacity(0).get();
         var gap = new Array(); 
-            //         temp = new Array();
-            // temp.push(parseDate(locations[i].timeISO));
-            // temp.push(locations[i].temperature);
-            // mainData.push(temp);
         gap.push([parseDate(ti[0].timeISO) - mainTrackerPeriod, ti[0].temperature]);
         gap.push([parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod, ti[lastPoint].temperature]);
 
@@ -699,8 +604,9 @@
         // console.log($scope.MI);
         // debugger;
         for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
-            if($scope.trackers[$scope.MI].locations[i].alerts.length > 0){
-                var str = $scope.trackers[$scope.MI].locations[i].alerts[0].type;
+            var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
+            if(alertinfo.length == 1){
+                var str = alertinfo[0].type;
                 var alert = "";
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
@@ -717,9 +623,40 @@
                 //update msg
                 var msg = {};
 
-                msg.title = "<img src='theme/img/tiny" + alert + str + ".png'/><span>" + $scope.trackers[$scope.MI].locations[i].alerts[0].title + "</span>";
-                msg.lines = [$scope.trackers[$scope.MI].locations[i].alerts[0].Line1, $scope.trackers[$scope.MI].locations[i].alerts[0].Line2];
-                $scope.trackerMsg[i] = msg;
+                msg.title = "<img src='theme/img/tiny" + alert + str + ".png'/><span>" + alertinfo[0].title + "</span>";
+                msg.lines = [alertinfo[0].Line1];   
+                if(alertinfo[0].Line2 != undefined){
+                    msg.lines.push(alertinfo[0].Line2);
+                }
+                $scope.trackerMsg[i] = [msg];
+            } else if(alertinfo.length > 1){
+                obj = {};
+                obj.x = parseDate($scope.trackers[$scope.MI].locations[i].timeISO);
+                obj.y = $scope.trackers[$scope.MI].locations[i].temperature;
+                obj.marker = {
+                    enabled: true,
+                    symbol: 'url(theme/img/alerts.png)'
+                };
+                var tmpArray = new Array();
+                tmpArray.push(obj);
+                alertData.unshift(tmpArray);
+                //update msg
+                var alertmsg = [];
+                for(var k = 0; k < alertinfo.length; k++){
+                    var str = alertinfo[k].type;
+                    var alert = "";
+                    if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
+                    else alert = "Alert";
+                    var msg = {};
+                    msg.title = "<img src='theme/img/tiny" + alert + str + ".png'/><span>" + alertinfo[k].title + "</span>";
+                    msg.lines = [alertinfo[k].Line1];   
+                    if(alertinfo[k].Line2 != undefined){
+                        msg.lines.push(alertinfo[k].Line2);
+                    }
+                    alertmsg.push(msg);
+                }
+                
+                $scope.trackerMsg[i] = alertmsg;
             }
         }
         
@@ -783,8 +720,6 @@
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
         var endTime = parseDate($scope.trackers[$scope.MI].locations[$scope.trackers[$scope.MI].locations.length - 1].timeISO);
         
-        $scope.xMin = new Date(startTime).getTime();
-        $scope.xMax = new Date(endTime).getTime();
         var gap = (endTime - startTime) / 25;
 
         startTime -= gap;
