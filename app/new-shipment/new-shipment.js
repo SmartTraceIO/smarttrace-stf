@@ -203,8 +203,13 @@
         $scope.AlertNotiRule = "";
         $scope.ArrivalNotiRule = "";
 
+        //-- init ShipmentTemplate if it was not
+        if(!$scope.ShipmentTemplate) {
+            $scope.ShipmentTemplate = {};
+        }
         if (!$scope.ShipmentTemplate.selectedShipmentTemplateId)
             $scope.ShipmentTemplate.selectedShipmentTemplateId = $scope.SelectedTemplateId;
+
 
         var param = {
             shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
@@ -275,7 +280,8 @@
             }
             console.log("NEW", $scope.NewShipment);
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
-                console.log("TEST", data);
+                console.log("DATA", data);
+                console.log("Status", textStatus);
                 if ($scope.NewShipment.saveAsNewTemplate)
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
                 else
