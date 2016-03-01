@@ -81,6 +81,7 @@
     };
     webSvc.getShipmentTemplates(param).success(function(data){
         if(data.status.code != 0) return;
+        console.log(data.response);
         $scope.ShipmentTemplates = data.response;
     })
 
@@ -203,45 +204,55 @@
         $scope.AlertNotiRule = "";
         $scope.ArrivalNotiRule = "";
 
-        //-- init ShipmentTemplate if it was not
-        if(!$scope.ShipmentTemplate) {
-            $scope.ShipmentTemplate = {};
-        }
-        if (!$scope.ShipmentTemplate.selectedShipmentTemplateId)
-            $scope.ShipmentTemplate.selectedShipmentTemplateId = $scope.SelectedTemplateId;
+        console.log($scope.ShipmentTemplate.selectedShipmentTemplateId)
 
+        if ($scope.ShipmentTemplate.selectedShipmentTemplateId) {
 
-        var param = {
-            shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
-        };
-        webSvc.getShipmentTemplates(param).success(function(data){
-            if (data.status.code == 0) {
-                for(i = 0; i < data.response.length; i ++){
-                    if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
-                        $scope.NewShipment.shipment = data.response[i];
-                        data.response = data.response[i];
-                        break;
+            var param = {
+                shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
+            };
+            webSvc.getShipmentTemplates(param).success(function(data){
+                console.log(data)
+                if (data.status.code == 0) {
+                    for(i = 0; i < data.response.length; i ++){
+                        if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
+                            $scope.NewShipment.shipment = data.response[i];
+                            data.response = data.response[i];
+                            break;
+                        }
+                    }
+
+                    if (data.response) {
+                        $scope.SelectedTemplateId = data.response.shipmentTemplateId;
+                        $scope.ShipmentTemplate.selectedShipmentTemplateId = data.response.shipmentTemplateId;
+                        $scope.AddDateShipped = data.response.addDateShipped;
+                        $scope.NewShipment.shipment.shipmentDate = new Date();
+                        if (data.response.arrivalNotificationWithinKm == 0 || data.response.arrivalNotificationWithinKm)
+                            $scope.NewShipment.shipment.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
+                        if (data.response.shutdownDeviceAfterMinutes == 0 || data.response.shutdownDeviceAfterMinutes)
+                            $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = data.response.shutdownDeviceAfterMinutes.toString();
+
+                        $scope.ChangeNotiScheduleForAlert();
+                        $scope.ChangeNotiScheduleForArrival();
+                        $scope.CreateAlertRule();
+                        $scope.GetShippedFromAddress();
+                        $scope.GetShippedToAddress();
                     }
                 }
-
-                if (data.response) {
-                    $scope.SelectedTemplateId = data.response.shipmentTemplateId;
-                    $scope.ShipmentTemplate.selectedShipmentTemplateId = data.response.shipmentTemplateId;
-                    $scope.AddDateShipped = data.response.addDateShipped;
-                    $scope.NewShipment.shipment.shipmentDate = new Date();
-                    if (data.response.arrivalNotificationWithinKm == 0 || data.response.arrivalNotificationWithinKm)
-                        $scope.NewShipment.shipment.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
-                    if (data.response.shutdownDeviceAfterMinutes == 0 || data.response.shutdownDeviceAfterMinutes)
-                        $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = data.response.shutdownDeviceAfterMinutes.toString();
-
-                    $scope.ChangeNotiScheduleForAlert();
-                    $scope.ChangeNotiScheduleForArrival();
-                    $scope.CreateAlertRule();
-                    $scope.GetShippedFromAddress();
-                    $scope.GetShippedToAddress();
-                }
-            }
-        })
+            })
+        } else {
+            $scope.NewShipment.shipment = {};
+            $scope.SelectedTemplateId = $scope.ShipmentTemplate.selectedShipmentTemplateId;
+            $scope.AddDateShipped = false;
+            $scope.NewShipment.shipment.shipmentDate = new Date();
+            $scope.NewShipment.shipment.arrivalNotificationWithinKm = '0';
+            $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = '120';
+            $scope.ChangeNotiScheduleForAlert();
+            $scope.ChangeNotiScheduleForArrival();
+            $scope.CreateAlertRule();
+            $scope.GetShippedFromAddress();
+            $scope.GetShippedToAddress();
+        }
     }
 
     $scope.formatDate = function(d){
