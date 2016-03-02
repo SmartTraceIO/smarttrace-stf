@@ -81,7 +81,7 @@
     };
     webSvc.getShipmentTemplates(param).success(function(data){
         if(data.status.code != 0) return;
-        console.log(data.response);
+        //console.log(data.response);
         $scope.ShipmentTemplates = data.response;
     })
 
@@ -212,7 +212,7 @@
                 shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
             };
             webSvc.getShipmentTemplates(param).success(function(data){
-                console.log(data)
+                //console.log(data)
                 if (data.status.code == 0) {
                     for(i = 0; i < data.response.length; i ++){
                         if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
@@ -286,12 +286,18 @@
             $scope.NewShipment.shipment.status = "InProgress";
             $scope.NewShipment.shipment.detectLocationForShippedFrom = false;
 
+            //-- add more field follow indication from Vyacheslav
+            $scope.NewShipment.shipment.alertsNotificationSchedules = [];
+            $scope.NewShipment.shipment.arrivalNotificationSchedules = [];
+            $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = false;
+
             if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
             console.log("NEW", $scope.NewShipment);
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
                 console.log("DATA", data);
+                console.log('NewShipment', $scope.NewShipment);
                 console.log("Status", textStatus);
                 if ($scope.NewShipment.saveAsNewTemplate)
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
