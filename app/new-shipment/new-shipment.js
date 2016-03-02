@@ -204,7 +204,7 @@
         $scope.AlertNotiRule = "";
         $scope.ArrivalNotiRule = "";
 
-        console.log($scope.ShipmentTemplate.selectedShipmentTemplateId)
+        //console.log($scope.ShipmentTemplate.selectedShipmentTemplateId)
 
         if ($scope.ShipmentTemplate.selectedShipmentTemplateId) {
 
@@ -296,23 +296,25 @@
             if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
-            console.log("NEW", $scope.NewShipment);
+            //console.log("NEW", $scope.NewShipment);
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
-                console.log("DATA", data);
+                //console.log("DATA", data);
                 console.log('NewShipment', $scope.NewShipment);
                 console.log("Status", textStatus);
                 if ($scope.NewShipment.saveAsNewTemplate)
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
                 else
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page.")
-                var param = {
-                    pageSize: 1000000,
-                    pageIndex: 1
-                };
-                webSvc.getShipmentTemplates(param).success(function(tempData){
-                    $scope.ShipmentTemplates = tempData.response;
-                    $scope.ChangeSelectedShipmentTemplate();
-                });
+
+                $scope.ChangeSelectedShipmentTemplate();
+                //var param = {
+                //    pageSize: 1000000,
+                //    pageIndex: 1
+                //};
+                //webSvc.getShipmentTemplates(param).success(function(tempData){
+                //    $scope.ShipmentTemplates = tempData.response;
+                //    $scope.ChangeSelectedShipmentTemplate();
+                //});
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
