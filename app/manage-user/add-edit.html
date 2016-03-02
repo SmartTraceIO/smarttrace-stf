@@ -1,7 +1,7 @@
 ﻿<!--<h3 class="page-title" ng-init="Init()">
     Users
 </h3>-->
-<div class="portlet box green " ng-init="Init()">
+<div class="portlet box green ">
     <div class="portlet-title">
         <div class="caption">
             <img style="margin-top:-8px" src="../../theme/img/headerUsers.png" />  {{Action}} Users
@@ -79,6 +79,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-1 col-md-4">
                         <label class="control-label">Email:&nbsp;<i tooltip="Email" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <input type="email" name="Email" maxlength="60" placeholder="Enter an Email" class="form-control" ng-model="User.user.email" required />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Email.$error.required">Please enter email</span>
@@ -89,6 +90,7 @@
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
                         <label class="control-label">Password:&nbsp;<i tooltip="Password" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <input type="password" name="Password" ng-pattern="/^(?=.*\d)([a-zA-Z0-9]{8,})$/" maxlength="30" placeholder="Enter a Password" class="form-control" ng-model="User.password" ng-required="AddUser" />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Password.$error.required">Please enter password</span>
@@ -106,6 +108,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-1 col-md-4">
                         <label class="control-label">Phone(for SMS):&nbsp;<i tooltip="Phone(for SMS)" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <input type="text" name="Phone" ng-pattern="/^\+{0,1}\d{11,15}$/" placeholder="Enter a Phone" class="form-control" ng-model="User.user.phone" required />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Phone.$error.pattern">Enter number with min (+)11 and max (+)15 digit</span>
@@ -115,6 +118,7 @@
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
                         <label class="control-label">Roles:&nbsp;<i tooltip="Roles" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <select required style="width:100%" multiple ui-select2="RoleOption" name="Roles" ng-model="User.user.roles" data-placeholder="Select Roles For User">
                             <option ng-repeat="role in RoleList" value="{{role}}">{{role}}</option>
                         </select>
@@ -160,7 +164,11 @@
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-3 col-md-offset-1">
                         <label class="control-label">Timezone&nbsp;<i tooltip="Timezone" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <select class="form-control" ng-model="User.user.timeZone" ng-options="timezone.id as timezone.displayName for timezone in TimezoneList">
+                        <label class="control-label pull-right"><span class="text-error">*</span></label>
+
+                        <select class="form-control"
+                                ng-model="User.user.timeZone"
+                                ng-options="timezone.id as timezone.displayName for timezone in TimezoneList">
                         </select>
                     </div>
                 </div>

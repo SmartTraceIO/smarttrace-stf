@@ -86,6 +86,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     var BindTimezones = function () {
         webSvc.getTimeZones().success(function(data){
             if (data.status.code == 0) {
+                console.log('TIMEZONELIST', data.response);
                 $scope.TimezoneList = data.response;
             }
         });
@@ -98,8 +99,6 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
             }
         });
     }
-
-    $scope.Init = function () {
         BindRoles();
         BindLanguages();
         BindTimezones();
@@ -109,13 +108,12 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
         $scope.User.user.temperatureUnits = "Celsius";
         $scope.User.user.measurementUnits = "Metric";
         $scope.User.user.language = "English";
-        $scope.User.user.timeZone = "Antarctica/Casey";
+        $scope.User.user.timeZone = "Australia/Sydney";
         $scope.User.user.external = false;
         $scope.User.resetOnLogin = false;
         $scope.User.user.active = true;
         if ($scope.InternalCompany)
             $scope.User.user.externalCompany = $scope.InternalCompany;
-    }
 
     $scope.$watch("User.user.external", function (nVal, oVal) {
         if ($scope.User && $scope.User.user) {
@@ -126,12 +124,13 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
                 $scope.User.user.externalCompany = $scope.externalCompany;
             }
         }
-    })
-
+    });
+    console.log('USER-TO-PRE', $scope.User);
     $scope.SaveData = function (isValid) {
         if (isValid) {
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
                 console.log('RESPONSE-NEW-USER', data);
+                console.log('USER-TO-CREATE', $scope.User);
                 if (data.status.code == 0) {
                     toastr.success("User added successfully");
                 } else {
