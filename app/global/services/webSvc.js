@@ -250,6 +250,16 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
+		//-- added by Vu
+		getShipmentTemplate: function(param){
+			var url = Api.url + 'getShipmentTemplate/' + localDbSvc.getToken();
+			var params = {
+				params: param
+			};
+			return $http.get(url, params);
+		},
+
+
 		deleteShipmentTemplate: function(shipmentTemplateId){
 			var url = Api.url + 'deleteShipmentTemplate/' + localDbSvc.getToken();
 			var params = {

@@ -466,7 +466,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $
             var param = {
                 shipmentTemplateId: $scope.STId
             };
-            webSvc.getShipmentTemplates(param).success(function(data){
+            webSvc.getShipmentTemplate(param).success(function(data){
             // .get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
                 if (data.status.code == 0) {
                     $scope.ShipmentTemplate = data.response;

@@ -211,21 +211,28 @@
             var param = {
                 shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
             };
-            webSvc.getShipmentTemplates(param).success(function(data){
-                //console.log(data)
+            webSvc.getShipmentTemplate(param).success(function(data){
+                console.log(data)
                 if (data.status.code == 0) {
-                    for(i = 0; i < data.response.length; i ++){
+                    /*for(i = 0; i < data.response.length; i ++){
                         if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
                             $scope.NewShipment.shipment = data.response[i];
                             data.response = data.response[i];
                             break;
                         }
-                    }
+                    }*/
+                    $scope.NewShipment.shipment = data.response;
 
                     if (data.response) {
                         $scope.SelectedTemplateId = data.response.shipmentTemplateId;
                         $scope.ShipmentTemplate.selectedShipmentTemplateId = data.response.shipmentTemplateId;
                         $scope.AddDateShipped = data.response.addDateShipped;
+
+                        //-- add more field follow indication from Vyacheslav
+                        $scope.NewShipment.shipment.alertsNotificationSchedules = data.response.alertsNotificationSchedules;
+                        $scope.NewShipment.shipment.arrivalNotificationSchedules = data.response.arrivalNotificationSchedules;
+                        $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = data.response.excludeNotificationsIfNoAlerts;
+
                         $scope.NewShipment.shipment.shipmentDate = new Date();
                         if (data.response.arrivalNotificationWithinKm == 0 || data.response.arrivalNotificationWithinKm)
                             $scope.NewShipment.shipment.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
@@ -285,11 +292,6 @@
             $scope.NewShipment.shipment.tripCount = null;
             $scope.NewShipment.shipment.status = "InProgress";
             $scope.NewShipment.shipment.detectLocationForShippedFrom = false;
-
-            //-- add more field follow indication from Vyacheslav
-            $scope.NewShipment.shipment.alertsNotificationSchedules = [];
-            $scope.NewShipment.shipment.arrivalNotificationSchedules = [];
-            $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = false;
 
             if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
