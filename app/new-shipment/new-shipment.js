@@ -306,15 +306,6 @@
                 else
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page.")
 
-                $scope.ChangeSelectedShipmentTemplate();
-                //var param = {
-                //    pageSize: 1000000,
-                //    pageIndex: 1
-                //};
-                //webSvc.getShipmentTemplates(param).success(function(tempData){
-                //    $scope.ShipmentTemplates = tempData.response;
-                //    $scope.ChangeSelectedShipmentTemplate();
-                //});
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
