@@ -110,7 +110,9 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 		getNotifications: function(includeRead){
 			var url = Api.url + 'getNotifications/' + localDbSvc.getToken();
 			var params = {
-				includeRead: includeRead
+				params: {
+					includeRead: includeRead
+				}
 			};
 			return $http.get(url, params);
 		},

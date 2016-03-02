@@ -72,7 +72,7 @@
 
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {
-            console.log("NOTIFICATION", data);
+            //console.log("NOTIFICATION", data.response[0].date);
             if(data.status.code == 0){
                 
                 while($rootScope.readNotification.length > 0){
@@ -95,7 +95,7 @@
                     var diff = hourdiff(data.response[i].date);
                     if(parseInt(diff/24) == 0) data.response[i].date = (diff % 24)  + " hrs ago";
                     else if(parseInt(diff/24) == 1) data.response[i].date = "Yesterday";
-                    else data.response[i].date = diff + " days ago";
+                    else data.response[i].date = Math.round(diff/24) + " days ago";
 
                     if(data.response[i].closed){
                         $rootScope.readNotification.push(data.response[i]);
