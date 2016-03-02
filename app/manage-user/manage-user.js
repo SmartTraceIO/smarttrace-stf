@@ -74,7 +74,6 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
         });
     }
 
-
     var BindLanguages = function () {
         webSvc.getLanguages().success(function(data){
             if (data.status.code == 0) {
@@ -132,7 +131,14 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     $scope.SaveData = function (isValid) {
         if (isValid) {
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("User added successfully");
+                console.log('RESPONSE-NEW-USER', data);
+                if (data.status.code == 0) {
+                    toastr.success("User added successfully");
+                } else {
+                    //--todo: need more meaning error message
+                    var errStr = data.status.message;
+                    toastr.error(errStr);
+                }
                 $state.go('manage.user');
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
