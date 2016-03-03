@@ -74,7 +74,7 @@
                             <li class="menu-li"><a href="#/manage/location">Locations</a></li>
                             <li class="menu-li"><a href="#/manage/shipment-template">Shipment Templates</a></li>
                             <li class="menu-li"><a href="#/manage/user">Users</a></li>
-                            <!-- <li class="menu-li"><a href="#/manage/autostart-template">AutoStart Templates</a></li> -->
+                            <li class="menu-li"><a href="#/manage/autostart-template">AutoStart Templates</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -215,11 +215,11 @@
                                         <span class="title">Users</span>
                                     </a>
                                 </li>
-                                <!-- <li class="nav-item  ">
+                                 <li class="nav-item  ">
                                     <a href="#/manage/autostart-template" class="nav-link">
                                         <span class="title">AutoStart Templates</span>
                                     </a>
-                                </li> -->
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -247,6 +247,22 @@
             © Copyright 2015 SmartTrace Pty Ltd
         </div>
     </div>
+
+    <script>
+        function loadJSON(v, callback) {
+
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open('GET', 'app/config/route-config.json?v='+v, true); // Replace 'my_data' with the path to your file
+            xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                    callback(xobj.responseText);
+                }
+            };
+            xobj.send(null);
+        }
+    </script>
 
     <script src="http://use.edgefonts.net/source-code-pro.js"></script>
     <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>

@@ -244,6 +244,15 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
+		//-- AutoStart-Shipment Template
+		getAutoStartShipments: function(param) {
+			var url = Api.url + 'getAutoStartShipments/' + localDbSvc.getToken();
+			var params = {
+                params: param
+            }
+            return $http.get(url, params);
+		},
+
 		getShipmentTemplates: function(param){
 			var url = Api.url + 'getShipmentTemplates/' + localDbSvc.getToken();
 			var params = {
@@ -251,10 +260,13 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			};
 			return $http.get(url, params);
 		},
-
+        saveAutoStartShipment: function(data) {
+            var url = Api.url + 'getShipmentTemplates/' + localDbSvc.getToken();
+            return $http.post(url, data);
+        },
 		//-- added by Vu
 		getShipmentTemplate: function(param){
-			var url = Api.url + 'getShipmentTemplate/' + localDbSvc.getToken();
+			var url = Api.url + 'saveAutoStartShipment/' + localDbSvc.getToken();
 			var params = {
 				params: param
 			};
