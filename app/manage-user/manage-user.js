@@ -125,7 +125,6 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
             }
         }
     });
-    console.log('USER-TO-PRE', $scope.User);
     $scope.SaveData = function (isValid) {
         if (isValid) {
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
@@ -146,6 +145,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     }
 });
 
+//-- edit user
 appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $rootScope) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
@@ -153,6 +153,7 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     $scope.AddUser = false;
+    $scope.InternalCompany = localDbSvc.get("InternalCompany");
     var BindRoles = function () {
         webSvc.getRoles().success(function(data){
             console.log("TEST", data);
@@ -196,55 +197,48 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
     BindLanguages();
     BindTimezones();
     BindDeviceGroups();
-    $scope.Init = function () {
-
-        $scope.UId = $stateParams.uId;
-        console.log($scope.UId);
-        $scope.User = {};
-        if ($scope.UId) {
-
-            var param = {
-                userId: $scope.UId
-            };
-            webSvc.getUser(param).success(function(data){
-                // console.log("TEST", data);
-                // .get({ action: "getUser", token: $scope.AuthToken, userId: $scope.UId }, function (data) {
-                if (data.status.code == 0) {
-                    $scope.User = {};
-                    $scope.User.user = data.response;
-                    $scope.externalCompany = data.response.externalCompany;
-                    console.log($scope.User.user)
-                }
-            });
 
 
-            //$scope.$watch("User.user.external", function (nVal, oVal) {
-            //    if (nVal) {
-            //        $scope.User.user.company = "";
-            //    }
-            //    else {
-            //        $scope.User.user.company = $scope.User.user.internalCompany;
-            //    }
-            //})
+    $scope.UId = $stateParams.uId;
+    console.log($scope.UId);
+     $scope.User = {};
+     if ($scope.UId) {
 
-        }
-    }
+         var param = {
+             userId: $scope.UId
+         };
+         webSvc.getUser(param).success(function(data){
+              console.log("TEST-DATA", data);
+             if (data.status.code == 0) {
+                 $scope.User = {};
+                 $scope.User.user = data.response;
+                 $scope.externalCompany = data.response.externalCompany;
+                 console.log($scope.User.user)
+             }
+         });
 
-    $scope.$watch("User.user.external", function (nVal, oVal) {
-        if ($scope.User && $scope.User.user) {
-            if (!nVal) {
-                $scope.User.user.externalCompany = $scope.User.user.internalCompany
-            }
-            else {
-                $scope.User.user.externalCompany = $scope.externalCompany;
-            }
-        }
-    })
+
+         $scope.$watch("User.user.external", function (nVal, oVal) {
+             if ($scope.User && $scope.User.user) {
+                 if (!nVal) {
+                     $scope.User.user.externalCompany = $scope.InternalCompany
+                 }
+                 else {
+                     $scope.User.user.externalCompany = $scope.externalCompany;
+                 }
+             }
+         });
+     }
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("User updated successfully")
+                console.log(data);
+                if (data.status.code == 0) {
+                    toastr.success("User updated successfully")
+                } else {
+                    toastr.error(data.status.message);
+                }
                 $state.go('manage.user')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
