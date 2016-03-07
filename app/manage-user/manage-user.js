@@ -208,7 +208,7 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
              userId: $scope.UId
          };
          webSvc.getUser(param).success(function(data){
-              console.log("TEST-DATA", data);
+             console.log("TEST-DATA", data);
              if (data.status.code == 0) {
                  $scope.User = {};
                  $scope.User.user = data.response;
