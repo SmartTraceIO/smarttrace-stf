@@ -1,5 +1,5 @@
-﻿var tick = (new Date()).getTime();
-console.log(tick);
+﻿//var version = (new Date()).getTime();
+//console.log(version);
 appConstants.constant('routes', [
       {
           name: 'login',
@@ -13,7 +13,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/login/login.js?v=' + tick,
+              'app/login/login.js?v=' + version,
           ]
       },
       {
@@ -28,7 +28,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/preference/preference.js?v=' + tick,
+              'app/preference/preference.js?v=' + version,
           ]
       },
       {
@@ -43,7 +43,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/user-update/user-update.js?v=' + tick,
+              'app/user-update/user-update.js?v=' + version,
           ]
       },
       {
@@ -58,7 +58,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/forget-password/forget-password.js?v=' + tick,
+              'app/forget-password/forget-password.js?v=' + version,
           ]
       },
       {
@@ -73,7 +73,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/change-password/change-password.js?v=' + tick,
+              'app/change-password/change-password.js?v=' + version,
           ]
       },
       {
@@ -88,7 +88,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/new-shipment/new-shipment.js?v=' + tick
+              'app/new-shipment/new-shipment.js?v=' + version
           ]
       },
       {
@@ -103,7 +103,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/view-shipment/view-shipment.js?v=' + tick,
+              'app/view-shipment/view-shipment.js?v=' + version,
           ]
       },
       {
@@ -118,7 +118,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/view-shipment-detail/view-shipment-detail.js?v=' + tick,
+              'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
           ]
       },
       {
@@ -133,7 +133,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-tracker/manage-tracker.js?v=' + tick,
+              'app/manage-tracker/manage-tracker.js?v=' + version,
           ]
       },
       {
@@ -160,7 +160,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + tick,
+              'app/manage-alert/manage-alert.js?v=' + version,
           ]
       },
       {
@@ -175,7 +175,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + tick,
+              'app/manage-alert/manage-alert.js?v=' + version,
           ]
       },
       {
@@ -190,7 +190,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + tick,
+              'app/manage-alert/manage-alert.js?v=' + version,
           ]
       },
       {
@@ -205,7 +205,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + tick,
+              'app/manage-notification/manage-notification.js?v=' + version,
           ]
       },
       {
@@ -220,8 +220,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + tick,
-              'app/global/directives/weekdays.js?v=' + tick
+              'app/manage-notification/manage-notification.js?v=' + version,
+              'app/global/directives/weekdays.js?v=' + version
           ]
       },
       {
@@ -236,8 +236,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + tick,
-              'app/global/directives/weekdays.js?v=' + tick
+              'app/manage-notification/manage-notification.js?v=' + version,
+              'app/global/directives/weekdays.js?v=' + version
           ]
       },
       {
@@ -252,7 +252,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + tick,
+              'app/manage-location/manage-location.js?v=' + version,
           ]
       },
       {
@@ -267,7 +267,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + tick,
+              'app/manage-location/manage-location.js?v=' + version,
           ]
       },
       {
@@ -282,7 +282,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + tick,
+              'app/manage-location/manage-location.js?v=' + version,
           ]
       },
       {
@@ -297,7 +297,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + tick,
+              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
           ]
       },
       {
@@ -312,7 +312,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + tick
+              'app/manage-shipment-template/manage-shipment-template.js?v=' + version
           ]
       },
       {
@@ -327,7 +327,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + tick,
+              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
           ]
       },
       {
@@ -357,7 +357,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js?v=' + tick,
+              'app/manage-user/manage-user.js?v=' + version,
           ]
       },
       {
@@ -372,7 +372,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js?v=' + tick,
+              'app/manage-user/manage-user.js?v=' + version,
           ]
       },
       {
@@ -387,7 +387,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + tick,
+              'app/autostart-template/autostart-template.js?v=' + version,
           ]
       },
       {
@@ -402,7 +402,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + tick
+              'app/autostart-template/autostart-template.js?v=' + version
           ]
       },
       {
@@ -417,7 +417,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + tick,
+              'app/autostart-template/autostart-template.js?v=' + version,
           ]
       }
 ]);

@@ -249,19 +249,20 @@
     </div>
 
     <script>
-        function loadJSON(v, callback) {
-
-            var xobj = new XMLHttpRequest();
-            xobj.overrideMimeType("application/json");
-            xobj.open('GET', 'app/config/route-config.json?v='+v, true); // Replace 'my_data' with the path to your file
-            xobj.onreadystatechange = function () {
-                if (xobj.readyState == 4 && xobj.status == "200") {
-                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-                    callback(xobj.responseText);
+        var version = 0;
+        var v = (new Date()).getTime();
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', 'app/config/version.json?v='+v, true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                var jsonVer = JSON.parse(xobj.responseText);
+                if (jsonVer) {
+                    version = jsonVer.version;
                 }
-            };
-            xobj.send(null);
-        }
+            }
+        };
+        xobj.send(null);
     </script>
 
     <script src="http://use.edgefonts.net/source-code-pro.js"></script>
