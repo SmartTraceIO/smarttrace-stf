@@ -261,7 +261,7 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
         saveAutoStartShipment: function(data) {
-            var url = Api.url + 'getShipmentTemplates/' + localDbSvc.getToken();
+            var url = Api.url + 'saveAutoStartShipment/' + localDbSvc.getToken();
             return $http.post(url, data);
         },
 		//-- added by Vu

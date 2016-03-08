@@ -65,7 +65,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
     var BindLocations = function (cb) {
-        webSvc.getLocations(1000000, 1, 'locationName', 'asc').success(function(data){
+        webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
 
@@ -115,12 +115,12 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         });
     }
     $scope.Init = function () {
-        $scope.AutoShipmentTemplate = {};
-        $scope.AutoShipmentTemplate.detectLocationForShippedFrom = false;
-        $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = '120';
-        $scope.AutoShipmentTemplate.alertSuppressionMinutes = 120;
-        $scope.AutoShipmentTemplate.addDateShipped = false;
-        $scope.AutoShipmentTemplate.excludeNotificationsIfNoAlerts = false;
+        $scope.AutoStartShipment = {};
+        $scope.AutoStartShipment.detectLocationForShippedFrom = false;
+        $scope.AutoStartShipment.shutdownDeviceAfterMinutes = '120';
+        $scope.AutoStartShipment.alertSuppressionMinutes = 120;
+        $scope.AutoStartShipment.addDateShipped = false;
+        $scope.AutoStartShipment.excludeNotificationsIfNoAlerts = false;
         $scope.NotificationScheduleOption = {
             multiple: true
         };
@@ -134,9 +134,9 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
     $scope.map.setCenter(new google.maps.LatLng(20.632784, 78.969727));
-    $scope.$watch("AutoShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
+    $scope.$watch("AutoStartShipment.detectLocationForShippedFrom", function (nVal, oVal) {
         if (nVal) {
-            $scope.AutoShipmentTemplate.shippedFrom = "";
+            $scope.AutoStartShipment.shippedFrom = "";
 
             if ($scope.HomeMarker)
                 $scope.HomeMarker.setMap(null);
@@ -146,25 +146,25 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     })
     $scope.ChangeShipmentFrom = function () {
 
-        if ($scope.AutoShipmentTemplate.shippedFrom) {
-            $scope.AutoShipmentTemplate.detectLocationForShippedFrom = false;
+        if ($scope.AutoStartShipment.shippedFrom) {
+            $scope.AutoStartShipment.detectLocationForShippedFrom = false;
         }
 
         if ($scope.HomeMarker)
             $scope.HomeMarker.setMap(null);
 
         $scope.HomeMarker = new google.maps.Marker({
-            position: new google.maps.LatLng($scope.AutoShipmentTemplate.shippedFrom.location.lat, $scope.AutoShipmentTemplate.shippedFrom.location.lon),
+            position: new google.maps.LatLng($scope.AutoStartShipment.shippedFrom.location.lat, $scope.AutoStartShipment.shippedFrom.location.lon),
             map: $scope.map,
             icon: '/theme/img/mapStart.png'
         });
 
-        $scope.map.setCenter(new google.maps.LatLng($scope.AutoShipmentTemplate.shippedFrom.location.lat, $scope.AutoShipmentTemplate.shippedFrom.location.lon));
+        $scope.map.setCenter(new google.maps.LatLng($scope.AutoStartShipment.shippedFrom.location.lat, $scope.AutoStartShipment.shippedFrom.location.lon));
 
         $scope.HomeMarker.setMap($scope.map);
 
-        if ($scope.AutoShipmentTemplate.shippedFrom && $scope.AutoShipmentTemplate.shippedTo) {
-            $scope.DrawLine([$scope.AutoShipmentTemplate.shippedFrom.location, $scope.AutoShipmentTemplate.shippedTo.location])
+        if ($scope.AutoStartShipment.shippedFrom && $scope.AutoStartShipment.shippedTo) {
+            $scope.DrawLine([$scope.AutoStartShipment.shippedFrom.location, $scope.AutoStartShipment.shippedTo.location])
         }
     }
     $scope.ChangeShipmentTo = function () {
@@ -173,16 +173,16 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             $scope.EndMarker.setMap(null);
 
         $scope.EndMarker = new google.maps.Marker({
-            position: new google.maps.LatLng($scope.AutoShipmentTemplate.shippedTo.location.lat, $scope.AutoShipmentTemplate.shippedTo.location.lon),
+            position: new google.maps.LatLng($scope.AutoStartShipment.shippedTo.location.lat, $scope.AutoStartShipment.shippedTo.location.lon),
             map: $scope.map,
             icon: '/theme/img/mapStop.png'
         });
 
-        $scope.map.setCenter(new google.maps.LatLng($scope.AutoShipmentTemplate.shippedTo.location.lat, $scope.AutoShipmentTemplate.shippedTo.location.lon));
+        $scope.map.setCenter(new google.maps.LatLng($scope.AutoStartShipment.shippedTo.location.lat, $scope.AutoStartShipment.shippedTo.location.lon));
         $scope.EndMarker.setMap($scope.map);
 
-        if ($scope.AutoShipmentTemplate.shippedFrom && $scope.AutoShipmentTemplate.shippedTo) {
-            $scope.DrawLine([$scope.AutoShipmentTemplate.shippedFrom.location, $scope.AutoShipmentTemplate.shippedTo.location])
+        if ($scope.AutoStartShipment.shippedFrom && $scope.AutoStartShipment.shippedTo) {
+            $scope.DrawLine([$scope.AutoStartShipment.shippedFrom.location, $scope.AutoStartShipment.shippedTo.location])
         }
     }
     $scope.DrawLine = function (arrayOfLatLang) {
@@ -210,21 +210,22 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.SaveData = function (isValid) {
         if (isValid) {
-            if (!$scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes)
-                $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = null;
+            if (!$scope.AutoStartShipment.shutdownDeviceAfterMinutes)
+                $scope.AutoStartShipment.shutdownDeviceAfterMinutes = null;
 
-            if (!$scope.AutoShipmentTemplate.arrivalNotificationWithinKm)
-                $scope.AutoShipmentTemplate.arrivalNotificationWithinKm = null;
+            if (!$scope.AutoStartShipment.arrivalNotificationWithinKm)
+                $scope.AutoStartShipment.arrivalNotificationWithinKm = null;
 
-            $scope.AutoShipmentTemplate.maxTimesAlertFires = null;
-            $scope.AutoShipmentTemplate.useCurrentTimeForDateShipped = true;
+            $scope.AutoStartShipment.maxTimesAlertFires = null;
+            $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
 
-            if ($scope.AutoShipmentTemplate.shippedFrom)
-                $scope.AutoShipmentTemplate.shippedFrom = $scope.AutoShipmentTemplate.shippedFrom.locationId;
-            if ($scope.AutoShipmentTemplate.shippedTo)
-                $scope.AutoShipmentTemplate.shippedTo = $scope.AutoShipmentTemplate.shippedTo.locationId;
+            if ($scope.AutoStartShipment.shippedFrom)
+                $scope.AutoStartShipment.shippedFrom = $scope.AutoStartShipment.shippedFrom.locationId;
+            if ($scope.AutoStartShipment.shippedTo)
+                $scope.AutoStartShipment.shippedTo = $scope.AutoStartShipment.shippedTo.locationId;
 
-            webSvc.saveAutoStartShipment($scope.AutoShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
+            webSvc.saveAutoStartShipment($scope.AutoStartShipment).success( function (data, textStatus, XmlHttpRequest) {
+                console.log('AutoStartShipment', data);
                 if (data.status.code == 0) {
                     toastr.success("Shipment template added successfully")
                 }
@@ -242,15 +243,15 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
         $rootScope.modalInstance.result.then(function () {
             BindLocations(function () {
-                if ($scope.AutoShipmentTemplate.shippedFrom) {
-                    var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedFrom.locationId }, true)[0];
+                if ($scope.AutoStartShipment.shippedFrom) {
+                    var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedFrom.locationId }, true)[0];
                     if (shippedFrom)
-                        $scope.AutoShipmentTemplate.shippedFrom = shippedFrom;
+                        $scope.AutoStartShipment.shippedFrom = shippedFrom;
                 }
-                if ($scope.AutoShipmentTemplate.shippedTo) {
-                    var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedTo.locationId }, true)[0];
+                if ($scope.AutoStartShipment.shippedTo) {
+                    var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedTo.locationId }, true)[0];
                     if (shippedFrom)
-                        $scope.AutoShipmentTemplate.shippedTo = shippedTo;
+                        $scope.AutoStartShipment.shippedTo = shippedTo;
                 }
             });
         });
@@ -265,15 +266,15 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
             $rootScope.modalInstance.result.then(function () {
                 BindLocations(function () {
-                    if ($scope.AutoShipmentTemplate.shippedFrom) {
-                        var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedFrom.locationId }, true)[0];
+                    if ($scope.AutoStartShipment.shippedFrom) {
+                        var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedFrom.locationId }, true)[0];
                         if (shippedFrom)
-                            $scope.AutoShipmentTemplate.shippedFrom = shippedFrom;
+                            $scope.AutoStartShipment.shippedFrom = shippedFrom;
                     }
-                    if ($scope.AutoShipmentTemplate.shippedTo) {
-                        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedTo.locationId }, true)[0];
+                    if ($scope.AutoStartShipment.shippedTo) {
+                        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedTo.locationId }, true)[0];
                         if (shippedTo)
-                            $scope.AutoShipmentTemplate.shippedTo = shippedTo;
+                            $scope.AutoStartShipment.shippedTo = shippedTo;
                     }
                 });
             });
@@ -287,10 +288,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
         $rootScope.modalInstance.result.then(function () {
             BindAlertProfiles(function () {
-                if ($scope.AutoShipmentTemplate.alertProfileId) {
-                    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId }, true)[0];
+                if ($scope.AutoStartShipment.alertProfileId) {
+                    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true)[0];
                     if (alertProfile)
-                        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                        $scope.AutoStartShipment.alertProfileId = alertProfile;
                 }
             })
         });
@@ -305,10 +306,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
             $rootScope.modalInstance.result.then(function () {
                 BindAlertProfiles(function () {
-                    if ($scope.AutoShipmentTemplate.alertProfileId) {
-                        var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId }, true)[0];
+                    if ($scope.AutoStartShipment.alertProfileId) {
+                        var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true)[0];
                         if (alertProfile)
-                            $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                            $scope.AutoStartShipment.alertProfileId = alertProfile;
                     }
                 })
             });
@@ -322,10 +323,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
         $rootScope.modalInstance.result.then(function () {
             BindNotificationSchedules(function () {
-                //if ($scope.AutoShipmentTemplate.alertProfileId) {
-                //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                //if ($scope.AutoStartShipment.alertProfileId) {
+                //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                 //    if (alertProfile)
-                //        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                //        $scope.AutoStartShipment.alertProfileId = alertProfile;
                 //}
             })
         });
@@ -344,10 +345,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
             $rootScope.modalInstance.result.then(function () {
                 BindNotificationSchedules(function () {
-                    //if ($scope.AutoShipmentTemplate.alertProfileId) {
-                    //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                    //if ($scope.AutoStartShipment.alertProfileId) {
+                    //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                     //    if (alertProfile)
-                    //        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                    //        $scope.AutoStartShipment.alertProfileId = alertProfile;
                     //}
                 })
             });
@@ -356,7 +357,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
     $scope.CreateAlertRule = function () {
         if ($scope.AlertList && $scope.AlertList.length > 0) {
-            var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId }, true);
+            var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true);
             if (selectedAlertProfile && selectedAlertProfile.length > 0) {
                 selectedAlertProfile = selectedAlertProfile[0];
                 if (selectedAlertProfile.alertRuleList) {
@@ -372,11 +373,11 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 
     $scope.ChangeNotiScheduleForAlert = function () {
-        console.log($scope.AutoShipmentTemplate.alertsNotificationSchedules);
-        if ($scope.AutoShipmentTemplate && $scope.AutoShipmentTemplate.alertsNotificationSchedules) {
+        console.log($scope.AutoStartShipment.alertsNotificationSchedules);
+        if ($scope.AutoStartShipment && $scope.AutoStartShipment.alertsNotificationSchedules) {
             $scope.AlertNotiRule = '';
-            for (var i = 0; i < $scope.AutoShipmentTemplate.alertsNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoShipmentTemplate.alertsNotificationSchedules[i]) }, true)
+            for (var i = 0; i < $scope.AutoStartShipment.alertsNotificationSchedules.length; i++) {
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.alertsNotificationSchedules[i]) }, true)
                 if (shipment && shipment.length > 0) {
                     shipment = shipment[0];
                     var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
@@ -391,10 +392,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
     $scope.ChangeNotiScheduleForArrival = function () {
         
-        if ($scope.AutoShipmentTemplate && $scope.AutoShipmentTemplate.arrivalNotificationSchedules) {
+        if ($scope.AutoStartShipment && $scope.AutoStartShipment.arrivalNotificationSchedules) {
             $scope.ArrivalNotiRule = '';
-            for (var i = 0; i < $scope.AutoShipmentTemplate.arrivalNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoShipmentTemplate.arrivalNotificationSchedules[i]) }, true)
+            for (var i = 0; i < $scope.AutoStartShipment.arrivalNotificationSchedules.length; i++) {
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.arrivalNotificationSchedules[i]) }, true)
 
                 if (shipment) {
                     if (shipment.length > 0) {
@@ -450,7 +451,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
     $scope.Init = function () {
         $scope.STId = $stateParams.stId
-        $scope.AutoShipmentTemplate = {};
+        $scope.AutoStartShipment = {};
         if ($scope.STId) {
             var param = {
                 shipmentTemplateId: $scope.STId
@@ -458,22 +459,22 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             webSvc.getShipmentTemplates(param).success(function(data){
             // .get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
                 if (data.status.code == 0) {
-                    $scope.AutoShipmentTemplate = data.response;
+                    $scope.AutoStartShipment = data.response;
                     if (data.response) {
 
-                        if ($scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes == 0)
-                            $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = "0";
+                        if ($scope.AutoStartShipment.shutdownDeviceAfterMinutes == 0)
+                            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = "0";
                         else if (data.response.shutdownDeviceAfterMinutes)
-                            $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = data.response.shutdownDeviceAfterMinutes.toString();
+                            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = data.response.shutdownDeviceAfterMinutes.toString();
                         else
-                            $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = "";
+                            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = "";
 
-                        if ($scope.AutoShipmentTemplate.arrivalNotificationWithinKm == 0)
-                            $scope.AutoShipmentTemplate.arrivalNotificationWithinKm = "0";
+                        if ($scope.AutoStartShipment.arrivalNotificationWithinKm == 0)
+                            $scope.AutoStartShipment.arrivalNotificationWithinKm = "0";
                         else if (data.response.arrivalNotificationWithinKm)
-                            $scope.AutoShipmentTemplate.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
+                            $scope.AutoStartShipment.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
                         else
-                            $scope.AutoShipmentTemplate.arrivalNotificationWithinKm = "";
+                            $scope.AutoStartShipment.arrivalNotificationWithinKm = "";
 
                         webSvc.getLocations(1000000, 1, 'locationName', 'asc').success(function(data){
                             if (data.status.code == 0) {
@@ -496,19 +497,19 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                                         $scope.ToLocationList.push(val);
                                 })
 
-                                var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedFrom }, true);
+                                var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedFrom }, true);
                                 if (shippedFrom && shippedFrom.length > 0) {
-                                    $scope.AutoShipmentTemplate.shippedFrom = shippedFrom[0];
+                                    $scope.AutoStartShipment.shippedFrom = shippedFrom[0];
                                 }
 
-                                var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedTo }, true);
+                                var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedTo }, true);
                                 if (shippedTo && shippedTo.length > 0) {
-                                    $scope.AutoShipmentTemplate.shippedTo = shippedTo[0];
+                                    $scope.AutoStartShipment.shippedTo = shippedTo[0];
                                 }
 
-                                if ($scope.AutoShipmentTemplate.shippedFrom)
+                                if ($scope.AutoStartShipment.shippedFrom)
                                     $scope.ChangeShipmentFrom();
-                                if ($scope.AutoShipmentTemplate.shippedTo)
+                                if ($scope.AutoStartShipment.shippedTo)
                                     $scope.ChangeShipmentTo();
                             }
                         });
@@ -533,9 +534,9 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     }
 
-    $scope.$watch("AutoShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
+    $scope.$watch("AutoStartShipment.detectLocationForShippedFrom", function (nVal, oVal) {
         if (nVal) {
-            $scope.AutoShipmentTemplate.shippedFrom = "";
+            $scope.AutoStartShipment.shippedFrom = "";
 
             if ($scope.HomeMarker)
                 $scope.HomeMarker.setMap(null);
@@ -545,9 +546,9 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     })
 
     $scope.ChangeShipmentFrom = function () {
-        console.log($scope.AutoShipmentTemplate.shippedFrom)
-        if ($scope.AutoShipmentTemplate.shippedFrom) {
-            $scope.AutoShipmentTemplate.detectLocationForShippedFrom = false;
+        console.log($scope.AutoStartShipment.shippedFrom)
+        if ($scope.AutoStartShipment.shippedFrom) {
+            $scope.AutoStartShipment.detectLocationForShippedFrom = false;
         }
         else { return; }
 
@@ -555,35 +556,35 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             $scope.HomeMarker.setMap(null);
 
         $scope.HomeMarker = new google.maps.Marker({
-            position: new google.maps.LatLng($scope.AutoShipmentTemplate.shippedFrom.location.lat, $scope.AutoShipmentTemplate.shippedFrom.location.lon),
+            position: new google.maps.LatLng($scope.AutoStartShipment.shippedFrom.location.lat, $scope.AutoStartShipment.shippedFrom.location.lon),
             map: $scope.map,
             icon: '/theme/img/mapStart.png'
         });
 
-        $scope.map.setCenter(new google.maps.LatLng($scope.AutoShipmentTemplate.shippedFrom.location.lat, $scope.AutoShipmentTemplate.shippedFrom.location.lon));
+        $scope.map.setCenter(new google.maps.LatLng($scope.AutoStartShipment.shippedFrom.location.lat, $scope.AutoStartShipment.shippedFrom.location.lon));
 
         $scope.HomeMarker.setMap($scope.map);
 
-        if ($scope.AutoShipmentTemplate.shippedFrom && $scope.AutoShipmentTemplate.shippedTo) {
-            $scope.DrawLine([$scope.AutoShipmentTemplate.shippedFrom.location, $scope.AutoShipmentTemplate.shippedTo.location])
+        if ($scope.AutoStartShipment.shippedFrom && $scope.AutoStartShipment.shippedTo) {
+            $scope.DrawLine([$scope.AutoStartShipment.shippedFrom.location, $scope.AutoStartShipment.shippedTo.location])
         }
     }
     $scope.ChangeShipmentTo = function () {
-        console.log($scope.AutoShipmentTemplate.shippedTo)
+        console.log($scope.AutoStartShipment.shippedTo)
         if ($scope.EndMarker)
             $scope.EndMarker.setMap(null);
 
         $scope.EndMarker = new google.maps.Marker({
-            position: new google.maps.LatLng($scope.AutoShipmentTemplate.shippedTo.location.lat, $scope.AutoShipmentTemplate.shippedTo.location.lon),
+            position: new google.maps.LatLng($scope.AutoStartShipment.shippedTo.location.lat, $scope.AutoStartShipment.shippedTo.location.lon),
             map: $scope.map,
             icon: '/theme/img/mapStop.png'
         });
 
-        $scope.map.setCenter(new google.maps.LatLng($scope.AutoShipmentTemplate.shippedTo.location.lat, $scope.AutoShipmentTemplate.shippedTo.location.lon));
+        $scope.map.setCenter(new google.maps.LatLng($scope.AutoStartShipment.shippedTo.location.lat, $scope.AutoStartShipment.shippedTo.location.lon));
         $scope.EndMarker.setMap($scope.map);
 
-        if ($scope.AutoShipmentTemplate.shippedFrom && $scope.AutoShipmentTemplate.shippedTo) {
-            $scope.DrawLine([$scope.AutoShipmentTemplate.shippedFrom.location, $scope.AutoShipmentTemplate.shippedTo.location])
+        if ($scope.AutoStartShipment.shippedFrom && $scope.AutoStartShipment.shippedTo) {
+            $scope.DrawLine([$scope.AutoStartShipment.shippedFrom.location, $scope.AutoStartShipment.shippedTo.location])
         }
     }
     $scope.DrawLine = function (arrayOfLatLang) {
@@ -614,19 +615,19 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.SaveData = function (isValid) {
         if (isValid) {
 
-            if (!$scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes)
-                $scope.AutoShipmentTemplate.shutdownDeviceAfterMinutes = null;
+            if (!$scope.AutoStartShipment.shutdownDeviceAfterMinutes)
+                $scope.AutoStartShipment.shutdownDeviceAfterMinutes = null;
 
-            if (!$scope.AutoShipmentTemplate.arrivalNotificationWithinKm)
-                $scope.AutoShipmentTemplate.arrivalNotificationWithinKm = null;
+            if (!$scope.AutoStartShipment.arrivalNotificationWithinKm)
+                $scope.AutoStartShipment.arrivalNotificationWithinKm = null;
 
-            $scope.AutoShipmentTemplate.maxTimesAlertFires = null;
-            $scope.AutoShipmentTemplate.useCurrentTimeForDateShipped = true;
+            $scope.AutoStartShipment.maxTimesAlertFires = null;
+            $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
 
-            if ($scope.AutoShipmentTemplate.shippedFrom)
-                $scope.AutoShipmentTemplate.shippedFrom = $scope.AutoShipmentTemplate.shippedFrom.locationId;
-            if ($scope.AutoShipmentTemplate.shippedTo)
-                $scope.AutoShipmentTemplate.shippedTo = $scope.AutoShipmentTemplate.shippedTo.locationId;
+            if ($scope.AutoStartShipment.shippedFrom)
+                $scope.AutoStartShipment.shippedFrom = $scope.AutoStartShipment.shippedFrom.locationId;
+            if ($scope.AutoStartShipment.shippedTo)
+                $scope.AutoStartShipment.shippedTo = $scope.AutoStartShipment.shippedTo.locationId;
 
             // $scope.AuthToken = localDbSvc.getToken();
             // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
@@ -635,7 +636,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             //     datatype: "json",
             //     processData: false,
             //     contentType: "text/plain",
-            //     data: JSON.stringify($scope.AutoShipmentTemplate),
+            //     data: JSON.stringify($scope.AutoStartShipment),
             //     url: url,
             //     success: function (data, textStatus, XmlHttpRequest) {
             //         toastr.success("Shipment template updated successfully")
@@ -646,7 +647,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             //     }
             // });
             
-            webSvc.saveShipmentTemplate($scope.AutoShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
+            webSvc.saveShipmentTemplate($scope.AutoStartShipment).success( function (data, textStatus, XmlHttpRequest) {
                 toastr.success("Shipment template added successfully")
                 $state.go('manage.shiptemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
@@ -663,15 +664,15 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
         $rootScope.modalInstance.result.then(function () {
             BindLocations(function () {
-                if ($scope.AutoShipmentTemplate.shippedFrom) {
-                    var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedFrom.locationId })[0];
+                if ($scope.AutoStartShipment.shippedFrom) {
+                    var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedFrom.locationId })[0];
                     if (shippedFrom)
-                        $scope.AutoShipmentTemplate.shippedFrom = shippedFrom;
+                        $scope.AutoStartShipment.shippedFrom = shippedFrom;
                 }
-                if ($scope.AutoShipmentTemplate.shippedTo) {
-                    var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedTo.locationId })[0];
+                if ($scope.AutoStartShipment.shippedTo) {
+                    var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedTo.locationId })[0];
                     if (shippedFrom)
-                        $scope.AutoShipmentTemplate.shippedTo = shippedTo;
+                        $scope.AutoStartShipment.shippedTo = shippedTo;
                 }
 
                 $scope.ChangeShipmentFrom();
@@ -689,15 +690,15 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
             $rootScope.modalInstance.result.then(function () {
                 BindLocations(function () {
-                    if ($scope.AutoShipmentTemplate.shippedFrom) {
-                        var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedFrom.locationId })[0];
+                    if ($scope.AutoStartShipment.shippedFrom) {
+                        var shippedFrom = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedFrom.locationId })[0];
                         if (shippedFrom)
-                            $scope.AutoShipmentTemplate.shippedFrom = shippedFrom;
+                            $scope.AutoStartShipment.shippedFrom = shippedFrom;
                     }
-                    if ($scope.AutoShipmentTemplate.shippedTo) {
-                        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoShipmentTemplate.shippedTo.locationId })[0];
+                    if ($scope.AutoStartShipment.shippedTo) {
+                        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.AutoStartShipment.shippedTo.locationId })[0];
                         if (shippedTo)
-                            $scope.AutoShipmentTemplate.shippedTo = shippedTo;
+                            $scope.AutoStartShipment.shippedTo = shippedTo;
                     }
 
                     $scope.ChangeShipmentFrom();
@@ -714,10 +715,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
         $rootScope.modalInstance.result.then(function () {
             BindAlertProfiles(function () {
-                if ($scope.AutoShipmentTemplate.alertProfileId) {
-                    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                if ($scope.AutoStartShipment.alertProfileId) {
+                    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                     if (alertProfile)
-                        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                        $scope.AutoStartShipment.alertProfileId = alertProfile;
                 }
             })
         });
@@ -732,10 +733,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
             $rootScope.modalInstance.result.then(function () {
                 BindAlertProfiles(function () {
-                    if ($scope.AutoShipmentTemplate.alertProfileId) {
-                        var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                    if ($scope.AutoStartShipment.alertProfileId) {
+                        var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                         if (alertProfile)
-                            $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                            $scope.AutoStartShipment.alertProfileId = alertProfile;
                     }
                 })
             });
@@ -749,10 +750,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
         $rootScope.modalInstance.result.then(function () {
             BindNotificationSchedules(function () {
-                //if ($scope.AutoShipmentTemplate.alertProfileId) {
-                //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                //if ($scope.AutoStartShipment.alertProfileId) {
+                //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                 //    if (alertProfile)
-                //        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                //        $scope.AutoStartShipment.alertProfileId = alertProfile;
                 //}
             })
         });
@@ -771,10 +772,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
             $rootScope.modalInstance.result.then(function () {
                 BindNotificationSchedules(function () {
-                    //if ($scope.AutoShipmentTemplate.alertProfileId) {
-                    //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId })[0];
+                    //if ($scope.AutoStartShipment.alertProfileId) {
+                    //    var alertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId })[0];
                     //    if (alertProfile)
-                    //        $scope.AutoShipmentTemplate.alertProfileId = alertProfile;
+                    //        $scope.AutoStartShipment.alertProfileId = alertProfile;
                     //}
                 })
             });
@@ -782,7 +783,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     };
     $scope.CreateAlertRule = function () {
         if ($scope.AlertList && $scope.AlertList.length > 0) {
-            var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoShipmentTemplate.alertProfileId }, true);
+            var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true);
             if (selectedAlertProfile) {
                 if (selectedAlertProfile.length > 0) {
                     selectedAlertProfile = selectedAlertProfile[0];
@@ -799,10 +800,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     }
     $scope.ChangeNotiScheduleForAlert = function () {
-        if ($scope.AutoShipmentTemplate && $scope.AutoShipmentTemplate.alertsNotificationSchedules) {
+        if ($scope.AutoStartShipment && $scope.AutoStartShipment.alertsNotificationSchedules) {
             $scope.AlertNotiRule = '';
-            for (var i = 0; i < $scope.AutoShipmentTemplate.alertsNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoShipmentTemplate.alertsNotificationSchedules[i]) }, true)
+            for (var i = 0; i < $scope.AutoStartShipment.alertsNotificationSchedules.length; i++) {
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.alertsNotificationSchedules[i]) }, true)
                 if (shipment) {
                     if (shipment.length > 0) {
                         shipment = shipment[0];
@@ -817,10 +818,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     }
     $scope.ChangeNotiScheduleForArrival = function () {
-        if ($scope.AutoShipmentTemplate && $scope.AutoShipmentTemplate.arrivalNotificationSchedules) {
+        if ($scope.AutoStartShipment && $scope.AutoStartShipment.arrivalNotificationSchedules) {
             $scope.ArrivalNotiRule = '';
-            for (var i = 0; i < $scope.AutoShipmentTemplate.arrivalNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoShipmentTemplate.arrivalNotificationSchedules[i]) }, true)
+            for (var i = 0; i < $scope.AutoStartShipment.arrivalNotificationSchedules.length; i++) {
+                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.arrivalNotificationSchedules[i]) }, true)
                 if (shipment) {
                     if (shipment.length > 0) {
                         shipment = shipment[0];
