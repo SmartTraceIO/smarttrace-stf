@@ -76,7 +76,7 @@
 
                     </th>
                 </tr>
-                <tr ng-repeat="shipment in ShipmentTemplateList">
+                <tr ng-repeat="shipment in AutoStartShipmentList">
                     <td width="20%">
                         {{shipment.shipmentTemplateName}}
                     </td>
@@ -93,10 +93,10 @@
                         {{shipment.alertProfileName}}
                     </td>
                     <td class="text-center" width="5%">
-                        <a class="btn green" href="/#/manage/edit-autostart-template/{{shipment.shipmentTemplateId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        <a class="btn green" href="/#/manage/edit-autostart-template/{{shipment.id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center" width="5%">
-                        <a class="btn green" ng-click="confirm(shipment.shipmentTemplateId)"><i class="fa fa-remove"></i>&nbsp;Delete</a>
+                        <a class="btn green" ng-click="confirm(shipment.id)"><i class="fa fa-remove"></i>&nbsp;Delete</a>
                     </td>
                 </tr>
             </table>

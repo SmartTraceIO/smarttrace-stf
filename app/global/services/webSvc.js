@@ -252,10 +252,26 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
             }
             return $http.get(url, params);
 		},
+        getAutoStartShipment: function(param) {
+            var url = Api.url + 'getAutoStartShipment/' + localDbSvc.getToken();
+            var params = {
+                params: param
+            }
+            return $http.get(url, params);
+        },
 		saveAutoStartShipment: function(data) {
 			var url = Api.url + 'saveAutoStartShipment/' + localDbSvc.getToken();
 			return $http.post(url, data);
 		},
+        deleteAutoStartShipment: function(autoStartShipmentId){
+            var url = Api.url + 'deleteAutoStartShipment/' + localDbSvc.getToken();
+            var params = {
+                params: {
+                    autoStartShipmentId: autoStartShipmentId
+                }
+            };
+            return $http.get(url, params);
+        },
 
 		getShipmentTemplates: function(param){
 			var url = Api.url + 'getShipmentTemplates/' + localDbSvc.getToken();

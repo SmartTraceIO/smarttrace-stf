@@ -245,7 +245,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Suppress all alert upon arrival&nbsp;
-                            <i tooltip="Suppress all alert upon arrival"
+                            <i tooltip="No alert after arrival minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -262,13 +262,13 @@
                     </div>
                     <div class="col-sm-2">
                         <label class="control-label">Suppress all alert after&nbsp;
-                            <i tooltip="Suppress all alert after"
+                            <i tooltip="No alert after start minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.noAlertsAfterArrivalMinutes">
+                        <select class="form-control " ng-model="AutoStartShipment.noAlertsAfterStartMinutes">
                             <option value="">Don't Shutdown</option>
                             <option value="60">1hr</option>
                             <option value="120">2hrs</option>
@@ -343,13 +343,13 @@
                     <div class="col-sm-12">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">Shutdown Device upon arrival&nbsp;
-                            <i tooltip="Shutdown device"
+                            <i tooltip="Shutdown device after minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.noAlertsAfterArrivalMinutes">
+                        <select class="form-control " ng-model="AutoStartShipment.shutdownDeviceAfterMinutes">
                             <option value="">Don't Shutdown</option>
                             <option value="0">On Arrival</option>
                             <option value="60">After 1 hr at destination</option>
@@ -360,13 +360,13 @@
                     </div>
                     <div class="col-sm-4">
                         <label class="control-label">Shutdown Device after:&nbsp;
-                            <i tooltip="Shutdown device"
+                            <i tooltip="Shutdown after start minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.shutdownDeviceAfterMinutes">
+                        <select class="form-control " ng-model="AutoStartShipment.shutdownAfterStartMinutes">
                             <option value="">Don't Shutdown</option>
                             <option value="60">1hr</option>
                             <option value="120">2hrs</option>

@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $filter, rootSvc, localDbSvc, webSvc) {
     rootSvc.SetPageTitle('List Auto Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Auto Templates");
@@ -10,17 +10,47 @@
             so: $scope.So,
             sc: $scope.Sc
         };
+
         webSvc.getAutoStartShipments(param).success(function(data){
             if (data.status.code == 0) {
                 toastr.success('Get list of AutoStartShipment');
                 console.log(data);
-                $scope.AutoShipmentList = data.response;
-                $scope.AutoShipmentList.totalCount = data.totalCount;
+                $scope.AutoStartShipmentList = data.response;
+                $scope.AutoStartShipmentList.totalCount = data.totalCount;
+
+                webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
+                    if (data.status.code == 0) {
+                        $scope.AlertList = data.response;
+                    }
+                });
+                webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
+                    if (data.status.code == 0) {
+                        $scope.LocationList = data.response;
+                    }
+                });
+                angular.forEach($scope.AutoStartShipmentList, function(autoStartShipment, key) {
+                    if (autoStartShipment.alertProfileId) {
+                        webSvc.getAlertProfile(autoStartShipment.alertProfileId).success(function(resp) {
+                            $scope.AutoStartShipmentList[key].alertProfileName = resp.response.alertProfileName;
+                        })
+                    }
+                    if (autoStartShipment.startLocations && autoStartShipment.startLocations.length > 0){
+                        webSvc.getLocation(autoStartShipment.startLocations[0]).success(function(resp) {
+                            $scope.AutoStartShipmentList[key].shippedFromLocationName = resp.response.locationName;
+                        })
+                    }
+                    if (autoStartShipment.endLocations && autoStartShipment.endLocations.length>0){
+                        webSvc.getLocation(autoStartShipment.endLocations[0]).success(function(resp) {
+                            $scope.AutoStartShipmentList[key].shippedToLocationName = resp.response.locationName;
+                        })
+                    }
+                });
             } else {
                 toastr.error('Cannot get list of AutoStartShipment');
             }
         });
     }
+
     $scope.Init = function () {
         $scope.PageSize = '20';
         $scope.PageIndex = 1;
@@ -42,20 +72,19 @@
     }
 
     $scope.confirm = function (shipmentTempId) {
-        $scope.STemplateToDeleteShipTemp = shipmentTempId;
+        $scope.autoStartShipmentId = shipmentTempId;
         $("#confirmModel").modal("show");
     }
 
     $scope.DeleteShipment = function () {
         $("#confirmModel").modal("hide");
-        webSvc.deleteShipmentTemplate($scope.STemplateToDeleteShipTemp).success(function(data){
+        webSvc.deleteAutoStartShipment($scope.autoStartShipmentId).success(function(data){
             if (data.status.code == 0) {
                 toastr.success("Shipment template deleted successfully")
                 BindAutoShipmentList();
             }
         });
     }
-
 });
 
 appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
@@ -106,6 +135,9 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     var BindNotificationSchedules = function (cb) {
         webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
+            if (DEBUG) {
+                console.log('getAutoStartShipment', data);
+            }
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
             }
@@ -210,22 +242,21 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.SaveData = function (isValid) {
         if (isValid) {
-            if (!$scope.AutoStartShipment.shutdownDeviceAfterMinutes)
-                $scope.AutoStartShipment.shutdownDeviceAfterMinutes = null;
-
-            if (!$scope.AutoStartShipment.arrivalNotificationWithinKm)
-                $scope.AutoStartShipment.arrivalNotificationWithinKm = null;
 
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
+            $scope.AutoStartShipment.startLocations = [];
+            $scope.AutoStartShipment.endLocations = [];
 
             if ($scope.AutoStartShipment.shippedFrom)
-                $scope.AutoStartShipment.shippedFrom = $scope.AutoStartShipment.shippedFrom.locationId;
-            if ($scope.AutoStartShipment.shippedTo)
-                $scope.AutoStartShipment.shippedTo = $scope.AutoStartShipment.shippedTo.locationId;
+                $scope.AutoStartShipment.startLocations.push($scope.AutoStartShipment.shippedFrom.locationId);
 
-            webSvc.saveAutoStartShipment($scope.AutoStartShipment).success( function (data, textStatus, XmlHttpRequest) {
-                console.log('AutoStartShipment', data);
+            if ($scope.AutoStartShipment.shippedTo)
+                $scope.AutoStartShipment.endLocations.push($scope.AutoStartShipment.shippedTo.locationId);
+
+
+            webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
+                function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
                     toastr.success("Shipment template added successfully")
                 }
@@ -454,9 +485,9 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         $scope.AutoStartShipment = {};
         if ($scope.STId) {
             var param = {
-                shipmentTemplateId: $scope.STId
+                autoStartShipmentId: $scope.STId
             };
-            webSvc.getShipmentTemplates(param).success(function(data){
+            webSvc.getAutoStartShipment(param).success(function(data){
             // .get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
                 if (data.status.code == 0) {
                     $scope.AutoStartShipment = data.response;
@@ -612,9 +643,9 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         $scope.Path.setMap($scope.map);
         $scope.map.fitBounds(bounds);
     }
+
     $scope.SaveData = function (isValid) {
         if (isValid) {
-
             if (!$scope.AutoStartShipment.shutdownDeviceAfterMinutes)
                 $scope.AutoStartShipment.shutdownDeviceAfterMinutes = null;
 
@@ -624,32 +655,18 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
 
+            $scope.AutoStartShipment.startLocations = [];
+            $scope.AutoStartShipment.endLocations = [];
+
+            //--TODO:
             if ($scope.AutoStartShipment.shippedFrom)
                 $scope.AutoStartShipment.shippedFrom = $scope.AutoStartShipment.shippedFrom.locationId;
             if ($scope.AutoStartShipment.shippedTo)
                 $scope.AutoStartShipment.shippedTo = $scope.AutoStartShipment.shippedTo.locationId;
 
-            // $scope.AuthToken = localDbSvc.getToken();
-            // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
-            // $.ajax({
-            //     type: "POST",
-            //     datatype: "json",
-            //     processData: false,
-            //     contentType: "text/plain",
-            //     data: JSON.stringify($scope.AutoStartShipment),
-            //     url: url,
-            //     success: function (data, textStatus, XmlHttpRequest) {
-            //         toastr.success("Shipment template updated successfully")
-            //         $state.go('manage.shiptemp')
-            //     },
-            //     error: function (xmlHttpRequest, textStatus, errorThrown) {
-            //         alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-            //     }
-            // });
-            
-            webSvc.saveShipmentTemplate($scope.AutoStartShipment).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Shipment template added successfully")
-                $state.go('manage.shiptemp')
+            webSvc.saveAutoStartShipment($scope.AutoStartShipment).success( function (data, textStatus, XmlHttpRequest) {
+                toastr.success("Auto Start Shipment updated successfully")
+                $state.go('manage.autotemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
