@@ -1,6 +1,4 @@
-﻿var DEBUG=true;
-
-app.constant("Api", { url: "https://smarttrace.com.au/web/vf/rest/" });
+﻿app.constant("Api", { url: "https://smarttrace.com.au/web/vf/rest/" });
 // executes only once for an app, calls evertime when page refreshed by user
 app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $templateCache) {
   
@@ -36,7 +34,10 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
         });
 });
 
-app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$provide', '$httpProvider', '$compileProvider', '$filterProvider', '$injector', function ($locationProvider, $stateProvider, $controllerProvider, $provide, $httpProvider, $compileProvider, $filterProvider, $injector) {
+app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$provide',
+    '$httpProvider', '$compileProvider', '$filterProvider', '$injector',
+    function ($locationProvider, $stateProvider, $controllerProvider, $provide,
+              $httpProvider, $compileProvider, $filterProvider, $injector) {
     ////register controller,service,factory,value,constant etc....
     appCtrls.controller = $controllerProvider.register;
     appDirs.directive = $compileProvider.directive;;

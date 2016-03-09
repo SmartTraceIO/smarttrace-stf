@@ -41,3 +41,24 @@
         BindTrackerList();
     }
 });
+/**
+ * Created by beou on 09/03/2016.
+ */
+appFilters.filter('volt', function() {
+    return function (input) {
+        return Number(input/1000).toFixed(1) + 'V';
+    }
+});
+appFilters.filter('friendlyDate', function() {
+    return function (input) {
+        cdate = new Date(input);
+        return cdate.getTime();
+    }
+});
+appFilters.filter('mark', function() {
+    return function (input) {
+        //marked = '<i class="fa fa-check"></i>'
+        //unmarked = '<i class="fa fa-times"></i>';
+        return input ? '\uf00d' : '\uf00c';
+    }
+})
