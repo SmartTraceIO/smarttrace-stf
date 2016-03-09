@@ -92,18 +92,27 @@
                                        tooltip-placement="top" class="fa fa-info-circle">
                                     </i>
                                 </label>
-                                <br /><select style="width:100%"
-                                              ng-change="ChangeNotiScheduleForAlert()"
-                                              multiple ui-select2="NotificationScheduleOption"
-                                              ng-model="AutoShipmentTemplate.alertsNotificationSchedules"
-                                              data-placeholder="Select Notification Schedule For Alert Profile">
+                                <br />
+                                <!--<select style="width:100%"
+                                          ng-change="ChangeNotiScheduleForAlert()"
+                                          multiple ui-select2="NotificationScheduleOption"
+                                          ng-model="AutoShipmentTemplate.alertsNotificationSchedules"
+                                          data-placeholder="Select Notification Schedule For Alert Profile">
                                     <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                                </select><br />
+                                </select>-->
+                                <select style="width:100%" ng-change=""
+                                        multiple ui-select2="OptionsShipmentFrom"
+                                        ng-model="AutoStartShipment.optionsShipmentFrom"
+                                        data-placeholder="Select location for auto detection of shipmentFrom">
+                                    <option ng-repeat="location in FromLocationList"
+                                            value="{{location.locationId}}">{{location.DisplayText}}</option>
+                                </select>
+                                <br />
                                 <small class="text-muted control-label">
                                     {{AlertNotiRule}}
                                 </small>
                             </div>
-                            <div class="col-sm-2 control-label" style="text-align:left">
+                            <!--<div class="col-sm-2 control-label" style="text-align:left">
                                 <br />
                                 <a href="">
                                     <i class="fa fa-pencil"
@@ -115,8 +124,14 @@
                                     </i>
                                 </a>
                                 &nbsp;
-                                <a href=""><i class="fa fa-plus" ng-click="openAddNoti()" tooltip="Add new Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                            </div>
+                                <a href="">
+                                    <i class="fa fa-plus"
+                                       ng-click="openAddNoti()"
+                                       tooltip="Add new Notification Schedule"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter" tooltip-placement="top"/>
+                                </a>
+                            </div>-->
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -153,20 +168,38 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <label class="control-label">Notification Schedule(s) For Alerts&nbsp;<i tooltip="Notification schedule(s) for alerts" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                                <br /><select style="width:100%" ng-change="ChangeNotiScheduleForAlert()" multiple ui-select2="NotificationScheduleOption" ng-model="AutoStartShipment.alertsNotificationSchedules" data-placeholder="Select Notification Schedule For Alert Profile">
-                                    <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                                </select><br />
+                                <label class="control-label">Options for auto-detection of Shipment To&nbsp;
+                                    <i tooltip="Options for auto-detection of Shipment From"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <select style="width:100%" ng-change=""
+                                        multiple ui-select2="OptionsShipmentTo"
+                                        ng-model="AutoStartShipment.optionsShipmentTo"
+                                        data-placeholder="Select location for auto detection of shipment to">
+                                    <option ng-repeat="location in ToLocationList"
+                                            value="{{location.locationId}}">{{location.DisplayText}}</option>
+                                </select>
+                                <!--<select style="width:100%" ng-change="ChangeNotiScheduleForAlert()"
+                                              multiple ui-select2="NotificationScheduleOption"
+                                              ng-model="AutoStartShipment.alertsNotificationSchedules"
+                                              data-placeholder="Select Notification Schedule For Alert Profile">
+                                    <option ng-repeat="noti in NotificationList"
+                                            value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
+                                </select>-->
+                                <br />
                                 <small class="text-muted control-label">
                                     {{AlertNotiRule}}
                                 </small>
                             </div>
-                            <div class="col-sm-2 control-label" style="text-align:left">
+                            <!--<div class="col-sm-2 control-label" style="text-align:left">
                                 <br />
                                 <a href=""><i class="fa fa-pencil" ng-click="openEditNoti(AutoStartShipment.alertsNotificationSchedules)" tooltip="Edit this Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
                                 &nbsp;
                                 <a href=""><i class="fa fa-plus" ng-click="openAddNoti()" tooltip="Add new Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <div class="col-sm-6" style="display:none;">
@@ -268,7 +301,7 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.noAlertsAfterStartMinutes">
+                        <select class="form-control" ng-model="AutoStartShipment.noAlertsAfterStartMinutes">
                             <option value="">Don't Shutdown</option>
                             <option value="60">1hr</option>
                             <option value="120">2hrs</option>
@@ -366,7 +399,7 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.shutdownAfterStartMinutes">
+                        <select class="form-control" ng-model="AutoStartShipment.shutDownAfterStartMinutes">
                             <option value="">Don't Shutdown</option>
                             <option value="60">1hr</option>
                             <option value="120">2hrs</option>
