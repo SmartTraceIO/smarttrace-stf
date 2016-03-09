@@ -51,6 +51,9 @@ appFilters.filter('volt', function() {
 });
 appFilters.filter('friendlyDate', function() {
     return function (input) {
+        if (input == null) {
+            input = "0";
+        }
         cdate = new Date(input);
         return cdate.getTime();
     }

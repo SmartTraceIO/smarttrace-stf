@@ -130,10 +130,15 @@
                     <td ng-if="tracker.active==false">
                         <i class="fa fa-times"/>
                     </td>
-                    <td>{{tracker.lastReadingTimeISO | friendlyDate | date:'h:mma dd MMM yyyy'}}</td>
+                    <td ng-if="tracker.lastReadingTime!=null">
+                        {{tracker.lastReadingTime}}
+                    </td>
+                    <td ng-if="tracker.lastReadingTime==null">
+                        {{tracker.lastReadingTimeISO | friendlyDate | date:'h:mma dd MMM yyyy'}}
+                    </td>
                     <td ng-bind="tracker.lastReadingTemperature"></td>
                     <td>{{tracker.lastReadingBattery | volt}}</td>
-                    <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}">{{tracker.shipmentNumber}}</a></td>
+                    <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>
                     <td ng-bind="tracker.shipmentStatus"></td>
                 </tr>
             </table>
