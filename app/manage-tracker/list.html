@@ -133,7 +133,7 @@
                         <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center">
-                        <a class="btn green" ng-click="confirm(tracker.sn);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
+                        <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
                     </td>
 
                 </tr>
@@ -151,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="DeleteTrackerProfile()">Ok</button>
+                <button type="button" class="btn btn-primary" ng-click="DeleteDevice()">Ok</button>
             </div>
         </div>
     </div>

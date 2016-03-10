@@ -42,6 +42,23 @@
             BindTrackerList();
         }*/
 
+        $scope.confirm = function (deviceImei) {
+            $scope.deviceImei = deviceImei;
+            $("#confirmModel").modal("show");
+        }
+
+        $scope.DeleteDevice = function () {
+            $("#confirmModel").modal("hide");
+            webSvc.deleteDevice($scope.deviceImei).success(function(data){
+                console.log('DELETE-DEVICE', data);
+                if (data.status.code == 0) {
+                    toastr.success("Device deleted successfully")
+                } else {
+                    toastr.error('Can\'t delete device!');
+                }
+            });
+        }
+
         var orderBy = $filter('orderBy');
         $scope.Sorting = function(predicate) {
             $scope.predicate = predicate;

@@ -186,6 +186,16 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			var url = Api.url + 'saveDevice/' + localDbSvc.getToken();
 			return $http.post(url, data);
 		},
+		//-- delete device
+		deleteDevice: function(deviceId) {
+			var url = Api.url + 'deleteDevice/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					imei: deviceId
+				}
+			};
+			return $http.get(url, params);
+		},
 		getShipments: function(data){
 			var url = Api.url + 'getShipments/' + localDbSvc.getToken();
 			return $http.post(url, data);
