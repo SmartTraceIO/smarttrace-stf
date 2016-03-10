@@ -172,7 +172,20 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			};
 			return $http.get(url, params);
 		},
-		
+		getDevice: function(imei){
+			var url = Api.url + 'getDevice/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					imei: imei
+				}
+			};
+			return $http.get(url, params);
+		},
+		//-- save device
+		saveDevice: function(data) {
+			var url = Api.url + 'saveDevice/' + localDbSvc.getToken();
+			return $http.post(url, data);
+		},
 		getShipments: function(data){
 			var url = Api.url + 'getShipments/' + localDbSvc.getToken();
 			return $http.post(url, data);

@@ -1,27 +1,22 @@
 ﻿<div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-bell"></i> List of Trackers
+            <i class="fa fa-bell"></i>List of Trackers
         </div>
     </div>
     <div class="portlet-body">
-        <div class="pull-left">
-            Show 
+        <div class="pull-left">Show
             <select class="form-control" style="width:auto;display:inline-block" ng-change="PageSizeChanged()" ng-model="PageSize">
-                <option value="20" selected>
-                    20
-                </option>
-                <option value="50">
-                    50
-                </option>
-                <option value="100">
-                    100
-                </option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
         </div>
-        <!-- <div class="pull-right">
-            <a class="btn btn-default pull-right" href="/#/manage/add-tracker"><i class="fa fa-plus"></i>&nbsp;Add New Tracker</a>
-        </div> -->
+         <div class="pull-right">
+            <a class="btn btn-default pull-right" href="/#/add-tracker">
+                <i class="fa fa-plus"></i>&nbsp;Add New Tracker
+            </a>
+        </div>
         <div class="clearfix"></div>
         <br />
         <hr />
@@ -110,6 +105,8 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
                     <td ng-bind="tracker.sn"></td>
@@ -131,6 +128,14 @@
                     <td>{{tracker.lastReadingBattery | volt}}</td>
                     <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>
                     <td ng-bind="tracker.shipmentStatus"></td>
+
+                    <td class="text-center">
+                        <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn green" ng-click="confirm(tracker.sn);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
+                    </td>
+
                 </tr>
             </table>
         </div>
@@ -151,10 +156,3 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        setTimeout(function () {
-            window.scrollTo(0, 0);     // run it a bit later also for browser compatibility
-        }, 1000);
-    })
-</script>

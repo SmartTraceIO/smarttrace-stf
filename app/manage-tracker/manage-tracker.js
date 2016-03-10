@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
     function ($scope, $filter, rootSvc, localDbSvc, webSvc) {
         rootSvc.SetPageTitle('List Trackers');
-        rootSvc.SetActiveMenu('Tracker');
+        rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
 
         $scope.AuthToken = localDbSvc.getToken();
@@ -49,6 +49,73 @@
             $scope.TrackerList = orderBy($scope.TrackerList, predicate, $scope.reverse);
         };
 });
+appCtrls.controller('AddTrackerCtrl', ['$scope', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
+    function($scope, $filter, rootSvc, localDbSvc, webSvc) {
+        rootSvc.SetPageTitle('Add Tracker');
+        rootSvc.SetActiveMenu('Trackers');
+        rootSvc.SetPageHeader("Trackers");
+
+        $scope.Action = "Add";
+}]);
+appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc',
+    function($scope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc) {
+        rootSvc.SetPageTitle('Edit Tracker');
+        rootSvc.SetActiveMenu('Trackers');
+        rootSvc.SetPageHeader("Trackers");
+        $scope.Action = "Edit";
+
+        $scope.tracker = {};
+        $scope.tracker.imei = $stateParams.imei;
+        var filter = $filter('filter');
+        var param = {
+            pageSize: 1000,
+            pageIndex: 1,
+            so: 'id',
+            sc: 'asc'
+        };
+        console.log('PARAM', $scope.tracker.imei);
+        webSvc.getDevice($scope.tracker.imei).success(function(data){
+            console.log("TRACKER", data);
+            if (data.status.code == 0) {
+                $scope.tracker = data.response;
+            } else {
+                //error
+            }
+        }).then(function() {
+            webSvc.getAutoStartShipments(param).success(function(data) {
+                if (data.status.code == 0) {
+                    console.log('AutoShipment', data.response);
+                    $scope.AutoStartShipmentList = data.response;
+                    $scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
+                }
+            });
+        });
+
+/*
+        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.ShipmentTemplate.shippedTo }, true);
+        if (shippedTo && shippedTo.length > 0) {
+            $scope.ShipmentTemplate.shippedTo = shippedTo[0];
+        }*/
+
+
+
+        $scope.saveTracker = function() {
+            if ($scope.tracker.autoStartShipment) {
+                $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
+            }
+            webSvc.saveDevice($scope.tracker).success(function(resp) {
+                console.log('UPDATED', resp);
+                if (resp.status.code == 0) {
+                    //success
+                    toastr.success('You\'v updated device: ' + $scope.tracker.imei);
+                    $state.go('tracker');
+                } else {
+                    //error
+                    toastr.error('Can\'t update the device: ' + $scope.tracker.imei + resp.status.message);
+                }
+            });
+        }
+    }]);
 /**
  * Created by beou on 09/03/2016.
  */

@@ -122,21 +122,6 @@ appConstants.constant('routes', [
           ]
       },
       {
-          name: 'tracker',
-          config: {
-              url: "/tracker"
-              , views: {
-                  "content": {
-                      templateUrl: "app/manage-tracker/list.html"
-                       , controller: 'ListTrackerCtrl'
-                  }
-              }
-          },
-          dependencies: [
-              'app/manage-tracker/manage-tracker.js?v=' + version,
-          ]
-      },
-      {
           name: 'manage',
           config: {
               url: "/manage",
@@ -148,6 +133,52 @@ appConstants.constant('routes', [
               }
           }
       },
+
+    {
+        name: 'tracker',
+        config: {
+            url: "/tracker"
+            , views: {
+                "content": {
+                    templateUrl: "app/manage-tracker/list.html"
+                    , controller: 'ListTrackerCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-tracker/manage-tracker.js?v=' + version,
+        ]
+    },
+    {
+        name: 'addtracker',
+        config: {
+            url: "/add-tracker"
+            , views: {
+                "content": {
+                    templateUrl: "app/manage-tracker/add-edit.html"
+                    , controller: 'AddTrackerCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-tracker/manage-tracker.js?v=' + version,
+        ]
+    },
+    {
+        name: 'edittracker',
+        config: {
+            url: "/edit-tracker/:imei"
+            , views: {
+                "content": {
+                    templateUrl: "app/manage-tracker/add-edit.html"
+                    , controller: 'EditTrackerCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-tracker/manage-tracker.js?v=' + version,
+        ]
+    },
       {
           name: 'manage.alert',
           config: {
