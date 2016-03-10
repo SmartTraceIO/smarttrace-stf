@@ -58,10 +58,3 @@ appFilters.filter('friendlyDate', function() {
         return cdate.getTime();
     }
 });
-appFilters.filter('mark', function() {
-    return function (input) {
-        //marked = '<i class="fa fa-check"></i>'
-        //unmarked = '<i class="fa fa-times"></i>';
-        return input ? '\uf00d' : '\uf00c';
-    }
-})

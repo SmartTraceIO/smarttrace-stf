@@ -1,7 +1,4 @@
-﻿ <!--<h3 class="page-title" ng-init="Init()">
-    Autostart Shipment
-</h3>-->
-<div class="portlet box green " ng-init="Init()">
+﻿<div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-bell"></i> {{Action}}&nbsp; autostart shipment template
@@ -19,7 +16,8 @@
                                class="form-control" required maxlength="50"
                                placeholder="Enter shipment template name" />
                         <span ng-if="frmAddEditTemplate.$invalid && frmAddEditTemplate.$submitted" ng-cloak>
-                            <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.TemplateName.$error.required">Please enter tmeplate name</span>
+                            <span ng-cloak class="text-danger"
+                                  ng-if="frmAddEditTemplate.TemplateName.$error.required">Please enter tmeplate name</span>
                              <span ng-cloak class="text-danger"
                                    ng-if="frmAddEditTemplate.TemplateName.$error.maxlength">Template name must be less than or equal to 60 chars</span>
                         </span>
@@ -61,31 +59,6 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <label class="control-label">Shipment From:&nbsp;<i tooltip="Shipment from" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                                <select ng-change="ChangeShipmentFrom()"
-                                        ng-model="AutoStartShipment.shippedFrom"
-                                        ng-options="location as location.DisplayText for location in FromLocationList track by location.locationId"
-                                        class="form-control input-sm">
-                                    <option value="">-- Please Select --</option>
-                                </select>
-                                <small class="text-muted">
-                                    {{AutoStartShipment.shippedFrom.address}}
-                                </small>
-                            </div>
-                            <div class="col-sm-2 control-label" style="text-align:left">
-                                <br />
-                                <a href=""><i class="fa fa-pencil" ng-click="openEditLocation(AutoStartShipment.shippedFrom.locationId)" tooltip="Edit this Shipped From Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                                &nbsp;
-                                <a href="" ng-click="openAddLocation()"><i class="fa fa-plus" tooltip="Add New Shipped From Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-10">
-                                <h3 style="margin:-3px 0;" class="pull-right">OR</h3>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-10">
                                 <label class="control-label">Options for auto-detection of Shipment From&nbsp;
                                     <i tooltip="Options for auto-detection of Shipment From"
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
@@ -93,113 +66,41 @@
                                     </i>
                                 </label>
                                 <br />
-                                <!--<select style="width:100%"
-                                          ng-change="ChangeNotiScheduleForAlert()"
-                                          multiple ui-select2="NotificationScheduleOption"
-                                          ng-model="AutoShipmentTemplate.alertsNotificationSchedules"
-                                          data-placeholder="Select Notification Schedule For Alert Profile">
-                                    <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                                </select>-->
-                                <select style="width:100%" ng-change=""
+                                <select style="width:100%" ng-change="ChangeShipmentFrom()"
                                         multiple ui-select2="OptionsShipmentFrom"
-                                        ng-model="AutoStartShipment.optionsShipmentFrom"
+                                        ng-model="AutoStartShipment.startLocations"
                                         data-placeholder="Select location for auto detection of shipmentFrom">
                                     <option ng-repeat="location in FromLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
                                 </select>
                                 <br />
                                 <small class="text-muted control-label">
-                                    {{AlertNotiRule}}
+                                    {{ShipmentFrom}}
                                 </small>
                             </div>
-                            <!--<div class="col-sm-2 control-label" style="text-align:left">
-                                <br />
-                                <a href="">
-                                    <i class="fa fa-pencil"
-                                       ng-click="openEditNoti(AutoStartShipment.alertsNotificationSchedules)"
-                                       tooltip="Edit this Notification Schedule"
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top">
-                                    </i>
-                                </a>
-                                &nbsp;
-                                <a href="">
-                                    <i class="fa fa-plus"
-                                       ng-click="openAddNoti()"
-                                       tooltip="Add new Notification Schedule"
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter" tooltip-placement="top"/>
-                                </a>
-                            </div>-->
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <label class="control-label">Shipment To:&nbsp;
-                                    <i tooltip="Shipment to"
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"/>
-                                </label>
-                                <select ng-change="ChangeShipmentTo()"
-                                        ng-model="AutoStartShipment.shippedTo"
-                                        ng-options="location as location.DisplayText for location in ToLocationList track by location.locationId"
-                                        class="form-control input-sm">
-                                    <option value="">-- Please Select --</option>
-                                </select>
-                                <small class="text-muted">
-                                    {{AutoStartShipment.shippedTo.address}}
-                                </small>
-                            </div>
-                            <div class="col-sm-2 control-label" style="text-align:left">
-                                <br />
-                                <a href=""><i class="fa fa-pencil" ng-click="openEditLocation(AutoStartShipment.shippedTo.locationId)" tooltip="Edit this Shipped To Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                                &nbsp;
-                                <a href="" ng-click="openAddLocation()"><i class="fa fa-plus" tooltip="Add New Shipped To Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-10">
-                                <h3 style="margin:-3px 0;" class="pull-right">OR</h3>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-10">
                                 <label class="control-label">Options for auto-detection of Shipment To&nbsp;
-                                    <i tooltip="Options for auto-detection of Shipment From"
+                                    <i tooltip="Options for auto-detection of Shipment To"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
                                        class="fa fa-info-circle"/>
                                 </label>
-                                <select style="width:100%" ng-change=""
+                                <select style="width:100%" ng-change="ChangeShipmenTo()"
                                         multiple ui-select2="OptionsShipmentTo"
-                                        ng-model="AutoStartShipment.optionsShipmentTo"
+                                        ng-model="AutoStartShipment.endLocations"
                                         data-placeholder="Select location for auto detection of shipment to">
-                                    <option ng-repeat="location in ToLocationList"
+                                    <option ng-repeat="location in ToLocationList"t
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
                                 </select>
-                                <!--<select style="width:100%" ng-change="ChangeNotiScheduleForAlert()"
-                                              multiple ui-select2="NotificationScheduleOption"
-                                              ng-model="AutoStartShipment.alertsNotificationSchedules"
-                                              data-placeholder="Select Notification Schedule For Alert Profile">
-                                    <option ng-repeat="noti in NotificationList"
-                                            value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                                </select>-->
-                                <br />
                                 <small class="text-muted control-label">
-                                    {{AlertNotiRule}}
+                                    {{ShipmentTo}}
                                 </small>
                             </div>
-                            <!--<div class="col-sm-2 control-label" style="text-align:left">
-                                <br />
-                                <a href=""><i class="fa fa-pencil" ng-click="openEditNoti(AutoStartShipment.alertsNotificationSchedules)" tooltip="Edit this Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                                &nbsp;
-                                <a href=""><i class="fa fa-plus" ng-click="openAddNoti()" tooltip="Add new Notification Schedule" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
-                            </div>-->
                         </div>
                     </div>
                     <div class="col-sm-6" style="display:none;">
