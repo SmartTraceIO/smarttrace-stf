@@ -91,14 +91,6 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$statePa
             });
         });
 
-/*
-        var shippedTo = $filter('filter')($scope.LocationList, { locationId: $scope.ShipmentTemplate.shippedTo }, true);
-        if (shippedTo && shippedTo.length > 0) {
-            $scope.ShipmentTemplate.shippedTo = shippedTo[0];
-        }*/
-
-
-
         $scope.saveTracker = function() {
             if ($scope.tracker.autoStartShipment) {
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
