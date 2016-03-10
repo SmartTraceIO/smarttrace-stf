@@ -140,7 +140,7 @@ appConstants.constant('routes', [
             url: "/tracker"
             , views: {
                 "content": {
-                    templateUrl: "app/manage-tracker/list.html"
+                    templateUrl: "app/manage-tracker/list.html?v="+version
                     , controller: 'ListTrackerCtrl'
                 }
             }

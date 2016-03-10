@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $filter, rootSvc, localDbSvc, webSvc) {
-    rootSvc.SetPageTitle('List Auto Template');
+    rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Auto Templates");
+    rootSvc.SetPageHeader("Autostart templates");
     $scope.AuthToken = localDbSvc.getToken();
     var BindAutoShipmentList = function () {
         var param = {

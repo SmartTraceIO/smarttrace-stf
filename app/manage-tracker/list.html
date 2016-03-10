@@ -113,8 +113,8 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th></th>
-                    <th></th>
+                    <!--<th></th>-->
+                    <!--<th></th>-->
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
                     <td ng-bind="tracker.sn"></td>
@@ -137,12 +137,12 @@
                     <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>
                     <td ng-bind="tracker.shipmentStatus"></td>
 
-                    <td class="text-center">
+                    <!--<td class="text-center">
                         <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center">
                         <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
-                    </td>
+                    </td>-->
 
                 </tr>
             </table>
