@@ -34,13 +34,13 @@
             BindTrackerList();
         }
 
-        /*$scope.Sorting = function (expression) {
+        $scope.Sorting = function (expression) {
             $scope.So = $scope.So == "asc" ? "desc" : "asc";
             $scope.Sc = expression;
             console.log($scope.So);
             console.log($scope.Sc);
             BindTrackerList();
-        }*/
+        }
 
         $scope.confirm = function (deviceImei) {
             $scope.deviceImei = deviceImei;
@@ -59,12 +59,12 @@
             });
         }
 
-        var orderBy = $filter('orderBy');
+        /*var orderBy = $filter('orderBy');
         $scope.Sorting = function(predicate) {
             $scope.predicate = predicate;
             $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
             $scope.TrackerList = orderBy($scope.TrackerList, predicate, $scope.reverse);
-        };
+        };*/
 });
 appCtrls.controller('AddTrackerCtrl', ['$scope', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
     function($scope, $filter, rootSvc, localDbSvc, webSvc) {
