@@ -28,6 +28,22 @@
     <link href="Scripts/select2/select2.css" rel="stylesheet" />
     <link href="theme/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" />
     <link href="Scripts/tipsy/tipsy.css" rel="stylesheet" />
+    <script>
+        var version = 0;
+        var v = (new Date()).getTime();
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', 'app/config/version.json?v='+v, true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                var jsonVer = JSON.parse(xobj.responseText);
+                if (jsonVer) {
+                    version = jsonVer.version;
+                }
+            }
+        };
+        xobj.send(null);
+    </script>
 </head>
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
     <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green" ng-controller="reloadCtrl">
@@ -241,24 +257,6 @@
             © Copyright 2015 SmartTrace Pty Ltd
         </div>
     </div>
-
-    <script>
-        var version = 0;
-        var v = (new Date()).getTime();
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open('GET', 'app/config/version.json?v='+v, true);
-        xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                var jsonVer = JSON.parse(xobj.responseText);
-                if (jsonVer) {
-                    version = jsonVer.version;
-                }
-            }
-        };
-        xobj.send(null);
-    </script>
-
     <script src="http://use.edgefonts.net/source-code-pro.js"></script>
     <script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
     <script src="Scripts/toprint/ace.js" type="text/javascript" charset="utf-8"></script>
