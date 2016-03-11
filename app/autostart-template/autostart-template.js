@@ -423,6 +423,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.Action = "Edit";
     var BindLocations = function (cb) {
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
+            console.log('LOCATIONS', data.response);
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
 
@@ -477,40 +478,40 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     BindAlertProfiles();
     BindNotificationSchedules();
 
-    $scope.ChangeShipmentFrom = function () {
-        $scope.ShipmentFrom = [];
-        if ($scope.AutoStartShipment.startLocations) {
-            angular.forEach($scope.AutoStartShipment.startLocations, function(value, key) {
-
-
-                webSvc.getLocation(value).success(function(resp) {
-                    if (resp.status.code == 0) {
-                        if ($scope.ShipmentFrom.indexOf(resp.response.locationName) < 0) {
-                            $scope.ShipmentFrom.push(resp.response.locationName);
-                        }
-                    } else {
-
-                    }
-                });
-            })
-        }
-    };
-    $scope.ChangeShipmentTo = function () {
-        $scope.ShipmentTo = [];
-        if ($scope.AutoStartShipment.endLocations) {
-            angular.forEach($scope.AutoStartShipment.endLocations, function(value, key) {
-                webSvc.getLocation(value).success(function(resp) {
-                    if (resp.status.code == 0) {
-                        if ($scope.ShipmentTo.indexOf(resp.response.locationName) < 0) {
-                            $scope.ShipmentTo.push(resp.response.locationName);
-                        }
-                    } else {
-
-                    }
-                });
-            })
-        }
-    }
+    //$scope.ChangeShipmentFrom = function () {
+    //    $scope.ShipmentFrom = [];
+    //    if ($scope.AutoStartShipment.startLocations) {
+    //        angular.forEach($scope.AutoStartShipment.startLocations, function(value, key) {
+    //
+    //
+    //            webSvc.getLocation(value).success(function(resp) {
+    //                if (resp.status.code == 0) {
+    //                    if ($scope.ShipmentFrom.indexOf(resp.response.locationName) < 0) {
+    //                        $scope.ShipmentFrom.push(resp.response.locationName);
+    //                    }
+    //                } else {
+    //
+    //                }
+    //            });
+    //        })
+    //    }
+    //};
+    //$scope.ChangeShipmentTo = function () {
+    //    $scope.ShipmentTo = [];
+    //    if ($scope.AutoStartShipment.endLocations) {
+    //        angular.forEach($scope.AutoStartShipment.endLocations, function(value, key) {
+    //            webSvc.getLocation(value).success(function(resp) {
+    //                if (resp.status.code == 0) {
+    //                    if ($scope.ShipmentTo.indexOf(resp.response.locationName) < 0) {
+    //                        $scope.ShipmentTo.push(resp.response.locationName);
+    //                    }
+    //                } else {
+    //
+    //                }
+    //            });
+    //        })
+    //    }
+    //}
     $scope.Init = function () {
         $scope.STId = $stateParams.stId
         $scope.AutoStartShipment = {};
