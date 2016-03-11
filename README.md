@@ -57,3 +57,6 @@ In file `app/config/routeConfig.js` we implement lazy loading solution by adding
 ###Usage:
 - When the new version of code was deployed, let's change the version information in file `app/config/version.json` by increase the version-number by +1.
 - In client side (here is a browser), let's refresh the page by `click on button refresh`, `press Ctrl + F5` or `close the page and re-open it`.
+
+###Explain
+Web-Browser like google-chrome, Firefox do cache for static file (html, javascript, css) and refer them back to render website as needed. Browser base on url to refer caching. By adding version information to the end of url we can force browser reload cached files
