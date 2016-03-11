@@ -1,10 +1,8 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
-    function ($scope, $filter, rootSvc, localDbSvc, webSvc) {
+    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
-
-        $scope.AuthToken = localDbSvc.getToken();
 
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
@@ -23,6 +21,10 @@
             $scope.So = "asc";
             $scope.Sc = "name";
             BindTrackerList();
+            console.log('USER-DATA', $rootScope.User);
+            //webSvc.getRoles().success(function(resp) {
+            //    console.log('Roles', resp);
+            //});
         }
 
         $scope.PageSizeChanged = function () {
@@ -58,6 +60,38 @@
                 }
             });
         }
+
+        $scope.isAdmin = function() {
+            if ($rootScope.User && $rootScope.User.roles) {
+                return $rootScope.User.roles.indexOf('Admin')>=0;
+            }
+            return false;
+        }
+        $scope.isCompanyAdmin = function() {
+            if ($rootScope.User && $rootScope.User.roles) {
+                return $rootScope.User.roles.indexOf('CompanyAdmin')>=0;
+            }
+            return false;
+        }
+        $scope.isGlobalAdmin = function() {
+            if ($rootScope.User && $rootScope.User.roles) {
+                return $rootScope.User.roles.indexOf('GlobalAdmin')>=0;
+            }
+            return false;
+        }
+        $scope.isDispatcher = function() {
+            if ($rootScope.User && $rootScope.User.roles) {
+                return $rootScope.User.roles.indexOf('Dispatcher')>=0;
+            }
+            return false;
+        }
+        $scope.isReportViewer = function() {
+            if ($rootScope.User && $rootScope.User.roles) {
+                return $rootScope.User.roles.indexOf('ReportViewer')>=0;
+            }
+            return false;
+        }
+
 
         /*var orderBy = $filter('orderBy');
         $scope.Sorting = function(predicate) {

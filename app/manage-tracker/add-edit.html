@@ -16,25 +16,49 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="trackerNum">Tracker Num</label>
+                            <label for="trackerNum">Tracker Num
+                                <i tooltip="The unique 6 digit number of this tracker"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </label>
                             <input ng-model="tracker.sn" type="text" id="trackerNum" class="form-control" placeholder="Tracker Number">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="trackerName">Tracker Name</label>
+                            <label for="trackerName">Tracker Name
+                                <i tooltip="A meaningful name given to this tracker. Can be changed via EDIT button"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </label>
                             <input ng-model="tracker.name" type="text" id="trackerName" class="form-control" placeholder="Tracker Name">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="trackerDesc">Description</label>
+                            <label for="trackerDesc">Description
+                                <i tooltip="Tracker Description"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </label>
                             <input ng-model="tracker.description" type="text" id="trackerDesc" class="form-control" placeholder="Description">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="trackerImei">IMEI</label>
+                            <label for="trackerImei">IMEI
+                                <i tooltip="Tracker IMEI 15 digits"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </label>
                             <input ng-model="tracker.imei" type="text" id="trackerImei" class="form-control" placeholder="Tracker imei">
                         </div>
                     </div>
@@ -42,7 +66,15 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="autoStartTemplate">AutoStart Template</label>
+                            <label for="autoStartTemplate">AutoStart Template
+                                <i tooltip="The Autostart Template assigned to this tracker.
+                                 An Autostart Template provides default shipment data when a tracker is switched on.
+                                  This default data can be overwritten by entering actual shipment data via NewShipment."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </label>
                             <select id="autoStartTemplate"
                                     class="form-control"
                                     ng-options="shipment as shipment.shipmentDescription
@@ -59,24 +91,60 @@
                     <div class="row"><hr/></div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <h5>Last Reading</h5>
-                            <span>7:22am 12 Mar 2016</span>
+                            <h5>Last Reading
+                                <i tooltip="The time of the last known reading for this tracker."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </h5>
+                            <span>{{tracker.lastReadingTime}}</span>
                         </div>
                         <div class="col-sm-2">
-                            <h5>Temperature</h5>
-                            <span>6.03</span>
+                            <h5>Temperature
+                                <i tooltip="The temperature for this last reading."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </h5>
+                            <span>{{tracker.lastReadingTemperature}}</span>
                         </div>
                         <div class="col-sm-2">
-                            <h5>Battery</h5>
-                            <span>4.1V</span>
+                            <h5>Battery
+                                <i tooltip="The battery level for this last reading"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </h5>
+                            <span>{{tracker.lastReadingBattery | volt}}</span>
                         </div>
                         <div class="col-sm-2">
-                            <h5>Last Shipment</h5>
-                            <span><u>233(4)</u></span>
+                            <h5>Last Shipment
+                                <i tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </h5>
+                            <span><a href="#/view-shipment-detail/{{tracker.lastShipmentId}}">
+                                <u>{{tracker.shipmentNumber}}</u>
+                            </a></span>
                         </div>
                         <div class="col-sm-2">
-                            <h5>Shipment Status</h5>
-                            <span>Default</span>
+                            <h5>Shipment Status
+                                <i tooltip="The status of this most recent shipment.
+                                 An 'InProgress' status is an active shipment with manually entered shipment data.
+                                  A 'Default' status is an active shipment generated via an Autostart Template.
+                                   An 'Arrived' status is a shipment that has reached its destination.
+                                 An 'Ended' status is a shipment that has ended but has no known destination."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </h5>
+                            <span>{{tracker.shipmentStatus}}</span>
                         </div>
                         <div class="col-sm-2">
                             <button type="button" class="btn green">Shutdown Now</button>

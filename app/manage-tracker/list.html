@@ -1,4 +1,4 @@
-﻿<div class="portlet box green " ng-init="Init()">
+﻿<div class="portlet box green" ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-bell"></i>List of Trackers
@@ -12,7 +12,7 @@
                 <option value="100">100</option>
             </select>
         </div>
-         <div class="pull-right">
+         <div ng-if="isGlobalAdmin()" class="pull-right">
             <a class="btn btn-default pull-right" href="/#/add-tracker">
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker
             </a>
@@ -113,8 +113,8 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <!--<th></th>-->
-                    <!--<th></th>-->
+                    <th ng-if="isAdmin() || isGlobalAdmin()"></th>
+                    <th ng-if="isGlobalAdmin()"></th>
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
                     <td ng-bind="tracker.sn"></td>
@@ -137,12 +137,12 @@
                     <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>
                     <td ng-bind="tracker.shipmentStatus"></td>
 
-                    <!--<td class="text-center">
+                    <td class="text-center" ng-if="isAdmin() || isGlobalAdmin()">
                         <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" ng-if="isGlobalAdmin()">
                         <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
-                    </td>-->
+                    </td>
 
                 </tr>
             </table>
