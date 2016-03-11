@@ -423,7 +423,6 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.Action = "Edit";
     var BindLocations = function (cb) {
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
-            console.log('LOCATIONS', data.response);
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
 
