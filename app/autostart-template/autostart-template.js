@@ -545,8 +545,8 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                         }
                         $scope.ChangeNotiScheduleForAlert();
                         $scope.ChangeNotiScheduleForArrival();
-                        $scope.ChangeShipmentFrom();
-                        $scope.ChangeShipmentTo();
+                        //$scope.ChangeShipmentFrom();
+                        //$scope.ChangeShipmentTo();
                     }
                 } else {
                     toastr.error(data.status.message);
