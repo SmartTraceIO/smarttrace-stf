@@ -13,8 +13,6 @@
 
         webSvc.getAutoStartShipments(param).success(function(data){
             if (data.status.code == 0) {
-                toastr.success('Get list of AutoStartShipment');
-                console.log(data);
                 $scope.AutoStartShipmentList = data.response;
                 $scope.AutoStartShipmentList.totalCount = data.totalCount;
 
@@ -47,7 +45,6 @@
                 });
             } else {
                 toastr.error('Cannot get list of AutoStartShipment');
-                console.log("ERROR-AUTOSTARTLIST", data);
             }
         });
     }
@@ -81,7 +78,7 @@
         $("#confirmModel").modal("hide");
         webSvc.deleteAutoStartShipment($scope.autoStartShipmentId).success(function(data){
             if (data.status.code == 0) {
-                toastr.success("Shipment template deleted successfully")
+                toastr.success("Shipment template deleted successfully");
                 BindAutoShipmentList();
             }
         });
@@ -136,9 +133,6 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     var BindNotificationSchedules = function (cb) {
         webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
-            if (DEBUG) {
-                console.log('getAutoStartShipment', data);
-            }
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
             }
@@ -487,6 +481,8 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         $scope.ShipmentFrom = [];
         if ($scope.AutoStartShipment.startLocations) {
             angular.forEach($scope.AutoStartShipment.startLocations, function(value, key) {
+
+
                 webSvc.getLocation(value).success(function(resp) {
                     if (resp.status.code == 0) {
                         if ($scope.ShipmentFrom.indexOf(resp.response.locationName) < 0) {

@@ -33,7 +33,7 @@
         var v = (new Date()).getTime();
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-        xobj.open('GET', 'app/config/version.json?v='+v, true);
+        xobj.open('GET', '/app/config/version.json?v='+v, true);
         xobj.onreadystatechange = function () {
             if (xobj.readyState == 4 && xobj.status == "200") {
                 var jsonVer = JSON.parse(xobj.responseText);

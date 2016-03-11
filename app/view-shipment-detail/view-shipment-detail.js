@@ -402,9 +402,6 @@
             $scope.chartConfig = {
                 redraw: false,
                 options:{
-                    chart: {
-                        backgroundColor: '#cecece'
-                    },
                     plotOptions: {
                         series: {
                             point: {
@@ -546,8 +543,17 @@
                 },
                 series: chartSeries,
                 func: function(chart) {
-                    $scope.chartObj = chart;
-                    console.log($scope.chartObj);
+                    var heigh = chart.renderer.height;
+                    var dataArray = chartSeries.data;
+                    console.log('DRAWING', chartSeries);
+                    chart.renderer.rect(chartSeries[7].data[0].x, 0, 100, heigh, 0)
+                        .attr({
+                            'stroke-width': 0.3,
+                            stroke: 'red',
+                            fill: 'yellow',
+                            zIndex: 0
+                        })
+                        .add();
                 },
                 useHighStocks: true
             }
@@ -564,9 +570,9 @@
 
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
-            marker: {
+            /*marker: {
                 symbol: 'url(theme/img/dot.png)'
-            },
+            },*/
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI]
