@@ -1,4 +1,6 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
+﻿appCtrls.controller('ViewShipmentDetailCtrl',
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams,
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
 
     // $templateCache.remove('/view-shipment-detail');
     // console.log("cleared view-shipment-detail cache");
@@ -7,6 +9,8 @@
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
+    $scope.AuthToken = localDbSvc.getToken();
+    //$scope.ShipmentId = $stateParams.vsId;
     $scope.ShipmentId = $stateParams.vsId; 
     var plotLines = new Array();
     $scope.vm = this;
@@ -18,12 +22,17 @@
     var trackerRoute = null;
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
+    $scope.xMin = 0;
+    $scope.xMax = 0;
     $scope.mapInfo = {};
     var bounds= null;
 
     //------CHART SERIES DATA  ------
     var chartSeries = new Array();
     var subSeries = new Array();
+    var endSeries = new Array();
+    var trackerArrival = new Array();
+    var trackerDest = new Array();
     var alertData = new Array();
 
     //google map first point
@@ -393,6 +402,9 @@
             $scope.chartConfig = {
                 redraw: false,
                 options:{
+                    chart: {
+                        backgroundColor: '#cecece'
+                    },
                     plotOptions: {
                         series: {
                             point: {
@@ -533,6 +545,10 @@
                     }
                 },
                 series: chartSeries,
+                func: function(chart) {
+                    $scope.chartObj = chart;
+                    console.log($scope.chartObj);
+                },
                 useHighStocks: true
             }
             
@@ -720,6 +736,8 @@
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
         var endTime = parseDate($scope.trackers[$scope.MI].locations[$scope.trackers[$scope.MI].locations.length - 1].timeISO);
         
+        $scope.xMin = new Date(startTime).getTime();
+        $scope.xMax = new Date(endTime).getTime();
         var gap = (endTime - startTime) / 25;
 
         startTime -= gap;
