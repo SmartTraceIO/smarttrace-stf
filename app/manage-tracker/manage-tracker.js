@@ -157,6 +157,10 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$statePa
                     toastr.error('Can\'t update the device: ' + $scope.tracker.imei + resp.status.message);
                 }
             });
+        };
+        $scope.confirm = function() {
+            //-- confirm to cancel
+            $state.go('tracker');
         }
     }]);
 /**

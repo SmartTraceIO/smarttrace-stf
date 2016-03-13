@@ -1,7 +1,7 @@
-﻿<div class="portlet box green" ng-init="Init()">
+﻿<div class="portlet box green clearfix" ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-bell"></i>List of Trackers
+            <img style="margin-top:-8px" src="../../theme/img/headerTrackers.png" />List of Trackers
         </div>
     </div>
     <div class="portlet-body">
@@ -39,16 +39,20 @@
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"/></a>
                         </span>
                     </th>
-                    <th ng-click="Sorting('description')">
-                        <span class="pull-left">Description
-                            <i tooltip="A meaningful description you assign to each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                    <th ng-click="Sorting('autostartTemplateName')">
+                        <span class="pull-left">Autostart Template
+                            <i tooltip="Autostart Template that assigned to each tracker"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='description'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='description'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th class="text-center" ng-click="Sorting('active')">
@@ -91,9 +95,13 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" ng-click="Sorting('lastShipmentId')">
-                        <span class="pull-left">Shipment
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                    <th class="text-center" ng-click="Sorting('sn')">
+                        <span class="pull-left">Shipment Num
+                            <i tooltip="Active trackers are available for usage"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -117,21 +125,28 @@
                     <th ng-if="isGlobalAdmin()"></th>
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
-                    <td ng-bind="tracker.sn"></td>
-                    <td ng-bind="tracker.name"></td>
-                    <td ng-bind="tracker.description"></td>
+                    <td>{{tracker.sn}}</td>
+                    <td>{{tracker.name}}</td>
+                    <td>
+                        <a href="#/manage/edit-autostart-template/{{tracker.autostartTemplateId}}">
+                            <u>{{tracker.autostartTemplateName}}</u>
+                        </a>
+                    </td>
+
                     <td ng-if="tracker.active==true">
                         <i class="fa fa-check"/>
                     </td>
                     <td ng-if="tracker.active==false">
                         <i class="fa fa-times"/>
                     </td>
+
                     <td ng-if="tracker.lastReadingTime!=null">
                         {{tracker.lastReadingTime}}
                     </td>
                     <td ng-if="tracker.lastReadingTime==null">
                         {{tracker.lastReadingTimeISO | friendlyDate | date:'h:mma dd MMM yyyy'}}
                     </td>
+
                     <td ng-bind="tracker.lastReadingTemperature"></td>
                     <td>{{tracker.lastReadingBattery | volt}}</td>
                     <td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>
@@ -147,7 +162,15 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="TrackerList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+        <pagination class="pagination-sm"
+                    max-size="5"
+                    on-select-page="PageChanged(page)"
+                    total-items="TrackerList.totalCount"
+                    page="PageIndex"
+                    items-per-page="PageSize"
+                    boundary-links="true"
+                    rotate="false"
+                    first-text="<<" last-text=">>" next-text=">" previous-text="<"/>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
