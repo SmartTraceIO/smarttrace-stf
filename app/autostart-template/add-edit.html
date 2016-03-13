@@ -1,7 +1,7 @@
 ﻿<div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-bell"></i> {{Action}}&nbsp; autostart shipment template
+            <img style="margin-top:-8px" src="../../theme/img/headerAutostartTemplate.png" />  Autostart Shipment templates
         </div>
     </div>
     <div class="portlet-body form">
@@ -9,7 +9,13 @@
             <div class="form-body">
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
-                        <label class="control-label pull-left">Autostart Shipment Template Name:&nbsp;<i tooltip="Shipment template name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-left">Autostart Shipment Template Name:&nbsp;
+                            <i tooltip="Shipment template name"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
                         <label class="control-label pull-right text-error">*</label>
                         <input ng-model="AutoStartShipment.shipmentTemplateName"
                                type="text" name="TemplateName"
@@ -293,7 +299,7 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label">"Shutdown device:&nbsp;
+                        <label class="control-label">Shutdown device&nbsp;
                             <i tooltip="Shutdown after start minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"

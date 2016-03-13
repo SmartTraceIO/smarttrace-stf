@@ -1,11 +1,7 @@
-﻿
-<!--<h3 class="page-title" ng-init="Init()">
-    Autostart Shipment
-</h3>-->
-<div class="portlet box green " ng-init="Init()">
+﻿<div class="portlet box green clearfix" ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <img style="margin-top:-8px" src="../../theme/img/headerShipmentTemplate.png" />  List of autostart templates
+            <img style="margin-top:-8px" src="../../theme/img/headerAutostartTemplate.png" />  List of autostart templates
         </div>
     </div>
     <div class="portlet-body">
@@ -24,7 +20,8 @@
             </select>
         </div>
         <div class="pull-right">
-            <a class="btn btn-default pull-right" href="/#/manage/add-autostart-template"><i class="fa fa-plus"></i>&nbsp;Add New Autostart Shipment</a>
+            <a class="btn btn-default pull-right" href="/#/manage/add-autostart-template">
+                <i class="fa fa-plus"></i>&nbsp;Add New Autostart Shipment</a>
         </div>
         <div class="clearfix"></div>
         <br />
@@ -102,8 +99,6 @@
         </div>
         <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentTemplateList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
     </div>
-
-
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
     <div class="modal-dialog">
