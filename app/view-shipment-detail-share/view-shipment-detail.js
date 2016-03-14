@@ -1,4 +1,6 @@
-﻿appCtrls.controller('ViewShipmentDetailCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
+﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams,
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
 
     // $templateCache.remove('/view-shipment-detail');
     // console.log("cleared view-shipment-detail cache");
@@ -9,7 +11,13 @@
 
     $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
-    $scope.ShipmentId = $stateParams.vsId; 
+    if ($stateParams.vsId) {
+        $scope.ShipmentId = $stateParams.vsId;
+    } else {
+        $scope.sn = $stateParams.sn;
+        $scope.trip = $stateParams.trip;
+    }
+
     var plotLines = new Array();
     $scope.vm = this;
     $scope.specialMarkers = new Array();
@@ -293,8 +301,31 @@
 
     function loadTrackerData(){
 
-        webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
-            // console.log("Success", graphData);
+        /*var params = {
+            params: {
+                shipmentId: shipmentId
+            }
+        };*/
+
+        var params = null;
+        if ($scope.ShipmentId) {
+            params = {
+                params: {
+                    shipmentId: $scope.ShipmentId
+                }
+            };
+        } else {
+            params = {
+                params: {
+                    sn : $scope.sn,
+                    trip : $scope.trip
+                }
+            };
+        }
+
+        //console.log('PARAMS', params);
+        webSvc.getSingleShipmentShare(params).success( function (graphData) {
+            //console.log("Success", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -348,8 +379,18 @@
             for(i = 0; i < info.siblings.length; i++){
                 $scope.trackers[i + 1].loadedForIcon = false;
 
-
-                webSvc.getSingleShipment(info.siblings[i].shipmentId).success( function (graphData) {
+                /*var params = {
+                 params: {
+                 shipmentId: shipmentId
+                 }
+                 };*/
+                var params = {
+                    params: {
+                        shipmentId: info.siblings[i].shipmentId
+                    }
+                }
+                console.log('PARAMS', params)
+                webSvc.getSingleShipmentShare(params).success( function (graphData) {
                     if(graphData.status.code != 0) return;
                     dt = graphData.response;
                     // console.log(dt.shipmentId);
@@ -540,6 +581,19 @@
                     }
                 },
                 series: chartSeries,
+                /*func: function(chart) {
+                    var heigh = chart.renderer.height;
+                    var dataArray = chartSeries.data;
+                    console.log('DRAWING', chartSeries);
+                    chart.renderer.rect(chartSeries[7].data[0].x, 0, 100, heigh, 0)
+                        .attr({
+                            'stroke-width': 0.3,
+                            stroke: 'red',
+                            fill: 'yellow',
+                            zIndex: 0
+                        })
+                        .add();
+                },*/
                 useHighStocks: true
             }
             
@@ -555,9 +609,9 @@
 
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
-            marker: {
+            /*marker: {
                 symbol: 'url(theme/img/dot.png)'
-            },
+            },*/
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI]

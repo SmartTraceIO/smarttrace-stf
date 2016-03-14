@@ -122,19 +122,18 @@ appConstants.constant('routes', [
           ]
       },
     {
-        //--TODO
-        name: 'viewshipmentdetailforshare',
+        name: 'viewshipmentdetailshare',
         config: {
             url: "/view-shipment-detail?sn&trip"
             , views: {
                 "content": {
-                    templateUrl: "app/view-shipment-detail/view-shipment-detail.html?v="+ version
-                    , controller: 'ViewShipmentDetailCtrl as vm'
+                    templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html?v="+ version
+                    , controller: 'ViewShipmentDetailShareCtrl as vm'
                 }
             }
         },
         dependencies: [
-            'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
+            'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
         ]
     },
       {
