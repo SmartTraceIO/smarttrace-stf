@@ -30,14 +30,14 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="20%" ng-click="Sorting('shipmentTemplateName')">
+                    <th ng-click="Sorting('shipmentTemplateName')">
                         <span class="pull-left">Template Name</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('shipmentDescription')">
+                    <th ng-click="Sorting('shipmentDescription')">
                         <span class="pull-left">Shipment description</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -51,14 +51,14 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shippedFromLocationName'}" ng-click="Sorting('shippedFromLocationName')"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('endLocations')">
+                    <th ng-click="Sorting('endLocations')">
                         <span class="pull-left">Shipment to</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedToLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shippedToLocationName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('alertProfileName')">
+                    <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert profile</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -73,19 +73,19 @@
                     </th>
                 </tr>
                 <tr ng-repeat="shipment in AutoStartShipmentList">
-                    <td width="20%">
+                    <td>
                         {{shipment.shipmentTemplateName}}
                     </td>
-                    <td width="20%">
+                    <td>
                         {{shipment.shipmentDescription}}
                     </td>
-                    <td width="15%">
+                    <td>
                         {{shipment.shippedFromLocationName}}
                     </td>
-                    <td width="15%">
+                    <td>
                         {{shipment.shippedToLocationName}}
                     </td>
-                    <td width="20%">
+                    <td>
                         {{shipment.alertProfileName}}
                     </td>
                     <td class="text-center" width="5%">
