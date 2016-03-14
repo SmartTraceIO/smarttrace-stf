@@ -117,13 +117,18 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
-		getSingleShipment: function(shipmentId){
+		/*getSingleShipment: function(shipmentId){
 			var url = Api.url + 'getSingleShipment/' + localDbSvc.getToken();
 			var params = {
 				params: {
 					shipmentId: shipmentId
 				}
 			};
+			return $http.get(url, params);
+		},*/
+
+		getSingleShipment: function(params){
+			var url = Api.url + 'getSingleShipment/' + localDbSvc.getToken();
 			return $http.get(url, params);
 		},
 

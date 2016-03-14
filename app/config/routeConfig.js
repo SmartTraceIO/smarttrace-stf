@@ -1,7 +1,7 @@
 ﻿//var version = (new Date()).getTime();
 //console.log(version);
 appConstants.constant('routes', [
-      {
+    {
           name: 'login',
           config: {
               url: "/login"
@@ -121,6 +121,22 @@ appConstants.constant('routes', [
               'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
           ]
       },
+    {
+        //--TODO
+        name: 'viewshipmentdetailforshare',
+        config: {
+            url: "/view-shipment-detail?sn&trip"
+            , views: {
+                "content": {
+                    templateUrl: "app/view-shipment-detail/view-shipment-detail.html?v="+ version
+                    , controller: 'ViewShipmentDetailCtrl as vm'
+                }
+            }
+        },
+        dependencies: [
+            'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
+        ]
+    },
       {
           name: 'manage',
           config: {
@@ -474,7 +490,6 @@ app.config(['$stateProvider', '$urlRouterProvider', 'routes',
             }
             $stateProvider.state(route.name, route.config);
         });
-
         $urlRouterProvider.otherwise('/new-shipment');
 
     }]);

@@ -245,8 +245,10 @@ hr {
 }
 
 .form .form-actions {
-    background-color: #F7FDF2;
+    /*background-color: #F7FDF2;*/
     border-top: 1px solid #f7fdf2;
+    padding: 20px 10px;
+    background-color:rgba(0,0,0,0);
 }
 
 .note {

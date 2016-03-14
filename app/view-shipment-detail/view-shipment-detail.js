@@ -11,7 +11,13 @@
 
     $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
-    $scope.ShipmentId = $stateParams.vsId; 
+    if ($stateParams.vsId) {
+        $scope.ShipmentId = $stateParams.vsId;
+    } else {
+        $scope.sn = $stateParams.sn;
+        $scope.trip = $stateParams.trip;
+    }
+
     var plotLines = new Array();
     $scope.vm = this;
     $scope.specialMarkers = new Array();
@@ -295,8 +301,31 @@
 
     function loadTrackerData(){
 
-        webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
-            // console.log("Success", graphData);
+        /*var params = {
+            params: {
+                shipmentId: shipmentId
+            }
+        };*/
+
+        var params = null;
+        if ($scope.ShipmentId) {
+            params = {
+                params: {
+                    shipmentId: $scope.ShipmentId
+                }
+            };
+        } else {
+            params = {
+                params: {
+                    sn : $scope.sn,
+                    trip : $scope.trip
+                }
+            };
+        }
+
+        //console.log('PARAMS', params);
+        webSvc.getSingleShipment(params).success( function (graphData) {
+            //console.log("Success", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -350,8 +379,18 @@
             for(i = 0; i < info.siblings.length; i++){
                 $scope.trackers[i + 1].loadedForIcon = false;
 
-
-                webSvc.getSingleShipment(info.siblings[i].shipmentId).success( function (graphData) {
+                /*var params = {
+                 params: {
+                 shipmentId: shipmentId
+                 }
+                 };*/
+                var params = {
+                    params: {
+                        shipmentId: info.siblings[i].shipmentId
+                    }
+                }
+                console.log('PARAMS', params)
+                webSvc.getSingleShipment(params).success( function (graphData) {
                     if(graphData.status.code != 0) return;
                     dt = graphData.response;
                     // console.log(dt.shipmentId);
@@ -542,7 +581,7 @@
                     }
                 },
                 series: chartSeries,
-                func: function(chart) {
+                /*func: function(chart) {
                     var heigh = chart.renderer.height;
                     var dataArray = chartSeries.data;
                     console.log('DRAWING', chartSeries);
@@ -554,7 +593,7 @@
                             zIndex: 0
                         })
                         .add();
-                },
+                },*/
                 useHighStocks: true
             }
             
