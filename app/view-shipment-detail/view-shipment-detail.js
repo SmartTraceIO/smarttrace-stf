@@ -294,7 +294,7 @@
     function loadTrackerData(){
 
         webSvc.getSingleShipment($scope.ShipmentId).success( function (graphData) {
-            // console.log("Success", graphData);
+             console.log("SINGLESHIPMENT", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;

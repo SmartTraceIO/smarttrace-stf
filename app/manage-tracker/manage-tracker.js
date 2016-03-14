@@ -76,38 +76,6 @@
             }
         }
 
-        $scope.isAdmin = function() {
-            if ($rootScope.User && $rootScope.User.roles) {
-                return $rootScope.User.roles.indexOf('Admin')>=0;
-            }
-            return false;
-        }
-        $scope.isCompanyAdmin = function() {
-            if ($rootScope.User && $rootScope.User.roles) {
-                return $rootScope.User.roles.indexOf('CompanyAdmin')>=0;
-            }
-            return false;
-        }
-        $scope.isGlobalAdmin = function() {
-            if ($rootScope.User && $rootScope.User.roles) {
-                return $rootScope.User.roles.indexOf('GlobalAdmin')>=0;
-            }
-            return false;
-        }
-        $scope.isDispatcher = function() {
-            if ($rootScope.User && $rootScope.User.roles) {
-                return $rootScope.User.roles.indexOf('Dispatcher')>=0;
-            }
-            return false;
-        }
-        $scope.isReportViewer = function() {
-            if ($rootScope.User && $rootScope.User.roles) {
-                return $rootScope.User.roles.indexOf('ReportViewer')>=0;
-            }
-            return false;
-        }
-
-
         /*var orderBy = $filter('orderBy');
         $scope.Sorting = function(predicate) {
             $scope.predicate = predicate;
@@ -115,20 +83,71 @@
             $scope.TrackerList = orderBy($scope.TrackerList, predicate, $scope.reverse);
         };*/
 });
-appCtrls.controller('AddTrackerCtrl', ['$scope', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
-    function($scope, $filter, rootSvc, localDbSvc, webSvc) {
+appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
+    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
-
         $scope.Action = "Add";
+        var filter = $filter('filter');
+        var param = {
+            pageSize: 1000,
+            pageIndex: 1,
+            so: 'id',
+            sc: 'asc'
+        };
+        webSvc.getAutoStartShipments(param).success(function(data) {
+            if (data.status.code == 0) {
+                console.log('AutoShipment', data.response);
+                $scope.AutoStartShipmentList = data.response;
+                //$scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
+            }
+        });
+
+        $scope.saveTracker = function() {
+            if ($scope.tracker.autoStartShipment) {
+                $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
+            }
+            webSvc.saveDevice($scope.tracker).success(function(resp) {
+                console.log('UPDATED', resp);
+                if (resp.status.code == 0) {
+                    //success
+                    toastr.success('You\'v created a device: ' + $scope.tracker.imei);
+                    $state.go('tracker');
+                } else {
+                    //error
+                    toastr.error('Can\'t create the device: ' + $scope.tracker.imei + resp.status.message);
+                }
+            });
+        };
 }]);
-appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc',
-    function($scope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc) {
+appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Edit";
+
+        $scope.roles = {};
+        $scope.roles.SmartTraceAdmin = 1000;
+        $scope.roles.Admin = 999;
+        $scope.roles.Normal = 99;
+        $scope.roles.Basic = 9;
+        $scope.getRole = function () {
+            if (!$rootScope.User || !$rootScope.User.roles) {
+                return $scope.roles.Basic;
+            }
+            else if ($rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
+                return $scope.roles.SmartTraceAdmin;
+            } else if ($rootScope.User.roles.indexOf('Admin') >= 0) {
+                return $scope.roles.Admin;
+            } else if ($rootScope.User.roles.indexOf('Normal') >= 0) {
+                return $scope.roles.Normal;
+            } else {
+                return $scope.roles.Basic;
+            }
+        }
+
 
         $scope.tracker = {};
         $scope.tracker.imei = $stateParams.imei;
@@ -139,7 +158,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$statePa
             so: 'id',
             sc: 'asc'
         };
-        console.log('PARAM', $scope.tracker.imei);
+        //console.log('PARAM', $scope.tracker.imei);
         webSvc.getDevice($scope.tracker.imei).success(function(data){
             console.log("TRACKER", data);
             if (data.status.code == 0) {
@@ -182,15 +201,29 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$statePa
             if (shipmentId == null) {
                 toastr.error('No Shipment for this device');
             } else {
-                webSvc.shutdownDevice(shipmentId).success(function(resp) {
+                webSvc.getSingleShipment(shipmentId).success(function(resp) {
                     if (resp.status.code == 0) {
-                        //success shutdown
-                        toastr.success('You\'v shutdown a device!');
+                        $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
                     } else {
-                        //error shutdown
-                        toastr.error('You have no permission to shut this device down.');
+                        toastr.error('Could not get a single shipment!');
+                        return;
                     }
-                });
+                }).then(function() {
+                    if ($scope.arrivalTimeISO == null) {
+                        webSvc.shutdownDevice(shipmentId).success(function(resp) {
+                            if (resp.status.code == 0) {
+                                //success shutdown
+                                toastr.success('You\'v shutdown a device!');
+                            } else {
+                                //error shutdown
+                                toastr.error('You have no permission to shut this device down.');
+                            }
+                        });
+                    } else {
+                        toastr.warning('You have already shut this device down!');
+                    }
+                })
+
             }
         };
     }]);

@@ -3,9 +3,6 @@
             <div class="caption">
                 <img style="margin-top:-8px" src="../../theme/img/headerTrackers.png" /> {{Action}}&nbsp;Tracker Details
             </div>
-            <!--<div class="pull-right" ng-if="fromModalPopup">
-                <button type="button" style="vertical-align:middle;color:white" class="close" ng-click="close()">Close</button>
-            </div>-->
         </div>
         <div class="portlet-body form">
             <div class="container">
@@ -13,81 +10,130 @@
                     <h3>Tracker Details</h3>
                 </div>
                 <div class="row"><hr/></div>
-                <div class="row"> <!--Tracker details-->
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label for="trackerNum">Tracker Num
-                                <i tooltip="The unique 6 digit number of this tracker"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </label>
-                            <input readonly ng-model="tracker.sn" type="text" id="trackerNum" class="form-control" placeholder="Tracker Number">
+                    <div class="row"> <!--Tracker details-->
+                        <div class="col-sm-3">
+                            <div class="form-group"  ng-if="Action=='Edit'">
+                                <label for="trackerNumEdit">Tracker Num
+                                    <i tooltip="The unique 6 digit number of this tracker"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <span class="text-error pull-right">*</span>
+                                <input readonly ng-model="tracker.sn" type="text" id="trackerNumEdit" class="form-control" placeholder="Tracker Number">
+                            </div>
+                            <div class="form-group" ng-if="Action=='Add'" ng-form="ngfTrackerNum">
+                                <label for="trackerNumAdd">Tracker Num
+                                    <i tooltip="The unique 6 digit number of this tracker"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <span class="text-error pull-right">*</span>
+                                <input ng-model="tracker.sn"
+                                       minlength="6" maxlength="6"
+                                       ng-required="true"
+                                       type="number"
+                                       name="trackerSN"
+                                       id="trackerNumAdd"
+                                       class="form-control"
+                                       placeholder="Tracker Number">
+                                <div role="alert">
+                                    <span class="text-danger" ng-show="ngfTrackerNum.trackerSN.$touched && ngfTrackerNum.trackerSN.$invalid">The field is required and length 6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group" ng-form="ngfTrackerName">
+                                <label for="trackerName">Tracker Name
+                                    <i tooltip="A meaningful name given to this tracker. Can be changed via EDIT button"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <span class="text-error pull-right">*</span>
+                                <input ng-model="tracker.name"
+                                       ng-required="true"
+                                       name="trackerName"
+                                       type="text" id="trackerName"
+                                       class="form-control"
+                                       placeholder="Tracker Name">
+                                <span class="text-danger" ng-show="ngfTrackerName.trackerName.$touched && ngfTrackerName.trackerName.$invalid">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="trackerDesc">Description
+                                    <i tooltip="Tracker Description"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <input ng-model="tracker.description" type="text" id="trackerDesc" class="form-control" placeholder="Description">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group" ng-if="Action=='Edit'">
+                                <label for="trackerImeiEdit">IMEI
+                                    <i tooltip="Tracker IMEI 15 digits"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <span class="text-error pull-right">*</span>
+                                <input readonly ng-model="tracker.imei" type="text" id="trackerImeiEdit" class="form-control" placeholder="Tracker imei">
+                            </div>
+                            <div class="form-group" ng-if="Action=='Add'" ng-form="ngfTrackerImei">
+                                <label for="trackerImeiAdd">IMEI
+                                    <i tooltip="Tracker IMEI 15 digits"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <span class="text-error pull-right">*</span>
+                                <input ng-model="tracker.imei"
+                                       name="trackerImei"
+                                       ng-required="true"
+                                       ng-minlength="15"
+                                       type="number" id="trackerImeiAdd"
+                                       class="form-control"
+                                       placeholder="Tracker imei">
+                                <span class="text-danger" ng-show="ngfTrackerImei.trackerImei.$touched && ngfTrackerImei.trackerImei.$invalid">This field is required and length is 15</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label for="trackerName">Tracker Name
-                                <i tooltip="A meaningful name given to this tracker. Can be changed via EDIT button"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </label>
-                            <input ng-model="tracker.name" type="text" id="trackerName" class="form-control" placeholder="Tracker Name">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="autoStartTemplate">AutoStart Template
+                                    <i tooltip="The Autostart Template assigned to this tracker.
+                                     An Autostart Template provides default shipment data when a tracker is switched on.
+                                      This default data can be overwritten by entering actual shipment data via NewShipment."
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <select id="autoStartTemplate"
+                                        class="form-control"
+                                        ng-options="shipment as shipment.shipmentTemplateName
+                                         for shipment in AutoStartShipmentList track by shipment.id"
+                                        ng-model="tracker.autoStartShipment">
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label for="trackerDesc">Description
-                                <i tooltip="Tracker Description"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </label>
-                            <input ng-model="tracker.description" type="text" id="trackerDesc" class="form-control" placeholder="Description">
-                        </div>
+                    <div class="container-fluid form-actions text-center">
+                        <button class="btn green" ng-click="saveTracker()">Save</button>
+                        <button class="btn default" ng-click="confirm()">Cancel</button>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label for="trackerImei">IMEI
-                                <i tooltip="Tracker IMEI 15 digits"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </label>
-                            <input readonly ng-model="tracker.imei" type="text" id="trackerImei" class="form-control" placeholder="Tracker imei">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="autoStartTemplate">AutoStart Template
-                                <i tooltip="The Autostart Template assigned to this tracker.
-                                 An Autostart Template provides default shipment data when a tracker is switched on.
-                                  This default data can be overwritten by entering actual shipment data via NewShipment."
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </label>
-                            <select id="autoStartTemplate"
-                                    class="form-control"
-                                    ng-options="shipment as shipment.shipmentTemplateName
-                                     for shipment in AutoStartShipmentList track by shipment.id"
-                                    ng-model="tracker.autoStartShipment">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid form-actions text-center">
-                    <button class="btn green" ng-click="saveTracker()">Save</button>
-                    <button class="btn default" ng-click="confirm()">Cancel</button>
-                </div>
+
                 <div class="" ng-if="Action==='Edit'">
                     <div class="row">
                         <h3>Last Reading / Last Shipment</h3>
@@ -150,31 +196,33 @@
                             </h5>
                             <span>{{tracker.shipmentStatus}}</span>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-2" ng-if="getRole() >= roles.Normal">
                             <button type="button" class="btn green" ng-click="shutdownNow(tracker.lastShipmentId)">Shutdown Now</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <h3>Billing</h3>
-                    </div>
-                    <div class="row"><hr/></div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <strong>Activated</strong>
+                    <div ng-if="getRole() >= roles.Admin">
+                        <div class="row">
+                            <h3>Billing</h3>
                         </div>
-                        <div class="col-sm-3">
-                            <h5>Activation Date</h5>
-                            <span>7:22am 12 Mar 2016</span>
+                        <div class="row"><hr/></div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <strong>Activated</strong>
+                            </div>
+                            <div class="col-sm-3">
+                                <h5>Activation Date</h5>
+                                <span>7:22am 12 Mar 2016</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <h5>Deactivation Date</h5>
+                                <span>-</span>
+                            </div>
+                            <div class="col-sm-2 pull-right">
+                                <button class="btn green">Deactivate Now</button>
+                            </div>
                         </div>
-                        <div class="col-sm-3">
-                            <h5>Deactivation Date</h5>
-                            <span>-</span>
+                        <div class="row">
                         </div>
-                        <div class="col-sm-2 pull-right">
-                            <button class="btn green">Deactivate Now</button>
-                        </div>
-                    </div>
-                    <div class="row">
                     </div>
                 </div>
                 <div class="form-actions"></div>
