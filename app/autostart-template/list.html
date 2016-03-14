@@ -44,14 +44,14 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('shippedFromLocationName')">
+                    <th width="15%" ng-click="Sorting('startLocations')">
                         <span class="pull-left">Shipment from</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedFromLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shippedFromLocationName'}" ng-click="Sorting('shippedFromLocationName')"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('shippedToLocationName')">
+                    <th width="15%" ng-click="Sorting('endLocations')">
                         <span class="pull-left">Shipment to</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedToLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
