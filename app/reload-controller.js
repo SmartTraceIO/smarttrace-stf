@@ -72,7 +72,7 @@
 
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {
-            console.log("NOTIFICATION", data.response[0].date);
+            //console.log("NOTIFICATION", data.response[0].date);
             if(data.status.code == 0){
 
                 while($rootScope.readNotification.length > 0){

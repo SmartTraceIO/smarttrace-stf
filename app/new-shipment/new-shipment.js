@@ -5,7 +5,7 @@
     
     $scope.AuthToken = localDbSvc.getToken();
 
-    console.log("New Shipment Call", localDbSvc.getToken());
+    //console.log("New Shipment Call", localDbSvc.getToken());
     webSvc.getUser().success( function (userData) {
         // console.log("USERDATA", userData);
         if (userData.status.code == 0) {
