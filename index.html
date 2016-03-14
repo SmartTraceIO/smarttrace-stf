@@ -55,13 +55,13 @@
             </div>
             <div class="hor-menu hidden-sm hidden-xs">
                 <ul class="nav navbar-nav">
-                    <li class="classic-menu-dropdown menu-li" ng-class="{'active':ActiveMenu == 'New Shipment'}">
+                    <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Shipment'}">
                         <a href="#/new-shipment">
                             New Shipment
                             <span class="selected"> </span>
                         </a>
                     </li>
-                    <li class="classic-menu-dropdown menu-li" ng-class="{'active':ActiveMenu == 'View Shipment'}">
+                    <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
                         <a href="#/view-shipment">
                             View Shipments
                             <span class="selected"> </span>
@@ -73,7 +73,7 @@
                             <span class="selected"> </span>
                         </a>
                     </li> -->
-                    <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Trackers'}">
+                    <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'Trackers'}">
                         <a href="#/tracker">
                             Trackers
                             <span class="selected"> </span>
@@ -85,12 +85,12 @@
                             <span class="selected"> </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="menu-li"><a href="#/manage/alert">Alert Profiles</a></li>
-                            <li class="menu-li"><a href="#/manage/notification">Notification Schedules</a></li>
-                            <li class="menu-li"><a href="#/manage/location">Locations</a></li>
-                            <li class="menu-li"><a href="#/manage/shipment-template">Shipment Templates</a></li>
-                            <li class="menu-li"><a href="#/manage/autostart-template">AutoStart Templates</a></li>
-                            <li class="menu-li"><a href="#/manage/user">Users</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/alert">Alert Profiles</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/notification">Notification Schedules</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/location">Locations</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/shipment-template">Shipment Templates</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/autostart-template">AutoStart Templates</a></li>
+                            <li class="menu-li" ng-click="reload()"><a href="#/manage/user">Users</a></li>
                         </ul>
                     </li>
                 </ul>

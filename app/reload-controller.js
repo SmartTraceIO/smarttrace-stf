@@ -74,7 +74,7 @@
         webSvc.getNotifications(true).success(function (data) {
             console.log("NOTIFICATION", data.response[0].date);
             if(data.status.code == 0){
-                
+
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
                 }
@@ -88,7 +88,7 @@
                     lnk = lnk.substr(0, lnk.length - "{shipmentId}".length);
                     lnk = lnk + data.response[i].shipmentId;
                     data.response[i].link = lnk;
-                    
+
                     if(data.response[i].Line3 != undefined)
                         data.response[i].Line3 = data.response[i].Line3.replace("Description", "Desc");
 
@@ -106,7 +106,6 @@
             }
         });
     }
-
 
     $rootScope.updateUserTime = function() {
         webSvc.getUserTime().success( function (timeData) {
@@ -152,6 +151,7 @@
     $rootScope.updateUserTime();
 
     function hourdiff(alertDate) {
+        console.log('DATE', alertDate);
         var first = new Date(alertDate);
         var second = new Date();
         return Math.round((second-first)/(1000*60*60));
@@ -160,11 +160,17 @@
     //Get Notifications
     //
 
-	$(".menu-li a").on("click", function () {
+    $scope.reload = function() {
+        if ($state.current.name == $rootScope.previousState.name) {
+            $state.go($state.current, {}, { reload: true });
+        }
+    };
+
+	/*$(".menu-li a").on("click", function () {
         if ($state.current.name == $rootScope.previousState.name) {
             $state.go($state.current, {}, { reload: true }); 
         }
-    })
+    })*/
 
     $('.dropdown-notification > ul').click(function(e) {
         e.stopPropagation();
