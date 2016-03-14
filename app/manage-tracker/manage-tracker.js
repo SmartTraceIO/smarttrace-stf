@@ -6,11 +6,11 @@
 
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
-                console.log("TRACKER", data);
+                //console.log("TRACKER", data);
                 if (data.status.code == 0) {
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
-                    console.log(data);
+                    //console.log(data);
                 }
             });
         }
@@ -18,12 +18,9 @@
         $scope.Init = function () {
             $scope.PageSize = '20';
             $scope.PageIndex = 1;
-            $scope.So = "dsc";
+            $scope.So = "desc";
             $scope.Sc = "lastReadingTimeISO";
             BindTrackerList();
-            //webSvc.getRoles().success(function(resp) {
-            //    console.log('Roles', resp);
-            //});
         }
 
         $scope.PageSizeChanged = function () {
