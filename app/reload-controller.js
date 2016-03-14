@@ -151,7 +151,6 @@
     $rootScope.updateUserTime();
 
     function hourdiff(alertDate) {
-        console.log('DATE', alertDate);
         var first = new Date(alertDate);
         var second = new Date();
         return Math.round((second-first)/(1000*60*60));
