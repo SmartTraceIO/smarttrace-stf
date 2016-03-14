@@ -18,10 +18,9 @@
         $scope.Init = function () {
             $scope.PageSize = '20';
             $scope.PageIndex = 1;
-            $scope.So = "asc";
-            $scope.Sc = "name";
+            $scope.So = "dsc";
+            $scope.Sc = "lastReadingTimeISO";
             BindTrackerList();
-            console.log('USER-DATA', $rootScope.User);
             //webSvc.getRoles().success(function(resp) {
             //    console.log('Roles', resp);
             //});
@@ -59,6 +58,25 @@
                     toastr.error('Can\'t delete device!');
                 }
             });
+        }
+        $scope.roles = {};
+        $scope.roles.SmartTraceAdmin = 1000;
+        $scope.roles.Admin = 999;
+        $scope.roles.Normal = 99;
+        $scope.roles.Basic = 9;
+        $scope.getRole = function () {
+            if (!$rootScope.User || !$rootScope.User.roles) {
+                return $scope.roles.Basic;
+            }
+            else if ($rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
+                return $scope.roles.SmartTraceAdmin;
+            } else if ($rootScope.User.roles.indexOf('Admin') >= 0) {
+                return $scope.roles.Admin;
+            } else if ($rootScope.User.roles.indexOf('Normal') >= 0) {
+                return $scope.roles.Normal;
+            } else {
+                return $scope.roles.Basic;
+            }
         }
 
         $scope.isAdmin = function() {
@@ -161,7 +179,23 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$state', '$filter', '$statePa
         $scope.confirm = function() {
             //-- confirm to cancel
             $state.go('tracker');
-        }
+        };
+
+        $scope.shutdownNow = function(shipmentId) {
+            if (shipmentId == null) {
+                toastr.error('No Shipment for this device');
+            } else {
+                webSvc.shutdownDevice(shipmentId).success(function(resp) {
+                    if (resp.status.code == 0) {
+                        //success shutdown
+                        toastr.success('You\'v shutdown a device!');
+                    } else {
+                        //error shutdown
+                        toastr.error('You have no permission to shut this device down.');
+                    }
+                });
+            }
+        };
     }]);
 /**
  * Created by beou on 09/03/2016.

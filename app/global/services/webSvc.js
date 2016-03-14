@@ -196,6 +196,25 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			};
 			return $http.get(url, params);
 		},
+        shutdownDevice: function(shipmentId) {
+            var url = Api.url + 'shutdownDevice/' + localDbSvc.getToken();
+            var params = {
+                params: {
+                    shipmentId: shipmentId
+                }
+            };
+            return $http.get(url, params);
+        },
+		sendCommandToDevice: function(imei, cmd) {
+			var url = Api.url + 'sendCommandToDevice/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					device: imei,
+					command: cmd
+				}
+			}
+			return $http.post(url, params);
+		},
 		getShipments: function(data){
 			var url = Api.url + 'getShipments/' + localDbSvc.getToken();
 			return $http.post(url, data);

@@ -23,7 +23,7 @@
                                    tooltip-placement="top"
                                    class="fa fa-info-circle"/>
                             </label>
-                            <input ng-model="tracker.sn" type="text" id="trackerNum" class="form-control" placeholder="Tracker Number">
+                            <input readonly ng-model="tracker.sn" type="text" id="trackerNum" class="form-control" placeholder="Tracker Number">
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -59,7 +59,7 @@
                                    tooltip-placement="top"
                                    class="fa fa-info-circle"/>
                             </label>
-                            <input ng-model="tracker.imei" type="text" id="trackerImei" class="form-control" placeholder="Tracker imei">
+                            <input readonly ng-model="tracker.imei" type="text" id="trackerImei" class="form-control" placeholder="Tracker imei">
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                             </label>
                             <select id="autoStartTemplate"
                                     class="form-control"
-                                    ng-options="shipment as shipment.shipmentDescription
+                                    ng-options="shipment as shipment.shipmentTemplateName
                                      for shipment in AutoStartShipmentList track by shipment.id"
                                     ng-model="tracker.autoStartShipment">
                             </select>
@@ -147,7 +147,7 @@
                             <span>{{tracker.shipmentStatus}}</span>
                         </div>
                         <div class="col-sm-2">
-                            <button type="button" class="btn green">Shutdown Now</button>
+                            <button type="button" class="btn green" ng-click="shutdownNow(tracker.lastShipmentId)">Shutdown Now</button>
                         </div>
                     </div>
                     <div class="row">
