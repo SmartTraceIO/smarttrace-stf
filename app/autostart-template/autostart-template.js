@@ -767,3 +767,13 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     }
 });
+
+appFilters.filter('arrayToString', function() {
+    return function (input) {
+        if (angular.isArray(input)) {
+            return input.join();
+        } else {
+            return input;
+        }
+    }
+});

@@ -80,9 +80,9 @@
                         {{shipment.shipmentDescription}}
                     </td>
                     <td>
-                        {{shipment.endLocationNames[0]}}
+                        {{shipment.endLocationNames | arrayToString}}
                     </td>
-                    <td>{{shipment.startLocationNames[0]}}</td>
+                    <td>{{shipment.startLocationNames | arrayToString}}</td>
                     <td>
                         {{shipment.alertProfileName}}
                     </td>
