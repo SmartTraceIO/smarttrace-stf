@@ -44,7 +44,7 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('startLocations')">
+                    <th ng-click="Sorting('startLocations')">
                         <span class="pull-left">Shipment from</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedFromLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -80,11 +80,9 @@
                         {{shipment.shipmentDescription}}
                     </td>
                     <td>
-                        {{shipment.shippedFromLocationName}}
+                        {{shipment.endLocationNames[0]}}
                     </td>
-                    <td>
-                        {{shipment.shippedToLocationName}}
-                    </td>
+                    <td>{{shipment.startLocationNames[0]}}</td>
                     <td>
                         {{shipment.alertProfileName}}
                     </td>
