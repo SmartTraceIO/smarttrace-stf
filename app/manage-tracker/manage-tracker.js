@@ -184,24 +184,29 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 console.log('UPDATED', resp);
                 if (resp.status.code == 0) {
                     //success
-                    toastr.success('You\'v updated device: ' + $scope.tracker.imei);
+                    toastr.success('"Changes saved for Device ' + $scope.tracker.sn);
                     $state.go('tracker');
                 } else {
                     //error
-                    toastr.error('Can\'t update the device: ' + $scope.tracker.imei + resp.status.message);
+                    toastr.error('Can\'t update the device: ' + $scope.tracker.sn + resp.status.message);
                 }
             });
         };
-        $scope.confirm = function() {
+        $scope.confirmCancel = function() {
             //-- confirm to cancel
             $state.go('tracker');
         };
 
-        $scope.shutdownNow = function(shipmentId) {
+        $scope.confirmShutdown = function() {
+            $("#confirmShutdown").modal("show");
+        };
+        $scope.shutdownNow = function() {
+            var shipmentId = $scope.tracker.lastShipmentId;
             if (shipmentId == null) {
                 toastr.error('No Shipment for this device');
             } else {
                 webSvc.getSingleShipment(shipmentId).success(function(resp) {
+                    console.log('DATA', resp);
                     if (resp.status.code == 0) {
                         $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
                     } else {
@@ -225,6 +230,62 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 })
 
             }
+        };
+
+        /*$scope.confirm = function (deviceImei) {
+            $scope.deviceImei = deviceImei;
+            $("#confirmModel").modal("show");
+        }*/
+
+        $scope.deactivateNow = function () {
+            $("#confirmDeactive").modal("hide");
+            $scope.tracker.active = false; //-- deactivate
+            webSvc.saveDevice($scope.tracker).success(function(data){
+                console.log('DEACTIVATE-DEVICE', data);
+                if (data.status.code == 0) {
+                    toastr.success("Device has just deactivated successfully")
+                    $state.go('tracker');
+                } else {
+                    toastr.error('Can\'t deactivate device!');
+                }
+            });
+        }
+
+        $scope.confirmDeactive = function() {
+            //-- check if this device shutdown already or not
+            var shipmentId = $scope.tracker.lastShipmentId;
+            /*if (shipmentId == null) {
+                toastr.warning('There is no shipmentId with this device!');
+                webSvc.saveDevice($scope.tracker).success(function(data){
+                    if (data.status.code == 0) {
+                        toastr.success("Device has just deactivated successfully")
+                        $state.go('tracker');
+                    } else {
+                        toastr.error('Can\'t deactivate device!');
+                    }
+                });
+                return;
+            }*/
+            webSvc.getSingleShipment(shipmentId).success(function(resp) {
+                console.log('SINGLE', resp);
+                if (resp.status.code == 0) {
+                    $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
+                } else {
+                    $scope.arrivalTimeISO = -1;
+                    toastr.warning('There is no shipment with this device!');
+                }
+            }).then(function() {
+                if ($scope.arrivalTimeISO != null){
+                    if ($scope.tracker.active) {
+                        $("#confirmDeactive").modal("show");
+                    } else {
+                        toastr.warning('This device was deactivated!');
+                    }
+                } else {
+                    toastr.warning('You must shut the device down first!')
+                }
+            })
+
         };
     }]);
 /**
