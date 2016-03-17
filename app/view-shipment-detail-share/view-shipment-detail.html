@@ -1,4 +1,6 @@
-﻿<div class="portlet box green mainbox" id="print-content">
+﻿<div class="portlet box green mainbox">
+    <div id="print-content">
+    </div>
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-truck fa-lg"></i> View shipment details
@@ -12,7 +14,7 @@
         <div class="tabbable-line">
             
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 left-panel">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-page">
                             <h4 class="panel-title uppercase">
@@ -31,7 +33,7 @@
                                         <div>
                                             <img class="tiny-icon15" ng-src="theme/img/Tracker{{trackers[MI].index + 1}}.png">
                                             <span class="tracker-id">Tracker {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span>
-                                            <img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" src="theme/img/alert{{p}}.png">
+                                            <img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png">
                                         </div>
                                     </a>
                                     <div class="tools">
@@ -233,13 +235,10 @@
                         ></marker>
                          -->
                         <!--special markers -->
-                        <marker ng-if="specialMarkers.length != 0" ng-repeat="p in specialMarkers"
-                            position="{{p.data.lat}}, {{p.data.long}}"
-                            icon="{
-                                url:'{{p.iconUrl}}',
-                                scaledSize:[{{p.len}}, {{p.len}}],
-                                anchor:[{{p.len / 2}}, {{p.len / 2}}]
-                            }"
+                        <marker ng-if="specialMarkers.length != 0"
+                            ng-repeat="p in specialMarkers"
+                            position="{{p.pos}}"
+                            icon="{{p.icon}}"
                             data="{{p}}"
                             zIndex="3"
                             on-mouseover="showAlertsUI();"
@@ -260,11 +259,7 @@
                         </custom-marker>
 
                         <marker position="{{currentPoint.loc.lat}},{{currentPoint.loc.long}}"
-                            icon="{
-                                url:'{{currentPoint.iconUrl}}',
-                                scaledSize:[{{currentPoint.len}}, {{currentPoint.len}}],
-                                anchor:[{{currentPoint.len / 2}}, {{currentPoint.len / 2}}]
-                            }"
+                              icon="{{currentPoint.icon}}"
                              optimized="false" z-index="102">
                         </marker>
                         

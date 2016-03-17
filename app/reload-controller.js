@@ -10,11 +10,10 @@
     // $rootScope.showRead= false;
     webSvc.getUser().success(function (data) {
         if(data.status.code == 0){
-            $rootScope.User = data.response;    
+            $rootScope.User = data.response;
             loadNotifications();
         }
     });
-
     $scope.clearCache = function() { 
         $templateCache.removeAll();
         toastr.info("Cleared cache");
@@ -73,35 +72,29 @@
 
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {
-            //console.log("NOTIFICATION", data.response[0].date);
+            //console.log("NOTIFICATION", data.response[0]);
             if(data.status.code == 0){
-
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
                 }
+
                 while($rootScope.unreadNotification.length > 0){
                     $rootScope.unreadNotification.pop();
                 }
 
                 for(i = 0; i < data.response.length; i++){
-                    var lnk = data.response[i].link;
-                    lnk = lnk.substr("http://stf.smarttrace.com.au".length);
-                    lnk = lnk.substr(0, lnk.length - "{shipmentId}".length);
-                    lnk = lnk + data.response[i].shipmentId;
-                    data.response[i].link = lnk;
-
-                    if(data.response[i].Line3 != undefined)
-                        data.response[i].Line3 = data.response[i].Line3.replace("Description", "Desc");
-
-                    var diff = hourdiff(data.response[i].date);
-                    if(parseInt(diff/24) == 0) data.response[i].date = (diff % 24)  + " hrs ago";
-                    else if(parseInt(diff/24) == 1) data.response[i].date = "Yesterday";
-                    else data.response[i].date = Math.round(diff/24) + " days ago";
+                    var obj = data.response[i];
+                    //var current = new Date();
+                    var alert = new Date(obj.date);
+                    var diff = parseInt(($rootScope.UserRunningTime - alert)/(1000*60*60));//(new Date()) - $rootScope.UserTime;
+                    if(parseInt(diff/24) == 0) obj.date = (diff % 24)  + " hrs ago";
+                    else if(parseInt(diff/24) == 1) obj.date = "Yesterday";
+                    else obj.date = Math.round(diff/24) + " days ago";
 
                     if(data.response[i].closed){
-                        $rootScope.readNotification.push(data.response[i]);
+                        $rootScope.readNotification.push(obj);
                     } else {
-                        $rootScope.unreadNotification.push(data.response[i]);
+                        $rootScope.unreadNotification.push(obj);
                     }
                 }
             }
@@ -113,7 +106,8 @@
             if (timeData.status.code == 0) {
                 $scope.tickInterval = 1000 //ms
                 $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);
-                
+                $rootScope.UserRunningTime = new Date(timeData.response.dateTimeIso);
+
                 $rootScope.timeDiff = $rootScope.RunningTime - new Date();
                 $rootScope.timeDiff -= $rootScope.timeDiff % 100000;
                 
@@ -152,6 +146,8 @@
     $rootScope.updateUserTime();
 
     function hourdiff(alertDate) {
+        console.log(alertDate);
+
         var first = new Date(alertDate);
         var second = new Date();
         return Math.round((second-first)/(1000*60*60));
