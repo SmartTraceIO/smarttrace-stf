@@ -228,6 +228,9 @@ p.no-padding {
     color: white;
 }
 
+.form-control[readonly] {
+    background-color: #EAEAEA;
+}
 
 hr {
     border-bottom: 1px solid #C2CAD8;
@@ -615,4 +618,16 @@ ng-map{
 }
 .user-detail p{
     font-style: italic;
+}
+
+#print-content{
+    display: none;
+}
+@media print{
+    body>*{
+        display: none;
+    }
+    #print-content{
+        display: block !important;
+    }
 }

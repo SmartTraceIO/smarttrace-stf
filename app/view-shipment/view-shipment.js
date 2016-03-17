@@ -3,6 +3,8 @@
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
     $scope.AuthToken = localDbSvc.getToken();
+
+
     $scope.specificDates = false;
     $scope.ViewShipment = {
         alertsOnly: false,
@@ -69,7 +71,6 @@
         webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
-                console.log(data.response);
                 $scope.ShipmentList = data.response;
                 $scope.ShipmentList.totalCount = data.totalCount;
             } else if(data.status.code == 1){
@@ -151,7 +152,7 @@
         // console.log("Devi", data);
         if (data.status.code == 0) {
             $scope.TrackerList = data.response;
-            console.log(data.response);
+            // console.log(data.response);
         }
     });
     $scope.SortOptionChanged = function(){

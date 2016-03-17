@@ -6,11 +6,9 @@
 
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
-                //console.log("TRACKER", data);
                 if (data.status.code == 0) {
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
-                    //console.log(data);
                 }
             });
         }
@@ -35,8 +33,6 @@
         $scope.Sorting = function (expression) {
             $scope.So = $scope.So == "asc" ? "desc" : "asc";
             $scope.Sc = expression;
-            console.log($scope.So);
-            console.log($scope.Sc);
             BindTrackerList();
         }
 
@@ -75,13 +71,6 @@
                 return $scope.roles.Basic;
             }
         }
-
-        /*var orderBy = $filter('orderBy');
-        $scope.Sorting = function(predicate) {
-            $scope.predicate = predicate;
-            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-            $scope.TrackerList = orderBy($scope.TrackerList, predicate, $scope.reverse);
-        };*/
 });
 appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
     function($scope, $state, $filter, rootSvc, localDbSvc, webSvc) {
@@ -150,7 +139,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
 
 
         $scope.tracker = {};
-        $scope.tracker.imei = $stateParams.imei;
+        //$scope.tracker.imei = $stateParams.imei;
         var filter = $filter('filter');
         var param = {
             pageSize: 1000,
@@ -159,7 +148,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             sc: 'asc'
         };
         //console.log('PARAM', $scope.tracker.imei);
-        webSvc.getDevice($scope.tracker.imei).success(function(data){
+        webSvc.getDevice($stateParams.imei).success(function(data){
             console.log("TRACKER", data);
             if (data.status.code == 0) {
                 $scope.tracker = data.response;
@@ -201,11 +190,12 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             $("#confirmShutdown").modal("show");
         };
         $scope.shutdownNow = function() {
+            $("#confirmShutdown").modal("hide");
             var shipmentId = $scope.tracker.lastShipmentId;
             if (shipmentId == null) {
                 toastr.error('No Shipment for this device');
             } else {
-                webSvc.getSingleShipment(shipmentId).success(function(resp) {
+                webSvc.getShipment(shipmentId).success(function(resp) {
                     console.log('DATA', resp);
                     if (resp.status.code == 0) {
                         $scope.arrivalTimeISO = resp.response.arrivalTimeISO;

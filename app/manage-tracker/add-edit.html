@@ -21,7 +21,9 @@
                                        class="fa fa-info-circle"/>
                                 </label>
                                 <span class="text-error pull-right">*</span>
-                                <input readonly ng-model="tracker.sn" type="text" id="trackerNumEdit" class="form-control" placeholder="Tracker Number">
+                                <input readonly ng-model="tracker.sn"
+                                       type="text" id="trackerNumEdit"
+                                       class="form-control" placeholder="Tracker Number">
                             </div>
                             <div class="form-group" ng-if="Action=='Add'" ng-form="ngfTrackerNum">
                                 <label for="trackerNumAdd">Tracker Num
@@ -136,7 +138,7 @@
 
                 <div class="" ng-if="Action==='Edit'">
                     <div class="row">
-                        <h3>Last Reading / Last Shipment</h3>
+                        <h3>Last Reading / Latest Shipment</h3>
                     </div>
                     <div class="row"><hr/></div>
                     <div class="row">
@@ -171,7 +173,7 @@
                             <span>{{tracker.lastReadingBattery | volt}}</span>
                         </div>
                         <div class="col-sm-2">
-                            <h5>Last Shipment
+                            <h5>Latest Shipment
                                 <i tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -200,12 +202,12 @@
                             <button type="button" class="btn green" ng-click="confirmShutdown()">Shutdown Now</button>
                         </div>
                     </div>
-                    <div ng-if="getRole() >= roles.Admin">
+                    <div ng-if="getRole() > roles.Admin">
                         <div class="row">
                             <h3>Billing</h3>
                         </div>
                         <div class="row"><hr/></div>
-                        <div class="row">
+                        <div class="row" ng-if="tracker.active">
                             <div class="col-sm-3">
                                 <strong>Activated</strong>
                             </div>
@@ -213,12 +215,20 @@
                                 <h5>Activation Date</h5>
                                 <span>7:22am 12 Mar 2016</span>
                             </div>
+                            <div class="col-sm-2 pull-right">
+                                <button class="btn green" ng-click="confirmDeactive()">Deactivate Now</button>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="!tracker.active">
+                            <div class="col-sm-3">
+                                <strong>Deactivated</strong>
+                            </div>
                             <div class="col-sm-3">
                                 <h5>Deactivation Date</h5>
                                 <span>-</span>
                             </div>
-                            <div class="col-sm-2 pull-right">
-                                <button class="btn green" ng-click="confirmDeactive()">Deactivate Now</button>
+                            <div class="col-sm-6 pull-right">
+                                <span>Please contact <a href="mailto:support@smarttrace.com"><u><strong>support@smartTrace.com.au</strong></u></a> to reactivate this device</span>
                             </div>
                         </div>
                         <div class="row">
@@ -233,7 +243,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Are you sure you want to deactivate this device? There is a re-connection fee and a 24hr delay if you need to reactivate it later</h4>
                 </div>
                 <div class="modal-footer">

@@ -1,4 +1,5 @@
-﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, localDbSvc, webSvc, $timeout, $document, $templateCache) {
+﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval,
+                                            localDbSvc, webSvc, $timeout, $document, $templateCache) {
 	
     $rootScope.readNotification = [];
     $rootScope.unreadNotification = [];
@@ -106,7 +107,7 @@
             }
         });
     }
-
+    $interval(loadNotifications, 10*60*1000); // 10 minutes
     $rootScope.updateUserTime = function() {
         webSvc.getUserTime().success( function (timeData) {
             if (timeData.status.code == 0) {
