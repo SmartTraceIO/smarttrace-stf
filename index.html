@@ -45,15 +45,15 @@
         xobj.send(null);
     </script>
 </head>
-<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
-    <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green" ng-controller="reloadCtrl">
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width" ng-controller="reloadCtrl">
+    <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green">
         <div class="page-header-inner ">
             <div class="page-logo">
                 <a href="index.html">
                     <img src="theme/img/logo.jpg" alt="logo" class="logo-default" />
                 </a>
             </div>
-            <div class="hor-menu hidden-sm hidden-xs">
+            <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
                 <ul class="nav navbar-nav">
                     <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Shipment'}">
                         <a href="#/new-shipment">
@@ -172,7 +172,7 @@
     <div class="clearfix"> </div>
     <div class="page-container">
         <div class="page-content-wrapper">
-            <div class="page-sidebar navbar-collapse collapse"> <!--ng-controller="reloadCtrl"-->
+            <div class="page-sidebar navbar-collapse collapse"> <!-- ng-controller="reloadCtrl">-->
                 <div class="page-sidebar-wrapper">
                     <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed">
                         <li class="nav-item start ">

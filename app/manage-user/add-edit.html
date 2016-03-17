@@ -60,8 +60,19 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
-                        <label class="control-label">Company:&nbsp;<i tooltip="Company" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <input type="text" name="Company" maxlength="30" placeholder="Enter a Company Name" class="form-control" ng-model="User.user.externalCompany" ng-disabled="!User.user.external" ng-required="User.user.external" />
+                        <label class="control-label">Company:&nbsp;
+                            <i tooltip="Company" tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
+                        <input type="text" name="Company"
+                               maxlength="30"
+                               placeholder="Enter a Company Name"
+                               class="form-control"
+                               ng-model="User.user.externalCompany"
+                               ng-disabled="!User.user.external"
+                               ng-required="User.user.external" />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Company.$error.required">Please enter company name</span>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Company.$error.maxlength">Company name must be less than or equal to 30 chars</span>

@@ -1,8 +1,8 @@
-﻿appCtrls.controller('ListUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc) {
+﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $window, $scope, rootSvc, webSvc, localDbSvc) {
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
-    $scope.AuthToken = localDbSvc.getToken();
+
     var BindUserList = function () {
         webSvc.getUsers($scope.pageSize, $scope.pageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {

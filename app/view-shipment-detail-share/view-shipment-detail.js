@@ -28,8 +28,6 @@
     var trackerRoute = null;
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
-    $scope.xMin = 0;
-    $scope.xMax = 0;
     $scope.mapInfo = {};
     var bounds= null;
 
@@ -40,6 +38,7 @@
     var trackerArrival = new Array();
     var trackerDest = new Array();
     var alertData = new Array();
+    var lightPlotBand = new Array();
 
     //google map first point
     $scope.firstPoint = {};
@@ -73,6 +72,16 @@
     });
 
     $scope.Print = function(){
+        $print = $("#print-content").detach();
+        $print.empty();
+        $print.append($(".left-panel").clone());
+        $print.append($("#chart1").clone());
+        $print.append($("ng-map").clone());
+        // $print.append($(".col-sm-9").clone());
+        $("body").append($print);
+        setTimeout(print, 100);
+    }
+    function print(){
         $window.print();
     }
 
@@ -100,11 +109,42 @@
                 lat: locations[i].lat, 
                 lng: locations[i].long});
             //markers
+            var pos = [locations[i].lat, locations[i].long];
             if(locations[i].alerts.length > 0){
                 if(locations[i].alerts[0].type == 'LastReading'){
-                    $scope.specialMarkers.push({index: $scope.specialMarkers.length, len: 16, oi: i, data: locations[i], iconUrl: "theme/img/Tracker" + (index + 1) + ".png", tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"});    
+                    $scope.specialMarkers.push(
+                        {
+                            index: $scope.specialMarkers.length,
+                            len: 16,
+                            oi: i,
+                            pos: pos,
+                            data: locations[i],
+                            iconUrl: "theme/img/Tracker" + (index + 1) + ".png",
+                            icon: {
+                                url:"theme/img/Tracker" + (index + 1) + ".png",
+                                scaledSize:[16, 16],
+                                anchor:[8, 8]
+                            },
+                            tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
+                        }
+                    );
                 } else {
-                    $scope.specialMarkers.push({index: $scope.specialMarkers.length, len: 24, oi: i, data: locations[i], iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png", tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"});    
+                    $scope.specialMarkers.push(
+                        {
+                            index: $scope.specialMarkers.length,
+                            len: 24,
+                            oi: i,
+                            pos: pos,
+                            data: locations[i],
+                            iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
+                            icon: {
+                                url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
+                                scaledSize:[24, 24],
+                                anchor:[12, 12]
+                            },
+                            tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"
+                        }
+                    );
                 }
             }
             // $scope.normalMarkers.push({index: $scope.normalMarkers.length, oi: i, data: locations[i], iconUrl: "theme/img/edot.png", len: 12, normal: true});
@@ -278,6 +318,11 @@
         //mouse out
         if(index == -1){
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
+            $scope.currentPoint.icon = {
+                url: "theme/img/edot.png",
+                size: [12, 12],
+                anchor: [6, 6]
+            };
             $scope.currentPoint.len = 12;
         } else {
             //For alerts, only black circle without point in it.
@@ -286,6 +331,11 @@
             for(i = 0; i < $scope.specialMarkers.length; i++){
                 if($scope.specialMarkers[i].oi == index){
                     $scope.currentPoint.iconUrl = "theme/img/outdot.png";
+                    $scope.currentPoint.icon = {
+                        url: "theme/img/outdot.png",
+                        size: [35, 35],
+                        anchor: [18, 17]
+                    }
                     break;
                 }
             }
@@ -566,6 +616,7 @@
                                 return formatDateAxis(this.value);
                             },
                         },
+                        plotBands: lightPlotBand,
                         lineWidth:1,
                         ordinal: false,
                         lineColor:"#000",
@@ -581,19 +632,6 @@
                     }
                 },
                 series: chartSeries,
-                /*func: function(chart) {
-                    var heigh = chart.renderer.height;
-                    var dataArray = chartSeries.data;
-                    console.log('DRAWING', chartSeries);
-                    chart.renderer.rect(chartSeries[7].data[0].x, 0, 100, heigh, 0)
-                        .attr({
-                            'stroke-width': 0.3,
-                            stroke: 'red',
-                            fill: 'yellow',
-                            zIndex: 0
-                        })
-                        .add();
-                },*/
                 useHighStocks: true
             }
             
@@ -609,9 +647,9 @@
 
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
-            /*marker: {
+            marker: {
                 symbol: 'url(theme/img/dot.png)'
-            },*/
+            },
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI]
@@ -659,6 +697,13 @@
     }
 
     function prepareAlertHighchartSeries(){
+        
+        while(lightPlotBand.length > 0){
+            lightPlotBand.pop();
+        }
+
+        var plot = {};
+        plot.from = null;
         while(alertData.length > 0){
             alertData.pop();
         }
@@ -668,6 +713,18 @@
             var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
+                if(str.toLowerCase() == "lighton"){
+                    plot.from = subSeries[$scope.MI][i][0];
+                }
+                if(str.toLowerCase() == "lightoff"){
+                    plot.to = subSeries[$scope.MI][i][0];
+                    plot.color = 'rgba(255, 255, 0, 0.6)';
+                    if(plot.from != null){
+                        lightPlotBand.push(plot);
+                        plot = {};
+                        plot.from = null;
+                    }
+                }
                 var alert = "";
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
@@ -733,8 +790,8 @@
             symbol: 'url(theme/img/tracker' + ($scope.MI + 1) + '.png)'
         };
 
-        trackerDest.pop();
-        trackerDest.push(obj);
+        // trackerDest.pop();
+        // trackerDest.push(obj);
     }
 
     $scope.generatePDF = function(){
@@ -781,8 +838,6 @@
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
         var endTime = parseDate($scope.trackers[$scope.MI].locations[$scope.trackers[$scope.MI].locations.length - 1].timeISO);
         
-        $scope.xMin = new Date(startTime).getTime();
-        $scope.xMax = new Date(endTime).getTime();
         var gap = (endTime - startTime) / 25;
 
         startTime -= gap;

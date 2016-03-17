@@ -1,20 +1,23 @@
 ﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval,
                                             localDbSvc, webSvc, $timeout, $document, $templateCache) {
-	
-    $rootScope.readNotification = [];
-    $rootScope.unreadNotification = [];
-    $rootScope.closedNotification = [];
     $rootScope.closeText = "";
     $rootScope.loading = false;
     $scope.showRead = false;
     // $rootScope.showRead= false;
-    webSvc.getUser().success(function (data) {
-        if(data.status.code == 0){
-            $rootScope.User = data.response;
-            loadNotifications();
-        }
-    });
-    $scope.clearCache = function() { 
+    $scope.init = function() {
+        $rootScope.readNotification = [];
+        $rootScope.unreadNotification = [];
+        $rootScope.closedNotification = [];
+        webSvc.getUser().success(function (data) {
+            if(data.status.code == 0){
+                $rootScope.User = data.response;
+                //$scope.User = data.response;
+                loadNotifications();
+            }
+        });
+    }
+
+    $scope.clearCache = function() {
         $templateCache.removeAll();
         toastr.info("Cleared cache");
     }
@@ -153,22 +156,23 @@
         return Math.round((second-first)/(1000*60*60));
     }
 
-    //Get Notifications
-    //
-
     $scope.reload = function() {
+        $scope.AuthToken = localDbSvc.getToken();
+        if ($rootScope.AuthToken != $scope.AuthToken) {
+            $rootScope.AuthToken = $scope.AuthToken;
+            //--reset
+            $rootScope.readNotification = [];
+            $rootScope.unreadNotification = [];
+            $rootScope.closedNotification = [];
+            webSvc.getUser().success(function (data) {
+                 if(data.status.code == 0){
+                    $rootScope.User = data.response;
+                     loadNotifications();
+                 }
+            });
+        }
         if ($state.current.name == $rootScope.previousState.name) {
             $state.go($state.current, {}, { reload: true });
         }
     };
-
-	/*$(".menu-li a").on("click", function () {
-        if ($state.current.name == $rootScope.previousState.name) {
-            $state.go($state.current, {}, { reload: true }); 
-        }
-    })*/
-
-    $('.dropdown-notification > ul').click(function(e) {
-        e.stopPropagation();
-    });
 });
