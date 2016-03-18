@@ -35,7 +35,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 		        	$rootScope.redirectUrl = "/view-shipment";
 		        }
 		        $rootScope.showHeader = false;
-		        $location.path($rootScope.redirectUrl);
+		        $location.url($rootScope.redirectUrl);
 		        $rootScope.redirectUrl = "";
 		        toastr.success("Successfully logged in.");
 		        webSvc.getUser().success(function (data) {
