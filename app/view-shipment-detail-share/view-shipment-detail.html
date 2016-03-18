@@ -47,9 +47,9 @@
                                         <tr><td>Asset Type:</td><td>{{trackerInfo.assetType}}</td></tr>
                                         <tr><td>Pallet ID:</td><td>{{trackerInfo.palletId}}</td></tr>
                                     </table>
-                                    <div>
+                                    <!-- <div>
                                         <span class="bold-font">Tracker Position:</span>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -100,15 +100,15 @@
                                 <td><img src="theme/img/tinyLocationStart.png"></td>
                                 <td>
                                     <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
-                                    <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTimeISO}}</span>
+                                    <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
                                 </td>
                             </tr><tr>
                                 <td><img src="theme/img/tinyLocationStop.png"></td>
                                 <td>
                                     <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
-                                    <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTimeISO}}</span>
-                                    <span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.etaISO}}</span>
-                                    <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTimeISO}}</span>
+                                    <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
+                                    <span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>
+                                    <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                     <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                                 </td>
                             </tr></table>
@@ -141,10 +141,10 @@
                                     </div>
                                 </td></tr>
                             </table>
-                            <a href="#" ng-show="trackerInfo.alertYetToFire != null" class="bold-font" style="text-decoration:underline;">
+                            <!-- <a href="#" ng-show="trackerInfo.alertYetToFire != null" class="bold-font" style="text-decoration:underline;">
                                 Suppress further notifications
                                 <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                     <div class="portlet box grey">
@@ -160,13 +160,13 @@
                         <div class="portlet-body" style="display:none;">
                             <table class="tracker-desc">
                                 <tr><td>Time of arrival:</td><td>
-                                    {{trackerInfo.arrivalTimeISO}}
+                                    {{trackerInfo.arrivalTime}}
                                     <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
                                 <tr><td>Notify when:</td><td>
                                     {{trackerInfo.arrivalNotificationWithinKm}} Km away
                                     <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
                                 <tr><td>Notified at:</td><td>
-                                    {{trackerInfo.arrivalNotificationTimeISO}}
+                                    {{trackerInfo.arrivalNotificationTime}}
                                     <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
                                 <tr><td>Who to notify:</td><td>{{trackerInfo.alertPeopleToNotify}}</td></tr>
                                 <tr><td>Schedule(s):</td><td>
@@ -177,7 +177,7 @@
                                 </td></tr>
                                 <tr><td>Comments:</td><td>{{trackerInfo.commentsForReceiver}}</td></tr>
                                 <tr><td>Time of shutdown:</td><td>
-                                    {{trackerInfo.shutdownTimeISO}}
+                                    {{trackerInfo.shutdownTime}}
                                     <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
                             </table>
                         </div>
@@ -214,7 +214,7 @@
                                 <table class="end-marker-content"><tr>
                                     <td>
                                         <b>{{mapInfo.endLocation}}</b><br/>
-                                        <!-- {{mapInfo.etaISO}} -->
+                                        <!-- {{mapInfo.eta}} -->
                                     </td>
                                     <td><img src="theme/img/locationStop.png"></td>
                                 </tr></table>
@@ -252,7 +252,7 @@
                                     <td><img src="theme/img/locationStart.png"></td>
                                     <td>
                                         <b>{{mapInfo.startLocation}}</b><br/>
-                                        <!-- {{mapInfo.startTimeISO}} -->
+                                        <!-- {{mapInfo.startTime}} -->
                                     </td>
                                 </tr></table>
                             </div>

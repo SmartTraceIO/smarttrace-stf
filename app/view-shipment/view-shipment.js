@@ -72,6 +72,7 @@
             
             if (data.status.code == 0) {
                 $scope.ShipmentList = data.response;
+                console.log('SHIPMENT', $scope.ShipmentList);
                 $scope.ShipmentList.totalCount = data.totalCount;
             } else if(data.status.code == 1){
                 $rootScope.redirectUrl = "/view-shipment";

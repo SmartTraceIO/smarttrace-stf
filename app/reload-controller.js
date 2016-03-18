@@ -12,7 +12,7 @@
             if(data.status.code == 0){
                 $rootScope.User = data.response;
                 //$scope.User = data.response;
-                loadNotifications();
+                //loadNotifications();
             }
         });
     }
@@ -75,25 +75,19 @@
 
     loadNotifications = function(){
         webSvc.getNotifications(true).success(function (data) {
-            //console.log("NOTIFICATION", data.response[0]);
+            console.log("NOTIFICATION", data.response[0]);
             if(data.status.code == 0){
                 while($rootScope.readNotification.length > 0){
                     $rootScope.readNotification.pop();
                 }
-
                 while($rootScope.unreadNotification.length > 0){
                     $rootScope.unreadNotification.pop();
                 }
 
                 for(i = 0; i < data.response.length; i++){
                     var obj = data.response[i];
-                    //var current = new Date();
-                    var alert = new Date(obj.date);
-                    var diff = parseInt(($rootScope.UserRunningTime - alert)/(1000*60*60));//(new Date()) - $rootScope.UserTime;
-                    if(parseInt(diff/24) == 0) obj.date = (diff % 24)  + " hrs ago";
-                    else if(parseInt(diff/24) == 1) obj.date = "Yesterday";
-                    else obj.date = Math.round(diff/24) + " days ago";
-
+                    var m = moment(obj.date);
+                    obj.date = m.fromNow()
                     if(data.response[i].closed){
                         $rootScope.readNotification.push(obj);
                     } else {
@@ -106,18 +100,13 @@
     $interval(loadNotifications, 10*60*1000); // 10 minutes
     $rootScope.updateUserTime = function() {
         webSvc.getUserTime().success( function (timeData) {
+            console.log('USER-TIME', timeData);
             if (timeData.status.code == 0) {
-                $scope.tickInterval = 1000 //ms
-                $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);
-                $rootScope.UserRunningTime = new Date(timeData.response.dateTimeIso);
-
-                $rootScope.timeDiff = $rootScope.RunningTime - new Date();
-                $rootScope.timeDiff -= $rootScope.timeDiff % 100000;
-                
                 $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
-                
+                $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+                $scope.tickInterval = 1000 //ms
                 var tick = function () {
-                    $rootScope.RunningTime = formatDate(Date.parse(new Date()) + $rootScope.timeDiff);
+                    $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
                     $timeout(tick, $scope.tickInterval); // reset the timer
                 }
                 // Start the timer
@@ -126,35 +115,7 @@
         });
     }
 
-    function formatDate(date){
-        var m_names = new Array("Jan", "Feb", "Mar", 
-            "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-            "Oct", "Nov", "Dec");
-        var d = new Date(date);
-
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth();
-        var curr_year = d.getFullYear();
-
-        var curr_hour = d.getHours();
-        var curr_min = d.getMinutes();
-        var ampm = curr_hour >= 12 ? 'PM' : 'AM';
-        curr_hour %= 12;
-        curr_hour = curr_hour ? curr_hour : 12;
-        curr_hour = ("00" + curr_hour).slice(-2);
-        curr_min = ("00" + curr_min).slice(-2);
-        return curr_date + "-" + m_names[curr_month] + "-" + curr_year + " " + curr_hour + ":" + curr_min + ampm;;
-    }
-	
     $rootScope.updateUserTime();
-
-    function hourdiff(alertDate) {
-        console.log(alertDate);
-
-        var first = new Date(alertDate);
-        var second = new Date();
-        return Math.round((second-first)/(1000*60*60));
-    }
 
     $scope.reload = function() {
         $scope.AuthToken = localDbSvc.getToken();

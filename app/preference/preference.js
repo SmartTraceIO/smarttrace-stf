@@ -33,21 +33,27 @@ appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSv
     	userData.language = $scope.User.language;
     	userData.timeZone = $scope.User.timeZone;
 
+        console.log('BEFORE-UPDATE', userData);
+
         webSvc.updateUserDetails(userData).success( function (data, textStatus, XmlHttpRequest) {
             if(data.status.code == 0){
                 toastr.success("Successfully updated the user preferences");
-                toastr.info("Please login again...");
-                $state.go("login");
-                webSvc.getUserTime().success( function (data) {            
-                    if (timeData.status.code == 0) {
-                        $rootScope.RunningTime = new Date(timeData.response.dateTimeIso);
-                        $rootScope.RunningTimeZoneId = timeData.response.timeZoneId;
-                    }
-                });
+                //toastr.info("Please login again...");
+                //$state.go("login");
+
             }
         }).error( function (xmlHttpRequest, textStatus, errorThrown) {
             toastr.warning("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-        });
+        }).then(function() {
+            webSvc.getUserTime().success( function (timeData) {
+                if (timeData.status.code == 0) {
+                    console.log('UPDATE-USER', timeData);
+                    //$rootScope.RunningTime = new Date(timeData.response.dateTimeIso);
+                    //$rootScope.RunningTimeZoneId = timeData.response.timeZoneId;
+                    $rootScope.RunningTimeZoneId = $scope.User.timeZone;
+                }
+            });
+        })
     }
 
 	BindLanguages();

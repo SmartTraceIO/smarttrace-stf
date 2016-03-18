@@ -34,9 +34,6 @@
     //------CHART SERIES DATA  ------
     var chartSeries = new Array();
     var subSeries = new Array();
-    var endSeries = new Array();
-    var trackerArrival = new Array();
-    var trackerDest = new Array();
     var alertData = new Array();
     var lightPlotBand = new Array();
 
@@ -54,6 +51,7 @@
         // console.log("Updating tracker data...");
         refreshTimer = $timeout(refreshData, 300000);
     }
+    var tickInterval = 5;
 
     refreshTimer = $timeout(refreshData, 300000);
     $scope.$on("$destroy", function(event){
@@ -128,7 +126,7 @@
                             tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                         }
                     );
-                } else {
+                } else if(locations[i].alerts[0].type.toLowerCase() != 'lighton' && locations[i].alerts[0].type.toLowerCase() != 'lightoff') {
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -192,7 +190,19 @@
             return;
         }
 
+        //Map start and end location info
+        $scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
+        $scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
+        $scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
+        $scope.mapInfo.endLocationForMap = $scope.trackers[index].endLocationForMap;
+        $scope.mapInfo.endLocation = $scope.trackers[index].endLocation;
+        $scope.mapInfo.etaISO = $scope.trackers[index].etaISO;
+        $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
+        $scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
+
+        console.log("MAP INFO", $scope.mapInfo);
         $scope.trackerInfo = $scope.trackers[index];
+        console.log($scope.trackerInfo);
         prepareMainHighchartSeries();
         prepareTrackerMessage();
         prepareAlertHighchartSeries();
@@ -382,17 +392,18 @@
             }
 
             var info = graphData.response;
-            // console.log(info);
 
-            //Map start and end location info
-            $scope.mapInfo.startLocationForMap = info.startLocationForMap;
-            $scope.mapInfo.startTimeISO = info.startTimeISO;
-            $scope.mapInfo.startLocation = info.startLocation;
-            $scope.mapInfo.endLocationForMap = info.endLocationForMap;
-            $scope.mapInfo.endLocation = info.endLocation;
-            $scope.mapInfo.etaISO = info.etaISO;
-            $scope.mapInfo.arrivalTimeISO = info.arrivalTimeISO;
-            $scope.mapInfo.lastReadingTimeISO = info.lastReadingTimeISO;
+            //--------Remove Light On, Off---------
+            for(alert = 0; alert < info.alertSummary.length; alert ++){
+                if(info.alertSummary[alert].toLowerCase() == "lighton" 
+                    || info.alertSummary[alert].toLowerCase() == "lightoff") {
+                    info.alertSummary.splice(alert --, 1);
+                }
+            }
+            //--------Remove Light On, Off---------
+            console.log(info);
+
+            
 
             // console.log("******", info.locations.length);
 
@@ -597,7 +608,7 @@
                             align:'right',
                             x:-10
                         },
-                        tickInterval: 5,
+                        tickInterval: tickInterval,
                         plotBands: [{
                             from: 0,
                             to: 5,
@@ -713,19 +724,9 @@
             var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
-                if(str.toLowerCase() == "lighton"){
-                    plot.from = subSeries[$scope.MI][i][0];
-                }
-                if(str.toLowerCase() == "lightoff"){
-                    plot.to = subSeries[$scope.MI][i][0];
-                    plot.color = 'rgba(255, 255, 0, 0.6)';
-                    if(plot.from != null){
-                        lightPlotBand.push(plot);
-                        plot = {};
-                        plot.from = null;
-                    }
-                }
                 var alert = "";
+                
+                
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
                 obj = {};
@@ -735,9 +736,23 @@
                     enabled: true,
                     symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
                 };
-                var tmpArray = new Array();
-                tmpArray.push(obj);
-                alertData.unshift(tmpArray);
+                //for light on/off, show yellow bar and hide icons
+                //by not adding to the alert list
+                if(str.toLowerCase() == "lighton"){
+                    plot.from = subSeries[$scope.MI][i][0];
+                } else if(str.toLowerCase() == "lightoff"){
+                    plot.to = subSeries[$scope.MI][i][0];
+                    plot.color = 'rgba(255, 255, 0, 0.2)';
+                    if(plot.from != null){
+                        lightPlotBand.push(plot);
+                        plot = {};
+                        plot.from = null;
+                    }
+                } else {
+                    var tmpArray = new Array();
+                    tmpArray.push(obj);
+                    alertData.unshift(tmpArray);
+                }
                 //update msg
                 var msg = {};
 
@@ -762,6 +777,19 @@
                 var alertmsg = [];
                 for(var k = 0; k < alertinfo.length; k++){
                     var str = alertinfo[k].type;
+                    //for light on/off, show yellow bar and hide icons
+                    //by not adding to the alert list
+                    if(str.toLowerCase() == "lighton"){
+                        plot.from = subSeries[$scope.MI][i][0];
+                    } else if(str.toLowerCase() == "lightoff"){
+                        plot.to = subSeries[$scope.MI][i][0];
+                        plot.color = 'rgba(255, 255, 0, 0.2)';
+                        if(plot.from != null){
+                            lightPlotBand.push(plot);
+                            plot = {};
+                            plot.from = null;
+                        }
+                    }
                     var alert = "";
                     if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                     else alert = "Alert";
@@ -844,6 +872,7 @@
         endTime += gap;
 
         //Add siblings tracker data to the subSeries
+        var tempMin = null, tempMax = null;   //to calculate y-axis interval;
         for(i = 0; i < $scope.trackers.length; i++){
             if(!$scope.trackers[i].loaded) {
                 subSeries.push(new Array());
@@ -853,6 +882,9 @@
             var skipCnt = locations.length / 300;
             var tmpCnt = 0;
             var series = new Array();
+            if(tempMax == null){
+                tempMax = tempMin = locations[0].temperature;
+            }
             for(j = 0; j < locations.length; j++){
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
@@ -864,6 +896,12 @@
                 temp = new Array();
                 temp.push(parseDate(locations[j].timeISO));
                 temp.push(locations[j].temperature);
+                if(tempMax < locations[j].temperature){
+                    tempMax = locations[j].temperature;
+                }
+                if(tempMin > locations[j].temperature){
+                    tempMin = locations[j].temperature;
+                }
                 if(startTime <= temp[0] && temp[0] <= endTime){
                     series.push(temp);
                 }
@@ -872,6 +910,9 @@
             // console.log("--------",series.length);
             subSeries.push(series);
         }
+        console.log("TEMP", tempMin, tempMax);
+        if(tempMax - tempMin <= 10) tickInterval = 1;
+        else tickInterval = 5;
     }
 
     function parseDate(date){

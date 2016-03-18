@@ -225,7 +225,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <br>
-        <div class="table-responsive">
+        <!--<div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
                     <th class="text-center" ng-click="Sorting('sn')">
@@ -322,7 +322,7 @@
                     <td ng-bind="tracker.lastShipmentId"></td>
                 </tr>
             </table>
-        </div>
+        </div>-->
                 </div>
             </div>
             <div class="row">
@@ -333,7 +333,9 @@
                                 {{shipment.shipmentDescription}}
                             </div>
                             <div class="pull-right" style="margin-top:6px">
-                                <a href="/#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
+                                <a href="/#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
+                                   class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
+                                <!--<a href="/#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>-->
                             </div>
                         </div>
                         <div class="portlet-body" style="position:relative">
