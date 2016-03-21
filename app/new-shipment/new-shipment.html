@@ -102,9 +102,17 @@
                             <div class="col-sm-12">&nbsp;</div>
                             <div class="col-sm-4">
                                 <label>&nbsp;</label>
-                                <label class="control-label">Date Shipped:&nbsp;<i tooltip="Date shipped" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                                <label class="control-label">Date Shipped:&nbsp;
+                                    <i tooltip="Date shipped"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
                                 <div class="input-group">
-                                    <input show-button-bar="false" id="txtDate" type="text" class="form-control" max="maxDate" placeholder="Select Date" datepicker-popup="dd-MMM-yyyy" ng-model="NewShipment.shipment.shipmentDate" close-text="Close" />
+                                    <input show-button-bar="false" id="txtDate" type="text" class="form-control"
+                                           max="maxDate" placeholder="Select Date" datepicker-popup="dd-MMM-yyyy"
+                                           ng-model="date1" close-text="Close" />
                                     <label for="txtDate" class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </label>
@@ -112,9 +120,6 @@
                             </div>
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-4">
-                                <!--{{time1 | date: 'shortTime'}}-->
-                                <!--
-                    minute-step="15" -->
                                 <timepicker ng-model="time1" show-meridian='showMeridian' />
                             </div>
                         </div>

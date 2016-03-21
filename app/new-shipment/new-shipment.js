@@ -4,17 +4,6 @@
     rootSvc.SetPageHeader("New Shipment");
     
     $scope.AuthToken = localDbSvc.getToken();
-
-    //console.log("New Shipment Call", localDbSvc.getToken());
-    webSvc.getUser().success( function (userData) {
-        // console.log("USERDATA", userData);
-        if (userData.status.code == 0) {
-            localDbSvc.set("CurrentUSerTimeZone", userData.response.timeZone);
-            localDbSvc.set("CurrentUserTempUnits", userData.response.temperatureUnits);
-            localDbSvc.set("InternalCompany", userData.response.internalCompany);
-        }
-    });
-
     webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success( function (data) {
         
         if (data.status.code == 0) {
@@ -81,14 +70,16 @@
     };
     webSvc.getShipmentTemplates(param).success(function(data){
         if(data.status.code != 0) return;
-        //console.log(data.response);
         $scope.ShipmentTemplates = data.response;
     })
 
     webSvc.getUserTime().success( function (data) {
         if(data.status.code != 0) return;
         $scope.Time = data.response;
-        $scope.time1 = new Date($scope.Time.dateTimeIso);
+        var t1withZone = moment.tz($scope.Time.dateTimeIso, $rootScope.RunningTimeZoneId).format('MMM DD, YYYY HH:mm:ss');
+        var d1withZone = moment.tz($scope.Time.dateTimeIso, $rootScope.RunningTimeZoneId).format('MMM DD, YYYY HH:mm:ss');
+        $scope.time1 = new Date(t1withZone);
+        $scope.date1 = new Date(d1withZone);
         $scope.timeZone = data.response.timeZoneId;
     })
     //     }
@@ -109,6 +100,7 @@
     $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = false;
     $scope.NewShipment.saveAsNewTemplate = false;
     $scope.NewShipment.shipment.shipmentDate = new Date();
+    var momentShipment = moment.tz();
 
     $scope.WarnUserAndRedirectToAddShipment = function () {
         if (confirm("Your unsaved shipment data will be lost. Do you want to add a template now?")) {
@@ -157,7 +149,6 @@
             }
         }
     }
-
     $scope.ChangeNotiScheduleForArrival = function () {
         if ($scope.NewShipment && $scope.NewShipment.shipment && $scope.NewShipment.shipment.arrivalNotificationSchedules) {
             $scope.ArrivalNotiRule = '';
@@ -171,25 +162,27 @@
             }
         }
     }
-
     $scope.NotificationScheduleOption = {
         multiple: true
     };
 
-    $scope.$watch('NewShipment.shipment.shipmentDate', function (nVal, oVal) {
-        // console.log(nVal, oVal, $scope.NewShipment.shipment.shipmentDate);
+    $scope.$watch('date1', function (nVal, oVal) {
         if (nVal) {
+            momentShipment.date(nVal.getDate());
+            momentShipment.year(nVal.getFullYear());
+            momentShipment.month(nVal.getMonth());
             if (angular.isDate(nVal)) {
                 var date = $filter('date')(nVal, 'dd-MMM-yyyy');
                 var time = $filter('date')($scope.time1, 'shortTime');
                 $scope.NewShipment.shipment.DiscriptionDateTime = date + " " + time + " " + $scope.timeZone;
-                // console.log(date, time, $scope.NewShipment.shipment.DiscriptionDateTime);
             }
         }
     })
 
     $scope.$watch('time1', function (nVal, oVal) {
         if (nVal) {
+            momentShipment.hour(nVal.getHours());
+            momentShipment.minute(nVal.getMinutes());
             var date = $filter('date')($scope.NewShipment.shipment.shipmentDate, 'dd-MMM-yyyy');
             var time = $filter('date')(nVal, 'shortTime');
             $scope.NewShipment.shipment.DiscriptionDateTime = date + " " + time + " " + $scope.timeZone;
@@ -204,23 +197,13 @@
         $scope.AlertNotiRule = "";
         $scope.ArrivalNotiRule = "";
 
-        //console.log($scope.ShipmentTemplate.selectedShipmentTemplateId)
-
         if ($scope.ShipmentTemplate.selectedShipmentTemplateId) {
 
             var param = {
                 shipmentTemplateId: $scope.ShipmentTemplate.selectedShipmentTemplateId
             };
             webSvc.getShipmentTemplate(param).success(function(data){
-                console.log(data)
                 if (data.status.code == 0) {
-                    /*for(i = 0; i < data.response.length; i ++){
-                        if(data.response[i].shipmentTemplateId == param.shipmentTemplateId){
-                            $scope.NewShipment.shipment = data.response[i];
-                            data.response = data.response[i];
-                            break;
-                        }
-                    }*/
                     $scope.NewShipment.shipment = data.response;
 
                     if (data.response) {
@@ -233,7 +216,9 @@
                         $scope.NewShipment.shipment.arrivalNotificationSchedules = data.response.arrivalNotificationSchedules;
                         $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = data.response.excludeNotificationsIfNoAlerts;
 
-                        $scope.NewShipment.shipment.shipmentDate = new Date();
+
+                        $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
+
                         if (data.response.arrivalNotificationWithinKm == 0 || data.response.arrivalNotificationWithinKm)
                             $scope.NewShipment.shipment.arrivalNotificationWithinKm = data.response.arrivalNotificationWithinKm.toString();
                         if (data.response.shutdownDeviceAfterMinutes == 0 || data.response.shutdownDeviceAfterMinutes)
@@ -251,7 +236,7 @@
             $scope.NewShipment.shipment = {};
             $scope.SelectedTemplateId = $scope.ShipmentTemplate.selectedShipmentTemplateId;
             $scope.AddDateShipped = false;
-            $scope.NewShipment.shipment.shipmentDate = new Date();
+            $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
             $scope.NewShipment.shipment.arrivalNotificationWithinKm = '0';
             $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = '120';
             $scope.ChangeNotiScheduleForAlert();
@@ -276,11 +261,7 @@
     }
 
     $scope.SaveData = function (isValid) {
-        var date = new Date($scope.NewShipment.shipment.shipmentDate);
-        $scope.NewShipment.shipment.shipmentDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), $filter('date')($scope.time1, 'hh'), $filter('date')($scope.time1, 'mm')));
-        console.log($scope.NewShipment.shipment.shipmentDate);
-        // console.log($scope.NewShipment.shipment.shipmentDate);
-
+        $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
         if (isValid) {
             if (!$scope.NewShipment.shipment.shutdownDeviceAfterMinutes)
                 $scope.NewShipment.shipment.shutdownDeviceAfterMinutes = null
@@ -296,11 +277,7 @@
             if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
             }
-            //console.log("NEW", $scope.NewShipment);
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
-                //console.log("DATA", data);
-                console.log('NewShipment', $scope.NewShipment);
-                console.log("Status", textStatus);
                 if ($scope.NewShipment.saveAsNewTemplate)
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
                 else
