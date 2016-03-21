@@ -330,27 +330,22 @@
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
             $scope.currentPoint.icon = {
                 url: "theme/img/edot.png",
-                size: [12, 12],
+                scaledSize: [12, 12],
                 anchor: [6, 6]
             };
             $scope.currentPoint.len = 12;
         } else {
             //For alerts, only black circle without point in it.
             $scope.currentPoint.iconUrl = "theme/img/dot.png";
-
+            $scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
+            $scope.currentPoint.len = 35;
             for(i = 0; i < $scope.specialMarkers.length; i++){
                 if($scope.specialMarkers[i].oi == index){
                     $scope.currentPoint.iconUrl = "theme/img/outdot.png";
-                    $scope.currentPoint.icon = {
-                        url: "theme/img/outdot.png",
-                        size: [35, 35],
-                        anchor: [18, 17]
-                    }
                     break;
                 }
             }
-            $scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
-            $scope.currentPoint.len = 35;
+
         }
         if(!$scope.$$phase) {
             $scope.$apply();
