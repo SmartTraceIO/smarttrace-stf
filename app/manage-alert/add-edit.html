@@ -303,23 +303,3 @@
             </div>
         </div>
     </div>
-<script>
-    window.onload = function () {
-        // short timeout
-        setTimeout(function () {
-            if ($('body').scrollTop() > 0) {
-                $('body').scrollTop(0);         //Chrome,Safari
-            } else {
-                if ($('html').scrollTop() > 0) {    //IE, FF
-                    $('html').scrollTop(0);
-                }
-            }
-        }, 1500);
-    };
-
-    //$(document).ready(function () {
-    //    //setTimeout(function () {
-    //    //    window.scrollTop(0, 0);     // run it a bit later also for browser compatibility
-    //    //}, 1200);
-    //});
-</script>

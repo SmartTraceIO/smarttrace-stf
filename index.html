@@ -291,8 +291,11 @@
     <script src="Scripts/highcharts-ng/dist/highstock.js"></script>
     <!--<script src="Scripts/highcharts-ng/dist/standalone-framework.js"></script>-->
     <script src="Scripts/highcharts-ng/dist/highcharts-ng.js"></script>
-    <script src="Scripts/require.js"></script>
-    <script src="Scripts/AngularUI/ui-router.min.js"></script>
+    <!--<script src="Scripts/require.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.min.js"></script>
+
+    <!--<script src="Scripts/AngularUI/ui-router.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
     <!--<script src="Scripts/angular-resource.min.js"></script>-->
     <!--<script src="Scripts/angular-cookies.min.js"></script>-->
     <!--<script src="Scripts/angular-animate.min.js"></script>-->
@@ -330,12 +333,6 @@
             $("#setup").addClass("open");
             $("#setup span.arrow").addClass("opne");
             $("ul.sub-menu").attr("style", "display:block;");
-        })
-
-        $(document).ready(function () {
-            setTimeout(function () {
-                window.scrollTo(0, 0);     // run it a bit later also for browser compatibility
-            }, 1000);
         })
     </script>
 </body>
