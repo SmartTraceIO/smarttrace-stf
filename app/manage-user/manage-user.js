@@ -246,3 +246,4 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
         }
     }
 });
+
