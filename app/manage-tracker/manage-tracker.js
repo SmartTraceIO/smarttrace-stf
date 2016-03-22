@@ -21,6 +21,7 @@
                         var n = temShipmentNumber.substr(idx1+1, idx2-1);
                         $scope.TrackerList[k].tripCount = parseInt(n);
                     }
+                    $scope.TrackerList[k].sn = parseInt(v.sn);
                 })
             });
         }
@@ -161,7 +162,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
         };
         //console.log('PARAM', $scope.tracker.imei);
         webSvc.getDevice($stateParams.imei).success(function(data){
-            console.log("TRACKER", data);
+            //console.log("TRACKER", data);
             if (data.status.code == 0) {
                 $scope.tracker = data.response;
             } else {
@@ -183,6 +184,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 var n = temShipmentNumber.substr(idx1+1, idx2-1);
                 $scope.tracker.tripCount = parseInt(n);
             }
+            $scope.tracker.sn = parseInt($scope.tracker.sn);
         });
 
         $scope.saveTracker = function() {
@@ -216,7 +218,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 toastr.error('No Shipment for this device');
             } else {
                 webSvc.getShipment(shipmentId).success(function(resp) {
-                    console.log('DATA', resp);
+                    //console.log('DATA', resp);
                     if (resp.status.code == 0) {
                         $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
                     } else {
@@ -228,7 +230,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                         webSvc.shutdownDevice(shipmentId).success(function(resp) {
                             if (resp.status.code == 0) {
                                 //success shutdown
-                                toastr.success('You\'v shutdown a device!');
+                                toastr.success('Shutdown has been triggered for Tracker ' + $scope.tracker.sn + "(" + $scope.tracker.tripCount + ")");
                             } else {
                                 //error shutdown
                                 toastr.error('You have no permission to shut this device down.');
