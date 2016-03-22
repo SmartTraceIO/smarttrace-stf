@@ -114,7 +114,7 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
         $scope.Alert = {};
         $scope.Alert.watchBatteryLow = true;
         $scope.Alert.watchEnterBrightEnvironment = true;
-        $scope.Alert.watchEnterDarkEnvironment = true;
+        //$scope.Alert.watchEnterDarkEnvironment = true;
         $scope.Alert.watchMovementStart = false;
         $scope.Alert.watchMovementStop = true;
 
