@@ -142,9 +142,6 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 		},
 
 		getLocations: function(pageSize, pageIndex, sc, so){
-			if (localDbSvc.getToken() == '_') {
-				return null;
-			}
 			var url = Api.url + 'getLocations/' + localDbSvc.getToken();
 			var params = {
 				params: {
@@ -233,9 +230,6 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.post(url, params);
 		},
 		getShipments: function(data){
-			if (localDbSvc.getToken == '_') {
-				return null;
-			}
 			var url = Api.url + 'getShipments/' + localDbSvc.getToken();
 			return $http.post(url, data);
 		},
