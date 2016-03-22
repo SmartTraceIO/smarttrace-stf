@@ -2,8 +2,6 @@
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
-    $scope.AuthToken = localDbSvc.getToken();
-
 
     $scope.specificDates = false;
     $scope.ViewShipment = {
@@ -24,7 +22,7 @@
         sc: 'shipmentId',
         so: 'desc'
     };
-    $scope.sc = 'shipmentId1';
+    $scope.sc = 'shipmentId';
     var bounds = null;
     $scope.vm = this;
 
@@ -86,6 +84,10 @@
         }).error( function (xmlHttpRequest, textStatus, errorThrown) {
             alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             $scope.loading = false;
+        }).then(function() {
+            angular.forEach($scope.ShipmentList, function(v, k) {
+                $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN);
+            })
         });
     }
 
@@ -208,4 +210,18 @@
             $scope.ViewShipment.lastMonth = nVal;
         }
     })
+
+    $scope.viewCard = true;
+    $scope.showTable = function() {
+        $scope.viewCard = false;
+    };
+    $scope.showCard = function() {
+        $scope.viewCard = true;
+    }
+});
+
+appFilters.filter('temp', function() {
+    return function (input) {
+        return Number(input).toFixed(1) + '\u2103';
+    }
 });

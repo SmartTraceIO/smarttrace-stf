@@ -128,9 +128,10 @@
                 <label>Status</label>
                 <select class="form-control input-sm" ng-model="ViewShipment.status">
                     <option value="">-- Please Select --</option>
+                    <!--<option value="AutoStart">AutoStart</option>-->
+                    <option value="Default">Default</option>
                     <option value="InProgress">InProgress</option>
                     <option value="Arrived">Arrived</option>
-                    <option value="AutoStart">AutoStart</option>
                     <option value="Ended">Ended</option>
                 </select>
             </div>
@@ -172,7 +173,13 @@
             </h4>
             <span class="text-error" style="vertical-align:middle" ng-if="loading">Retrieving your shipment data...</span>
             <h4 class="pull-right">
-                <button class="btn default btn-sm uppercase" type="button" ng-click="Print()"><i class="fa fa-times"></i>&nbsp;Print</button>
+                <button class="btn btn-switch" ng-class="{selected:!viewCard}" ng-click="showTable()"><i class="fa fa-table"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:viewCard}" ng-click="showCard()"><i class="fa fa-th-large"></i></button>
+
+                <button class="btn default btn-sm uppercase"
+                        type="button" ng-click="Print()">
+                    <i class="fa fa-times"></i>&nbsp;Print
+                </button>
             </h4>
             <div class="clearfix"></div>
             <hr />
@@ -222,110 +229,202 @@
                     </ng-map>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-if="!viewCard">
                 <div class="col-sm-12">
                     <br>
-        <!--<div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th class="text-center" ng-click="Sorting('sn')">
-                        <span class="pull-left">Device
-                            <i tooltip="The unique 6 digit number on each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th ng-click="Sorting('name')">
-                        <span class="pull-left">Trip
-                            <i tooltip="A meaningful short name you assign to each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th ng-click="Sorting('description')">
-                        <span class="pull-left">Description
-                            <i tooltip="A meaningful description you assign to each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='description'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='description'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('imei')">
-                        <span class="pull-left">IMEI
-                            <i tooltip="The unique international identify of each tracker" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='imei'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='imei'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Active
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Last Reading
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Temp.
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Battery
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Shipment
-                            <i tooltip="Active trackers are available for usage" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                </tr>
-                <tr ng-repeat="tracker in TrackerList">
-                    <td ng-bind="tracker.sn"></td>
-                    <td ng-bind="tracker.name"></td>
-                    <td ng-bind="tracker.description"></td>
-                    <td ng-bind="tracker.imei"></td>
-                    <td></td>
-                    <td ng-bind="tracker.lastReadingTimeISO"></td>
-                    <td ng-bind="tracker.lastReadingTemperature"></td>
-                    <td ng-bind="tracker.lastReadingBattery"></td>
-                    <td ng-bind="tracker.lastShipmentId"></td>
-                </tr>
-            </table>
-        </div>-->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="text-center" ng-click="Sorting('shipmentId')">
+                                    <span class="pull-left">ID
+                                        <i tooltip="Shipment ID"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentId'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentId'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th ng-click="Sorting('deviceSN')">
+                                    <span class="pull-left">Tracker (Trip)
+                                        <i tooltip="A meaningful short name you assign to each tracker"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='deviceSN'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='deviceSN'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th ng-click="Sorting('shipmentDescription')">
+                                    <span class="pull-left">Shipment Description
+                                        <i tooltip="A meaningful description you assign to each tracker"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('shippedFrom')">
+                                    <span class="pull-left">Shipment From
+                                        <i tooltip="Shipment From"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='shippedFrom'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='shippedFrom'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('shipmentDate')">
+                                    <span class="pull-left">Shipment Date
+                                        <i tooltip="Shipment Date"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentDate'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('shippedTo')">
+                                    <span class="pull-left">Shipment To
+                                        <i tooltip="Shipment To"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='shippedTo'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='shippedTo'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('estArrivalDate')">
+                                    <span class="pull-left">ETA or Arrival Date
+                                        <i tooltip="ETA or Arrival Date"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='estArrivalDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='estArrivalDate'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('status')">
+                                    <span class="pull-left">Status
+                                        <i tooltip="Status" tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='status'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='status'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('siblingCount')">
+                                    <span class="pull-left">Siblings
+                                        <i tooltip="Sibling Count"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='siblingCount'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='siblingCount'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('lastReadingTimeISO')">
+                                    <span class="pull-left">Last Reading
+                                        <i tooltip="Last reading time"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('lastReadingTemperature')">
+                                    <span class="pull-left">Temp.
+                                        <i tooltip="Last reading temperature"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                                <th class="text-center" ng-click="Sorting('alertSummary')">
+                                    <span class="pull-left">Alerts
+                                        <i tooltip="Alert summary"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':So=='asc' && Sc=='alertSummary'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':So=='desc' && Sc=='alertSummary'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+                                </th>
+                            </tr>
+                            <tr ng-repeat="shipment in ShipmentList">
+                                <td>
+                                    <a href="/#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                                        <u>{{shipment.shipmentId}}</u>
+                                    </a>
+                                </td>
+                                <td>{{shipment.deviceSN}} ({{shipment.tripCount}})</td>
+                                <td>{{shipment.shipmentDescription}}</td>
+                                <td>{{shipment.shippedFrom}}</td>
+                                <td>{{shipment.shipmentDate}}</td>
+                                <td>{{shipment.shippedTo}}</td>
+                                <td ng-if="shipment.actualArrivalDate==null">ETA:{{shipment.estArrivalDate}}</td>
+                                <td ng-if="shipment.actualArrivalDate!=null">{{shipment.actualArrivalDate}}</td>
+                                <td>{{shipment.status}}</td>
+                                <td>{{shipment.siblingCount}}</td>
+                                <td>{{shipment.lastReadingTimeISO}}</td>
+                                <td>{{shipment.lastReadingTemperature | temp}}</td>
+                                <td>
+                                    <!--show alert-->
+                                    <img ng-src="theme/img/alertLightOn.png" ng-if="shipment.alertSummary.LightOn" />
+                                    <img ng-src="theme/img/alertLightOff.png" ng-if="shipment.alertSummary.LightOff" />
+                                    <img ng-src="theme/img/alertCold.png" ng-if="shipment.alertSummary.Cold" />
+                                    <img ng-src="theme/img/alertHot.png" ng-if="shipment.alertSummary.Hot" />
+                                    <img ng-src="theme/img/alertCriticalCold.png" ng-if="shipment.alertSummary.CriticalCold" />
+                                    <img ng-src="theme/img/alertCriticalHot.png" ng-if="shipment.alertSummary.CriticalHot" />
+                                    <img ng-src="theme/img/alertBattery.png" ng-if="shipment.alertSummary.Battery" />
+                                    <img ng-src="theme/img/alertShock.png" ng-if="shipment.alertSummary.MovementStart" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-if="viewCard">
                 <div class="col-sm-6" ng-repeat="shipment in ShipmentList">
                     <div class="portlet box green">
                         <div class="portlet-title">
