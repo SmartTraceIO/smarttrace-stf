@@ -328,20 +328,28 @@
         //mouse out
         if(index == -1){
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
-            $scope.currentPoint.icon = {
-                url: "theme/img/edot.png",
+            /*$scope.currentPoint.icon = {
+                url: 'theme/img/edot.png',
                 scaledSize: [12, 12],
                 anchor: [6, 6]
-            };
+            };*/
             $scope.currentPoint.len = 12;
         } else {
             //For alerts, only black circle without point in it.
             $scope.currentPoint.iconUrl = "theme/img/dot.png";
             $scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
+            $scope.currentPoint.icon = {
+                url: 'theme/img/dot.png',
+                anchor: [17.5,17.5]
+            };
             $scope.currentPoint.len = 35;
             for(i = 0; i < $scope.specialMarkers.length; i++){
                 if($scope.specialMarkers[i].oi == index){
                     $scope.currentPoint.iconUrl = "theme/img/outdot.png";
+                    $scope.currentPoint.icon = {
+                        url: 'theme/img/outdot.png',
+                        anchor: [17.5,17.5]
+                    };
                     break;
                 }
             }
