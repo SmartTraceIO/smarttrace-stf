@@ -156,8 +156,6 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
     $scope.InternalCompany = localDbSvc.get("InternalCompany");
     var BindRoles = function () {
         webSvc.getRoles().success(function(data){
-            console.log("TEST", data);
-        // .get({ action: "getRoles", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
