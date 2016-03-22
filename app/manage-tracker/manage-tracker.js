@@ -7,9 +7,21 @@
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
                 if (data.status.code == 0) {
+                    console.log('TrackerList', data.response);
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
                 }
+            }).then(function() {
+                //parsing TrackerList
+                angular.forEach($scope.TrackerList, function(v, k) {
+                    var temShipmentNumber = v.shipmentNumber;
+                    if (temShipmentNumber){
+                        var idx1 = temShipmentNumber.indexOf('(');
+                        var idx2 = temShipmentNumber.indexOf(')');
+                        var n = temShipmentNumber.substr(idx1+1, idx2-1);
+                        $scope.TrackerList[k].tripCount = parseInt(n);
+                    }
+                })
             });
         }
 
@@ -163,6 +175,14 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                     $scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
                 }
             });
+        }).then(function() {
+            var temShipmentNumber = $scope.tracker.shipmentNumber;
+            if (temShipmentNumber){
+                var idx1 = temShipmentNumber.indexOf('(');
+                var idx2 = temShipmentNumber.indexOf(')');
+                var n = temShipmentNumber.substr(idx1+1, idx2-1);
+                $scope.tracker.tripCount = parseInt(n);
+            }
         });
 
         $scope.saveTracker = function() {
