@@ -619,7 +619,6 @@ ng-map{
 .user-detail p{
     font-style: italic;
 }
-
 #print-content{
     display: none;
 }
@@ -630,4 +629,16 @@ ng-map{
     #print-content{
         display: block !important;
     }
+}
+
+.btn-switch {
+    background-color: transparent;
+    font-size: x-large;
+    padding: 0px;
+}
+.btn-switch.selected {
+    background-color: #eaeaea;
+}
+.btn-switch:hover{
+    background-color: #eaeaea;
 }
