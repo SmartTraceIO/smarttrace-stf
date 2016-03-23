@@ -57,21 +57,7 @@
     
     var BindShipmentList = function () {
         $scope.loading = true;
-        //if ($scope.ViewShipment.shipmentDateFrom) {
-        //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateFrom).toDateString();
-        //    $scope.ViewShipment.shipmentDateFrom = shippedDateFrom;
-        //}
 
-        //if ($scope.ViewShipment.shipmentDateTo) {
-        //    var shippedDateFrom = new Date($scope.ViewShipment.shipmentDateTo).toDateString();
-        //    $scope.ViewShipment.shipmentDateTo = shippedDateFrom;
-        //}
-        //console.log("VIEW-SHIPMENT");
-        //console.log("    pageIndex", $scope.ViewShipment.pageIndex);
-        //console.log("    pageSize", $scope.ViewShipment.pageSize);
-        //console.log("    SC", $scope.ViewShipment.sc);
-        //console.log("    SO", $scope.ViewShipment.so);
-        //console.log("---------------");
         webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
@@ -95,8 +81,12 @@
                 $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN);
             })
         });
+    };
+    $scope.Sorting = function (expression) {
+        $scope.ViewShipment.so = $scope.ViewShipment.so == "asc" ? "desc" : "asc";
+        $scope.ViewShipment.sc = expression;
+        BindShipmentList();
     }
-
     $scope.ResetSearchCriteria = function () {
         $scope.ViewShipment = {
             alertsOnly: false,
