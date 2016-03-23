@@ -234,7 +234,7 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.post(url, data);
 		},
 
-		getAlertProfiles: function(pageSize, pageIndex, sc, so){
+        getAlertProfiles: function(pageSize, pageIndex, sc, so){
 			var url = Api.url + 'getAlertProfiles/' + localDbSvc.getToken();
 			var params = {
 				params: {

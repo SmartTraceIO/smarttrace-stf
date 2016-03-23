@@ -85,8 +85,8 @@
                                class="fa fa-info-circle"/>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th class="text-center" ng-click="Sorting('lastReadingTemperature')">
@@ -98,8 +98,8 @@
                                class="fa fa-info-circle"/>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th class="text-center" ng-click="Sorting('lastReadingBattery')">
@@ -111,8 +111,8 @@
                                class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th class="text-center" ng-click="Sorting('sn')">
@@ -124,8 +124,8 @@
                                class="fa fa-info-circle"/>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th class="text-center" ng-click="Sorting('shipmentStatus')">
@@ -137,8 +137,8 @@
                                class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th ng-if="getRole() >= roles.Admin"></th>

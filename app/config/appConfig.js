@@ -13,11 +13,7 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
             $templateCache.remove(current.templateUrl); 
             console.log("Cleared");
         } 
-    }); 
-    
-    // $templateCache.removeAll();
-    
-
+    });
     $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
 

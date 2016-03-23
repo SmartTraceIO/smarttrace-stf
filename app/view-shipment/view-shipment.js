@@ -3,6 +3,12 @@
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
 
+    var token = localDbSvc.getToken();
+    if (token == '_' || token == null) {
+        $rootScope.go('login');
+        return;
+    }
+
     $scope.specificDates = false;
     $scope.ViewShipment = {
         alertsOnly: false,

@@ -15,36 +15,6 @@
             if (data.status.code == 0) {
                 $scope.AutoStartShipmentList = data.response;
                 $scope.AutoStartShipmentList.totalCount = data.totalCount;
-
-                /*webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
-                    if (data.status.code == 0) {
-                        $scope.AlertList = data.response;
-                    }
-                }).then(function() {
-                    webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
-                        if (data.status.code == 0) {
-                            $scope.LocationList = data.response;
-                        }
-                    }).then(function() {
-                        console.log('LocationList', $scope.LocationList);
-                        angular.forEach($scope.AutoStartShipmentList, function(autoStartShipment, key) {
-                            if (autoStartShipment.alertProfileId) {
-                                webSvc.getAlertProfile(autoStartShipment.alertProfileId).success(function(resp) {
-                                    $scope.AutoStartShipmentList[key].alertProfileName = resp.response.alertProfileName;
-                                })
-                            }
-
-                            if (autoStartShipment.startLocations && autoStartShipment.startLocations.length > 0){
-                                var locFrom = filter($scope.LocationList, {locationId:autoStartShipment.startLocations[0]}, true);
-                                $scope.AutoStartShipmentList[key].shippedFromLocationName = locFrom[0].locationName;
-                            }
-                            if (autoStartShipment.endLocations && autoStartShipment.endLocations.length>0){
-                                var locTo = filter($scope.LocationList, {locationId: autoStartShipment.endLocations[0]}, true);
-                                $scope.AutoStartShipmentList[key].shippedToLocationName = locTo[0].locationName;
-                            }
-                        });
-                    })
-                })*/
             } else {
                 toastr.error('Cannot get list of AutoStartShipment');
             }
