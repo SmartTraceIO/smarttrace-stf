@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
     function ($scope, rootSvc, webSvc, localDbSvc, $stateParams,
-              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window) {
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
 
     // $templateCache.remove('/view-shipment-detail');
     // console.log("cleared view-shipment-detail cache");
@@ -70,13 +70,13 @@
     });
 
     $scope.Print = function(){
-        $print = $("#print-content").detach();
+        /*$print = $("#print-content").detach();
         $print.empty();
         $print.append($(".left-panel").clone());
         $print.append($("#chart1").clone());
         $print.append($("ng-map").clone());
         // $print.append($(".col-sm-9").clone());
-        $("body").append($print);
+        $("body").append($print);*/
         setTimeout(print, 100);
     }
     function print(){
@@ -200,9 +200,9 @@
         $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
         $scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
 
-        console.log("MAP INFO", $scope.mapInfo);
+        //console.log("MAP INFO", $scope.mapInfo);
         $scope.trackerInfo = $scope.trackers[index];
-        console.log($scope.trackerInfo);
+        //console.log($scope.trackerInfo);
         prepareMainHighchartSeries();
         prepareTrackerMessage();
         prepareAlertHighchartSeries();
@@ -404,7 +404,7 @@
                 }
             }
             //--------Remove Light On, Off---------
-            console.log(info);
+            //console.log(info);
 
             
 
@@ -421,7 +421,7 @@
                 tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
             tempObj.loaded = true;
             tempObj.loadedForIcon = true;
-            console.log("MainTracker", tempObj.locations.length);
+            //console.log("MainTracker", tempObj.locations.length);
             //$scope.trackers[0] is the main tracker here.
             //at the first time, it addes new tracker info to the $scope.trackers
             //next time, it only updates the main tracker info, not insert it to $scope.trackers
@@ -644,6 +644,26 @@
                             enabled: false
                         }
                     }
+                },
+                func : function(chart) {
+                    if(window.matchMedia) {
+                        // chrome & safari (ff supports it but doesn't implement it the way we need)
+                        var mediaQueryList = window.matchMedia("print");
+
+                        mediaQueryList.addListener(function(mql) {
+                            if(mql.matches) {
+                                if (chart && ($location.path()=='/view-shipment-detail')) {
+                                    chart.reflow();
+                                }
+                            } else {
+                            }
+                        });
+                    }
+                    window.addEventListener("beforeprint", function(ev) {
+                        if (chart && ($location.path()=='/view-shipment-detail')) {
+                            chart.reflow();
+                        }
+                    });
                 },
                 series: chartSeries,
                 useHighStocks: true
@@ -913,7 +933,7 @@
             // console.log("--------",series.length);
             subSeries.push(series);
         }
-        console.log("TEMP", tempMin, tempMax);
+        //console.log("TEMP", tempMin, tempMax);
         if(tempMax - tempMin <= 10) tickInterval = 1;
         else tickInterval = 5;
     }

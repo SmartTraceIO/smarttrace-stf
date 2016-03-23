@@ -15,6 +15,7 @@
             if (data.status.code == 0) {
                 $scope.AutoStartShipmentList = data.response;
                 $scope.AutoStartShipmentList.totalCount = data.totalCount;
+                console.log('AutoStartShipmentList', $scope.AutoStartShipmentList);
             } else {
                 toastr.error('Cannot get list of AutoStartShipment');
             }

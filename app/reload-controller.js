@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval,
-                                            localDbSvc, webSvc, $timeout, $document, $templateCache) {
+                                            localDbSvc, webSvc, $timeout, $document, $templateCache, $http) {
     $rootScope.closeText = "";
     $rootScope.loading = false;
     $scope.showRead = false;
@@ -16,7 +16,22 @@
             }
         });
     }
-
+    $scope.logout = function() {
+        var v = (new Date()).getTime();
+        $http.get('/app/config/version.json?v='+v).then(
+            function(response) {
+                var nxt = response.data.version;
+                if (nxt != version) {
+                    $rootScope.isOut = true;
+                }
+                $state.go('login');
+            },
+            function(response) {
+                $rootScope.isOut = true;
+                $state.go('login');
+            }
+        )
+    };
     $scope.clearCache = function() {
         $templateCache.removeAll();
         toastr.info("Cleared cache");

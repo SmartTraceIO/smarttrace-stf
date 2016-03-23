@@ -622,14 +622,14 @@ ng-map{
 #print-content{
     display: none;
 }
-@media print{
+/*@media print{
     body>*{
         display: none;
     }
     #print-content{
         display: block !important;
     }
-}
+}*/
 
 .btn-switch {
     background-color: transparent;

@@ -76,6 +76,32 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
+                    <th class="text-center" ng-click="Sorting('sn')">
+                        <span class="pull-left">Latest Shipment
+                            <i tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </span>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
+                    <th class="text-center" ng-click="Sorting('shipmentStatus')">
+                        <span class="pull-left">Status
+                            <i tooltip="The status of latest shipment."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </span>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
                     <th class="text-center" ng-click="Sorting('lastReadingTimeISO')">
                         <span class="pull-left">Last Reading
                             <i tooltip="The time of the last known reading for this tracker."
@@ -115,32 +141,7 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" ng-click="Sorting('sn')">
-                        <span class="pull-left">Latest Shipment
-                            <i tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"/>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
-                    <th class="text-center" ng-click="Sorting('shipmentStatus')">
-                        <span class="pull-left">Status
-                            <i tooltip="The status of latest shipment."
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
+
                     <th ng-if="getRole() >= roles.Admin"></th>
                     <!--<th ng-if="getRole() >= roles.SmartTraceAdmin"></th>-->
                 </tr>
@@ -159,46 +160,51 @@
                     <td ng-if="tracker.active==false">
                         <i class="fa fa-times"/>
                     </td>
-
-                    <td ng-if="tracker.lastReadingTime!=null">
-                        {{tracker.lastReadingTime}}
-                    </td>
-                    <td ng-if="tracker.lastReadingTime==null">
-                        {{tracker.lastReadingTimeISO | friendlyDate | date:'h:mma dd MMM yyyy'}}
-                    </td>
-
-                    <td ng-bind="tracker.lastReadingTemperature"></td>
-                    <td>{{tracker.lastReadingBattery | volt}}</td>
-                    <!--<td><a href="#view-shipment-detail/{{tracker.lastShipmentId}}"><u>{{tracker.shipmentNumber}}</u></a></td>-->
-                    <!--<td><a href="#view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}"><u>{{tracker.shipmentNumber}}</u></a></td>-->
-                    <td><a href="#view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}"><u>{{tracker.sn}} ({{tracker.tripCount}})</u></a></td>
-
-                    <td>{{tracker.shipmentStatus}}
-                        <i ng-if="tracker.shipmentStatus=='InProgress'"
-                            tooltip="An active shipment with manually entered shipment data."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"/>
-                        <i ng-if="tracker.shipmentStatus=='Default'"
-                           tooltip="An active shipment generated via an Autostart Template."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"/>
-                        <i ng-if="tracker.shipmentStatus=='Arrived'"
-                           tooltip="A shipment that has reached its destination."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"/>
-                        <i ng-if="tracker.shipmentStatus=='Ended'"
-                           tooltip="A shipment that has ended but has no known destination."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"/>
-                    </td>
+                        <td>
+                            <a href="#view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}" ng-if="tracker.lastShipmentId!=null">
+                                <u>{{tracker.sn}} ({{tracker.tripCount}})</u>
+                            </a>
+                        </td>
+                        <td>{{tracker.shipmentStatus}}
+                            <i ng-if="tracker.shipmentStatus=='InProgress'"
+                               tooltip="An active shipment with manually entered shipment data."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                            <i ng-if="tracker.shipmentStatus=='Default'"
+                               tooltip="An active shipment generated via an Autostart Template."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                            <i ng-if="tracker.shipmentStatus=='Arrived'"
+                               tooltip="A shipment that has reached its destination."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                            <i ng-if="tracker.shipmentStatus=='Ended'"
+                               tooltip="A shipment that has ended but has no known destination."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </td>
+                        <td ng-if="tracker.lastReadingTime!=null">
+                            <span ng-if="tracker.lastShipmentId!=null">{{tracker.lastReadingTime}}</span>
+                        </td>
+                        <td ng-if="tracker.lastReadingTime==null">
+                            <span ng-if="tracker.lastShipmentId!=null">
+                                {{tracker.lastReadingTimeISO | friendlyDate | date:'h:mma dd MMM yyyy'}}
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="tracker.lastShipmentId!=null">{{tracker.lastReadingTemperature}}</span>
+                        </td>
+                        <td>
+                            <span ng-if="tracker.lastShipmentId!=null">{{tracker.lastReadingBattery | volt}}</span>
+                        </td>
 
                     <td class="text-center" ng-if="getRole() >= roles.Admin">
                         <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>

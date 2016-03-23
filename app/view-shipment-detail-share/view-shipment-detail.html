@@ -5,7 +5,7 @@
         <div class="caption">
             <i class="fa fa-truck fa-lg"></i> View shipment details
         </div>
-        <div class="tools">
+        <div class="tools hidden-print">
             <!-- <button class="btn default btn-sm uppercase" type="button" ng-click="generatePDF()">PDF</button> -->
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
         </div>
@@ -14,7 +14,7 @@
         <div class="tabbable-line">
             
             <div class="row">
-                <div class="col-sm-3 left-panel">
+                <div class="col-md-3 left-panel">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-page">
                             <h4 class="panel-title uppercase">
@@ -197,8 +197,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-9">
-                    <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+                <div class="col-md-9">
+                    <highchart id="chart1" config="chartConfig" style="min-width: 310px; height: 400px; margin: 0 auto"></highchart>
 
                     <ng-map 
                         style="height:300px"

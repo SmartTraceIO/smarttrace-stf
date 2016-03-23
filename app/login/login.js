@@ -1,8 +1,11 @@
-appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache, $timeout) {
+appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache, $timeout, $window) {
 
-	// $templateCache.remove('/login');
-	// console.log("cleared cache");
-
+	 //$templateCache.remove('login.html');
+	 //console.log("cleared cache");
+    if ($rootScope.isOut == true) {
+        $window.location.reload();
+        $rootScope.isOut = false;
+    }
 	$rootScope.showHeader = true;
 	$scope.toggle = false;
 	$scope.username = localDbSvc.getUsername();

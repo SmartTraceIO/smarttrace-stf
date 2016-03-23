@@ -218,6 +218,9 @@
 
 appFilters.filter('temp', function() {
     return function (input) {
+        if (input == null) {
+            return '';
+        }
         return Number(input).toFixed(1) + '\u2103';
     }
 });
