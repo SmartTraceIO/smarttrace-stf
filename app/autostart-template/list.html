@@ -31,7 +31,7 @@
             <table class="table table-bordered table-striped">
                 <tr>
                     <th ng-click="Sorting('shipmentTemplateName')">
-                        <span class="pull-left">Template Name</span>
+                        <span class="pull-left">Autostart Template</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-desc"></i></a>
@@ -45,14 +45,14 @@
                         </span>
                     </th>
                     <th ng-click="Sorting('startLocations')">
-                        <span class="pull-left">Shipment from</span>
+                        <span class="pull-left">Shipped from</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='startLocations'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='startLocations'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
                     <th ng-click="Sorting('endLocations')">
-                        <span class="pull-left">Shipment to</span>
+                        <span class="pull-left">Shipped to</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='endLocations'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='endLocations'}"><i class="fa fa-sort-desc"></i></a>
@@ -79,10 +79,8 @@
                     <td>
                         {{shipment.shipmentDescription}}
                     </td>
-                    <td>
-                        {{shipment.endLocationNames | arrayToString}}
-                    </td>
                     <td>{{shipment.startLocationNames | arrayToString}}</td>
+                    <td>{{shipment.endLocationNames | arrayToString}}</td>
                     <td>
                         {{shipment.alertProfileName}}
                     </td>
