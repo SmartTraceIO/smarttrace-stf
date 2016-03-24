@@ -105,13 +105,13 @@
             <div class="col-sm-3">
                 <label>Shipped From</label>
                 <select style="width:100%" multiple ui-select2="LocationOptions" ng-model="ViewShipment.shippedFrom" data-placeholder="Select Shipped From">
-                    <option ng-repeat="location in LocationList" value="{{location.locationId}}">{{location.DisplayText}}</option>
+                    <option ng-repeat="location in LocationListFrom" value="{{location.locationId}}">{{location.DisplayText}}</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <label>Shipped To</label>
                 <select style="width:100%" multiple ui-select2="LocationOptions" ng-model="ViewShipment.shippedTo" data-placeholder="Select Shipped To">
-                    <option ng-repeat="location in LocationList" value="{{location.locationId}}">{{location.DisplayText}}</option>
+                    <option ng-repeat="location in LocationListTo" value="{{location.locationId}}">{{location.DisplayText}}</option>
                 </select>
             </div>
             <div class="col-sm-2">
@@ -126,8 +126,8 @@
             </div>
             <div class="col-sm-2">
                 <label>Status</label>
-                <select class="form-control input-sm" ng-model="ViewShipment.status">
-                    <option value="">-- Please Select --</option>
+                <select class="form-control input-sm" ng-model="ViewShipment.status" ng-init="ViewShipment.status='Default'">
+                    <!--<option value="">&#45;&#45; Please Select &#45;&#45;</option>-->
                     <!--<option value="AutoStart">AutoStart</option>-->
                     <option value="Default">Default</option>
                     <option value="InProgress">InProgress</option>

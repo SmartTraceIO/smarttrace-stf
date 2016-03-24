@@ -123,6 +123,9 @@
         }
     });
 
+    $scope.LocationListFrom = [];
+    $scope.LocationListTo = [];
+    $scope.LocationListInterim = [];
     webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
         // console.log("Location", data);
         bounds = new google.maps.LatLngBounds;
@@ -143,6 +146,16 @@
                 }
                 else {
                     $scope.LocationList[key].DisplayText = val.locationName;
+                }
+
+                if (val.startFlag=='Y') {
+                    $scope.LocationListFrom.push(val);
+                }
+                if (val.endFlag == 'Y') {
+                    $scope.LocationListTo.push(val)
+                }
+                if (val.interimFlag == 'Y') {
+                    $scope.LocationListInterim.push(val);
                 }
             })
         }
