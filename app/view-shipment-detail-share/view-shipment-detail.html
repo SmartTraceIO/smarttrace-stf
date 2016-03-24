@@ -201,12 +201,11 @@
                     <highchart id="chart1" config="chartConfig" style="min-width: 310px; height: 400px; margin: 0 auto"></highchart>
 
                     <ng-map 
-                        style="height:300px"
+                        style="height:300px; margin-left: 40px"
                         disable-default-u-i="true"
                         map-type-control-options="{
                             mapTypeIds: ['ROADMAP']
-                        }"
-                    >
+                        }">
 
                         <!-- end marker -->
                         <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}" optimized="false" z-index="101"> 

@@ -8,13 +8,7 @@
         $rootScope.readNotification = [];
         $rootScope.unreadNotification = [];
         $rootScope.closedNotification = [];
-        webSvc.getUser().success(function (data) {
-            if(data.status.code == 0){
-                $rootScope.User = data.response;
-                //$scope.User = data.response;
-                //loadNotifications();
-            }
-        });
+        //$scope.reloadUserIfNeed();
     }
     $scope.logout = function() {
         var v = (new Date()).getTime();
@@ -114,7 +108,7 @@
         });
     }
     $interval(loadNotifications, 10*60*1000); // 10 minutes
-    $rootScope.updateUserTime = function() {
+    /*$rootScope.updateUserTime = function() {
         webSvc.getUserTime().success( function (timeData) {
             console.log('USER-TIME', timeData);
             if (timeData.status.code == 0) {
@@ -131,9 +125,15 @@
         });
     }
 
-    $rootScope.updateUserTime();
+    $rootScope.updateUserTime();*/
 
     $scope.reload = function() {
+        $scope.reloadUserIfNeed();
+        if ($state.current.name == $rootScope.previousState.name) {
+            $state.go($state.current, {}, { reload: true });
+        }
+    };
+    $scope.reloadUserIfNeed = function() {
         $scope.AuthToken = localDbSvc.getToken();
         if ($rootScope.AuthToken != $scope.AuthToken) {
             $rootScope.AuthToken = $scope.AuthToken;
@@ -142,14 +142,29 @@
             $rootScope.unreadNotification = [];
             $rootScope.closedNotification = [];
             webSvc.getUser().success(function (data) {
-                 if(data.status.code == 0){
+                if(data.status.code == 0){
                     $rootScope.User = data.response;
-                     loadNotifications();
-                 }
+                    loadNotifications();
+                }
             });
         }
-        if ($state.current.name == $rootScope.previousState.name) {
-            $state.go($state.current, {}, { reload: true });
+
+        if ($rootScope.RunningTime == null) {
+            //reload user-time
+            webSvc.getUserTime().success( function (timeData) {
+                console.log('USER-TIME', timeData);
+                if (timeData.status.code == 0) {
+                    $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
+                    $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+                    $scope.tickInterval = 1000 //ms
+                    var tick = function () {
+                        $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                        $timeout(tick, $scope.tickInterval); // reset the timer
+                    }
+                    // Start the timer
+                    $timeout(tick, $scope.tickInterval);
+                }
+            });
         }
-    };
+    }
 });
