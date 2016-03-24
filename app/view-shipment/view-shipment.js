@@ -220,7 +220,7 @@
         }
     })
 
-    $scope.viewCard = true;
+    $scope.viewCard = false;
     $scope.showTable = function() {
         $scope.viewCard = false;
     };
