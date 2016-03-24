@@ -482,7 +482,7 @@
                                 <div class="col-xs-6 text-right">
                                     <p class="bold no-margin no-padding">{{shipment.shippedTo}}</p>
                                     <p class="text-muted no-margin no-padding">
-                                    <span ng-if="shipment.status != 'Arrived'">ETA</span>
+                                    <!--<span ng-if="shipment.status != 'Arrived'">ETA</span>-->
                                     <span ng-if="shipment.status == 'Arrived'">ARRIVED AT</span>: {{shipment.actualArrivalDate | date:'dd MMM yyyy hh:mm a'}}</p>
                                 </div>
                                 <div class="row">
