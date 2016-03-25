@@ -58,7 +58,7 @@
     }
 });
 
-appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
+appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter, $modal, $rootScope) {
     rootSvc.SetPageTitle('Add Auto Shipment');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Auto Shipment");
@@ -71,6 +71,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
                 $scope.FromLocationList = [];
                 $scope.ToLocationList = [];
+                $scope.InterimLocationList = [];
 
                 angular.forEach($scope.LocationList, function (val, key) {
                     if (val.companyName) {
@@ -86,7 +87,9 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
                         $scope.FromLocationList.push(val);
                     if (val.endFlag == "Y")
                         $scope.ToLocationList.push(val);
-
+                    if (val.interimFlag == 'Y') {
+                        $scope.InterimLocationList.push(val);
+                    }
                 })
 
                 if (cb)
@@ -131,75 +134,20 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         BindNotificationSchedules();
     }
 
-    $scope.ChangeShipmentFrom = function () {
-        $scope.ShipmentFrom = [];
-        if ($scope.AutoStartShipment.startLocations) {
-            angular.forEach($scope.AutoStartShipment.startLocations, function(value, key) {
-                webSvc.getLocation(value).success(function(resp) {
-                    if (resp.status.code == 0) {
-                        if ($scope.ShipmentFrom.indexOf(resp.response.locationName) < 0) {
-                            $scope.ShipmentFrom.push(resp.response.locationName);
-                        }
-                    } else {
-
-                    }
-                });
-            })
-        }
-    };
-    $scope.ChangeShipmentTo = function () {
-        $scope.ShipmentTo = [];
-        if ($scope.AutoStartShipment.endLocations) {
-            angular.forEach($scope.AutoStartShipment.endLocations, function(value, key) {
-                webSvc.getLocation(value).success(function(resp) {
-                    if (resp.status.code == 0) {
-                        if ($scope.ShipmentTo.indexOf(resp.response.locationName) < 0) {
-                            $scope.ShipmentTo.push(resp.response.locationName);
-                        }
-                    } else {
-
-                    }
-                });
-            })
-        }
-    }
-    $scope.DrawLine = function (arrayOfLatLang) {
-        if ($scope.Path)
-            $scope.Path.setMap(null);
-
-        var bounds = new google.maps.LatLngBounds();
-        $scope.Route = [];
-        angular.forEach(arrayOfLatLang, function (val, key) {
-            $scope.Route.push(new google.maps.LatLng(val.lat, val.lon))
-            bounds.extend(new google.maps.LatLng(val.lat, val.lon));
-        })
-
-        $scope.Path = new google.maps.Polyline(
-        {
-            path: $scope.Route,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 5
-        });
-
-        $scope.Path.setMap($scope.map);
-        $scope.map.fitBounds(bounds);
-    }
     $scope.SaveData = function (isValid) {
         if (isValid) {
-
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
-            $scope.AutoStartShipment.startLocations = [];
-            $scope.AutoStartShipment.endLocations = [];
+            //$scope.AutoStartShipment.startLocations = [];
+            //$scope.AutoStartShipment.endLocations = [];
 
-            if ($scope.AutoStartShipment.shippedFrom)
+            /*if ($scope.AutoStartShipment.shippedFrom)
                 $scope.AutoStartShipment.startLocations.push($scope.AutoStartShipment.shippedFrom.locationId);
 
             if ($scope.AutoStartShipment.shippedTo)
-                $scope.AutoStartShipment.endLocations.push($scope.AutoStartShipment.shippedTo.locationId);
+                $scope.AutoStartShipment.endLocations.push($scope.AutoStartShipment.shippedTo.locationId);*/
 
+            console.log('ADD - AutoStartShipment', $scope.AutoStartShipment);
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -332,18 +280,16 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
 
     $scope.CreateAlertRule = function () {
+        console.log('AlertList!', $scope.AlertList);
+        console.log($scope.AutoStartShipment.alertProfileId);
+        if ($scope.AutoStartShipment.alertProfileId == null) {
+            $scope.alertRuleListForSelectedAlertProfile = '';
+        } else
         if ($scope.AlertList && $scope.AlertList.length > 0) {
             var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true);
             if (selectedAlertProfile && selectedAlertProfile.length > 0) {
                 selectedAlertProfile = selectedAlertProfile[0];
-                if (selectedAlertProfile.alertRuleList) {
-                    angular.forEach(selectedAlertProfile.alertRuleList, function (val, key) {
-                        if (key != 0)
-                            $scope.alertRuleListForSelectedAlertProfile = $scope.alertRuleListForSelectedAlertProfile + ", " + val;
-                        else
-                            $scope.alertRuleListForSelectedAlertProfile = val;
-                    })
-                }
+                $scope.alertRuleListForSelectedAlertProfile = arrayToStringFilter(selectedAlertProfile.alertRuleList);
             }
         }
     }
@@ -388,7 +334,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, $state, $filter, $rootScope, $modal, webSvc) {
+appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $state, $filter, $rootScope, $modal, webSvc) {
     rootSvc.SetPageTitle('Edit AutoStart Shipment');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("AutoStart Shipment");
@@ -401,6 +347,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
                 $scope.FromLocationList = [];
                 $scope.ToLocationList = [];
+                $scope.InterimLocationList = [];
 
                 angular.forEach($scope.LocationList, function (val, key) {
                     if (val.companyName) {
@@ -412,10 +359,15 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                         $scope.LocationList[key].DisplayText = val.locationName;
                     }
 
-                    if (val.startFlag == "Y")
+                    if (val.startFlag == "Y"){
                         $scope.FromLocationList.push(val);
-                    if (val.endFlag == "Y")
+                    }
+                    if (val.endFlag == "Y"){
                         $scope.ToLocationList.push(val);
+                    }
+                    if (val.interimFlag == 'Y') {
+                        $scope.InterimLocationList.push(val);
+                    }
 
                 })
 
@@ -450,40 +402,6 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     BindAlertProfiles();
     BindNotificationSchedules();
 
-    //$scope.ChangeShipmentFrom = function () {
-    //    $scope.ShipmentFrom = [];
-    //    if ($scope.AutoStartShipment.startLocations) {
-    //        angular.forEach($scope.AutoStartShipment.startLocations, function(value, key) {
-    //
-    //
-    //            webSvc.getLocation(value).success(function(resp) {
-    //                if (resp.status.code == 0) {
-    //                    if ($scope.ShipmentFrom.indexOf(resp.response.locationName) < 0) {
-    //                        $scope.ShipmentFrom.push(resp.response.locationName);
-    //                    }
-    //                } else {
-    //
-    //                }
-    //            });
-    //        })
-    //    }
-    //};
-    //$scope.ChangeShipmentTo = function () {
-    //    $scope.ShipmentTo = [];
-    //    if ($scope.AutoStartShipment.endLocations) {
-    //        angular.forEach($scope.AutoStartShipment.endLocations, function(value, key) {
-    //            webSvc.getLocation(value).success(function(resp) {
-    //                if (resp.status.code == 0) {
-    //                    if ($scope.ShipmentTo.indexOf(resp.response.locationName) < 0) {
-    //                        $scope.ShipmentTo.push(resp.response.locationName);
-    //                    }
-    //                } else {
-    //
-    //                }
-    //            });
-    //        })
-    //    }
-    //}
     $scope.Init = function () {
         $scope.STId = $stateParams.stId
         $scope.AutoStartShipment = {};
@@ -683,23 +601,20 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     };
     $scope.CreateAlertRule = function () {
+        console.log('AlertList!', $scope.AlertList);
+        console.log($scope.AutoStartShipment.alertProfileId);
+        if ($scope.AutoStartShipment.alertProfileId == null) {
+            $scope.alertRuleListForSelectedAlertProfile = '';
+        } else
         if ($scope.AlertList && $scope.AlertList.length > 0) {
             var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.AutoStartShipment.alertProfileId }, true);
-            if (selectedAlertProfile) {
-                if (selectedAlertProfile.length > 0) {
-                    selectedAlertProfile = selectedAlertProfile[0];
-                    if (selectedAlertProfile.alertRuleList) {
-                        angular.forEach(selectedAlertProfile.alertRuleList, function (val, key) {
-                            if (key != 0)
-                                $scope.alertRuleListForSelectedAlertProfile = $scope.alertRuleListForSelectedAlertProfile + ", " + val;
-                            else
-                                $scope.alertRuleListForSelectedAlertProfile = val;
-                        })
-                    }
-                }
+            if (selectedAlertProfile && selectedAlertProfile.length > 0) {
+                selectedAlertProfile = selectedAlertProfile[0];
+                $scope.alertRuleListForSelectedAlertProfile = arrayToStringFilter(selectedAlertProfile.alertRuleList);
             }
         }
     }
+
     $scope.ChangeNotiScheduleForAlert = function () {
         if ($scope.AutoStartShipment && $scope.AutoStartShipment.alertsNotificationSchedules) {
             $scope.AlertNotiRule = '';
@@ -741,7 +656,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 appFilters.filter('arrayToString', function() {
     return function (input) {
         if (angular.isArray(input)) {
-            return input.join();
+            return input.join(', ');
         } else {
             return input;
         }

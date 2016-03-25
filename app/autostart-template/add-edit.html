@@ -95,9 +95,9 @@
                                 <br />
                                 <select style="width:100%"
                                         multiple ui-select2="OptionsShipmentFrom"
-                                        ng-model="AutoStartShipment.startLocations"
+                                        ng-model="AutoStartShipment.interimStops"
                                         data-placeholder="Select location for auto detection of shipmentFrom">
-                                    <option ng-repeat="location in FromLocationList"
+                                    <option ng-repeat="location in InterimLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
                                 </select>
                                 <br />
@@ -144,7 +144,8 @@
                         </label>
                         <select ng-model="AutoStartShipment.alertProfileId"
                                 ng-change="CreateAlertRule()"
-                                ng-options="alert.alertProfileId as alert.alertProfileName for alert in AlertList" class="form-control input-sm">
+                                ng-options="alert.alertProfileId as alert.alertProfileName for alert in AlertList"
+                                class="form-control input-sm">
                             <option value="">-- Please Select --</option>
                         </select>
                         <small class="text-muted">
