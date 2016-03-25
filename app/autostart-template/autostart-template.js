@@ -342,18 +342,19 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
-                                                  $state, $filter, $rootScope, $modal, webSvc, $window) {
+                                                  $state, $filter, $rootScope, $modal, webSvc, $window, $q){
     rootSvc.SetPageTitle('Edit AutoStart Shipment');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("AutoStart Shipment");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
-
+    var filter = $filter('filter');
     $scope.Print = function() {
         $window.print();
     }
 
     var BindLocations = function (cb) {
+        var defered = $q.defer();
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
@@ -388,6 +389,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                     cb;
             }
         });
+        return defered.promise;
     }
     var BindAlertProfiles = function (cb) {
         webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
@@ -412,10 +414,9 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         });
     }
 
-    BindLocations();
     BindAlertProfiles();
     BindNotificationSchedules();
-
+    var promise = BindLocations();
     $scope.Init = function () {
         $scope.STId = $stateParams.stId
         $scope.AutoStartShipment = {};
@@ -426,7 +427,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             webSvc.getAutoStartShipment(param).success(function(data){
                 if (data.status.code == 0) {
                     var response = data.response;
-                    console.log(response);
+                    console.log('Edit AutoShipmtn', response);
                     $scope.AutoStartShipment = response;
                     if (response) {
                         if (response.shutdownDeviceAfterMinutes)
@@ -449,8 +450,16 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                         }
                         $scope.ChangeNotiScheduleForAlert();
                         $scope.ChangeNotiScheduleForArrival();
-                        //$scope.ChangeShipmentFrom();
-                        //$scope.ChangeShipmentTo();
+
+                        $scope.AutoStartShipment.fromLocations = [];
+                        promise.then(function() {
+                            angular.forEach($scope.AutoStartShipment.startLocations, function(val, k) {
+                                var fLocs = filter($scope.FromLocationList, {locationId: val});
+                                if (fLocs && (fLocs.length > 0)) {
+                                    AutoStartShipment.fromLocations.push(fLocs[0]);
+                                }
+                            })
+                        })
                     }
                 } else {
                     toastr.error(data.status.message);
