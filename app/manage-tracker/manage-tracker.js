@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
-    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc) {
+    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc, $window) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -25,7 +25,9 @@
                 })
             });
         }
-
+        $scope.Print = function() {
+            $window.print();
+        }
         $scope.Init = function () {
             $scope.PageSize = '20';
             $scope.PageIndex = 1;
@@ -85,8 +87,8 @@
             }
         }
 });
-appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc',
-    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc) {
+appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window',
+    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -105,7 +107,9 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
                 //$scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
             }
         });
-
+        $scope.Print = function() {
+            $window.print();
+        }
         $scope.saveTracker = function() {
             if ($scope.tracker.autoStartShipment) {
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
@@ -123,8 +127,8 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
             });
         };
 }]);
-appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc) {
+appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc', '$window',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -149,7 +153,9 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 return $scope.roles.Basic;
             }
         }
-
+        $scope.Print = function() {
+            $window.print();
+        }
 
         $scope.tracker = {};
         //$scope.tracker.imei = $stateParams.imei;

@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListLocCtrl', function ($scope, webSvc, rootSvc, localDbSvc) {
+﻿appCtrls.controller('ListLocCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $window) {
     rootSvc.SetPageTitle('Manage Location');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Locations");
@@ -11,6 +11,9 @@
                 $scope.LocationList.totalCount = data.totalCount;
             }
         });
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.Init = function () {
         $scope.PageSize = '20';
@@ -51,7 +54,7 @@
     }
 });
 
-appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $resource) {
+appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $window) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Location');
         rootSvc.SetActiveMenu('Setup');
@@ -68,7 +71,9 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     $scope.Location.startFlag = true;
     $scope.Location.interimFlag = false;
     $scope.Location.endFlag = true;
-
+    $scope.Print = function() {
+        $window.print();
+    }
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true
     }
@@ -260,7 +265,7 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     }
 });
 
-appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout) {
+appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $window, $rootScope, $timeout) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Location');
         rootSvc.SetActiveMenu('Setup');
@@ -275,6 +280,9 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
     $scope.AuthToken = localDbSvc.getToken();
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.locationId = $stateParams.lId
     if ($scope.locationId || $rootScope.locationIdForModalPopup) {

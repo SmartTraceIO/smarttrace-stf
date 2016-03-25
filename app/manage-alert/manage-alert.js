@@ -1,10 +1,12 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
+﻿appCtrls.controller('ListAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
 
     $scope.AuthToken = localDbSvc.getToken();
-    
+    $scope.Print = function() {
+        $window.print();
+    }
     var BindAlertList = function () {
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
@@ -75,7 +77,7 @@
     }
 });
 
-appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout) {
+appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $window) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Alert');
         rootSvc.SetActiveMenu('Setup');
@@ -91,7 +93,9 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
-
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.TempType = localDbSvc.get("CurrentUserTempUnits") == "Celsius" ? "C" : "F";
     if ($scope.TempType == "C") {
         $scope.minRange = -20;
@@ -211,7 +215,7 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
     }
 });
 
-appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout) {
+appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout, $window) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Alert');
         rootSvc.SetActiveMenu('Setup');
@@ -242,7 +246,9 @@ appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $sta
             $rootScope.modalInstance.dismiss('cancel');
         }
     }
-
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.TempType = localDbSvc.get("CurrentUserTempUnits") == "Celsius" ? "C" : "F";
     if ($scope.TempType == "C") {
         $scope.minRange = -20;

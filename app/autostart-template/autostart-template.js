@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, rootSvc, localDbSvc, webSvc) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart templates");
@@ -22,6 +22,9 @@
         });
     }
 
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.Init = function () {
         $scope.PageSize = '20';
         $scope.PageIndex = 1;
@@ -58,12 +61,18 @@
     }
 });
 
-appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter, $modal, $rootScope) {
+appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window,
+                                                 $filter, arrayToStringFilter, $modal, $rootScope) {
     rootSvc.SetPageTitle('Add Auto Shipment');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Auto Shipment");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
+
+    $scope.Print = function() {
+        $window.print();
+    }
+
     var BindLocations = function (cb) {
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
@@ -332,12 +341,18 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $state, $filter, $rootScope, $modal, webSvc) {
+appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
+                                                  $state, $filter, $rootScope, $modal, webSvc, $window) {
     rootSvc.SetPageTitle('Edit AutoStart Shipment');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("AutoStart Shipment");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
+
+    $scope.Print = function() {
+        $window.print();
+    }
+
     var BindLocations = function (cb) {
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {

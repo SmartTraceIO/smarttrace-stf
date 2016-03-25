@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListNotiCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
+﻿appCtrls.controller('ListNotiCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List Notification');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Notifications Schedules");
@@ -10,6 +10,9 @@
                 $scope.NotificationList.totalCount = data.totalCount;
             }
         });
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.PageChanged = function (page) {
         $scope.PageIndex = page;
@@ -47,7 +50,7 @@
     }
 });
 
-appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state, $rootScope, $timeout, $filter, webSvc) {
+appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state, $rootScope, $timeout, $filter, webSvc, $window) {
 
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Notification');
@@ -59,7 +62,9 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
         $scope.ActiveMenu = 'Setup';
         $scope.PageHeader = "Notifications Schedules";
     }
-
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.daysSelection = [true, false, false, false, false, false, false];
     $scope.Noti = {};
     $scope.Noti.schedules = [];
@@ -211,7 +216,7 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
     }
 });
 
-appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $stateParams, $state, $rootScope, $timeout, $filter) {
+appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $stateParams, $state, $rootScope, $timeout, $filter, $window) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Notification');
         rootSvc.SetActiveMenu('Setup');
@@ -232,6 +237,9 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
         if (confirm("Any unsaved changes will be lost including delete, are you sure you want to cancel?")) {
             $rootScope.modalInstance.dismiss('cancel');
         }
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.WarnUserAndRedirect = function () {
         $("#confirmModel").modal("hide");

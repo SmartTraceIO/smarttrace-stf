@@ -5,8 +5,10 @@
 <div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-
             <img src="../../theme/img/headerNotificationSchedule.png" /> List of notification schedules
+        </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
         </div>
     </div>
     <div class="portlet-body">
@@ -24,7 +26,7 @@
                 </option>
             </select>
         </div>
-        <div class="pull-right">
+        <div class="pull-right hidden-print">
             <a class="btn btn-default pull-right" href="/#/manage/add-notification"><i class="fa fa-plus"></i>&nbsp;Add New Notification</a>
         </div>
         <div class="clearfix"></div>
@@ -55,12 +57,8 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='peopleToNotify'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th>
-
-                    </th>
-                    <th>
-
-                    </th>
+                    <th class="hidden-print"></th>
+                    <th class="hidden-print"></th>
                 </tr>
                 <tr ng-repeat="noti in NotificationList">
                     <td width="20%">
@@ -72,10 +70,10 @@
                     <td width="50%">
                         {{noti.peopleToNotify}}
                     </td>
-                    <td class="text-center" width="5%">
+                    <td class="text-center hidden-print" width="5%">
                         <a class="btn green" href="/#/manage/edit-notification/{{noti.notificationScheduleId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <td class="text-center" width="5%">
+                    <td class="text-center hidden-print" width="5%">
                         <a class="btn green" ng-click="confirm(noti.notificationScheduleId);"><i class="fa fa-remove"></i>&nbsp;Delete</a>
                     </td>
                 </tr>

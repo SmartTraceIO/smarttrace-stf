@@ -8,6 +8,9 @@
             <!--<i class="fa fa-bell"></i> List of shipment templates-->
             <img style="margin-top:-8px" src="../../theme/img/headerShipmentTemplate.png" />  List of shipment templates
         </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
+        </div>
     </div>
     <div class="portlet-body">
         <div class="pull-left">
@@ -24,7 +27,7 @@
                 </option>
             </select>
         </div>
-        <div class="pull-right">
+        <div class="pull-right hidden-print">
             <a class="btn btn-default pull-right" href="/#/manage/add-shipment-template"><i class="fa fa-plus"></i>&nbsp;Add New Template</a>
         </div>
         <div class="clearfix"></div>
@@ -69,33 +72,29 @@
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th>
-
-                    </th>
-                    <th>
-
-                    </th>
+                    <th class="hidden-print"></th>
+                    <th class="hidden-print"></th>
                 </tr>
                 <tr ng-repeat="shipment in ShipmentTemplateList">
-                    <td width="20%">
+                    <td>
                         {{shipment.shipmentTemplateName}}
                     </td>
-                    <td width="20%">
+                    <td>
                         {{shipment.shipmentDescription}}
                     </td>
-                    <td width="15%">
+                    <td>
                         {{shipment.shippedFromLocationName}}
                     </td>
-                    <td width="15%">
+                    <td>
                         {{shipment.shippedToLocationName}}
                     </td>
-                    <td width="20%">
+                    <td>
                         {{shipment.alertProfileName}}
                     </td>
-                    <td class="text-center" width="5%">
+                    <td class="text-center hidden-print">
                         <a class="btn green" href="/#/manage/edit-shipment-template/{{shipment.shipmentTemplateId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <td class="text-center" width="5%">
+                    <td class="text-center hidden-print">
                         <a class="btn green" ng-click="confirm(shipment.shipmentTemplateId)"><i class="fa fa-remove"></i>&nbsp;Delete</a>
                     </td>
                 </tr>

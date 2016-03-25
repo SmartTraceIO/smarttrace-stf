@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListShipTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc) {
+﻿appCtrls.controller('ListShipTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
@@ -16,6 +16,9 @@
                 $scope.ShipmentTemplateList.totalCount = data.totalCount;
             }
         });
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.Init = function () {
         $scope.PageSize = '20';
@@ -54,7 +57,7 @@
 
 });
 
-appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
+appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope, $window) {
     rootSvc.SetPageTitle('Add Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
@@ -89,6 +92,9 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
                     cb;
             }
         });
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     var BindAlertProfiles = function (cb) {
         webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
@@ -420,7 +426,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $modal, webSvc) {
+appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $modal, webSvc, $window) {
     rootSvc.SetPageTitle('Edit Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
@@ -456,7 +462,9 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     //BindLocations();
     BindAlertProfiles();
     BindNotificationSchedules();
-
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.Init = function () {
         $scope.STId = $stateParams.stId
         $scope.ShipmentTemplate = {};

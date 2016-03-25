@@ -1,4 +1,4 @@
-﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $state) {
+﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $window) {
     rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
     rootSvc.SetPageHeader("New Shipment");
@@ -34,7 +34,9 @@
             })
         }
     });
-
+    $scope.Print = function() {
+        $window.print();
+    }
     $scope.ResetForm = function () {
         $state.go($state.current, {}, { reload: true });
         $scope.frmAddNewShipment.$setPristine()

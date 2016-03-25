@@ -5,25 +5,23 @@
 <div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-bell"></i> List of alert profiles
+            <i class="fa fa-bell"></i>
+            <span>List of alert profiles</span>
+        </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
         </div>
     </div>
     <div class="portlet-body">
-        <div class="pull-left">
-            Show 
+        <div class="pull-left hidden-print">
+            <span>Show</span>
             <select class="form-control" style="width:auto;display:inline-block" ng-change="PageSizeChanged()" ng-model="PageSize">
-                <option value="20" selected>
-                    20
-                </option>
-                <option value="50">
-                    50
-                </option>
-                <option value="100">
-                    100
-                </option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
         </div>
-        <div class="pull-right">
+        <div class="pull-right hidden-print">
             <a class="btn btn-default pull-right" href="/#/manage/add-alert"><i class="fa fa-plus"></i>&nbsp;Add New Alert Profile</a>
         </div>
         <div class="clearfix"></div>
@@ -33,33 +31,29 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="15%" ng-click="Sorting('alertProfileName')">
+                    <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert Profile Name</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('alertProfileDescription')">
+                    <th ng-click="Sorting('alertProfileDescription')">
                         <span class="pull-left">Description</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="55%" class="text-center" ng-click="Sorting('alertRuleList')">
+                    <th class="text-center" ng-click="Sorting('alertRuleList')">
                         <span class="pull-left">Alert Rules</span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertRuleList'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertRuleList'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="5%" class="text-center">
-
-                    </th>
-                    <th width="5%" class="text-center">
-
-                    </th>
+                    <th class="text-center hidden-print"></th>
+                    <th class="text-center hidden-print"></th>
                 </tr>
                 <tr ng-repeat="alert in AlertList">
                     <td ng-bind="alert.alertProfileName"></td>
@@ -69,10 +63,10 @@
                             {{alert.rule}}
                         </span>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center hidden-print">
                         <a class="btn green" href="/#/manage/edit-alert/{{alert.alertProfileId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center hidden-print">
                         <!--<a class="btn green" ng-click="confirm();DeleteAlertProfile(alert.alertProfileId)"><i class="fa fa-remove"></i>&nbsp;Delete</a>-->
                         <a class="btn green" ng-click="confirm(alert.alertProfileId);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
                     </td>

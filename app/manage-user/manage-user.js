@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $window, $scope, rootSvc, webSvc, localDbSvc) {
+﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $window, $scope, rootSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -18,6 +18,9 @@
                 $scope.UserList.totalCount = data.totalCount;
             }
         });
+    }
+    $scope.Print = function() {
+        $window.print();
     }
     $scope.Init = function () {
         $scope.PageSize = '20';
@@ -58,7 +61,7 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope) {
+appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -73,7 +76,9 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
             }
         });
     }
-
+    $scope.Print = function() {
+        $window.print();
+    }
     var BindLanguages = function () {
         webSvc.getLanguages().success(function(data){
             if (data.status.code == 0) {
@@ -146,7 +151,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
 });
 
 //-- edit user
-appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $rootScope) {
+appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -161,7 +166,9 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
             }
         });
     }
-
+    $scope.Print = function() {
+        $window.print();
+    }
 
     var BindLanguages = function () {
         webSvc.getLanguages().success(function(data){
