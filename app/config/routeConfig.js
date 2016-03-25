@@ -88,7 +88,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/new-shipment/new-shipment.js?v=' + version
+              'app/new-shipment/new-shipment.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {

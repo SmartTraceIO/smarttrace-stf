@@ -1,4 +1,4 @@
-﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $state) {
+﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $state) {
     rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
     rootSvc.SetPageHeader("New Shipment");
@@ -120,18 +120,12 @@
     }
 
     $scope.CreateAlertRule = function () {
+        if ($scope.NewShipment == null || $scope.NewShipment.shipment == null || $scope.NewShipment.shipment.alertProfileId == null) {
+            $scope.alertRuleListForSelectedAlertProfile = '';
+        } else
         if ($scope.AlertList && $scope.AlertList.length > 0) {
             var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.NewShipment.shipment.alertProfileId })[0];
-            if (selectedAlertProfile) {
-                if (selectedAlertProfile.alertRuleList) {
-                    angular.forEach(selectedAlertProfile.alertRuleList, function (val, key) {
-                        if (key != 0)
-                            $scope.alertRuleListForSelectedAlertProfile = $scope.alertRuleListForSelectedAlertProfile + ", " + val;
-                        else
-                            $scope.alertRuleListForSelectedAlertProfile = val;
-                    })
-                }
-            }
+            $scope.alertRuleListForSelectedAlertProfile = arrayToStringFilter(selectedAlertProfile.alertRuleList);
         }
     }
 
