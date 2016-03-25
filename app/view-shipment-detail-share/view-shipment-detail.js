@@ -732,19 +732,23 @@
 
     function prepareAlertHighchartSeries(){
         
-        while(lightPlotBand.length > 0){
-            lightPlotBand.pop();
-        }
+        //while(lightPlotBand.length > 0){
+        //    lightPlotBand.pop();
+        //}
+        lightPlotBand.length = 0;
 
         var plot = {};
         plot.from = null;
-        while(alertData.length > 0){
+        /*while(alertData.length > 0){
             alertData.pop();
-        }
+        }*/
+        alertData.length = 0;
         // console.log($scope.MI);
         // debugger;
-        for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
-            var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
+        //for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
+        for(i = 0 ; i < subSeries[$scope.MI].length; i ++){
+        //    var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
+            var alertinfo = subSeries[$scope.MI][i][2];
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
                 var alert = "";
@@ -759,8 +763,13 @@
                     enabled: true,
                     symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
                 };
+
                 //for light on/off, show yellow bar and hide icons
                 //by not adding to the alert list
+                //console.log('MI', $scope.MI);
+                //console.log('I', i);
+                //console.log('subSeries[MI]', subSeries[$scope.MI]);
+                //console.log('subSeries[MI][i]', subSeries[$scope.MI][i]);
                 if(str.toLowerCase() == "lighton"){
                     plot.from = subSeries[$scope.MI][i][0];
                 } else if(str.toLowerCase() == "lightoff"){
@@ -881,9 +890,10 @@
 
     function prepareMainHighchartSeries(){
         
-        while(subSeries.length > 0){
+        /*while(subSeries.length > 0){
             subSeries.pop();
-        }
+        }*/
+        subSeries.length = 0;
 
         //calculate chart arrange and cut down the others
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
@@ -896,6 +906,7 @@
 
         //Add siblings tracker data to the subSeries
         var tempMin = null, tempMax = null;   //to calculate y-axis interval;
+        //console.log('TrackerI', $scope.trackers);
         for(i = 0; i < $scope.trackers.length; i++){
             if(!$scope.trackers[i].loaded) {
                 subSeries.push(new Array());
@@ -919,6 +930,7 @@
                 temp = new Array();
                 temp.push(parseDate(locations[j].timeISO));
                 temp.push(locations[j].temperature);
+                temp.push(locations[j].alerts);
                 if(tempMax < locations[j].temperature){
                     tempMax = locations[j].temperature;
                 }
@@ -930,7 +942,7 @@
                 }
 
             }
-            // console.log("--------",series.length);
+            //console.log("--------",series.length);
             subSeries.push(series);
         }
         //console.log("TEMP", tempMin, tempMax);
