@@ -344,6 +344,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -358,7 +359,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + version
+              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -374,6 +376,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -434,6 +437,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/autostart-template/autostart-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -448,7 +452,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + version
+              'app/autostart-template/autostart-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -464,6 +469,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/autostart-template/autostart-template.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       }
 ]);

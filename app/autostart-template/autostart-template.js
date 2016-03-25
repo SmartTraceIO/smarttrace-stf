@@ -280,8 +280,6 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
 
     $scope.CreateAlertRule = function () {
-        console.log('AlertList!', $scope.AlertList);
-        console.log($scope.AutoStartShipment.alertProfileId);
         if ($scope.AutoStartShipment.alertProfileId == null) {
             $scope.alertRuleListForSelectedAlertProfile = '';
         } else
@@ -380,11 +378,12 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
-                $scope.CreateAlertRule();
             }
 
             if (cb)
                 cb;
+        }).then(function() {
+            $scope.CreateAlertRule();
         });
     }
     var BindNotificationSchedules = function (cb) {
@@ -601,8 +600,6 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     };
     $scope.CreateAlertRule = function () {
-        console.log('AlertList!', $scope.AlertList);
-        console.log($scope.AutoStartShipment.alertProfileId);
         if ($scope.AutoStartShipment.alertProfileId == null) {
             $scope.alertRuleListForSelectedAlertProfile = '';
         } else
@@ -649,16 +646,6 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                     }
                 }
             }
-        }
-    }
-});
-
-appFilters.filter('arrayToString', function() {
-    return function (input) {
-        if (angular.isArray(input)) {
-            return input.join(', ');
-        } else {
-            return input;
         }
     }
 });

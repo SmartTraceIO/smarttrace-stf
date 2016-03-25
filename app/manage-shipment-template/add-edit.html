@@ -113,8 +113,16 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label class="control-label">Alert Profile&nbsp;<i tooltip="Alert Profile" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <select ng-model="ShipmentTemplate.alertProfileId" ng-change="CreateAlertRule()" ng-options="alert.alertProfileId as alert.alertProfileName for alert in AlertList" class="form-control input-sm">
+                        <label class="control-label">Alert Profile&nbsp;
+                            <i tooltip="Alert Profile"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/></label>
+                        <select ng-model="ShipmentTemplate.alertProfileId"
+                                ng-change="CreateAlertRule()"
+                                ng-options="alert.alertProfileId as alert.alertProfileName for alert in AlertList"
+                                class="form-control input-sm">
                             <option value="">-- Please Select --</option>
                         </select>
                         <small class="text-muted">

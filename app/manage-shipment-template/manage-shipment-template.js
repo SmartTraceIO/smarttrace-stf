@@ -366,17 +366,15 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
 
     $scope.CreateAlertRule = function () {
+        if ($scope.ShipmentTemplate.alertProfileId == null) {
+            $scope.alertRuleListForSelectedAlertProfile = '';
+        } else
         if ($scope.AlertList && $scope.AlertList.length > 0) {
             var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.ShipmentTemplate.alertProfileId }, true);
-            if (selectedAlertProfile && selectedAlertProfile.length > 0) {
-                selectedAlertProfile = selectedAlertProfile[0];
-                if (selectedAlertProfile.alertRuleList) {
-                    angular.forEach(selectedAlertProfile.alertRuleList, function (val, key) {
-                        if (key != 0)
-                            $scope.alertRuleListForSelectedAlertProfile = $scope.alertRuleListForSelectedAlertProfile + ", " + val;
-                        else
-                            $scope.alertRuleListForSelectedAlertProfile = val;
-                    })
+            if (selectedAlertProfile) {
+                if (selectedAlertProfile.length > 0) {
+                    selectedAlertProfile = selectedAlertProfile[0];
+                    $scope.alertRuleListForSelectedAlertProfile = arrayToStringFilter(selectedAlertProfile.alertRuleList);
                 }
             }
         }
@@ -422,7 +420,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, $state, $filter, $rootScope, $modal, webSvc) {
+appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $modal, webSvc) {
     rootSvc.SetPageTitle('Edit Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Shipment Templates");
@@ -433,14 +431,14 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $
     }
     var BindAlertProfiles = function (cb) {
         webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
-        // .get({ action: "getAlertProfiles", token: $scope.AuthToken, pageSize: 1000000, pageIndex: 1, so: 'alertProfileName', sc: 'asc' }, function (data) {
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
-                $scope.CreateAlertRule();
             }
 
             if (cb)
                 cb;
+        }).then(function() {
+            $scope.CreateAlertRule();
         });
     }
     var BindNotificationSchedules = function (cb) {
@@ -639,24 +637,6 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            // $scope.AuthToken = localDbSvc.getToken();
-            // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
-            // $.ajax({
-            //     type: "POST",
-            //     datatype: "json",
-            //     processData: false,
-            //     contentType: "text/plain",
-            //     data: JSON.stringify($scope.ShipmentTemplate),
-            //     url: url,
-            //     success: function (data, textStatus, XmlHttpRequest) {
-            //         toastr.success("Shipment template updated successfully")
-            //         $state.go('manage.shiptemp')
-            //     },
-            //     error: function (xmlHttpRequest, textStatus, errorThrown) {
-            //         alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-            //     }
-            // });
-            
             webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
                 toastr.success("Shipment template added successfully")
                 $state.go('manage.shiptemp')
@@ -791,20 +771,17 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, $
             });
         }
     };
+
     $scope.CreateAlertRule = function () {
+        if ($scope.ShipmentTemplate.alertProfileId == null) {
+            $scope.alertRuleListForSelectedAlertProfile = '';
+        } else
         if ($scope.AlertList && $scope.AlertList.length > 0) {
             var selectedAlertProfile = $filter('filter')($scope.AlertList, { alertProfileId: $scope.ShipmentTemplate.alertProfileId }, true);
             if (selectedAlertProfile) {
                 if (selectedAlertProfile.length > 0) {
                     selectedAlertProfile = selectedAlertProfile[0];
-                    if (selectedAlertProfile.alertRuleList) {
-                        angular.forEach(selectedAlertProfile.alertRuleList, function (val, key) {
-                            if (key != 0)
-                                $scope.alertRuleListForSelectedAlertProfile = $scope.alertRuleListForSelectedAlertProfile + ", " + val;
-                            else
-                                $scope.alertRuleListForSelectedAlertProfile = val;
-                        })
-                    }
+                    $scope.alertRuleListForSelectedAlertProfile = arrayToStringFilter(selectedAlertProfile.alertRuleList);
                 }
             }
         }
