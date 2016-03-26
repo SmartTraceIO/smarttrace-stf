@@ -70,13 +70,21 @@
     });
 
     $scope.Print = function(){
-        /*$print = $("#print-content").detach();
-        $print.empty();
-        $print.append($(".left-panel").clone());
-        $print.append($("#chart1").clone());
-        $print.append($("ng-map").clone());
-        // $print.append($(".col-sm-9").clone());
-        $("body").append($print);*/
+        //$print = $("#print-content").detach();
+        //$print.empty();
+        //$print.append($(".left-panel").clone());
+        //$print.append($("#chart1").clone());
+        //$print.append($("ng-map").clone());
+        //// $print.append($(".col-sm-9").clone());
+        //$("body").append($print);
+
+        /*var printDoc = document.createElement('div');
+        printDoc.style.position='fixed';
+        printDoc.style.top=0;
+        printDoc.style.bottom=0;
+        printDoc.innerHTML = document.getElementsByClassName('left-panel') + document.getElementById('chart1');
+        //printDoc.appendChild(document.getElementById('chart1'));
+        printDoc.print();*/
         setTimeout(print, 100);
     }
     function print(){
@@ -645,28 +653,39 @@
                         }
                     }
                 },
+                series: chartSeries,
+                useHighStocks: true,
                 func : function(chart) {
-                    if(window.matchMedia) {
-                        // chrome & safari (ff supports it but doesn't implement it the way we need)
-                        var mediaQueryList = window.matchMedia("print");
+                    if (!$scope.loaded) {
+                        $scope.loaded = true;
 
-                        mediaQueryList.addListener(function(mql) {
-                            if(mql.matches) {
-                                if (chart && ($location.path()=='/view-shipment-detail')) {
-                                    chart.reflow();
+                        //chart.reflow();
+                        var err = new Error();
+                        console.log('TRACE', err.stack);
+                        console.log('CHART', chart);
+                        if (window.matchMedia) {
+                            var mediaQueryList = window.matchMedia("print");
+                            mediaQueryList.addListener(function (mql) {
+                                if (mql.matches) {
+                                    if (chart && ($location.path() == '/view-shipment-detail')) {
+                                        chart = $("#chart1").highcharts();
+                                        chart.reflow();
+                                    }
+                                } else {
                                 }
-                            } else {
-                            }
+                            });
+                        }
+                        window.addEventListener("beforeprint", function (ev) {
+                            ev.preventDefault()
+                            chart = $("#chart1").highcharts();
+                            chart.oldParams = [chart.chartWidth, chart.chartHeight, false];
+                            chart.setSize(590, 400, false);
+                        });
+                        window.addEventListener("afterprint", function (ev) {
+                            chart.setSize.apply(chart, chart.oldParams)
                         });
                     }
-                    window.addEventListener("beforeprint", function(ev) {
-                        if (chart && ($location.path()=='/view-shipment-detail')) {
-                            chart.reflow();
-                        }
-                    });
-                },
-                series: chartSeries,
-                useHighStocks: true
+                }
             }
             
         });
