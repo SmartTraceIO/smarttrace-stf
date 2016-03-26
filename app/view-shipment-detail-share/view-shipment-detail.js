@@ -314,7 +314,7 @@
         $scope.msgForMap = [];
         for(var i = 0; i < $scope.trackerMsg[this.data.oi].length; i++){
             var tmp = {};
-            tmp.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi][i].title);    
+            tmp.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi][i].title);
             tmp.mapMarkerMessage = $scope.trackerMsg[this.data.oi][i].lines;
             $scope.msgForMap.push(tmp);
         }
@@ -658,17 +658,12 @@
                 func : function(chart) {
                     if (!$scope.loaded) {
                         $scope.loaded = true;
-
-                        //chart.reflow();
-                        var err = new Error();
-                        console.log('TRACE', err.stack);
-                        console.log('CHART', chart);
                         if (window.matchMedia) {
                             var mediaQueryList = window.matchMedia("print");
                             mediaQueryList.addListener(function (mql) {
                                 if (mql.matches) {
                                     if (chart && ($location.path() == '/view-shipment-detail')) {
-                                        chart = $("#chart1").highcharts();
+                                        chart = $("#chart-print").highcharts();
                                         chart.reflow();
                                     }
                                 } else {
@@ -676,13 +671,17 @@
                             });
                         }
                         window.addEventListener("beforeprint", function (ev) {
-                            ev.preventDefault()
-                            chart = $("#chart1").highcharts();
-                            chart.oldParams = [chart.chartWidth, chart.chartHeight, false];
-                            chart.setSize(590, 400, false);
+                            chart = $("#chart-print").highcharts();
+                            if (chart && ($location.path() == '/view-shipment-detail')) {
+                                //chart.oldParams = [chart.chartWidth, chart.chartHeight, false];
+                                //chart.setSize(590, 400, false);
+                                chart.reflow();
+                            }
                         });
                         window.addEventListener("afterprint", function (ev) {
-                            chart.setSize.apply(chart, chart.oldParams)
+                            if (chart && ($location.path() == '/view-shipment-detail')) {
+                                chart.setSize.apply(chart, chart.oldParams)
+                            }
                         });
                     }
                 }
