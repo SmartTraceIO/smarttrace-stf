@@ -466,7 +466,7 @@
                 <div class="col-md-9">
                     <highchart id="chart1" config="chartConfig" style="min-width: 310px; height: 400px; margin: 0 auto"></highchart>
 
-                    <ng-map 
+                    <ng-map
                         style="height:300px; margin-left: 40px"
                         disable-default-u-i="true"
                         map-type-control-options="{
@@ -474,7 +474,7 @@
                         }">
 
                         <!-- end marker -->
-                        <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}" optimized="false" z-index="101"> 
+                        <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}" optimized="false" z-index="101">
                             <div class="end-loc-box">
                                 <table class="end-marker-content"><tr>
                                     <td>
@@ -509,7 +509,7 @@
                             on-mouseover="showAlertsUI();"
                             on-mouseout="hideAlertsUI();"
                         ></marker>
-                        
+
                         <!-- start marker -->
                         <custom-marker id="start-location" position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}">
                             <div class="start-loc-box">
@@ -527,7 +527,7 @@
                             icon='{{currentPoint.icon}}'
                             optimized="false" z-index="102">
                         </marker>
-                        
+
                         <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.long}}">
                             <div>
                                 <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
