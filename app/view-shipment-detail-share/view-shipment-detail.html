@@ -309,9 +309,9 @@
                                 <div class="portlet-body">
                                     <div class="shipment-desc">{{trackerInfo.shipmentDescription}}</div>
                                     <table class="tracker-desc">
-                                        <tr><td>Asset Num:</td><td>{{trackerInfo.assetNum}}</td></tr>
-                                        <tr><td>Asset Type:</td><td>{{trackerInfo.assetType}}</td></tr>
-                                        <tr><td>Pallet ID:</td><td>{{trackerInfo.palletId}}</td></tr>
+                                        <tr ng-show="trackerInfo.assetNum"><td>Asset Num:</td><td>{{trackerInfo.assetNum}}</td></tr>
+                                        <tr ng-show="trackerInfo.assetType"><td>Asset Type:</td><td>{{trackerInfo.assetType}}</td></tr>
+                                        <tr ng-show="trackerInfo.palletId"><td>Pallet ID:</td><td>{{trackerInfo.palletId}}</td></tr>
                                     </table>
                                     <!-- <div>
                                         <span class="bold-font">Tracker Position:</span>
