@@ -474,7 +474,9 @@
                         }">
 
                         <!-- end marker -->
-                        <custom-marker id="end-location" position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}" optimized="false" z-index="101">
+                        <custom-marker id="end-location"
+                                       position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
+                                       optimized="false" z-index="101">
                             <div class="end-loc-box">
                                 <table class="end-marker-content"><tr>
                                     <td>
@@ -505,7 +507,7 @@
                             position="{{p.pos}}"
                             icon="{{p.icon}}"
                             data="{{p}}"
-                            zIndex="3"
+                            zIndex="103"
                             on-mouseover="showAlertsUI();"
                             on-mouseout="hideAlertsUI();"
                         ></marker>
@@ -528,7 +530,7 @@
                             optimized="false" z-index="102">
                         </marker>
 
-                        <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.long}}">
+                        <custom-marker id="gm-alert" position="{{markerData.data[3]}},{{markerData.data[4]}}">
                             <div>
                                 <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
                                     <div class="tt_title" style="background-color:{{diagColor}}">

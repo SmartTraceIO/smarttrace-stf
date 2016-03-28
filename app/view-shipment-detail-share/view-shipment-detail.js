@@ -92,32 +92,26 @@
     }
 
     function updateMapData(index){
-        var locations = $scope.trackers[index].locations;
-        
-        while($scope.trackerPath.length > 0){
-            $scope.trackerPath.pop();
-        }
-        while($scope.specialMarkers.length > 0){
-            $scope.specialMarkers.pop();
-        }
-        while($scope.normalMarkers.length > 0){
-            $scope.normalMarkers.pop();
-        }
+        var locations = subSeries[index];
+
+        $scope.trackerPath.length = 0;
+        $scope.specialMarkers.length = 0;
+        $scope.normalMarkers.length = 0;
 
         // console.log($scope.vm.map);
         bounds = new google.maps.LatLngBounds;
+        //for (var j = 0; j < $scope.trackers[index].locations.length; j++) {
+        //    bounds.extend(new google.maps.LatLng($scope.trackers[index].locations[j].lat, $scope.trackers[index].locations[j].long))
+        //}
 
         for(i = 0 ; i < locations.length; i ++){
-
-            bounds.extend(new google.maps.LatLng(locations[i].lat, locations[i].long));
-
-            $scope.trackerPath.push({
-                lat: locations[i].lat, 
-                lng: locations[i].long});
+            var ll = new google.maps.LatLng(locations[i][3], locations[i][4]);
+            bounds.extend(ll);
+            $scope.trackerPath.push({lat: locations[i][3], lng: locations[i][4]});
             //markers
-            var pos = [locations[i].lat, locations[i].long];
-            if(locations[i].alerts.length > 0){
-                if(locations[i].alerts[0].type == 'LastReading'){
+            var pos = [locations[i][3], locations[i][4]];
+            if(locations[i][2].length > 0){
+                if(locations[i][2][0].type == 'LastReading'){
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -134,7 +128,7 @@
                             tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                         }
                     );
-                } else if(locations[i].alerts[0].type.toLowerCase() != 'lighton' && locations[i].alerts[0].type.toLowerCase() != 'lightoff') {
+                } else if(locations[i][2][0].type.toLowerCase() != 'lighton' && locations[i][2][0].type.toLowerCase() != 'lightoff') {
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -142,39 +136,42 @@
                             oi: i,
                             pos: pos,
                             data: locations[i],
-                            iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
+                            iconUrl: "theme/img/alert" + locations[i][2][0].type + ".png",
                             icon: {
-                                url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
+                                url:"theme/img/alert" + locations[i][2][0].type + ".png",
                                 scaledSize:[24, 24],
                                 anchor:[12, 12]
                             },
-                            tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"
+                            tinyIconUrl: "theme/img/tinyAlert" + locations[i][2][0].type + ".png"
                         }
                     );
                 }
             }
             // $scope.normalMarkers.push({index: $scope.normalMarkers.length, oi: i, data: locations[i], iconUrl: "theme/img/edot.png", len: 12, normal: true});
         }
+
         //map bound part
         // console.log($scope.mapInfo);
-        if($scope.mapInfo.endLocationForMap != null)
-            bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
-        if($scope.mapInfo.startLocationForMap != null)
-        bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
+        //if($scope.mapInfo.endLocationForMap != null)
+        //    bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
+        //if($scope.mapInfo.startLocationForMap != null)
+        //bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
         
         if(trackerRoute != null){
             trackerRoute.setMap(null);
         }
+
+//        console.log('TrackerPath', $scope.trackerPath);
+
         trackerRoute = new google.maps.Polyline({
             path: $scope.trackerPath,
             strokeColor: $scope.trackers[index].siblingColor,
-            strokeOpacity: 0.5,
+            strokeOpacity: 1,
             strokeWeight: 5
         });
         // console.log($scope.vm.map, bounds);
-        // console.log($scope.vm.map);
         if($scope.vm.map != undefined){
-            $scope.vm.map.fitBounds(bounds); 
+            $scope.vm.map.fitBounds(bounds);
             trackerRoute.setMap($scope.vm.map);
             //Apply Shape route first
             if(!$scope.$$phase) {
@@ -192,12 +189,19 @@
     $scope.changeActiveTracker = function(index){
 
         $scope.MI = index;
-
         if($scope.trackers[index].locations.length == 0){
             toastr.warning("No data recorded yet!", "Empty Track");
             return;
         }
 
+        //console.log($scope.trackerInfo);
+        prepareMainHighchartSeries();
+        prepareTrackerMessage();
+        prepareAlertHighchartSeries();
+        refreshHighchartSeries();
+
+        //-------PREPARE HIGHCHART DATA-------
+        // prepareHighchartSeries();
         //Map start and end location info
         $scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
         $scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
@@ -208,16 +212,9 @@
         $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
         $scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
 
-        //console.log("MAP INFO", $scope.mapInfo);
         $scope.trackerInfo = $scope.trackers[index];
-        //console.log($scope.trackerInfo);
-        prepareMainHighchartSeries();
-        prepareTrackerMessage();
-        prepareAlertHighchartSeries();
-        refreshHighchartSeries();
+
         updatePlotLines();
-        //-------PREPARE HIGHCHART DATA-------
-        // prepareHighchartSeries();
     }
 
     function updatePlotLines(){
@@ -286,39 +283,38 @@
 
     function prepareTrackerMessage(){
 
-        var info = $scope.trackers[$scope.MI];
+        var info = subSeries[$scope.MI];
         while($scope.trackerMsg.length > 0){
             $scope.trackerMsg.pop();
         }
 
-        for(i = 0; i < info.locations.length; i++){
+        for(i = 0; i < subSeries[$scope.MI].length; i++){
                     //prepare tracker message data
             var obj = {};
-            obj.title = "Tracker " + info.deviceSN + "(" + info.tripCount + ")";
-            obj.lines = ['<div><span class="tt_temperature">' + info.locations[i].temperature.toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(parseDate(info.locations[i].timeISO)) + '</span></div>'];
+            obj.title = "Tracker " + info[i][6] + "(" + info[i][5] + ")";
+            obj.lines = ['<div><span class="tt_temperature">' + info[i][1].toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(info[i][0]) + '</span></div>'];
             $scope.trackerMsg.push([obj]);
         }
         // console.log($scope.trackerMsg.length);
     }
 
-    function updateMapMarker(){
-    }
-    
     $scope.showPathInfo = function(){
         // console.log(this);
     }
     $scope.showAlertsUI = function(){
-        // console.log("UI");
+        //console.log("UI", this.data);
         $scope.markerData = this.data;
+
         $scope.ttShow = true;
         $scope.msgForMap = [];
+
         for(var i = 0; i < $scope.trackerMsg[this.data.oi].length; i++){
             var tmp = {};
             tmp.mkttl = $sce.trustAsHtml($scope.trackerMsg[this.data.oi][i].title);
             tmp.mapMarkerMessage = $scope.trackerMsg[this.data.oi][i].lines;
             $scope.msgForMap.push(tmp);
         }
-        
+//        console.log('msgForMap', $scope.msgForMap);
         $scope.diagColor = $scope.trackerColor;
         
         if(!$scope.$$phase) {
@@ -336,21 +332,22 @@
         //mouse out
         if(index == -1){
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
-            /*$scope.currentPoint.icon = {
-                url: 'theme/img/edot.png',
-                scaledSize: [12, 12],
-                anchor: [6, 6]
-            };*/
             $scope.currentPoint.len = 12;
+            $scope.currentPoint.icon = {
+                url: 'theme/img/edot.png',
+                anchor: [6,6]
+            }
         } else {
             //For alerts, only black circle without point in it.
             $scope.currentPoint.iconUrl = "theme/img/dot.png";
-            $scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
+            //$scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
+            $scope.currentPoint.loc = {lat: subSeries[$scope.MI][index][3], long: subSeries[$scope.MI][index][4]};
             $scope.currentPoint.icon = {
                 url: 'theme/img/dot.png',
                 anchor: [17.5,17.5]
             };
             $scope.currentPoint.len = 35;
+            console.log($scope.specialMarkers);
             for(i = 0; i < $scope.specialMarkers.length; i++){
                 if($scope.specialMarkers[i].oi == index){
                     $scope.currentPoint.iconUrl = "theme/img/outdot.png";
@@ -371,12 +368,6 @@
     loadTrackerData();    
 
     function loadTrackerData(){
-
-        /*var params = {
-            params: {
-                shipmentId: shipmentId
-            }
-        };*/
 
         var params = null;
         if ($scope.ShipmentId) {
@@ -503,13 +494,10 @@
             $scope.firstPoint = locations[0];
             $scope.currentPoint.loc = locations[0];
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
-            
+            $scope.changeActiveTracker($scope.MI);
             updateMapData($scope.MI);
 
             // console.log($scope.trackerPath);
-            
-            $scope.changeActiveTracker($scope.MI);
-            
             $scope.chartConfig = {
                 redraw: false,
                 options:{
@@ -519,8 +507,8 @@
                                 events: {
                                     mouseOver: function () {
                                         var idx;
-                                        for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
-                                            if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x){
+                                        for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                            if(subSeries[$scope.MI][index][0] == this.x){
                                                 idx = index;
                                                 break;
                                             }
@@ -530,6 +518,7 @@
                                         $scope.showAlerts(idx);
                                     },
                                     mouseOut: function () {
+                                        console.log("MouseOut!")
                                         $scope.showAlerts(-1);
                                     }
                                 }
@@ -572,28 +561,27 @@
                         useHTML: true,
                         hideDelay: 500,
                         formatter: function () {
-                            
                             var index;
-                            for(index = 0; index < $scope.trackers[$scope.MI].locations.length; index ++){
-                                if(parseDate($scope.trackers[$scope.MI].locations[index].timeISO) == this.x) break;
+                            for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                if(subSeries[$scope.MI][index][0] == this.x) break;
                             }
                             var color = this.points[0].series.color;
                             msg = $scope.trackerMsg[index];
                             var message = "";
-                            
+
                             for(var j = 0; j < msg.length; j ++){
                                 //if this message is for alert show title
                                 if(msg[j].title.indexOf(".png") != -1){
-                                    message += "<div class='tt_title' style='background-color:" + color + "'>" 
+                                    message += "<div class='tt_title' style='background-color:" + color + "'>"
                                         + msg[j].title + "<div style='clear:both;'></div></div>";
                                 }
-                                message += "<div class='tt_body'>";    
+                                message += "<div class='tt_body'>";
                                 for(var k = 0; k < msg[j].lines.length; k ++){
                                     message += "<div>" + msg[j].lines[k] + "</div>";
                                 }
                                 message += "</div>";
                             }
-                            
+
                             var cont = "";
                             cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
                             cont += message;
@@ -686,7 +674,7 @@
                     }
                 }
             }
-            
+
         });
     }   
 
@@ -775,19 +763,13 @@
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
                 obj = {};
-                obj.x = parseDate($scope.trackers[$scope.MI].locations[i].timeISO);
-                obj.y = $scope.trackers[$scope.MI].locations[i].temperature;
+                obj.x = subSeries[$scope.MI][i][0]; //time-x
+                obj.y = subSeries[$scope.MI][i][1]; //temperature-y
                 obj.marker = {
                     enabled: true,
                     symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
                 };
 
-                //for light on/off, show yellow bar and hide icons
-                //by not adding to the alert list
-                //console.log('MI', $scope.MI);
-                //console.log('I', i);
-                //console.log('subSeries[MI]', subSeries[$scope.MI]);
-                //console.log('subSeries[MI][i]', subSeries[$scope.MI][i]);
                 if(str.toLowerCase() == "lighton"){
                     plot.from = subSeries[$scope.MI][i][0];
                 } else if(str.toLowerCase() == "lightoff"){
@@ -814,8 +796,8 @@
                 $scope.trackerMsg[i] = [msg];
             } else if(alertinfo.length > 1){
                 obj = {};
-                obj.x = parseDate($scope.trackers[$scope.MI].locations[i].timeISO);
-                obj.y = $scope.trackers[$scope.MI].locations[i].temperature;
+                obj.x = subSeries[$scope.MI][i][0];
+                obj.y = subSeries[$scope.MI][i][1];
                 obj.marker = {
                     enabled: true,
                     symbol: 'url(theme/img/alerts.png)'
@@ -924,7 +906,7 @@
 
         //Add siblings tracker data to the subSeries
         var tempMin = null, tempMax = null;   //to calculate y-axis interval;
-        //console.log('TrackerI', $scope.trackers);
+//        console.log('TrackerI', $scope.trackers);
         for(i = 0; i < $scope.trackers.length; i++){
             if(!$scope.trackers[i].loaded) {
                 subSeries.push(new Array());
@@ -945,10 +927,20 @@
                         tmpCnt = 0;
                     }
                 }
+
                 temp = new Array();
-                temp.push(parseDate(locations[j].timeISO));
-                temp.push(locations[j].temperature);
-                temp.push(locations[j].alerts);
+                temp.push(parseDate(locations[j].timeISO)); //--[0]
+                temp.push(locations[j].temperature);        //--[1]
+                temp.push(locations[j].alerts);             //--[2]
+                temp.push(locations[j].lat);                //--[3]
+                temp.push(locations[j].long);               //--[4]
+                //--
+                temp.push($scope.trackers[i].tripCount);    //--[5]
+                temp.push($scope.trackers[i].deviceSN);     //--[6]
+                //--
+                //temp.push($scope.trackers[i].startLocationForMap);
+                //temp.push($scope.trackers[i].endLocationForMap);
+
                 if(tempMax < locations[j].temperature){
                     tempMax = locations[j].temperature;
                 }
@@ -958,10 +950,10 @@
                 if(startTime <= temp[0] && temp[0] <= endTime){
                     series.push(temp);
                 }
-
             }
             //console.log("--------",series.length);
             subSeries.push(series);
+
         }
         //console.log("TEMP", tempMin, tempMax);
         if(tempMax - tempMin <= 10) tickInterval = 1;
