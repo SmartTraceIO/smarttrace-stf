@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams,
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
 
     // $templateCache.remove('/view-shipment-detail');
@@ -347,7 +347,7 @@
                 anchor: [17.5,17.5]
             };
             $scope.currentPoint.len = 35;
-            console.log($scope.specialMarkers);
+            //console.log($scope.specialMarkers);
             for(i = 0; i < $scope.specialMarkers.length; i++){
                 if($scope.specialMarkers[i].oi == index){
                     $scope.currentPoint.iconUrl = "theme/img/outdot.png";
@@ -452,11 +452,11 @@
                         shipmentId: info.siblings[i].shipmentId
                     }
                 }
-                console.log('PARAMS', params)
+                //console.log('PARAMS', params)
                 webSvc.getSingleShipmentShare(params).success( function (graphData) {
                     if(graphData.status.code != 0) return;
                     dt = graphData.response;
-                    // console.log(dt.shipmentId);
+                     console.log(dt);
                     // debugger;
                     for(j = 1; j < $scope.trackers.length; j++){
                         if($scope.trackers[j].shipmentId == dt.shipmentId){
@@ -518,7 +518,6 @@
                                         $scope.showAlerts(idx);
                                     },
                                     mouseOut: function () {
-                                        console.log("MouseOut!")
                                         $scope.showAlerts(-1);
                                     }
                                 }
@@ -1006,5 +1005,92 @@
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
     }
 
-    
+    $scope.EditDescription = function(Id) {
+        var modalInstance = $modal.open({
+            templateUrl: '/app/view-shipment-detail-share/edit-description.html',
+            controller: 'EditShipmentDetailDescription',
+            resolve: {
+                editId : function() {
+                    return Id;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function(result) {
+                $scope.trackerInfo.shipmentDescription = result;
+            }
+        );
+    }
+    $scope.EditComment = function(Id) {
+        var modalInstance = $modal.open({
+            templateUrl: '/app/view-shipment-detail-share/edit-comment.html',
+            controller: 'EditShipmentDetailComment',
+            resolve: {
+                editId : function() {
+                    return Id;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function(result) {
+                $scope.trackerInfo.commentsForReceiver = result;
+            }
+        );
+    }
 });
+
+appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$modalInstance', 'webSvc', 'editId',
+function($scope, $modalInstance, webSvc, editId) {
+    $scope.editId = editId;
+    webSvc.getShipment(editId).success(function(data) {
+        if (data.status.code == 0) {
+            $scope.shipment = data.response;
+        }
+    })
+    $scope.saveShipment  = function() {
+        var savingObject = {};
+        savingObject.saveAsNewTemplate = false;
+        savingObject.includePreviousData = false;
+
+        savingObject.shipment = $scope.shipment;
+        console.log('Shipment', $scope.shipment);
+        webSvc.saveShipment(savingObject).success(function(data) {
+            if (data.status.code == 0) {
+                toastr.success('Description updated for shipment ' + $scope.shipment.deviceSN + '(' + $scope.shipment.tripCount + ')');
+            } else {
+                toastr.error('You have no permission to update shipment');
+            }
+        })
+        $modalInstance.close($scope.shipment.shipmentDescription);
+    }
+    $scope.cancelEdit = function () {
+        $modalInstance.dismiss('cancel');
+    };
+}]);
+appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'webSvc', 'editId',
+    function($scope, $modalInstance, webSvc, editId) {
+        $scope.editId = editId;
+        webSvc.getShipment(editId).success(function(data) {
+            if (data.status.code == 0) {
+                $scope.shipment = data.response;
+            }
+        });
+        $scope.saveShipment  = function() {
+            var savingObject = {};
+            savingObject.saveAsNewTemplate = false;
+            savingObject.includePreviousData = false;
+
+            savingObject.shipment = $scope.shipment;
+            webSvc.saveShipment(savingObject).success(function(data) {
+                if (data.status.code == 0) {
+                    toastr.success('Comment updated for shipment ' + $scope.shipment.deviceSN + '(' + $scope.shipment.tripCount + ')');
+                } else {
+                    toastr.error('You have no permission to update shipment');
+                }
+            })
+            $modalInstance.close($scope.shipment.commentsForReceiver);
+        }
+        $scope.cancelEdit = function () {
+            $modalInstance.dismiss('cancel');
+        };
+}]);
