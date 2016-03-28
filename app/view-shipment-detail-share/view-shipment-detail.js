@@ -1078,7 +1078,7 @@ appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'w
         $scope.saveShipment  = function() {
             var savingObject = {};
             savingObject.saveAsNewTemplate = false;
-            savingObject.includePreviousData = false;
+            //savingObject.includePreviousData = false;
 
             savingObject.shipment = $scope.shipment;
             webSvc.saveShipment(savingObject).success(function(data) {
