@@ -33,6 +33,11 @@
                 <tr>
                     <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert Profile Name</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileName'}"><i class="fa fa-sort-desc"></i></a>
@@ -40,13 +45,23 @@
                     </th>
                     <th ng-click="Sorting('alertProfileDescription')">
                         <span class="pull-left">Description</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" ng-click="Sorting('alertRuleList')">
+                    <th ng-click="Sorting('alertRuleList')">
                         <span class="pull-left">Alert Rules</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertRuleList'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertRuleList'}"><i class="fa fa-sort-desc"></i></a>

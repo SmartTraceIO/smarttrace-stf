@@ -4,7 +4,7 @@
 <div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-bell"></i> {{Action}}&nbsp; shipment template
+            <i class="fa fa-bell"></i> {{Action}}&nbsp; manual shipment template
         </div>
         <div class="tools hidden-print">
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
@@ -16,9 +16,9 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
-                        <label class="control-label pull-left">Shipment Template Name:&nbsp;<i tooltip="Shipment template name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                        <label class="control-label pull-left">Manual Shipment Template Name:&nbsp;<i tooltip="Manual Shipment template name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
                         <label class="control-label pull-right text-error">*</label>
-                        <input ng-model="ShipmentTemplate.shipmentTemplateName" type="text" name="TemplateName" class="form-control" required maxlength="50" placeholder="Enter shipment template name" />
+                        <input ng-model="ShipmentTemplate.shipmentTemplateName" type="text" name="TemplateName" class="form-control" required maxlength="50" placeholder="Enter manual shipment template name" />
                         <span ng-if="frmAddEditTemplate.$invalid && frmAddEditTemplate.$submitted" ng-cloak>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.TemplateName.$error.required">Please enter tmeplate name</span>
                              <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.TemplateName.$error.maxlength">Template name must be less than or equal to 60 chars</span>
@@ -43,11 +43,16 @@
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.desc.$error.maxlength">Template description must be less than or equal to 120 chars</span>
                         </span>
                     </div>
-                    <div class="col-sm-4 control-label" style="text-align:left">
+                    <!--<div class="col-sm-4 control-label" style="text-align:left">
                         <br />
                         <span class="hidden-xs">-&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span><input type="checkbox" ng-model="ShipmentTemplate.addDateShipped" id="add-date-shipped"> Add date shipped to shipment Description</span>
-                    </div>
+                        <span>
+                            <input type="checkbox"
+                                   ng-model="ShipmentTemplate.addDateShipped"
+                                   id="add-date-shipped">
+                            Add date shipped to shipment Description
+                        </span>
+                    </div>-->
                 </div>
                 <div class="clearfix"></div>
                 <div class="portlet-title">

@@ -36,50 +36,85 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="15%" ng-click="Sorting('locationName')">
+                    <th ng-click="Sorting('locationName')">
                         <span class="pull-left">Location Name</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='locationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='locationName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('companyName')">
+                    <th ng-click="Sorting('companyName')">
                         <span class="pull-left">Company</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='companyName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='companyName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="30%" ng-click="Sorting('address')">
+                    <th ng-click="Sorting('address')">
                         <span class="pull-left">Address</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='address'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='address'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" width="10%" ng-click="Sorting('radiusMeters')">
+                    <th ng-click="Sorting('radiusMeters')">
                         <span class="pull-left">Radius</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='radiusMeters'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='radiusMeters'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" width="10%" ng-click="Sorting('startFlag')">
+                    <th ng-click="Sorting('startFlag')">
                         <span class="pull-left">Start</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='startFlag'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='startFlag'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" width="10%" ng-click="Sorting('interimFlag')">
+                    <th ng-click="Sorting('interimFlag')">
                         <span class="pull-left">Interim</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='interimFlag'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='interimFlag'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center" width="10%" ng-click="Sorting('endFlag')">
+                    <th ng-click="Sorting('endFlag')">
                         <span class="pull-left">End</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='endFlag'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='endFlag'}"><i class="fa fa-sort-desc"></i></a>
@@ -89,25 +124,25 @@
                     <th class="hidden-print"></th>
                 </tr>
                 <tr ng-repeat="location in LocationList">
-                    <td width="15%">
+                    <td>
                         {{location.locationName}}
                     </td>
-                    <td width="15%">
+                    <td>
                         {{location.companyName}}
                     </td>
-                    <td width="30%">
+                    <td>
                         {{location.address}}
                     </td>
-                    <td class="text-center" width="10%">
+                    <td>
                         {{location.radiusMeters}}
                     </td>
-                    <td class="text-center" width="10%">
+                    <td>
                         <i class="fa fa-check fa-lg" ng-if="location.startFlag == 'Y'"></i>
                     </td>
-                    <td class="text-center" width="10%">
+                    <td>
                         <i class="fa fa-check fa-lg" ng-if="location.interimFlag == 'Y'"></i>
                     </td>
-                    <td class="text-center" width="10%">
+                    <td>
                         <i class="fa fa-check fa-lg" ng-if="location.endFlag == 'Y'"></i>
                     </td>
                     <td class="text-center hidden-print">

@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ListShipTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
-    rootSvc.SetPageTitle('List Shipment Template');
+    rootSvc.SetPageTitle('List Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Shipment Templates");
+    rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     var BindShipmentList = function () {
         var param = {
@@ -58,9 +58,9 @@
 });
 
 appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope, $window) {
-    rootSvc.SetPageTitle('Add Shipment Template');
+    rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Shipment Templates");
+    rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
     var BindLocations = function (cb) {
@@ -427,9 +427,9 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $modal, webSvc, $window) {
-    rootSvc.SetPageTitle('Edit Shipment Template');
+    rootSvc.SetPageTitle('Edit Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Shipment Templates");
+    rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     var BindLocations = function (cb) {

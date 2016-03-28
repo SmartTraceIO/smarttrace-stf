@@ -36,22 +36,37 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="20%" ng-click="Sorting('notificationScheduleName')">
-                        Schedule Name
+                    <th ng-click="Sorting('notificationScheduleName')">
+                        <span>Schedule Name</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='notificationScheduleName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='notificationScheduleName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('notificationScheduleDescription')">
-                        Description
+                    <th ng-click="Sorting('notificationScheduleDescription')">
+                        <span>Description</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='notificationScheduleDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='notificationScheduleDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="50%" ng-click="Sorting('peopleToNotify')">
-                        People To Notify
+                    <th ng-click="Sorting('peopleToNotify')">
+                        <span>People To Notify</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='peopleToNotify'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='peopleToNotify'}"><i class="fa fa-sort-desc"></i></a>
@@ -61,19 +76,19 @@
                     <th class="hidden-print"></th>
                 </tr>
                 <tr ng-repeat="noti in NotificationList">
-                    <td width="20%">
+                    <td>
                         {{noti.notificationScheduleName}}
                     </td>
-                    <td width="20%">
+                    <td>
                         {{noti.notificationScheduleDescription}}
                     </td>
-                    <td width="50%">
+                    <td>
                         {{noti.peopleToNotify}}
                     </td>
-                    <td class="text-center hidden-print" width="5%">
+                    <td class="text-center hidden-print">
                         <a class="btn green" href="/#/manage/edit-notification/{{noti.notificationScheduleId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <td class="text-center hidden-print" width="5%">
+                    <td class="text-center hidden-print">
                         <a class="btn green" ng-click="confirm(noti.notificationScheduleId);"><i class="fa fa-remove"></i>&nbsp;Delete</a>
                     </td>
                 </tr>

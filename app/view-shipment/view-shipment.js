@@ -28,7 +28,7 @@
         sc: 'shipmentId',
         so: 'desc'
     };
-    $scope.sc = 'shipmentId';
+    $scope.sc = 'shipmentId1';
     var bounds = null;
     $scope.vm = this;
 
@@ -161,13 +161,13 @@
         }
     });
 
-    /*webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
+    webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
         // console.log("Devi", data);
         if (data.status.code == 0) {
             $scope.TrackerList = data.response;
             // console.log(data.response);
         }
-    });*/
+    });
     $scope.SortOptionChanged = function(){
         var order = $scope.sc.substr(-1);
         if(order == '1'){

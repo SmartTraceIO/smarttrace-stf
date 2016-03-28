@@ -24,7 +24,9 @@
                 $rootScope.isOut = true;
                 $state.go('login');
             }
-        )
+        ).finally(function() {
+
+        })
     };
     $scope.clearCache = function() {
         $templateCache.removeAll();

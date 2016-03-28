@@ -196,8 +196,9 @@
                     </div>
 
                     <div class="pull-right">
-                        Sort By:
-                        <select class="form-control" style="width:auto;display:inline-block" ng-change="SortOptionChanged()" ng-model="sc">
+                        <span>Sort By:</span>
+                        <select class="form-control" style="width:auto;display:inline-block"
+                                ng-change="SortOptionChanged()" ng-model="sc">
                             <option value="shipmentId1">CreationDate (Newest at top)</option>
                             <option value="shipmentId">CreationDate (Oldest at top)</option>
                             <option value="actualArrivalDate1">Date of Arrival (Newest at top)</option>

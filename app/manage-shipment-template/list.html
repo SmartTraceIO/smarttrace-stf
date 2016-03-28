@@ -5,8 +5,7 @@
 <div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
-            <!--<i class="fa fa-bell"></i> List of shipment templates-->
-            <img style="margin-top:-8px" src="../../theme/img/headerShipmentTemplate.png" />  List of shipment templates
+            <img style="margin-top:-8px" src="../../theme/img/headerManualTemplate.png" />  List of manual shipment templates
         </div>
         <div class="tools hidden-print">
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
@@ -28,7 +27,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="/#/manage/add-shipment-template"><i class="fa fa-plus"></i>&nbsp;Add New Template</a>
+            <a class="btn btn-default pull-right" href="/#/manage/add-shipment-template"><i class="fa fa-plus"></i>&nbsp;Add New Manual Template</a>
         </div>
         <div class="clearfix"></div>
         <br />
@@ -37,36 +36,61 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th width="20%" ng-click="Sorting('shipmentTemplateName')">
+                    <th ng-click="Sorting('shipmentTemplateName')">
                         <span class="pull-left">Template Name</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentTemplateName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('shipmentDescription')">
+                    <th ng-click="Sorting('shipmentDescription')">
                         <span class="pull-left">Shipment description</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('shippedFromLocationName')">
+                    <th ng-click="Sorting('shippedFromLocationName')">
                         <span class="pull-left">Shipment from</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedFromLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shippedFromLocationName'}" ng-click="Sorting('shippedFromLocationName')"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="15%" ng-click="Sorting('shippedToLocationName')">
+                    <th ng-click="Sorting('shippedToLocationName')">
                         <span class="pull-left">Shipment to</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shippedToLocationName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='shippedToLocationName'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th width="20%" ng-click="Sorting('alertProfileName')">
+                    <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert profile</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='alertProfileName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='alertProfileName'}"><i class="fa fa-sort-desc"></i></a>
