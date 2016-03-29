@@ -1,10 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
     function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
-
-    // $templateCache.remove('/view-shipment-detail');
-    // console.log("cleared view-shipment-detail cache");
-
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -36,6 +32,30 @@
     var subSeries = new Array();
     var alertData = new Array();
     var lightPlotBand = new Array();
+
+    var currentShipmentId = null;
+    var currentShipment = {};
+    var currentDevice = {};
+    $scope.roles = {};
+    $scope.roles.SmartTraceAdmin = 1000;
+    $scope.roles.Admin = 999;
+    $scope.roles.Normal = 99;
+    $scope.roles.Basic = 9;
+    $scope.getRole = function () {
+        if (!$rootScope.User || !$rootScope.User.roles) {
+            return $scope.roles.Basic;
+        }
+        else if ($rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
+            return $scope.roles.SmartTraceAdmin;
+        } else if ($rootScope.User.roles.indexOf('Admin') >= 0) {
+            return $scope.roles.Admin;
+        } else if ($rootScope.User.roles.indexOf('Normal') >= 0) {
+            return $scope.roles.Normal;
+        } else {
+            return $scope.roles.Basic;
+        }
+    }
+
 
     //google map first point
     $scope.firstPoint = {};
@@ -214,6 +234,31 @@
 
         $scope.trackerInfo = $scope.trackers[index];
 
+        //-- update trackerInfo here
+        $scope.trackerInfo.shutdownDeviceAfterMinutesText = parseInt($scope.trackerInfo.shutdownDeviceAfterMinutes/60) + " hr(s) after arrival";
+        $scope.trackerInfo.shutDownAfterStartMinutesText = parseInt($scope.trackerInfo.shutDownAfterStartMinutes/60) + " hr(s) after start";
+
+        //check if latest shipment here
+        $scope.shutdownAlready=false;
+        currentShipmentId = $scope.trackerInfo.shipmentId;
+        webSvc.getShipment (currentShipmentId).success(function(data) {
+            console.log('CURRENT-SHIPMENT',currentShipmentId, data)
+            currentShipment = data.response;
+            if (currentShipment.shutdownTime || currentShipment.status == 'Ended') {
+                $scope.shutdownAlready = true;
+            }
+            webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
+                console.log('CURRENT-DEVICE', dd);
+                currentDevice = dd.response;
+                if (currentShipmentId != currentDevice.lastShipmentId) {
+                    $scope.isLatest = false;
+                } else {
+                    $scope.isLatest = true;
+                }
+            })
+        })
+
+
         updatePlotLines();
     }
 
@@ -387,7 +432,7 @@
 
         //console.log('PARAMS', params);
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
-            //console.log("Success", graphData);
+            console.log("SINGLE-SHIPMENT", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -456,7 +501,6 @@
                 webSvc.getSingleShipmentShare(params).success( function (graphData) {
                     if(graphData.status.code != 0) return;
                     dt = graphData.response;
-                     console.log(dt);
                     // debugger;
                     for(j = 1; j < $scope.trackers.length; j++){
                         if($scope.trackers[j].shipmentId == dt.shipmentId){
@@ -1005,6 +1049,37 @@
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
     }
 
+    $scope.shutdownNow = function() {
+        if ($scope.isLatest) {
+            if (!$scope.shutdownAlready) {
+                webSvc.shutdownDevice(currentShipmentId).success(function(data) {
+                    if (data.status.code == 0) {
+                        toastr.success("Success. The shutdown process has been triggered for this device");
+                        $scope.trackerInfo.shutdownTime = moment.tz($rootScope.RunningTimeZoneId).format("h:mmA DD MMM YYYY");
+                        $scope.trackerInfo.status = 'Ended';
+                        $scope.shutdownAlready = true;
+                    } else {
+                        toastr.error("You have no permission to shutdown this device!");
+                    }
+                })
+            } else {
+                toastr.warning ('You have already shutdown this device!');
+            }
+
+        } else {
+            //todo: link
+            var temShipmentNumber = currentDevice.shipmentNumber;
+            if (temShipmentNumber){
+                var idx1 = temShipmentNumber.indexOf('(');
+                var idx2 = temShipmentNumber.indexOf(')');
+                var n = temShipmentNumber.substr(idx1+1, idx2-1);
+                currentDevice.tripCount = parseInt(n);
+            }
+            currentDevice.sn = parseInt(currentDevice.sn);
+            var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
+            toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
+        }
+    }
     $scope.EditDescription = function(Id) {
         var modalInstance = $modal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',

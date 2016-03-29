@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <div class="shipment-desc">{{trackerInfo.shipmentDescription}}</div>
+                                <!--<div class="shipment-desc">{{trackerInfo.shipmentDescription}}</div>-->
                                 <table class="tracker-desc">
                                     <tr ng-show="trackerInfo.assetNum"><td>Asset Num:</td><td>{{trackerInfo.assetNum}}</td></tr>
                                     <tr ng-show="trackerInfo.assetType"><td>Asset Type:</td><td>{{trackerInfo.assetType}}</td></tr>
@@ -48,6 +48,38 @@
                                 <!-- <div>
                                     <span class="bold-font">Tracker Position:</span>
                                 </div> -->
+                                <div>
+                                    <div class="portlet-title">
+                                            <span>
+                                                <strong>Description:</strong>
+                                            </span>
+                                        <i tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                        <!--<a href="" class="pull-right" ng-click="EditDescription(trackerInfo.shipmentId)">Edit</a>-->
+                                    </div>
+                                    <div class="">
+                                        <span>{{trackerInfo.shipmentDescription}}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="portlet-title">
+                                        <span>
+                                            <strong>Comment:</strong>
+                                        </span>
+                                        <i tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                        <!--<a href="" class="pull-right" ng-click="EditComment(trackerInfo.shipmentId)">Edit</a>-->
+                                    </div>
+                                    <div class="">
+                                        <span>{{trackerInfo.commentsForReceiver}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -55,9 +87,13 @@
             </div>
             <div class="row"><div class="portlet box grey">
                 <div class="portlet-title">
-                    <div class="caption uppercase">
-                        TRACKERS POSSIBLY ON SAME TRIP
-                        <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                    <div>
+                        <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
+                        <i tooltip="Waiting your tooltip text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse"> </a>
@@ -86,8 +122,8 @@
             </div></div>
             <div class="row"><div class="portlet box grey">
                 <div class="portlet-title">
-                    <div class="caption uppercase">
-                        Route
+                    <div>
+                        <span class="caption uppercase">Route</span>
                         <i tooltip="Waiting your tooltip text"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
@@ -347,9 +383,9 @@
                                     </div> -->
                                     <div>
                                         <div class="portlet-title">
-                                    <span>
-                                        <strong>Description:</strong>
-                                    </span>
+                                            <span>
+                                                <strong>Description:</strong>
+                                            </span>
                                             <i tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
@@ -363,9 +399,9 @@
                                     </div>
                                     <div>
                                         <div class="portlet-title">
-                                    <span>
-                                        <strong>Comment:</strong>
-                                    </span>
+                                        <span>
+                                            <strong>Comment:</strong>
+                                        </span>
                                             <i tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
@@ -384,7 +420,7 @@
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
-                                TRACKERS POSSIBLY ON SAME TRIP
+                                <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
                                 <i tooltip="Other trackers that are travelling on a similar path at the same time and hence likely to be on same vehicle"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -519,8 +555,8 @@
                     </div>
                     <div class="portlet box grey">
                         <div class="portlet-title">
-                            <div>
-                                <span class="caption uppercase">Arrival</span>
+                            <div class="caption uppercase">
+                                <span>Arrival</span>
                                 <i tooltip="Arrival details for this shipment"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -533,7 +569,7 @@
                         </div>
                         <div class="portlet-body" style="display:none;">
                             <table class="tracker-desc">
-                                <tr>
+                                <tr ng-show="trackerInfo.arrivalTime">
                                     <td>
                                         <span>Time of arrival</span>
                                         <i tooltip="Waiting your tooltip text"
@@ -546,7 +582,7 @@
                                         {{trackerInfo.arrivalTime}}
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
                                     <td>
                                         <span>Notify when</span>
                                         <i tooltip="Notify when"
@@ -559,7 +595,20 @@
                                         {{trackerInfo.arrivalNotificationWithinKm}} Km away
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="!trackerInfo.arrivalNotificationWithinKm">
+                                    <td>
+                                        <span>Notify when</span>
+                                        <i tooltip="Notify when"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>
+                                        Don't notify
+                                    </td>
+                                </tr>
+                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
                                     <td>
                                         <span>Notified at</span>
                                         <i tooltip="Notified at"
@@ -572,7 +621,7 @@
                                         {{trackerInfo.arrivalNotificationTime}}
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
                                     <td>
                                         <span>Who to notify</span>
                                         <i tooltip="Notify to people"
@@ -583,12 +632,14 @@
                                     </td>
                                     <td>{{trackerInfo.alertPeopleToNotify}}</td>
                                 </tr>
-                                <tr><td>Schedule(s):</td><td>
-                                    <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
-                                        {{p.notificationScheduleName}}
-                                        <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
-                                    </div>
-                                </td></tr>
+                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
+                                    <td>Schedule(s):</td><td>
+                                        <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
+                                            {{p.notificationScheduleName}}
+                                            <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         <span>Time of shutdown</span>
@@ -599,7 +650,19 @@
                                            class="fa fa-info-circle"/>
                                     </td>
                                     <td>
-                                        {{trackerInfo.shutdownTime}}
+                                        <span ng-show="trackerInfo.shutdownTime">{{trackerInfo.shutdownTime}}</span>
+                                        <span ng-show="trackerInfo.shutdownDeviceAfterMinutes && !trackerInfo.shutdownTime">, {{trackerInfo.shutdownDeviceAfterMinutesText}}</span>
+                                        <span ng-show="trackerInfo.shutDownAfterStartMinutes && !trackerInfo.shutdownTime">, {{trackerInfo.shutDownAfterStartMinutesText}}</span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="getRole() >= roles.Normal">
+                                    <td colspan="2">
+                                        <a href="" ng-click="shutdownNow()"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
+                                        <i tooltip="Shutdown this device now, provided this is the latest shipment for this device."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
                                     </td>
                                 </tr>
                             </table>
