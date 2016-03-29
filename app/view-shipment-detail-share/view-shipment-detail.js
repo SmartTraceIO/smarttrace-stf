@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal,
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
@@ -1049,23 +1049,32 @@
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
     }
 
-    $scope.shutdownNow = function() {
+    $scope.viewReading = function() {
+        $state.go('#/view-shipment-detail-table?sn='+$scope.trackerInfo.deviceSN+'&trip='+$scope.trackerInfo.tripCount);
+    }
+
+    $scope.confirmShutdown = function(shipmentId) {
         if ($scope.isLatest) {
             if (!$scope.shutdownAlready) {
-                webSvc.shutdownDevice(currentShipmentId).success(function(data) {
-                    if (data.status.code == 0) {
-                        toastr.success("Success. The shutdown process has been triggered for this device");
+                var modalInstance = $modal.open({
+                    templateUrl: '/app/view-shipment-detail-share/confirm-shutdown.html',
+                    controller: 'ConfirmShutdownCtrl',
+                    resolve: {
+                        shipmentId: function () {
+                            return shipmentId;
+                        }
+                    }
+                });
+                modalInstance.result.then(
+                    function() {
                         $scope.trackerInfo.shutdownTime = moment.tz($rootScope.RunningTimeZoneId).format("h:mmA DD MMM YYYY");
                         $scope.trackerInfo.status = 'Ended';
                         $scope.shutdownAlready = true;
-                    } else {
-                        toastr.error("You have no permission to shutdown this device!");
                     }
-                })
+                );
             } else {
                 toastr.warning ('You have already shutdown this device!');
             }
-
         } else {
             //todo: link
             var temShipmentNumber = currentDevice.shipmentNumber;
@@ -1080,6 +1089,7 @@
             toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
         }
     }
+
     $scope.EditDescription = function(Id) {
         var modalInstance = $modal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',

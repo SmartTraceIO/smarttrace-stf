@@ -154,7 +154,7 @@
         if ($rootScope.RunningTime == null) {
             //reload user-time
             webSvc.getUserTime().success( function (timeData) {
-                console.log('USER-TIME', timeData);
+                //console.log('USER-TIME', timeData);
                 if (timeData.status.code == 0) {
                     $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
                     $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);

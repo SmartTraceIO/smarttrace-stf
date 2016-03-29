@@ -6,7 +6,10 @@
             <i class="fa fa-truck fa-lg"></i> View shipment details
         </div>
         <div class="tools hidden-print">
-            <!-- <button class="btn default btn-sm uppercase" type="button" ng-click="generatePDF()">PDF</button> -->
+             <!--<button class="btn btn-link btn-sm uppercase" type="button" style="color:#ffffff" ng-click="viewReading()">View Readings</button>-->
+            <!--<a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}">-->
+                <!--<u>View Readings</u>-->
+            <!--</a>-->
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
         </div>
     </div>
@@ -651,13 +654,13 @@
                                     </td>
                                     <td>
                                         <span ng-show="trackerInfo.shutdownTime">{{trackerInfo.shutdownTime}}</span>
-                                        <span ng-show="trackerInfo.shutdownDeviceAfterMinutes && !trackerInfo.shutdownTime">, {{trackerInfo.shutdownDeviceAfterMinutesText}}</span>
+                                        <span ng-show="trackerInfo.shutdownDeviceAfterMinutes && !trackerInfo.shutdownTime">{{trackerInfo.shutdownDeviceAfterMinutesText}}</span>
                                         <span ng-show="trackerInfo.shutDownAfterStartMinutes && !trackerInfo.shutdownTime">, {{trackerInfo.shutDownAfterStartMinutesText}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-if="getRole() >= roles.Normal">
                                     <td colspan="2">
-                                        <a href="" ng-click="shutdownNow()"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
+                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
                                         <i tooltip="Shutdown this device now, provided this is the latest shipment for this device."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"

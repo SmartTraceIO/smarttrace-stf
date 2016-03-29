@@ -123,6 +123,21 @@ appConstants.constant('routes', [
           ]
       },
     {
+        name: 'viewshipmentdetailtable',
+        config: {
+            url: "/view-shipment-detail-table?sn&trip"
+            , views: {
+                "content": {
+                    templateUrl: "app/view-shipment-detail-table/view-shipment-detail.html?v="+ version
+                    , controller: 'ViewShipmentDetailTableCtrl as vm'
+                }
+            }
+        },
+        dependencies: [
+            'app/view-shipment-detail-table/view-shipment-detail.js?v=' + version,
+        ]
+    },
+    {
         name: 'viewshipmentdetailshare',
         config: {
             url: "/view-shipment-detail?sn&trip"
@@ -135,6 +150,7 @@ appConstants.constant('routes', [
         },
         dependencies: [
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
+            'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
         ]
     },
       {
