@@ -57,7 +57,7 @@
 
 });
 
-appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $rootScope, $window) {
+appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter, $modal, $rootScope, $window) {
     rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -136,7 +136,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
     $scope.map.setCenter(new google.maps.LatLng(20.632784, 78.969727));
-    $scope.$watch("ShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
+    /*$scope.$watch("ShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
         if (nVal) {
             $scope.ShipmentTemplate.shippedFrom = "";
 
@@ -145,7 +145,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             if ($scope.Path)
                 $scope.Path.setMap(null);
         }
-    })
+    })*/
     $scope.ChangeShipmentFrom = function () {
 
         if ($scope.ShipmentTemplate.shippedFrom) {
@@ -226,24 +226,9 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             if ($scope.ShipmentTemplate.shippedTo)
                 $scope.ShipmentTemplate.shippedTo = $scope.ShipmentTemplate.shippedTo.locationId;
 
-            // $scope.AuthToken = localDbSvc.getToken();
-            // var url = .url + 'saveShipmentTemplate/' + $scope.AuthToken
-            // $.ajax({
-            //     type: "POST",
-            //     datatype: "json",
-            //     processData: false,
-            //     contentType: "text/plain",
-            //     data: JSON.stringify($scope.ShipmentTemplate),
-            //     url: url,
-            //     success: function (data, textStatus, XmlHttpRequest) {
-            //         toastr.success("Shipment template added successfully")
-            //         $state.go('manage.shiptemp')
-            //     },
-            //     error: function (xmlHttpRequest, textStatus, errorThrown) {
-            //         alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-            //     }
-            // });
-            webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
+            webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success(
+                function (data, textStatus, XmlHttpRequest) {
+                    console.log('SAVED', data);
                 toastr.success("Shipment template added successfully")
                 $state.go('manage.shiptemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
@@ -550,7 +535,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         }
     }
 
-    $scope.$watch("ShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
+    /*$scope.$watch("ShipmentTemplate.detectLocationForShippedFrom", function (nVal, oVal) {
         if (nVal) {
             $scope.ShipmentTemplate.shippedFrom = "";
 
@@ -559,14 +544,14 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
             if ($scope.Path)
                 $scope.Path.setMap(null);
         }
-    })
+    })*/
 
     $scope.ChangeShipmentFrom = function () {
-        console.log($scope.ShipmentTemplate.shippedFrom)
+        /*console.log($scope.ShipmentTemplate.shippedFrom)
         if ($scope.ShipmentTemplate.shippedFrom) {
             $scope.ShipmentTemplate.detectLocationForShippedFrom = false;
         }
-        else { return; }
+        else { return; }*/
 
         if ($scope.HomeMarker)
             $scope.HomeMarker.setMap(null);
