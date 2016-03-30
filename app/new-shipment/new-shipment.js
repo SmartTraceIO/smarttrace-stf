@@ -257,6 +257,8 @@
     }
 
     $scope.SaveData = function (isValid) {
+        console.log('NewShipment', $scope.NewShipment);
+        console.log('$scope.AddDateShipped', $scope.AddDateShipped);
         $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
         if (isValid) {
             if (!$scope.NewShipment.shipment.shutdownDeviceAfterMinutes)
@@ -270,9 +272,9 @@
             $scope.NewShipment.shipment.status = "InProgress";
             $scope.NewShipment.shipment.detectLocationForShippedFrom = false;
 
-            if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
+            /*if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {
                 $scope.NewShipment.shipment.shipmentDescription = $scope.NewShipment.shipment.shipmentDescription + " - " + $scope.NewShipment.shipment.DiscriptionDateTime;
-            }
+            }*/
             webSvc.saveShipment($scope.NewShipment).success( function (data, textStatus, XmlHttpRequest) {
                 if ($scope.NewShipment.saveAsNewTemplate)
                     toastr.success("Shipment detailed saved. Enter another shipment by changing any required details and resubmitting the page. The template '" + $scope.NewShipment.templateName + "' was also created.")
@@ -282,6 +284,8 @@
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
+        } else {
+            toastr.error('Inputting data is not valid. Please correct all fields in RED before try again!');
         }
     }
 

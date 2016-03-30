@@ -50,29 +50,76 @@
                             </div>
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-8">
-                                <label class="control-label pull-left">Shipment Description:&nbsp;<i tooltip="Shipment Description(Trip name / PO num / Load identity / etc)" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                                <label class="control-label pull-left">
+                                    <span>Shipment Description:</span>
+                                    <i tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
                                 <label class="control-label" style="margin-left:24%"><span class="text-error">*</span></label>
                                 <div class="clearfix"></div>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" maxlength="120" placeholder="Enter Shipment Description" ng-model="NewShipment.shipment.shipmentDescription" />
+                                    <input type="text" class="form-control"
+                                           maxlength="120"
+                                           name="description"
+                                           placeholder="Enter Shipment Description"
+                                           ng-model="NewShipment.shipment.shipmentDescription" />
                                     <div class="input-group-btn">
                                         <button class="btn btn-default" style="border:none"> - </button>
                                     </div>
-                                    <input type="text" class="form-control" readonly ng-model="NewShipment.shipment.DiscriptionDateTime" placeholder="DateShipped will be added to Desc." />
+                                    <input type="text" class="form-control"
+                                           readonly ng-model="NewShipment.shipment.DiscriptionDateTime"
+                                           placeholder="DateShipped will be added to Desc." />
                                 </div>
+                                <span ng-if="frmAddNewShipment.$invalid" ng-cloak>
+                                    <span ng-cloak class="text-danger" ng-if="frmAddNewShipment.description.$error.maxlength">Description for a shipment must be less than or equal to 120 chars</span>
+                                </span>
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-offset-4 col-sm-4">
-                                <label class="control-label">Pallet Id:&nbsp;<i tooltip="Pallet unique Identity If available" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                                <input type="text" class="form-control" placeholder="Enter Pallet Id" ng-model="NewShipment.shipment.palletId" />
-                                <small class="text-muted">Enter a Pallet unique Identity If available</small>
+                                <label class="control-label">
+                                    <span>Pallet Id:</span>
+                                    <i tooltip="Pallet unique Identity If available"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <input type="text"
+                                       ng-maxlength="31"
+                                       name="palletId"
+                                       class="form-control"
+                                       placeholder="Enter Pallet Id"
+                                       ng-model="NewShipment.shipment.palletId" />
+
+                                <div><small class="text-muted">Enter a Pallet unique Identity If available</small></div>
+                                <span ng-if="frmAddNewShipment.$invalid" ng-cloak>
+                                    <span ng-cloak class="text-danger" ng-if="frmAddNewShipment.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
+                                </span>
                             </div>
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-4">
-                                <label class="control-label">Asset Num:&nbsp;<i tooltip="Enter the identity of the asset carrying the goods" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                                <input type="text" class="form-control" placeholder="Enter Asset Num" ng-model="NewShipment.shipment.assetNum" />
-                                <small class="text-muted">Enter the identity of the asset carrying the goods</small>
+                                <label class="control-label">
+                                    <span>Asset Num:</span>
+                                    <i tooltip="Enter the identity of the asset carrying the goods"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <input type="text"
+                                       ng-maxlength="31"
+                                       name="assetNum"
+                                       class="form-control"
+                                       placeholder="Enter Asset Num"
+                                       ng-model="NewShipment.shipment.assetNum" />
+                                <div><small class="text-muted">Enter the identity of the asset carrying the goods</small></div>
+                                <span ng-if="frmAddNewShipment.$invalid" ng-cloak>
+                                    <span ng-cloak class="text-danger" ng-if="frmAddNewShipment.assetNum.$error.maxlength">Asset Number for a shipment must be less than or equal to 31 chars</span>
+                                </span>
                             </div>
                         </div>
                         <div class="clearfix"></div>

@@ -166,6 +166,8 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
+        } else {
+            toastr.error('Inputted data is invalid. Please correct all fields in RED before try again!')
         }
     }
     $scope.openAddLocation = function () {

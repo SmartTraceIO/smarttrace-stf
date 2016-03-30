@@ -37,8 +37,14 @@
                         <label class="control-label pull-left">Shipment Description:&nbsp;<i tooltip="Shipment Description(Trip name / PO num / Load identity / etc)" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
                         <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <div class="clearfix"></div>
-                        <input ng-model="ShipmentTemplate.shipmentDescription" name="desc" required maxlength="120" type="text" class="form-control" placeholder="Enter Shipment Description" />
-                        <span ng-if="frmAddEditTemplate.$invalid && frmAddEditTemplate.$submitted" ng-cloak>
+                        <input ng-model="ShipmentTemplate.shipmentDescription"
+                               name="desc"
+                               required
+                               ng-maxlength="120"
+                               type="text"
+                               class="form-control"
+                               placeholder="Enter Shipment Description" />
+                        <span ng-if="frmAddEditTemplate.$invalid" ng-cloak>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.desc.$error.required">Please enter template description</span>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.desc.$error.maxlength">Template description must be less than or equal to 120 chars</span>
                         </span>
@@ -186,8 +192,22 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label class="control-label">Comments For Receiver&nbsp;<i tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <textarea maxlength="300" class="form-control" ng-model="ShipmentTemplate.commentsForReceiver" placeholder="Tracker is located on last pallet loaded into trailer. Please collect tracker and hand to driver for return."></textarea>
+                        <label class="control-label">
+                            <span>Comments For Receiver</span>
+                            <i tooltip="Comments for Receiver"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
+                        <textarea ng-maxlength="300"
+                                  name="comment"
+                                  class="form-control"
+                                  ng-model="ShipmentTemplate.commentsForReceiver"
+                                  placeholder="Tracker is located on last pallet loaded into trailer. Please collect tracker and hand to driver for return."/>
+                        <span ng-if="frmAddEditTemplate.$invalid" ng-cloak>
+                            <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.comment.$error.maxlength">Comment for receiver must be less than or equal to 300 chars</span>
+                        </span>
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-3">

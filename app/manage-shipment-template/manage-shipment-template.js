@@ -637,6 +637,8 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
 
+        } else {
+            toastr.error ('Data you have inputted is invalid. Please correct all fields in RED before try again.');
         }
     }
     $scope.openAddLocation = function () {
