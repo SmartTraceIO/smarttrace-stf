@@ -1,13 +1,9 @@
     <div class="panel-heading">
         <strong>Edit Shipment Description</strong>
-        <span>{{editId}}</span>
+        <a href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"><u>{{shipment.deviceSN}}({{shipment.tripCount}})</u></a>
     </div>
     <div class="panel-body">
         <form class="form" name="frmEditDescription">
-            <div class="form-group">
-                <label for="shipmentId">Shipment ID</label>
-                <input id="shipmentId" class="form-control" disabled ng-model="editId">
-            </div>
             <div class="form-group">
                 <label for="shipmentDescription">Shipment Description</label>
                 <textarea ng-model="shipment.shipmentDescription"
