@@ -1,7 +1,8 @@
 ﻿<div class="portlet box green mainbox">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-truck fa-lg"></i> View shipment details in table
+            <i class="fa fa-truck fa-lg"></i>
+            <span>Temperature Readings for Tracker {{trackerInfo.deviceSN}} Trip {{trackerInfo.tripCount}} as of {{RunningTime}}</span>
         </div>
         <div class="tools hidden-print">
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
@@ -9,72 +10,81 @@
     </div>
     <div class="portlet-body" style="padding: 0!important;">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row" style="margin-bottom: 25px;margin-top:15px">
                 <div class="col-sm-3 col-xs-12">
-                    <span>Temperature Readings for Tracker {{trackerInfo.deviceSN}} Trip {{trackerInfo.tripCount}} as of {{RunningTime}}</span>
+                    <div>
+                        <strong>Shipment Description</strong>
+                        <span>{{trackerInfo.shipmentDescription}}</span>
+                    </div>
+                    <div>
+                        <strong>Comment</strong>
+                        <span>{{trackerInfo.commentsForReceiver}}</span>
+                    </div>
+                    <div ng-show="trackerInfo.assetNum"><strong>Asset Num:</strong><span>{{trackerInfo.assetNum}}</span></div>
+                    <div ng-show="trackerInfo.assetType"><strong>Asset Type:</strong><span>{{trackerInfo.assetType}}</span></div>
+                    <div ng-show="trackerInfo.palletId"><strong>Pallet ID:</strong><span>{{trackerInfo.palletId}}</span></div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
-                    <span>Shipment Description</span>
-                    <span>{{trackerInfo.shipmentDescription}}</span>
-                    <span>Comment</span>
-                    <span>{{trackerInfo.commentsForReceiver}}</span>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                    <div ng-show="trackerInfo.assetNum"><span>Asset Num:</span><span>{{trackerInfo.assetNum}}</span></div>
-                    <div ng-show="trackerInfo.assetType"><span>Asset Type:</span><span>{{trackerInfo.assetType}}</span></div>
-                    <div ng-show="trackerInfo.palletId"><span>Pallet ID:</span><span>{{trackerInfo.palletId}}</span></div>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                    <span>Shipped From</span>
-                    <span>{{trackerInfo.startLocation}}</span>
-                    <span>Date Shipped</span>
-                    <span>{{trackerInfo.startTime}}</span>
-
-                    span>Shipped To</span>
-                    <span>{{trackerInfo.endLocation}}</span>
-                    <span>Time of Arrival</span>
-                    <span>{{trackerInfo.arrivalTime}}</span>
-                    <span>Current status</span>
-                    <span>{{trackerInfo.status}}</span>
-                    <span>Alert Profile</span>
-                    <span>{{trackerInfo.alertProfileName}}</span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-3 col-xs-12">
-                    <span>Who to notify</span>
-                    <span>{{trackerInfo.alertPeopleToNotify}}</span>
-                    <span>Schedule(s)</span>
-                    <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
-                        {{p.notificationScheduleName}}
-                        <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                    <div>
+                        <strong>Shipped From</strong>
+                        <span>{{trackerInfo.startLocation}}</span>
+                    </div>
+                    <div>
+                        <strong>Date Shipped</strong>
+                        <span>{{trackerInfo.startTime}}</span>
+                    </div>
+                    <div>
+                        <strong>Shipped To</strong>
+                        <span>{{trackerInfo.endLocation}}</span>
+                    </div>
+                    <div>
+                        <strong>Time of Arrival</strong>
+                        <span>{{trackerInfo.arrivalTime}}</span>
                     </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
-                    <span>Alerts Fired</span>
-                    <span>{{trackerInfo.alertYetToFire}}</span>
-                    <span>Notify when</span>
-                    <span>{{trackerInfo.arrivalNotificationWithinKm}} Km away</span>
-                    <span>Notified at</span>
-                    <span>{{trackerInfo.arrivalNotificationTime}}</span>
-                    <span>Who to notify</span>
-                    <span>{{trackerInfo.alertPeopleToNotify}}</span>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                    <span>Schedule(s)</span>
-                    <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
-                        {{p.notificationScheduleName}}
-                        <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                    <div>
+                        <strong>Current status</strong>
+                        <span>{{trackerInfo.status}}</span>
+                    </div>
+                    <div>
+                        <strong>Schedule(s)</strong>
+                        <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
+                            {{p.notificationScheduleName}}
+                            <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Time of shutdown</strong>
+                        {{trackerInfo.shutdownTime}}
                     </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
-                    <span>Time of shutdown</span>
-                    {{trackerInfo.shutdownTime}}
+                    <div>
+                        <strong>Alert Profile</strong>
+                        <span>{{trackerInfo.alertProfileName}}</span>
+                    </div>
+                    <div>
+                        <strong>Alerts Fired</strong>
+                        <div ng-repeat="al in trackerInfo.alertYetToFire">
+                            {{al}}
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Notify when</strong>
+                        <span>{{trackerInfo.arrivalNotificationWithinKm}} Km away</span>
+                    </div>
+                    <div><strong>Notified at</strong>
+                        <span>{{trackerInfo.arrivalNotificationTime}}</span></div>
+                    <div>
+                        <strong>Who to notify</strong>
+                        <span>{{trackerInfo.alertPeopleToNotify}}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container-fluid">
+
+            <!--Table-->
+            <hr>
             <table class="table table-responsive">
                 <tr>
                     <th>Time of Reading</th>
@@ -83,20 +93,27 @@
                     <th>Longitude</th>
                     <th>Type</th>
                     <th>Alert</th>
-                    <th>Note</th>
                 </tr>
                 <tr ng-repeat="loc in trackerInfo.locations">
                     <td>{{loc.timeISO}}</td>
-                    <td>{{loc.temperature}}</td>
+                    <td>{{loc.temperature | temperature}}</td>
                     <td>{{loc.lat}}</td>
                     <td>{{loc.long}}</td>
-                    <td>-</td>
+                    <td>{{loc.type}}</td>
                     <td>
                         <div ng-repeat="alert in loc.alerts">
                             {{alert.title}}
+                            <!--show alert-->
+                            <img ng-src="theme/img/alertLightOn.png" ng-if="alert.type=='LightOn'" />
+                            <img ng-src="theme/img/alertLightOff.png" ng-if="alert.type=='LightOff'" />
+                            <img ng-src="theme/img/alertCold.png" ng-if="alert.type=='Cold'" />
+                            <img ng-src="theme/img/alertHot.png" ng-if="alert.type=='Hot'" />
+                            <img ng-src="theme/img/alertCriticalCold.png" ng-if="alert.type=='CriticalCold'" />
+                            <img ng-src="theme/img/alertCriticalHot.png" ng-if="alert.type=='CriticalHot'" />
+                            <img ng-src="theme/img/alertBattery.png" ng-if="alert.type=='Battery'" />
+                            <img ng-src="theme/img/alertShock.png" ng-if="alert.type=='MovementStart'" />
                         </div>
                     </td>
-                    <td>-</td>
                 </tr>
             </table>
         </div>

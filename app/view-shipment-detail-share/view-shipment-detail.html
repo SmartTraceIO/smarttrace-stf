@@ -188,8 +188,8 @@
             </div></div>
             <div class="row"><div class="portlet box grey">
                 <div class="portlet-title">
-                    <div class="caption uppercase">
-                        Alerts
+                    <div>
+                        <span class="caption uppercase">Alerts</span>
                         <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                     </div>
                     <div class="tools">
@@ -346,7 +346,7 @@
             </ng-map>
             </div>
         </div>
-        <div class="tabbable-line hidden-print">
+        <div class="hidden-print tabbable-line">
             <div class="row">
                 <div class="col-md-3 left-panel">
                     <div class="panel panel-default">
@@ -423,7 +423,7 @@
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
-                                <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
+                                <span>TRACKERS POSSIBLY ON SAME TRIP</span>
                                 <i tooltip="Other trackers that are travelling on a similar path at the same time and hence likely to be on same vehicle"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -523,7 +523,7 @@
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
-                                Alerts
+                                <span>Alerts</span>
                                 <i tooltip="Alert details for this shipment"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -544,11 +544,24 @@
                                         <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
                                     </div>
                                 </td></tr>
-                                <tr><td>Alerts yet to fire:</td><td>
-                                    <div ng-repeat="p in trackerInfo.alertYetToFire">
-                                        {{p}}
-                                    </div>
-                                </td></tr>
+                                <tr>
+                                    <td>Alerts yet to fire:</td>
+                                    <td>
+                                        <div ng-repeat="p in trackerInfo.alertYetToFire">
+                                            {{p}}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" ng-if="getRole() >= roles.Normal">
+                                        <a href="" ng-click="confirmSuppress(trackerInfo.shipmentId)"><u ng-class="{'grey-out':(isEndedOrArrived || suppressAlready)}">Suppress further alerts</u></a>
+                                        <i tooltip="Suppress further alerts from firing during an active shipment. Requires Admin level access."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                </tr>
                             </table>
                             <!-- <a href="#" ng-show="trackerInfo.alertYetToFire != null" class="bold-font" style="text-decoration:underline;">
                                 Suppress further notifications

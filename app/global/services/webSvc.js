@@ -210,6 +210,17 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			};
 			return $http.get(url, params);
 		},
+
+		suppressAlerts: function(shipmentId) {
+			var url = Api.url + 'suppressAlerts/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					shipmentId: shipmentId
+				}
+			};
+			return $http.get(url, params);
+		},
+
         shutdownDevice: function(shipmentId) {
             var url = Api.url + 'shutdownDevice/' + localDbSvc.getToken();
             var params = {

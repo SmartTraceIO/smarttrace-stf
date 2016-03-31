@@ -6,6 +6,9 @@
     rootSvc.SetPageHeader("View Shipment Detail  in Table");
 
     $scope.AuthToken = localDbSvc.getToken();
+    $scope.Print = function() {
+        $window.print();
+    }
     //$scope.ShipmentId = $stateParams.vsId;
     if ($stateParams.vsId) {
         $scope.ShipmentId = $stateParams.vsId;
@@ -13,7 +16,38 @@
         $scope.sn = $stateParams.sn;
         $scope.trip = $stateParams.trip;
     }
+    //--update $rootScope roles
+    function reloadIfNeed() {
+            if ($rootScope.User) {
+                return $rootScope.User;
+            } else {
+                webSvc.getUser().success(function (data) {
+                    if(data.status.code == 0){
+                        $rootScope.User = data.response;
+                        console.log('USER', $rootScope.User);
+                    }
+                });
+            }
 
+            if ($rootScope.RunningTime == null) {
+                //reload user-time
+                webSvc.getUserTime().success( function (timeData) {
+                    //console.log('USER-TIME', timeData);
+                    if (timeData.status.code == 0) {
+                        $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
+                        $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+                        $scope.tickInterval = 1000 //ms
+                        var tick = function () {
+                            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                            $timeout(tick, $scope.tickInterval); // reset the timer
+                        }
+                        // Start the timer
+                        $timeout(tick, $scope.tickInterval);
+                    }
+                });
+            }
+        }
+        reloadIfNeed()
     //includes all tracker info here
     $scope.trackers = new Array();
     //------MAIN TRACKER INDEX ------
@@ -41,7 +75,6 @@
 
         //console.log('PARAMS', params);
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
-            console.log("SINGLE-SHIPMENT", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -179,9 +212,8 @@
 
             //check if latest shipment here
             $scope.shutdownAlready=false;
-            currentShipmentId = $scope.trackerInfo.shipmentId;
+            var currentShipmentId = $scope.trackerInfo.shipmentId;
             webSvc.getShipment (currentShipmentId).success(function(data) {
-                console.log('CURRENT-SHIPMENT',currentShipmentId, data)
                 currentShipment = data.response;
                 if (currentShipment.shutdownTime || currentShipment.status == 'Ended') {
                     $scope.shutdownAlready = true;
@@ -322,3 +354,15 @@ appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'w
             $modalInstance.dismiss('cancel');
         };
 }]);
+
+appFilters.filter('temperature', function ($rootScope) {
+    return function (input) {
+        if ($rootScope.User) {
+            if($rootScope.User.temperatureUnits=="Celsius") {
+                return input+ '\u2103';
+            } else {
+                return input+'\u2109';
+            }
+        }
+    }
+})

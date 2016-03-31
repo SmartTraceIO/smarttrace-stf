@@ -215,7 +215,11 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
         };
 
         $scope.confirmShutdown = function() {
-            $("#confirmShutdown").modal("show");
+            if ($scope.tracker.shipmentStatus!='Ended' && $scope.tracker.shipmentStatus!='Arrived'){
+                $("#confirmShutdown").modal("show");
+            } else {
+                toastr.error('You have already requested this tracker be shutdown')
+            }
         };
         $scope.shutdownNow = function() {
             $("#confirmShutdown").modal("hide");
@@ -237,6 +241,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                             if (resp.status.code == 0) {
                                 //success shutdown
                                 toastr.success('Shutdown has been triggered for Tracker ' + $scope.tracker.sn + "(" + $scope.tracker.tripCount + ")");
+                                $scope.tracker.shipmentStatus='Ended';
                             } else {
                                 //error shutdown
                                 toastr.error('You have no permission to shut this device down.');

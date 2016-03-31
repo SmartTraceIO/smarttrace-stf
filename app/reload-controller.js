@@ -130,12 +130,12 @@
     $rootScope.updateUserTime();*/
 
     $scope.reload = function() {
-        $scope.reloadUserIfNeed();
+        reloadUserIfNeed();
         if ($state.current.name == $rootScope.previousState.name) {
             $state.go($state.current, {}, { reload: true });
         }
     };
-    $scope.reloadUserIfNeed = function() {
+    function reloadUserIfNeed () {
         $scope.AuthToken = localDbSvc.getToken();
         if ($rootScope.AuthToken != $scope.AuthToken) {
             $rootScope.AuthToken = $scope.AuthToken;

@@ -151,6 +151,7 @@ appConstants.constant('routes', [
         dependencies: [
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
             'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
+            'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
         ]
     },
       {

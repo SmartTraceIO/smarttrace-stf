@@ -203,7 +203,14 @@
                             <span>{{tracker.shipmentStatus}}</span>
                         </div>
                         <div class="col-sm-2" ng-if="getRole() >= roles.Normal">
-                            <button type="button" class="btn green" ng-click="confirmShutdown()">Shutdown Now</button>
+                            <button type="button" class="btn"
+                                    ng-class="{green:(tracker.shipmentStatus!='Ended' && tracker.shipmentStatus!='Arrived')}"
+                                    ng-click="confirmShutdown()">Shutdown Now</button>
+                                <i tooltip="Shutdown this device and end the latest shipment."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
                         </div>
                     </div>
                     <div ng-if="getRole() > roles.Admin">

@@ -1,6 +1,7 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
-              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
+function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location)
+{
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -13,6 +14,38 @@
         $scope.sn = $stateParams.sn;
         $scope.trip = $stateParams.trip;
     }
+
+    //--update $rootScope roles
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            webSvc.getUser().success(function (data) {
+                if(data.status.code == 0){
+                    $rootScope.User = data.response;
+                }
+            });
+        }
+
+        if ($rootScope.RunningTime == null) {
+            //reload user-time
+            webSvc.getUserTime().success( function (timeData) {
+                //console.log('USER-TIME', timeData);
+                if (timeData.status.code == 0) {
+                    $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
+                    $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+                    $scope.tickInterval = 1000 //ms
+                    var tick = function () {
+                        $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                        $timeout(tick, $scope.tickInterval); // reset the timer
+                    }
+                    // Start the timer
+                    $timeout(tick, $scope.tickInterval);
+                }
+            });
+        }
+    }
+    reloadIfNeed();
 
     var plotLines = new Array();
     $scope.vm = this;
@@ -240,12 +273,17 @@
 
         //check if latest shipment here
         $scope.shutdownAlready=false;
+        $scope.suppressAlready=false;
         currentShipmentId = $scope.trackerInfo.shipmentId;
-        webSvc.getShipment (currentShipmentId).success(function(data) {
+        webSvc.getShipment(currentShipmentId).success(function(data) {
             console.log('CURRENT-SHIPMENT',currentShipmentId, data)
             currentShipment = data.response;
-            if (currentShipment.shutdownTime || currentShipment.status == 'Ended') {
+            if (currentShipment.shutdownTime) {
                 $scope.shutdownAlready = true;
+            }
+            if (currentShipment.status == 'Ended' || currentShipment.status == 'Arrived') {
+                $scope.suppressAlready = true;
+                $scope.isEndedOrArrived = true;
             }
             webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
                 console.log('CURRENT-DEVICE', dd);
@@ -1076,7 +1114,6 @@
                 toastr.warning ('You have already shutdown this device!');
             }
         } else {
-            //todo: link
             var temShipmentNumber = currentDevice.shipmentNumber;
             if (temShipmentNumber){
                 var idx1 = temShipmentNumber.indexOf('(');
@@ -1088,8 +1125,36 @@
             var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
             toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
         }
-    }
+    };
+    $scope.confirmSuppress = function(Id) {
+        if ($scope.isEndedOrArrived || $scope.suppressAlready) {
+            var temShipmentNumber = currentDevice.shipmentNumber;
+            if (temShipmentNumber){
+                var idx1 = temShipmentNumber.indexOf('(');
+                var idx2 = temShipmentNumber.indexOf(')');
+                var n = temShipmentNumber.substr(idx1+1, idx2-1);
+                currentDevice.tripCount = parseInt(n);
+            }
+            currentDevice.sn = parseInt(currentDevice.sn);
+            var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
 
+            toastr.warning('Warning. This device can only suppress alert from latest shipment ' + link);
+        } else {
+            var modalInstance = $modal.open({
+                templateUrl: '/app/view-shipment-detail-share/confirm-suppress.html',
+                controller: 'ConfirmSuppressCtrl',
+                resolve: {
+                    shipmentId: function() {
+                        return Id;
+                    }
+                }
+            });
+            modalInstance.result.then(function() {
+                //update data after suppress
+                $scope.suppressAlready = true;
+            });
+        }
+    };
     $scope.EditDescription = function(Id) {
         var modalInstance = $modal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',
