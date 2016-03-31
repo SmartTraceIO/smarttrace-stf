@@ -30,8 +30,8 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 				$timeout.cancel(loginTimer);
 				if (data.status.code == 0) {
 					localDbSvc.setToken(data.response.token, data.response.expired);
-					console.log(data.response);
-					console.log(localDbSvc.getToken());
+					//console.log(data.response);
+					//console.log(localDbSvc.getToken());
 					$scope.AuthToken = data.response.token;
 					$rootScope.AuthToken = data.response.token;
 					if ($rootScope.redirectUrl == "" || $rootScope.redirectUrl == undefined) {
