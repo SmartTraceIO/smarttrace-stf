@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart templates");
@@ -45,19 +45,23 @@
         BindAutoShipmentList();
     }
 
-    $scope.confirm = function (shipmentTempId) {
-        $scope.autoStartShipmentId = shipmentTempId;
-        $("#confirmModel").modal("show");
-    }
+    $scope.confirmDelete = function(shipmentTempId) {
+        var modalInstance = $modal.open({
+            templateUrl: 'app/autostart-template/confirm-delete.html',
+            controller: 'ConfirmDeleteAutoStartCtrl',
+            resolve: {
+                templateId: function () {
+                    return shipmentTempId;
+                }
+            }
+        })
 
-    $scope.DeleteShipment = function () {
-        $("#confirmModel").modal("hide");
-        webSvc.deleteAutoStartShipment($scope.autoStartShipmentId).success(function(data){
-            if (data.status.code == 0) {
-                toastr.success("Shipment template deleted successfully");
+        modalInstance.result.then(
+            function() {
+                //--TODO, update list without refresh
                 BindAutoShipmentList();
             }
-        });
+        );
     }
 });
 

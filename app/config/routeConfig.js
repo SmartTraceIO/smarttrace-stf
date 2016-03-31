@@ -455,6 +455,11 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/autostart-template/autostart-template.js?v=' + version,
+              'app/autostart-template/confirm-delete.js?v=' + version,
+              'app/manage-location/manage-location.js?v=' + version,
+              'app/manage-alert/manage-alert.js?v=' + version,
+              'app/manage-notification/manage-notification.js?v=' + version,
+              'app/global/directives/weekdays.js?v=' + version,
               'app/global/filters/filters.js?v=' + version
           ]
       },
