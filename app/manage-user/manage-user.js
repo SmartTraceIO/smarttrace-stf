@@ -133,14 +133,15 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     $scope.SaveData = function (isValid) {
         if (isValid) {
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                console.log('RESPONSE-NEW-USER', data);
                 console.log('USER-TO-CREATE', $scope.User);
                 if (data.status.code == 0) {
                     toastr.success("User added successfully");
                 } else {
-                    //--todo: need more meaning error message
                     var errStr = data.status.message;
-                    toastr.error(errStr);
+                    if (errStr.indexOf('Duplicate') >= 0) {
+                        errStr = errStr.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+                        toastr.error("The email address "+errStr+" is already in use in the system.");
+                    }
                 }
                 $state.go('manage.user');
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {

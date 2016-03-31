@@ -638,3 +638,6 @@ h3 span.info {
 .grey-out{
     color: #ddd;
 }
+.portlet.box.green > .portlet-title > .caption {
+    padding-top:16px;
+}
