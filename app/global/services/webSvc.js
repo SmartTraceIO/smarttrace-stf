@@ -141,6 +141,15 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
+		getNotes: function(params) {
+			var url = Api.url + 'getNotes/' + localDbSvc.getToken();
+			return $http.get(url, params);
+		},
+		saveNote: function(note) {
+			var url = Api.url + 'saveNote/' + localDbSvc.getToken();
+			return $http.post(url, note);
+		},
+
 		getLocations: function(pageSize, pageIndex, sc, so){
 			var url = Api.url + 'getLocations/' + localDbSvc.getToken();
 			var params = {

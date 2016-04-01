@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
+function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location)
 {
     rootSvc.SetPageTitle('View Shipment Detail');
@@ -65,6 +65,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
     var subSeries = new Array();
     var alertData = new Array();
     var lightPlotBand = new Array();
+    var noteData = new Array();
 
     var currentShipmentId = null;
     var currentShipment = {};
@@ -123,21 +124,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
     });
 
     $scope.Print = function(){
-        //$print = $("#print-content").detach();
-        //$print.empty();
-        //$print.append($(".left-panel").clone());
-        //$print.append($("#chart1").clone());
-        //$print.append($("ng-map").clone());
-        //// $print.append($(".col-sm-9").clone());
-        //$("body").append($print);
-
-        /*var printDoc = document.createElement('div');
-        printDoc.style.position='fixed';
-        printDoc.style.top=0;
-        printDoc.style.bottom=0;
-        printDoc.innerHTML = document.getElementsByClassName('left-panel') + document.getElementById('chart1');
-        //printDoc.appendChild(document.getElementById('chart1'));
-        printDoc.print();*/
         setTimeout(print, 100);
     }
     function print(){
@@ -255,6 +241,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
         prepareMainHighchartSeries();
         prepareTrackerMessage();
         prepareAlertHighchartSeries();
+        prepareNoteChartSeries();
         refreshHighchartSeries();
 
         //-------PREPARE HIGHCHART DATA-------
@@ -305,12 +292,11 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
     }
 
     function updatePlotLines(){
-        while(plotLines.length > 0){
-            plotLines.pop();
-        }
+        plotLines.length = 0;
 
         var ti = $scope.trackers[$scope.MI].locations;
         var lastPoint = ti.length - 1;
+
         var mainTrackerPeriod = parseDate(ti[lastPoint].timeISO) - parseDate(ti[0].timeISO);
         mainTrackerPeriod /= 25;
         var color = "#000";
@@ -452,9 +438,21 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
         }
     }
 
+    function  promiseGetNotes (params) {
+        return $q(function(resolve, reject) {
+            webSvc.getNotes(params).success(function(data) {
+                if (data.status.code == 0) {
+                    resolve(data.response);
+                } else {
+                    reject(data.status);
+                }
+            })
+        })
+    }
+
     loadTrackerData();    
 
-    function loadTrackerData(){
+    function loadTrackerData() {
 
         var params = null;
         if ($scope.ShipmentId) {
@@ -466,12 +464,21 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
         } else {
             params = {
                 params: {
-                    sn : $scope.sn,
-                    trip : $scope.trip
+                    sn: $scope.sn,
+                    trip: $scope.trip
                 }
             };
         }
 
+        var promise = promiseGetNotes(params);
+        promise.then(function (res) {
+            console.log('Note', res);
+            $scope.shipmentNotes = res;
+            loadSingShipment(params);
+        }, function (status) {
+        });
+    }
+    function loadSingShipment(params) {
         //console.log('PARAMS', params);
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
             console.log("SINGLE-SHIPMENT", graphData);
@@ -764,11 +771,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
     }   
 
     function refreshHighchartSeries(){
-
-        // console.log($scope.MI);
-        while(chartSeries.length > 0){
-            chartSeries.pop();
-        }
+        chartSeries.length=0;
 
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
@@ -778,7 +781,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI]
-        }); 
+        });
 
         //Add gap to the start and end
         var ti = $scope.trackers[$scope.MI].locations;
@@ -819,20 +822,26 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
                 data: alertData[i]
             });
         }
+
+        //-- notes
+        console.log('ShipmentNotes', $scope.shipmentNotes);
+        chartSeries.push({
+            name: "Notes",
+            color: "#e5e5e5",
+            data: noteData
+        });
+        console.log('Chart-series', chartSeries);
     }
 
+    function prepareNoteChartSeries() {
+        noteData.length = 0; //reset noteData
+
+    }
     function prepareAlertHighchartSeries(){
-        
-        //while(lightPlotBand.length > 0){
-        //    lightPlotBand.pop();
-        //}
         lightPlotBand.length = 0;
 
         var plot = {};
         plot.from = null;
-        /*while(alertData.length > 0){
-            alertData.pop();
-        }*/
         alertData.length = 0;
         // console.log($scope.MI);
         // debugger;
@@ -934,50 +943,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
             enabled: true,
             symbol: 'url(theme/img/tracker' + ($scope.MI + 1) + '.png)'
         };
-
-        // trackerDest.pop();
-        // trackerDest.push(obj);
-    }
-
-    $scope.generatePDF = function(){
-
-        console.log("clicked pdf button");
-        var printContents ='<html><head><link rel="stylesheet" href="./css/app.css"/></head><body id="pdf">'+document.getElementById("print-content").innerHTML+'</body></html>';
-        alert("OK");
-        alert(document.getElementById("print-content").innerHTML);
-        var popupWin = window.open('', 'app', '');
-        popupWin.document.open();
-        popupWin.document.write(printContents);
-        try{
-            //var pdf = new jsPDF('p','pt','a4');
-            var pdf = new jsPDF('landscape');
-            pdf.addHTML(popupWin.document.body,function() {
-                var string = pdf.output('datauristring');
-                $('.preview-pane').attr('src', string);
-            });
-        }
-        catch(e) {
-            console.error(e.message,e.stack,e);
-        }
-
-        var file ='Demo';
-
-        if (typeof doc !== 'undefined') {
-            doc.save(file + '.pdf');
-        } else if (typeof pdf !== 'undefined') {
-            setTimeout(function() {
-                pdf.save(file + '.pdf');
-            }, 2000);
-        } else {
-            alert('Error 0xE001BADF');
-        }
     }
 
     function prepareMainHighchartSeries(){
-        
-        /*while(subSeries.length > 0){
-            subSeries.pop();
-        }*/
         subSeries.length = 0;
 
         //calculate chart arrange and cut down the others
@@ -1004,6 +972,22 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
             if(tempMax == null){
                 tempMax = tempMin = locations[0].temperature;
             }
+
+            angular.forEach($scope.shipmentNotes, function(note, nk) {
+
+                //$scope.shipmentNotes[nk].y=locations[0].temperature;
+                //$scope.shipmentNotes[nk].x=parseDate(locations[0].timeISO);
+
+                for(var k =0; k<locations.length; k++) {
+                    if (note.timeOnChart == locations[k].timeISO) {
+                        $scope.shipmentNotes[nk].y=locations[k].temperature;
+                        $scope.shipmentNotes[nk].x=parseDate(locations[k].timeISO);
+                        break;
+                    }
+                }
+            });
+
+
             for(j = 0; j < locations.length; j++){
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
@@ -1013,15 +997,26 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
                     }
                 }
 
-                temp = new Array();
-                temp.push(parseDate(locations[j].timeISO)); //--[0]
-                temp.push(locations[j].temperature);        //--[1]
-                temp.push(locations[j].alerts);             //--[2]
-                temp.push(locations[j].lat);                //--[3]
-                temp.push(locations[j].long);               //--[4]
-                //--
-                temp.push($scope.trackers[i].tripCount);    //--[5]
-                temp.push($scope.trackers[i].deviceSN);     //--[6]
+                //temp = new Array();
+
+                temp = {};
+                temp.x = parseDate(locations[j].timeISO);
+                temp.y = locations[j].temperature;
+                temp.alerts = locations[j].alerts;
+                temp.lat = locations[j].lat;
+                temp.lng = locations[j].long;
+                temp.tripCount = $scope.trackers[i].tripCount;
+                temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                //temp.push(parseDate(locations[j].timeISO)); //--[0] x
+                //temp.push(locations[j].temperature);        //--[1] y
+                //temp.push(locations[j].alerts);             //--[2]
+                //temp.push(locations[j].lat);                //--[3]
+                //temp.push(locations[j].long);               //--[4]
+                ////--
+                //temp.push($scope.trackers[i].tripCount);    //--[5]
+                //temp.push($scope.trackers[i].deviceSN);     //--[6]
+
                 //--
                 //temp.push($scope.trackers[i].startLocationForMap);
                 //temp.push($scope.trackers[i].endLocationForMap);
@@ -1089,10 +1084,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
         curr_min = ("00" + curr_min).slice(-2);
 
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
-    }
-
-    $scope.viewReading = function() {
-        $state.go('#/view-shipment-detail-table?sn='+$scope.trackerInfo.deviceSN+'&trip='+$scope.trackerInfo.tripCount);
     }
 
     $scope.confirmShutdown = function(shipmentId) {
