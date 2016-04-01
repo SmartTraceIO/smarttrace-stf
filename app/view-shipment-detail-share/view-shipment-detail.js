@@ -144,6 +144,10 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state,
         $window.print();
     }
 
+    $scope.ViewReading = function(sn, trip) {
+        $state.go('viewshipmentdetailtable', {sn:sn, trip: trip})
+    }
+
     function updateMapData(index){
         var locations = subSeries[index];
 

@@ -7,9 +7,10 @@
         </div>
         <div class="tools hidden-print">
              <!--<button class="btn btn-link btn-sm uppercase" type="button" style="color:#ffffff" ng-click="viewReading()">View Readings</button>-->
-            <a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}">
+            <!--<a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}">
                 <u>View Readings</u>
-            </a>
+            </a>-->
+            <button class="btn default btn-sm uppercase" type="button" ng-click="ViewReading(trackerInfo.deviceSN, trackerInfo.tripCount)">View Reading</button>
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                 <i class="fa fa-print"></i>
                 <span>Print</span>
