@@ -10,20 +10,22 @@
                     console.log('TrackerList', data.response);
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
+
+                    //parsing TrackerList
+                    angular.forEach($scope.TrackerList, function(v, k) {
+                        var temShipmentNumber = v.shipmentNumber;
+                        if (temShipmentNumber){
+                            var idx1 = temShipmentNumber.indexOf('(');
+                            var idx2 = temShipmentNumber.indexOf(')');
+                            var n = temShipmentNumber.substr(idx1+1, idx2-1);
+                            var t = temShipmentNumber.substr(0, idx1);
+                            $scope.TrackerList[k].tripCount = Math.ceil(n);
+                            //$scope.TrackerList[k].sn = parseInt(t);
+                        }
+                        $scope.TrackerList[k].sn = Math.ceil(v.sn);
+                    })
                 }
-            }).then(function() {
-                //parsing TrackerList
-                angular.forEach($scope.TrackerList, function(v, k) {
-                    var temShipmentNumber = v.shipmentNumber;
-                    if (temShipmentNumber){
-                        var idx1 = temShipmentNumber.indexOf('(');
-                        var idx2 = temShipmentNumber.indexOf(')');
-                        var n = temShipmentNumber.substr(idx1+1, idx2-1);
-                        $scope.TrackerList[k].tripCount = parseInt(n);
-                    }
-                    $scope.TrackerList[k].sn = parseInt(v.sn);
-                })
-            });
+            })
         }
         $scope.Print = function() {
             $window.print();
@@ -188,9 +190,9 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 var idx1 = temShipmentNumber.indexOf('(');
                 var idx2 = temShipmentNumber.indexOf(')');
                 var n = temShipmentNumber.substr(idx1+1, idx2-1);
-                $scope.tracker.tripCount = parseInt(n);
+                $scope.tracker.tripCount = Math.ceil(n);
             }
-            $scope.tracker.sn = parseInt($scope.tracker.sn);
+            $scope.tracker.sn = Math.ceil($scope.tracker.sn);
         });
 
         $scope.saveTracker = function() {

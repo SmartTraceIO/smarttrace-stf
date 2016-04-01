@@ -143,18 +143,15 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
         // console.log($scope.vm.map);
         bounds = new google.maps.LatLngBounds;
-        //for (var j = 0; j < $scope.trackers[index].locations.length; j++) {
-        //    bounds.extend(new google.maps.LatLng($scope.trackers[index].locations[j].lat, $scope.trackers[index].locations[j].long))
-        //}
 
         for(i = 0 ; i < locations.length; i ++){
-            var ll = new google.maps.LatLng(locations[i][3], locations[i][4]);
+            var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
             bounds.extend(ll);
-            $scope.trackerPath.push({lat: locations[i][3], lng: locations[i][4]});
+            $scope.trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
             //markers
-            var pos = [locations[i][3], locations[i][4]];
-            if(locations[i][2].length > 0){
-                if(locations[i][2][0].type == 'LastReading'){
+            var pos = [locations[i].lat, locations[i].lng];
+            if(locations[i].alerts.length > 0){
+                if(locations[i].alerts[0].type == 'LastReading'){
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -171,7 +168,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                             tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                         }
                     );
-                } else if(locations[i][2][0].type.toLowerCase() != 'lighton' && locations[i][2][0].type.toLowerCase() != 'lightoff') {
+                } else if(locations[i].alerts[0].type.toLowerCase() != 'lighton' && locations[i].alerts[0].type.toLowerCase() != 'lightoff') {
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -179,13 +176,13 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                             oi: i,
                             pos: pos,
                             data: locations[i],
-                            iconUrl: "theme/img/alert" + locations[i][2][0].type + ".png",
+                            iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
                             icon: {
-                                url:"theme/img/alert" + locations[i][2][0].type + ".png",
+                                url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
                                 scaledSize:[24, 24],
                                 anchor:[12, 12]
                             },
-                            tinyIconUrl: "theme/img/tinyAlert" + locations[i][2][0].type + ".png"
+                            tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"
                         }
                     );
                 }
@@ -364,8 +361,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         for(i = 0; i < subSeries[$scope.MI].length; i++){
                     //prepare tracker message data
             var obj = {};
-            obj.title = "Tracker " + info[i][6] + "(" + info[i][5] + ")";
-            obj.lines = ['<div><span class="tt_temperature">' + info[i][1].toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(info[i][0]) + '</span></div>'];
+            obj.title = "Tracker " + info[i].deviceSN + "(" + info[i].tripCount + ")";
+            obj.lines = ['<div><span class="tt_temperature">' + info[i].y.toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(info[i].x) + '</span></div>'];
             $scope.trackerMsg.push([obj]);
         }
         // console.log($scope.trackerMsg.length);
@@ -387,7 +384,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             tmp.mapMarkerMessage = $scope.trackerMsg[this.data.oi][i].lines;
             $scope.msgForMap.push(tmp);
         }
-//        console.log('msgForMap', $scope.msgForMap);
+        //console.log('msgForMap', $scope.msgForMap);
         $scope.diagColor = $scope.trackerColor;
         
         if(!$scope.$$phase) {
@@ -414,7 +411,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             //For alerts, only black circle without point in it.
             $scope.currentPoint.iconUrl = "theme/img/dot.png";
             //$scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
-            $scope.currentPoint.loc = {lat: subSeries[$scope.MI][index][3], long: subSeries[$scope.MI][index][4]};
+            $scope.currentPoint.loc = {lat: subSeries[$scope.MI][index].lat, long: subSeries[$scope.MI][index].lng};
             $scope.currentPoint.icon = {
                 url: 'theme/img/dot.png',
                 anchor: [17.5,17.5]
@@ -601,7 +598,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                     mouseOver: function () {
                                         var idx;
                                         for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                            if(subSeries[$scope.MI][index][0] == this.x){
+                                            if(subSeries[$scope.MI][index].x == this.x){
                                                 idx = index;
                                                 break;
                                             }
@@ -612,6 +609,19 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                     },
                                     mouseOut: function () {
                                         $scope.showAlerts(-1);
+                                    }
+                                }
+                            },
+                            dataLabels: {
+                                enabled:true,
+                                useHTML: true,
+                                formatter: function() {
+                                    var index = 0;
+                                    //return 100;
+                                    for (index = 0; index < noteData.length; index++) {
+                                        if (noteData[index][0].x == this.x) {
+                                            return noteData[index][0].noteNum;
+                                        }
                                     }
                                 }
                             }
@@ -655,7 +665,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                         formatter: function () {
                             var index;
                             for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                if(subSeries[$scope.MI][index][0] == this.x) break;
+                                if(subSeries[$scope.MI][index].x == this.x) break;
                             }
                             var color = this.points[0].series.color;
                             msg = $scope.trackerMsg[index];
@@ -824,18 +834,30 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         }
 
         //-- notes
-        console.log('ShipmentNotes', $scope.shipmentNotes);
-        chartSeries.push({
-            name: "Notes",
-            color: "#e5e5e5",
-            data: noteData
-        });
+        angular.forEach(noteData, function(val, key) {
+            chartSeries.push({
+                name: "Notes",
+                color: "#e5e5e5",
+                data: val
+            });
+        })
         console.log('Chart-series', chartSeries);
     }
 
     function prepareNoteChartSeries() {
+        console.log('ShipmentNotes', $scope.shipmentNotes);
         noteData.length = 0; //reset noteData
+        //noteData = $scope.shipmentNotes;
 
+        angular.forEach($scope.shipmentNotes, function(val, key) {
+            var tmpArray = new Array();
+            val.marker = {
+                enabled: true,
+                //symbol: 'url(theme/img/alerts.png)'
+            }
+            tmpArray.push(val);
+            noteData.push(tmpArray);
+        })
     }
     function prepareAlertHighchartSeries(){
         lightPlotBand.length = 0;
@@ -848,7 +870,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         //for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
         for(i = 0 ; i < subSeries[$scope.MI].length; i ++){
         //    var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
-            var alertinfo = subSeries[$scope.MI][i][2];
+            var alertinfo = subSeries[$scope.MI][i].alerts;
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
                 var alert = "";
@@ -857,17 +879,17 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
                 obj = {};
-                obj.x = subSeries[$scope.MI][i][0]; //time-x
-                obj.y = subSeries[$scope.MI][i][1]; //temperature-y
+                obj.x = subSeries[$scope.MI][i].x; //time-x
+                obj.y = subSeries[$scope.MI][i].y; //temperature-y
                 obj.marker = {
                     enabled: true,
                     symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
                 };
 
                 if(str.toLowerCase() == "lighton"){
-                    plot.from = subSeries[$scope.MI][i][0];
+                    plot.from = subSeries[$scope.MI][i].x;
                 } else if(str.toLowerCase() == "lightoff"){
-                    plot.to = subSeries[$scope.MI][i][0];
+                    plot.to = subSeries[$scope.MI][i].x;
                     plot.color = 'rgba(255, 255, 0, 0.2)';
                     if(plot.from != null){
                         lightPlotBand.push(plot);
@@ -890,8 +912,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 $scope.trackerMsg[i] = [msg];
             } else if(alertinfo.length > 1){
                 obj = {};
-                obj.x = subSeries[$scope.MI][i][0];
-                obj.y = subSeries[$scope.MI][i][1];
+                obj.x = subSeries[$scope.MI][i].x;
+                obj.y = subSeries[$scope.MI][i].y;
                 obj.marker = {
                     enabled: true,
                     symbol: 'url(theme/img/alerts.png)'
@@ -906,9 +928,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     //for light on/off, show yellow bar and hide icons
                     //by not adding to the alert list
                     if(str.toLowerCase() == "lighton"){
-                        plot.from = subSeries[$scope.MI][i][0];
+                        plot.from = subSeries[$scope.MI][i].x;
                     } else if(str.toLowerCase() == "lightoff"){
-                        plot.to = subSeries[$scope.MI][i][0];
+                        plot.to = subSeries[$scope.MI][i].x;
                         plot.color = 'rgba(255, 255, 0, 0.2)';
                         if(plot.from != null){
                             lightPlotBand.push(plot);
@@ -933,16 +955,31 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         }
         
         lastPoint = subSeries[$scope.MI].length - 1;
+        console.log('LastPoint', lastPoint);
         //Destination
         obj = {};
-        // console.log(subSeries, $scope.MI, lastPoint);
-        obj.x = subSeries[$scope.MI][lastPoint][0];
-        obj.y = subSeries[$scope.MI][lastPoint][1];
+        obj.x = subSeries[$scope.MI][lastPoint].x;
+        obj.y = subSeries[$scope.MI][lastPoint].y;
         obj.z = 30;
         obj.marker = {
             enabled: true,
             symbol: 'url(theme/img/tracker' + ($scope.MI + 1) + '.png)'
         };
+    }
+
+    var sol = 0;
+    function updateNote(location) {
+        for (var i = sol; i< $scope.shipmentNotes.length; i++) {
+            $scope.shipmentNotes[i].x=parseDate($scope.shipmentNotes[i].timeOnChart);
+            var time = parseDate(location.timeISO);
+            if ($scope.shipmentNotes[i].x == time) {
+                $scope.shipmentNotes[i].y = location.temperature;
+                return true;
+            } else if ($scope.shipmentNotes[i].x > time){
+                return false;
+            }
+        }
+        return false;
     }
 
     function prepareMainHighchartSeries(){
@@ -973,25 +1010,19 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 tempMax = tempMin = locations[0].temperature;
             }
 
-            angular.forEach($scope.shipmentNotes, function(note, nk) {
 
-                //$scope.shipmentNotes[nk].y=locations[0].temperature;
-                //$scope.shipmentNotes[nk].x=parseDate(locations[0].timeISO);
-
-                for(var k =0; k<locations.length; k++) {
-                    if (note.timeOnChart == locations[k].timeISO) {
-                        $scope.shipmentNotes[nk].y=locations[k].temperature;
-                        $scope.shipmentNotes[nk].x=parseDate(locations[k].timeISO);
-                        break;
-                    }
-                }
-            });
 
 
             for(j = 0; j < locations.length; j++){
+                //-- update shipmentNotes
+                updateNote(locations[j]);
+
+
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
-                        if(locations[j].alerts.length == 0) continue;
+                        if((locations[j].alerts.length == 0) && !updateNote(locations[j])){
+                            continue;
+                        }
                     } else {
                         tmpCnt = 0;
                     }
@@ -1027,7 +1058,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 if(tempMin > locations[j].temperature){
                     tempMin = locations[j].temperature;
                 }
-                if(startTime <= temp[0] && temp[0] <= endTime){
+                if(startTime <= temp.x && temp.x <= endTime){
                     series.push(temp);
                 }
             }

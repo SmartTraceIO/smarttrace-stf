@@ -78,7 +78,7 @@
             $scope.loading = false;
         }).then(function() {
             angular.forEach($scope.ShipmentList, function(v, k) {
-                $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN);
+                $scope.ShipmentList[k].deviceSN = Math.ceil(v.deviceSN);
             })
         });
     };
