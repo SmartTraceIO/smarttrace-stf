@@ -133,7 +133,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.Init = function () {
         $scope.AutoStartShipment = {};
         $scope.AutoStartShipment.detectLocationForShippedFrom = false;
-        $scope.AutoStartShipment.shutdownDeviceAfterMinutes = '120';
+        $scope.AutoStartShipment.shutdownDeviceAfterMinutes = "120";
         $scope.AutoStartShipment.alertSuppressionMinutes = 120;
         $scope.AutoStartShipment.addDateShipped = false;
         $scope.AutoStartShipment.excludeNotificationsIfNoAlerts = false;
@@ -160,7 +160,14 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             if ($scope.AutoStartShipment.shippedTo)
                 $scope.AutoStartShipment.endLocations.push($scope.AutoStartShipment.shippedTo.locationId);*/
 
-            console.log('ADD - AutoStartShipment', $scope.AutoStartShipment);
+            //console.log('ADD - AutoStartShipment', $scope.AutoStartShipment);
+
+            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes);
+            $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes);
+            $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm);
+            $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes);
+            $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes);
+
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -419,12 +426,33 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                 var response = data.response;
                 $scope.AutoStartShipment = data.response;
 
+                //-- correcting
+                if (response.shutdownDeviceAfterMinutes)
+                    $scope.AutoStartShipment.shutdownDeviceAfterMinutes = response.shutdownDeviceAfterMinutes.toString();
+
+                if (response.shutDownAfterStartMinutes) {
+                    $scope.AutoStartShipment.shutDownAfterStartMinutes = response.shutDownAfterStartMinutes.toString();
+                }
+
+                if ($scope.AutoStartShipment.arrivalNotificationWithinKm)
+                    $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
+
+                //-- noAlertsAfterArrivalMinutes
+                if (response.noAlertsAfterArrivalMinutes) {
+                    $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
+                }
+                //-- noAlertsAfterStartMinutes -- seems not done on server side
+                if (response.noAlertsAfterStartMinutes) {
+                    $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
+                }
+
+
                 $scope.AutoStartShipment.alertsNotificationSchedules.map(function(val) {
                     return val.toString();
                 })
 
                 promise.then(function(notificationList){
-                    console.log('NotificationList', notificationList);
+                    //console.log('NotificationList', notificationList);
                     $scope.NotificationList = notificationList;
                     $scope.ChangeNotiScheduleForAlert();
                     $scope.ChangeNotiScheduleForArrival();
