@@ -355,47 +355,23 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     var filter = $filter('filter');
+
     $scope.Print = function() {
         $window.print();
     }
 
     var BindLocations = function (cb) {
-        var defered = $q.defer();
-        webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
-            if (data.status.code == 0) {
-                $scope.LocationList = data.response;
-
-                $scope.FromLocationList = [];
-                $scope.ToLocationList = [];
-                $scope.InterimLocationList = [];
-
-                angular.forEach($scope.LocationList, function (val, key) {
-                    if (val.companyName) {
-                        var dots = val.companyName.length > 20 ? '...' : '';
-                        var companyName = $filter('limitTo')(val.companyName, 20) + dots;
-                        $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
-                    }
-                    else {
-                        $scope.LocationList[key].DisplayText = val.locationName;
-                    }
-
-                    if (val.startFlag == "Y"){
-                        $scope.FromLocationList.push(val);
-                    }
-                    if (val.endFlag == "Y"){
-                        $scope.ToLocationList.push(val);
-                    }
-                    if (val.interimFlag == 'Y') {
-                        $scope.InterimLocationList.push(val);
-                    }
-
-                })
-
-                if (cb)
-                    cb;
-            }
+        return $q(function(resole, reject) {
+            webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
+                if (data.status.code == 0) {
+                    resole(data.response);
+                    if (cb)
+                        cb;
+                }
+            });
         });
-        return defered.promise;
+
+
     }
     var BindAlertProfiles = function (cb) {
         webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success(function(data){
@@ -405,81 +381,123 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
             if (cb)
                 cb;
-        }).then(function() {
-            $scope.CreateAlertRule();
-        });
+        })
     }
     var BindNotificationSchedules = function (cb) {
-        webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
-            if (data.status.code == 0) {
-                $scope.NotificationList = data.response;
-            }
-
-            if (cb)
-                cb;
-        });
-    }
-
-    BindAlertProfiles();
-    BindNotificationSchedules();
-    var promise = BindLocations();
-    $scope.Init = function () {
-        $scope.STId = $stateParams.stId
-        $scope.AutoStartShipment = {};
-        if ($scope.STId) {
-            var param = {
-                autoStartShipmentId: $scope.STId
-            };
-            webSvc.getAutoStartShipment(param).success(function(data){
+        return $q(function(resolve, reject) {
+            webSvc.getNotificationSchedules(1000000, 1, 'notificationScheduleName', 'asc').success(function(data){
                 if (data.status.code == 0) {
-                    var response = data.response;
-                    console.log('Edit AutoShipmtn', response);
-                    $scope.AutoStartShipment = response;
-                    if (response) {
-                        if (response.shutdownDeviceAfterMinutes)
-                            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = response.shutdownDeviceAfterMinutes.toString();
-
-                        if (response.shutDownAfterStartMinutes) {
-                            $scope.AutoStartShipment.shutDownAfterStartMinutes = response.shutDownAfterStartMinutes.toString();
-                        }
-
-                        if ($scope.AutoStartShipment.arrivalNotificationWithinKm)
-                            $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
-
-                        //-- noAlertsAfterArrivalMinutes
-                        if (response.noAlertsAfterArrivalMinutes) {
-                            $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
-                        }
-                        //-- noAlertsAfterStartMinutes -- seems not done on server side
-                        if (response.noAlertsAfterStartMinutes) {
-                            $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
-                        }
-                        $scope.ChangeNotiScheduleForAlert();
-                        $scope.ChangeNotiScheduleForArrival();
-
-                        $scope.AutoStartShipment.fromLocations = [];
-                        promise.then(function() {
-                            angular.forEach($scope.AutoStartShipment.startLocations, function(val, k) {
-                                var fLocs = filter($scope.FromLocationList, {locationId: val});
-                                if (fLocs && (fLocs.length > 0)) {
-                                    AutoStartShipment.fromLocations.push(fLocs[0]);
-                                }
-                            })
-                        })
-                    }
-                } else {
-                    toastr.error(data.status.message);
+                    resolve(data.response);
                 }
-            })
-
-            $scope.OptionsShipmentTo = {
-                multiple:true
-            };
-            $scope.OptionsShipmentFrom = {
-                multiple:true
-            }
-        }
+                if (cb)
+                    cb;
+            });
+        })
     }
+    $scope.OptionsShipmentTo = {
+        multiple:true
+    };
+    $scope.OptionsShipmentFrom = {
+        multiple:true
+    }
+    $scope.NotificationScheduleOption = {
+        multiple: true
+    };
+    BindLocations();
+    BindAlertProfiles();
+    //$scope.Init = function () {
+    var promise = BindNotificationSchedules();
+    var promise2 = BindLocations();
+
+    $scope.STId = $stateParams.stId
+    if ($scope.STId) {
+        var param = {
+            autoStartShipmentId: $scope.STId
+        };
+        webSvc.getAutoStartShipment(param).success(function(data){
+            if (data.status.code == 0) {
+                var response = data.response;
+                $scope.AutoStartShipment = data.response;
+
+                $scope.AutoStartShipment.alertsNotificationSchedules.map(function(val) {
+                    return val.toString();
+                })
+
+                promise.then(function(notificationList){
+                    console.log('NotificationList', notificationList);
+                    $scope.NotificationList = notificationList;
+                    $scope.ChangeNotiScheduleForAlert();
+                    $scope.ChangeNotiScheduleForArrival();
+                });
+
+                promise2.then(function(locationList) {
+                    $scope.LocationList = locationList;
+
+                    $scope.FromLocationList = [];
+                    $scope.ToLocationList = [];
+                    $scope.InterimLocationList = [];
+                    angular.forEach(locationList, function (val, key) {
+                        if (val.companyName) {
+                            var dots = val.companyName.length > 20 ? '...' : '';
+                            var companyName = $filter('limitTo')(val.companyName, 20) + dots;
+                            locationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
+                        }
+                        else {
+                            locationList[key].DisplayText = val.locationName;
+                        }
+
+                        if (val.startFlag == "Y"){
+                            $scope.FromLocationList.push(val);
+                        }
+                        if (val.endFlag == "Y"){
+                            $scope.ToLocationList.push(val);
+                        }
+                        if (val.interimFlag == 'Y') {
+                            $scope.InterimLocationList.push(val);
+                        }
+
+                    })
+                })
+
+                /*if (response) {
+                    if (response.shutdownDeviceAfterMinutes)
+                        $scope.AutoStartShipment.shutdownDeviceAfterMinutes = response.shutdownDeviceAfterMinutes.toString();
+
+                    if (response.shutDownAfterStartMinutes) {
+                        $scope.AutoStartShipment.shutDownAfterStartMinutes = response.shutDownAfterStartMinutes.toString();
+                    }
+
+                    if ($scope.AutoStartShipment.arrivalNotificationWithinKm)
+                        $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
+
+                    //-- noAlertsAfterArrivalMinutes
+                    if (response.noAlertsAfterArrivalMinutes) {
+                        $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
+                    }
+                    //-- noAlertsAfterStartMinutes -- seems not done on server side
+                    if (response.noAlertsAfterStartMinutes) {
+                        $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
+                    }*/
+                    //$scope.ChangeNotiScheduleForAlert();
+                    //$scope.ChangeNotiScheduleForArrival();
+
+                    /*$scope.AutoStartShipment.fromLocations = [];
+                    promise.then(function() {
+                        angular.forEach($scope.AutoStartShipment.startLocations, function(val, k) {
+                            var fLocs = filter($scope.FromLocationList, {locationId: val});
+                            if (fLocs && (fLocs.length > 0)) {
+                                AutoStartShipment.fromLocations.push(fLocs[0]);
+                            }
+                        })
+                    })
+                }*/
+            } else {
+                toastr.error(data.status.message);
+            }
+        })
+    }
+
+
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
@@ -643,39 +661,41 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     }
 
     $scope.ChangeNotiScheduleForAlert = function () {
+        $scope.AlertNotiRule = null;
         if ($scope.AutoStartShipment && $scope.AutoStartShipment.alertsNotificationSchedules) {
-            $scope.AlertNotiRule = '';
-            for (var i = 0; i < $scope.AutoStartShipment.alertsNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.alertsNotificationSchedules[i]) }, true)
-                if (shipment) {
-                    if (shipment.length > 0) {
-                        shipment = shipment[0];
-                        var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
-                        if ($scope.AlertNotiRule)
-                            $scope.AlertNotiRule = $scope.AlertNotiRule + ', ' + peopleToNotify;
-                        else
-                            $scope.AlertNotiRule = peopleToNotify;
-                    }
+            angular.forEach($scope.AutoStartShipment.alertsNotificationSchedules, function(val, key) {
+                var shipment = filter($scope.NotificationList, {notificationScheduleId: parseInt(val)}, true);
+                if (shipment && shipment.length > 0) {
+                    shipment = shipment[0];
+                    var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
+                    if ($scope.AlertNotiRule)
+                        $scope.AlertNotiRule = $scope.AlertNotiRule + ', ' + peopleToNotify;
+                    else
+                        $scope.AlertNotiRule = peopleToNotify;
                 }
-            }
+            })
         }
     }
+
     $scope.ChangeNotiScheduleForArrival = function () {
+        $scope.ArrivalNotiRule = null;
         if ($scope.AutoStartShipment && $scope.AutoStartShipment.arrivalNotificationSchedules) {
-            $scope.ArrivalNotiRule = '';
-            for (var i = 0; i < $scope.AutoStartShipment.arrivalNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.AutoStartShipment.arrivalNotificationSchedules[i]) }, true)
-                if (shipment) {
-                    if (shipment.length > 0) {
-                        shipment = shipment[0];
-                        var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
-                        if ($scope.ArrivalNotiRule)
-                            $scope.ArrivalNotiRule = $scope.ArrivalNotiRule + ', ' + peopleToNotify;
-                        else
-                            $scope.ArrivalNotiRule = peopleToNotify;
-                    }
+            angular.forEach($scope.AutoStartShipment.arrivalNotificationSchedules, function(val, key) {
+
+                console.log('FOREACH', val);
+
+
+                var shipment = filter($scope.NotificationList, { notificationScheduleId: parseInt(val)}, true);
+                if (shipment && shipment.length > 0) {
+                    shipment = shipment[0];
+                    var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
+                    if ($scope.ArrivalNotiRule)
+                        $scope.ArrivalNotiRule = $scope.ArrivalNotiRule + ', ' + peopleToNotify;
+                    else
+                        $scope.ArrivalNotiRule = peopleToNotify;
                 }
-            }
+            });
+
         }
     }
 });

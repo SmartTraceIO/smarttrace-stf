@@ -130,7 +130,7 @@
                                         multiple ui-select2="OptionsShipmentTo"
                                         ng-model="AutoStartShipment.endLocations"
                                         data-placeholder="Select location for auto detection of shipment to">
-                                    <option ng-repeat="location in ToLocationList"t
+                                    <option ng-repeat="location in ToLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
                                 </select>
                             </div>
@@ -191,11 +191,24 @@
                         </div>
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
+
                     <div class="col-sm-4">
-                        <label class="control-label">Notification Schedule(s) For Alerts&nbsp;<i tooltip="Notification schedule(s) for alerts" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <br /><select style="width:100%" ng-change="ChangeNotiScheduleForAlert()" multiple ui-select2="NotificationScheduleOption" ng-model="AutoStartShipment.alertsNotificationSchedules" data-placeholder="Select Notification Schedule For Alert Profile">
-                            <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select><br />
+                        <label class="control-label">
+                            <span>Notification Schedule(s) For Alerts</span>
+                            <i tooltip="Notification schedule(s) for alerts"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
+                        <select style="width:100%"
+                                ng-change="ChangeNotiScheduleForAlert()"
+                                multiple ui-select2="NotificationScheduleOption"
+                                ng-model="AutoStartShipment.alertsNotificationSchedules"
+                                data-placeholder="Select Notification Schedule For Alert Profile">
+                            <option ng-repeat="noti in NotificationList"
+                                    value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
+                        </select>
                         <small class="text-muted control-label">
                             {{AlertNotiRule}}
                         </small>
@@ -295,10 +308,23 @@
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-4">
-                        <label class="control-label">Schedule(s) For Arrival Notification&nbsp;<i tooltip="Schedule(s) for arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <br /><select style="width:100%" ng-change="ChangeNotiScheduleForArrival()" multiple ui-select2="NotificationScheduleOption" ng-model="AutoStartShipment.arrivalNotificationSchedules" data-placeholder="Select Notification Schedule For Arrival">
-                            <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select><br />
+                        <label class="control-label">
+                            <span>Schedule(s) For Arrival Notification</span>
+                            <i tooltip="Schedule(s) for arrival notification"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
+                        <select style="width:100%"
+                                ng-change="ChangeNotiScheduleForArrival()"
+                                multiple ui-select2="NotificationScheduleOption"
+                                ng-model="AutoStartShipment.arrivalNotificationSchedules"
+                                data-placeholder="Select Notification Schedule For Arrival">
+                            <option ng-repeat="noti in NotificationList"
+                                    value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
+                        </select>
+                        <br />
                         <small class="text-muted control-label">
                             {{ArrivalNotiRule}}
                         </small>
