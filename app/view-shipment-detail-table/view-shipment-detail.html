@@ -5,7 +5,10 @@
             <span>Temperature Readings for Tracker {{trackerInfo.deviceSN}} Trip {{trackerInfo.tripCount}} as of {{RunningTime}}</span>
         </div>
         <div class="tools hidden-print">
-            <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
+            <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
+                <i class="fa fa-print"></i>
+                <span>Print</span>
+            </button>
         </div>
     </div>
     <div class="portlet-body" style="padding: 0!important;">
