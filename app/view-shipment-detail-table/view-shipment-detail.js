@@ -155,8 +155,6 @@
                                 $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
                             $scope.trackers[j].loaded = true;
                             $scope.trackers[j].loadedForIcon = true;
-                            prepareMainHighchartSeries();
-                            refreshHighchartSeries();
                             break;
                         }
                     }
