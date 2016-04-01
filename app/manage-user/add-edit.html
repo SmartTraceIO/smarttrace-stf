@@ -1,7 +1,7 @@
 ﻿<!--<h3 class="page-title" ng-init="Init()">
     Users
 </h3>-->
-<div class="portlet box green ">
+<div class="portlet box green " ng-init="Init()">
     <div class="portlet-title">
         <div class="caption">
             <img style="margin-top:-8px" src="../../theme/img/headerUsers.png" />  {{Action}} Users
@@ -131,13 +131,27 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
-                        <label class="control-label">Roles:&nbsp;<i tooltip="Roles" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                        <label class="control-label pull-right"><span class="text-error">*</span></label>
-                        <select required style="width:100%" multiple ui-select2="RoleOption" name="Roles" ng-model="User.user.roles" data-placeholder="Select Roles For User">
+                        <label class="control-label">
+                            <span>Roles:</span>
+                            <i tooltip="Roles"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </label>
+                        <label class="control-label pull-right">
+                            <span class="text-error">*</span>
+                        </label>
+                        <select required style="width:100%"
+                                multiple ui-select2="RoleOption"
+                                name="Roles"
+                                ng-model="User.user.roles"
+                                data-placeholder="Select Roles For User">
                             <option ng-repeat="role in RoleList" value="{{role}}">{{role}}</option>
                         </select>
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
-                            <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Roles.$error.required">Please select atleast one role</span>
+                            <span ng-cloak class="text-danger"
+                                  ng-if="frmAddEditUser.Roles.$error.required">Please select atleast one role</span>
                         </span>
                     </div>
                     <div class="col-md-2 text-right">
@@ -200,7 +214,7 @@
         </form>
     </div>
 </div>
-<script src="../app/manage-location/manage-location.js"></script>
-<script src="../app/manage-alert/manage-alert.js"></script>
-<script src="../app/manage-notification/manage-notification.js"></script>
-<script src="../app/global/directives/weekdays.js"></script>
+<!--<script src="../app/manage-location/manage-location.js"></script>-->
+<!--<script src="../app/manage-alert/manage-alert.js"></script>-->
+<!--<script src="../app/manage-notification/manage-notification.js"></script>-->
+<!--<script src="../app/global/directives/weekdays.js"></script>-->

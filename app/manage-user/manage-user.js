@@ -71,6 +71,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     $scope.AddUser = true;
     var BindRoles = function () {
         webSvc.getRoles().success(function(data){
+            console.log('ROLELIST', data);
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
@@ -192,49 +193,44 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
 
     var BindDeviceGroups = function () {
         webSvc.getDeviceGroups().success(function(data){
-        // .get({ action: "getDeviceGroups ", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.DeviceGroupList = data.response;
             }
         });
     }
 
-    BindRoles();
-    BindLanguages();
-    BindTimezones();
-    BindDeviceGroups();
+    $scope.Init = function() {
+        $scope.UId = $stateParams.uId;
+        $scope.User = {};
+        if ($scope.UId) {
+            var param = {
+                userId: $scope.UId
+            };
+            webSvc.getUser(param).success(function(data){
+                if (data.status.code == 0) {
+                    $scope.User = {};
+                    $scope.User.user = data.response;
+                    $scope.externalCompany = data.response.externalCompany;
+                }
+            });
+        }
+        BindRoles();
+        BindLanguages();
+        BindTimezones();
+        BindDeviceGroups();
+    }
 
+    $scope.$watch("User.user.external", function (nVal, oVal) {
+        if ($scope.User && $scope.User.user) {
+            if (!nVal) {
+                $scope.User.user.externalCompany = $scope.InternalCompany
+            }
+            else {
+                $scope.User.user.externalCompany = $scope.externalCompany;
+            }
+        }
+    });
 
-    $scope.UId = $stateParams.uId;
-    console.log($scope.UId);
-     $scope.User = {};
-     if ($scope.UId) {
-
-         var param = {
-             userId: $scope.UId
-         };
-         webSvc.getUser(param).success(function(data){
-             console.log("TEST-DATA", data);
-             if (data.status.code == 0) {
-                 $scope.User = {};
-                 $scope.User.user = data.response;
-                 $scope.externalCompany = data.response.externalCompany;
-                 console.log($scope.User.user)
-             }
-         });
-
-
-         $scope.$watch("User.user.external", function (nVal, oVal) {
-             if ($scope.User && $scope.User.user) {
-                 if (!nVal) {
-                     $scope.User.user.externalCompany = $scope.InternalCompany
-                 }
-                 else {
-                     $scope.User.user.externalCompany = $scope.externalCompany;
-                 }
-             }
-         });
-     }
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
