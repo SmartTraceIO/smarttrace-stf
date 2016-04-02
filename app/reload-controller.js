@@ -146,6 +146,8 @@
             webSvc.getUser().success(function (data) {
                 if(data.status.code == 0){
                     $rootScope.User = data.response;
+                    //--update User
+                    localDbSvc.setDegreeUnits(data.response.temperatureUnits);
                     loadNotifications();
                 }
             });

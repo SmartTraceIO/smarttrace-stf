@@ -19,10 +19,10 @@
                             var idx2 = temShipmentNumber.indexOf(')');
                             var n = temShipmentNumber.substr(idx1+1, idx2-1);
                             var t = temShipmentNumber.substr(0, idx1);
-                            $scope.TrackerList[k].tripCount = Math.ceil(n);
+                            $scope.TrackerList[k].tripCount = parseInt(n, 10);
                             //$scope.TrackerList[k].sn = parseInt(t);
                         }
-                        $scope.TrackerList[k].sn = Math.ceil(v.sn);
+                        $scope.TrackerList[k].sn = parseInt(v.sn, 10);
                     })
                 }
             })
@@ -190,9 +190,9 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 var idx1 = temShipmentNumber.indexOf('(');
                 var idx2 = temShipmentNumber.indexOf(')');
                 var n = temShipmentNumber.substr(idx1+1, idx2-1);
-                $scope.tracker.tripCount = Math.ceil(n);
+                $scope.tracker.tripCount = parseInt(n, 10);
             }
-            $scope.tracker.sn = Math.ceil($scope.tracker.sn);
+            $scope.tracker.sn = parseInt($scope.tracker.sn, 10);
         });
 
         $scope.saveTracker = function() {

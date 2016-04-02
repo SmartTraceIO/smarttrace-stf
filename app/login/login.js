@@ -50,9 +50,10 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
     $scope.loadUserAndMove = function(url) {
         webSvc.getUser().success(function (data) {
             $rootScope.User = data.response;
+			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
         })
         webSvc.getUserTime().success( function (timeData) {
-            console.log('USER-TIME', timeData);
+            //console.log('USER-TIME', timeData);
             if (timeData.status.code == 0) {
                 $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
                 $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);

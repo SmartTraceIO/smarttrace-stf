@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, $rootScope, $window) {
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, $rootScope, $window) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -78,7 +78,7 @@
             $scope.loading = false;
         }).then(function() {
             angular.forEach($scope.ShipmentList, function(v, k) {
-                $scope.ShipmentList[k].deviceSN = Math.ceil(v.deviceSN);
+                $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
             })
         });
     };
@@ -227,14 +227,5 @@
     };
     $scope.showCard = function() {
         $scope.viewCard = true;
-    }
-});
-
-appFilters.filter('temp', function() {
-    return function (input) {
-        if (input == null) {
-            return '';
-        }
-        return Number(input).toFixed(1) + '\u2103';
     }
 });

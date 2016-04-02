@@ -105,6 +105,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/view-shipment/view-shipment.js?v=' + version,
+              'app/global/filters/filters.js?v=' + version
           ]
       },
       {
@@ -135,6 +136,7 @@ appConstants.constant('routes', [
         },
         dependencies: [
             'app/view-shipment-detail-table/view-shipment-detail.js?v=' + version,
+            'app/global/filters/filters.js?v=' + version
         ]
     },
     {
@@ -152,6 +154,7 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
             'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
             'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
+            'app/global/filters/filters.js?v=' + version
         ]
     },
       {

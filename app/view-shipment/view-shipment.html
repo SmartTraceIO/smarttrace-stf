@@ -413,7 +413,7 @@
                                 <td class="text-left" ng-if="shipment.siblingCount!=0">{{shipment.siblingCount}}</td>
                                 <td class="text-left" ng-if="shipment.siblingCount==0"></td>
                                 <td class="text-left">{{shipment.lastReadingTimeISO}}</td>
-                                <td class="text-left">{{shipment.lastReadingTemperature | temp}}</td>
+                                <td class="text-left">{{shipment.lastReadingTemperature | temperature}}</td>
                                 <td class="text-left">
                                     <!--show alert-->
                                     <img ng-src="theme/img/alertLightOn.png" ng-if="shipment.alertSummary.LightOn" />

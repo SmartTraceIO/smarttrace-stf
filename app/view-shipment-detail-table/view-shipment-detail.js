@@ -353,14 +353,3 @@ appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'w
         };
 }]);
 
-appFilters.filter('temperature', function ($rootScope) {
-    return function (input) {
-        if ($rootScope.User) {
-            if($rootScope.User.temperatureUnits=="Celsius") {
-                return input+ '\u2103';
-            } else {
-                return input+'\u2109';
-            }
-        }
-    }
-})

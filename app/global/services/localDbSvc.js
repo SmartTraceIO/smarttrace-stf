@@ -39,4 +39,11 @@
         return $cookies.get("login_password");
     }
 
+    this.setDegreeUnits = function(dunit) {
+        $cookies.put('degree_units', dunit); //C, F
+    }
+    this.getDegreeUnits = function() {
+        return $cookies.get('degree_units');
+    }
+
 }]);
