@@ -15,11 +15,15 @@ appFilters.filter('arrayToString', function() {
 });
 appFilters.filter('temperature', function (localDbSvc) {
     return function (input) {
-        input = input.toFixed(1);
-        if(localDbSvc.getDegreeUnits()=="Celsius") {
+        if (input) {
+            input = input.toFixed(1);
+            if(localDbSvc.getDegreeUnits()=="Celsius") {
                 return input+ '\u2103';
             } else {
                 return input+'\u2109';
             }
+        } else {
+            return '';
+        }
     }
 });
