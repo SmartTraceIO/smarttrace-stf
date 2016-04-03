@@ -130,7 +130,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         $window.print();
     }
 
-    $scope.ViewReading = function(sn, trip) {
+    $scope.ViewReading = function($e, sn, trip) {
+        $e.preventDefault();
         //$state.go('viewshipmentdetailtable', {sn:sn, trip: trip})
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
         //window.open('/#'+url,'');
