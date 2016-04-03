@@ -132,9 +132,21 @@
     }
 
     $scope.ChangeNotiScheduleForAlert = function () {
-        if ($scope.NewShipment && $scope.NewShipment.shipment && $scope.NewShipment.shipment.alertsNotificationSchedules) {
+        if ($scope.NewShipment && $scope.NewShipment.shipment && $scope.NewShipment.shipment.alerts_notification_schedules) {
             $scope.AlertNotiRule = '';
-            for (var i = 0; i < $scope.NewShipment.shipment.alertsNotificationSchedules.length; i++) {
+            $scope.NewShipment.shipment.alertsNotificationSchedules.length=0;
+
+            angular.forEach($scope.NewShipment.shipment.alerts_notification_schedules, function(val, key) {
+                var peopleToNotify = val.peopleToNotify ? val.peopleToNotify : "";
+                $scope.NewShipment.shipment.alertsNotificationSchedules.push(val.notificationScheduleId);
+                //var peopleToNotify = $scope.NewShipment.shipment.alertsNotificationSchedules[i].peopleToNotify ? $scope.NewShipment.shipment.alertsNotificationSchedules[i].peopleToNotify : "";
+                if ($scope.AlertNotiRule)
+                    $scope.AlertNotiRule = $scope.AlertNotiRule + ', ' + peopleToNotify;
+                else
+                    $scope.AlertNotiRule = peopleToNotify;
+            });
+
+            /*for (var i = 0; i < $scope.NewShipment.shipment.alertsNotificationSchedules.length; i++) {
                 var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: $scope.NewShipment.shipment.alertsNotificationSchedules[i] })[0]
                 var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
                 //var peopleToNotify = $scope.NewShipment.shipment.alertsNotificationSchedules[i].peopleToNotify ? $scope.NewShipment.shipment.alertsNotificationSchedules[i].peopleToNotify : "";
@@ -142,7 +154,7 @@
                     $scope.AlertNotiRule = $scope.AlertNotiRule + ', ' + peopleToNotify;
                 else
                     $scope.AlertNotiRule = peopleToNotify;
-            }
+            }*/
         }
     }
     $scope.ChangeNotiScheduleForArrival = function () {
@@ -202,16 +214,24 @@
                 if (data.status.code == 0) {
                     $scope.NewShipment.shipment = data.response;
 
+                    console.log('NewShipment',$scope.NewShipment.shipment);
                     if (data.response) {
                         $scope.SelectedTemplateId = data.response.shipmentTemplateId;
                         $scope.ShipmentTemplate.selectedShipmentTemplateId = data.response.shipmentTemplateId;
                         $scope.AddDateShipped = data.response.addDateShipped;
 
                         //-- add more field follow indication from Vyacheslav
-                        $scope.NewShipment.shipment.alertsNotificationSchedules = data.response.alertsNotificationSchedules;
+                        $scope.NewShipment.shipment.alertsNotificationSchedules = data.response.alertsNotificationSchedules.map(function(val) {
+                            return val.toString();
+                        });
                         $scope.NewShipment.shipment.arrivalNotificationSchedules = data.response.arrivalNotificationSchedules;
                         $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = data.response.excludeNotificationsIfNoAlerts;
 
+                        $scope.NewShipment.shipment.alerts_notification_schedules = data.response.alertsNotificationSchedules.map(function(val) {
+
+                            var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: val })[0]
+                            return shipment;
+                        });
 
                         $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
 
@@ -289,4 +309,35 @@
         }
     }
 
+});
+
+appFilters.filter('propsFilter', function() {
+    return function(items, props) {
+        var out = [];
+
+        if (angular.isArray(items)) {
+            items.forEach(function(item) {
+                var itemMatches = false;
+
+                var keys = Object.keys(props);
+                for (var i = 0; i < keys.length; i++) {
+                    var prop = keys[i];
+                    var text = props[prop].toLowerCase();
+                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                        itemMatches = true;
+                        break;
+                    }
+                }
+
+                if (itemMatches) {
+                    out.push(item);
+                }
+            });
+        } else {
+            // Let the output be the input untouched
+            out = items;
+        }
+
+        return out;
+    };
 });
