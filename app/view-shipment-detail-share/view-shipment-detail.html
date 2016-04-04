@@ -14,7 +14,7 @@
             <!--<a href="#" class="btn btn-default btn-sm uppercase" ng-click="ViewReading(trackerInfo.deviceSN, trackerInfo.tripCount)">View Reading</a>-->
             <a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}"
                ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
-                <button class="btn default btn-sm uppercase">View Reading</button></a>
+                <button class="btn default btn-sm uppercase">View Readings</button></a>
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                 <i class="fa fa-print"></i>
                 <span>Print</span>
@@ -563,7 +563,7 @@
                                 <tr>
                                     <td colspan="2" ng-if="getRole() >= roles.Normal">
                                         <a href="" ng-click="confirmSuppress(trackerInfo.shipmentId)"><u ng-class="{'grey-out':(isEndedOrArrived || suppressAlready)}">Suppress further alerts</u></a>
-                                        <i tooltip="Suppress further alerts from firing during an active shipment."
+                                        <i tooltip="Suppress further alerts (and arrival notification) from firing during this shipment."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -606,7 +606,7 @@
                                         {{trackerInfo.arrivalTime}}
                                     </td>
                                 </tr>
-                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
+                                <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
                                         <i tooltip="Notify when"
@@ -616,10 +616,10 @@
                                            class="fa fa-info-circle"/>
                                     </td>
                                     <td>
-                                        {{trackerInfo.arrivalNotificationWithinKm}} Km away
+                                        {{trackerInfo.arrivalNotificationText}}
                                     </td>
                                 </tr>
-                                <tr ng-show="!trackerInfo.arrivalNotificationWithinKm">
+                                <tr ng-show="!trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
                                         <i tooltip="Notify when"
@@ -628,11 +628,9 @@
                                            tooltip-placement="top"
                                            class="fa fa-info-circle"/>
                                     </td>
-                                    <td>
-                                        Don't notify
-                                    </td>
+                                    <td>Don't notify</td>
                                 </tr>
-                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
+                                <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notified at</span>
                                         <i tooltip="Notified at"
@@ -645,7 +643,7 @@
                                         {{trackerInfo.arrivalNotificationTime}}
                                     </td>
                                 </tr>
-                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
+                                <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Who to notify</span>
                                         <i tooltip="Notify to people"
@@ -656,7 +654,7 @@
                                     </td>
                                     <td>{{trackerInfo.alertPeopleToNotify}}</td>
                                 </tr>
-                                <tr ng-show="trackerInfo.arrivalNotificationWithinKm">
+                                <tr ng-show="trackerInfo.isNotifying">
                                     <td>Schedule(s):</td><td>
                                         <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
                                             {{p.notificationScheduleName}}

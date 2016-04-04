@@ -158,16 +158,27 @@
         }
     }
     $scope.ChangeNotiScheduleForArrival = function () {
-        if ($scope.NewShipment && $scope.NewShipment.shipment && $scope.NewShipment.shipment.arrivalNotificationSchedules) {
+        if ($scope.NewShipment && $scope.NewShipment.shipment && $scope.NewShipment.shipment.arrival_notification_schedules) {
             $scope.ArrivalNotiRule = '';
-            for (var i = 0; i < $scope.NewShipment.shipment.arrivalNotificationSchedules.length; i++) {
-                var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.NewShipment.shipment.arrivalNotificationSchedules[i]) })[0]
-                var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
+            $scope.NewShipment.shipment.arrivalNotificationSchedules.length = 0;
+
+            angular.forEach($scope.NewShipment.shipment.arrival_notification_schedules, function(val, key) {
+                var peopleToNotify = val.peopleToNotify ? val.peopleToNotify : "";
+                $scope.NewShipment.shipment.arrivalNotificationSchedules.push(val.notificationScheduleId);
                 if ($scope.ArrivalNotiRule)
                     $scope.ArrivalNotiRule = $scope.ArrivalNotiRule + ', ' + peopleToNotify;
                 else
                     $scope.ArrivalNotiRule = peopleToNotify;
-            }
+            });
+
+            //for (var i = 0; i < $scope.NewShipment.shipment.arrivalNotificationSchedules.length; i++) {
+            //    var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: parseInt($scope.NewShipment.shipment.arrivalNotificationSchedules[i]) })[0]
+            //    var peopleToNotify = shipment.peopleToNotify ? shipment.peopleToNotify : "";
+            //    if ($scope.ArrivalNotiRule)
+            //        $scope.ArrivalNotiRule = $scope.ArrivalNotiRule + ', ' + peopleToNotify;
+            //    else
+            //        $scope.ArrivalNotiRule = peopleToNotify;
+            //}
         }
     }
     $scope.NotificationScheduleOption = {
@@ -228,10 +239,13 @@
                         $scope.NewShipment.shipment.excludeNotificationsIfNoAlerts = data.response.excludeNotificationsIfNoAlerts;
 
                         $scope.NewShipment.shipment.alerts_notification_schedules = data.response.alertsNotificationSchedules.map(function(val) {
-
-                            var shipment = $filter('filter')($scope.NotificationList, { notificationScheduleId: val })[0]
-                            return shipment;
+                            var item = $filter('filter')($scope.NotificationList, { notificationScheduleId: val })[0]
+                            return item;
                         });
+                        $scope.NewShipment.shipment.arrival_notification_schedules = data.response.arrivalNotificationSchedules.map(function(val) {
+                            var item = $filter('filter')($scope.NotificationList, { notificationScheduleId: val })[0]
+                            return item;
+                        })
 
                         $scope.NewShipment.shipment.shipmentDate = momentShipment.format('YYYY-MM-DDTHH:mm');
 
