@@ -6,6 +6,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
+    var orderBy = $filter('orderBy');
+
     $scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
     if ($stateParams.vsId) {
@@ -65,7 +67,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     var subSeries = new Array();
     var alertData = new Array();
     var lightPlotBand = new Array();
-    var noteData = new Array();
+    $scope.noteData = new Array();
 
     var currentShipmentId = null;
     var currentShipment = {};
@@ -280,7 +282,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         $scope.suppressAlready=false;
         currentShipmentId = $scope.trackerInfo.shipmentId;
         webSvc.getShipment(currentShipmentId).success(function(data) {
-            console.log('CURRENT-SHIPMENT',currentShipmentId, data)
+            //console.log('CURRENT-SHIPMENT',currentShipmentId, data)
             currentShipment = data.response;
             if (currentShipment.shutdownTime) {
                 $scope.shutdownAlready = true;
@@ -290,7 +292,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 $scope.isEndedOrArrived = true;
             }
             webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
-                console.log('CURRENT-DEVICE', dd);
+                //console.log('CURRENT-DEVICE', dd);
                 currentDevice = dd.response;
                 if (currentShipmentId != currentDevice.lastShipmentId) {
                     $scope.isLatest = false;
@@ -454,6 +456,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     function  promiseGetNotes (params) {
         return $q(function(resolve, reject) {
             webSvc.getNotes(params).success(function(data) {
+                console.log('GetNote', data);
                 if (data.status.code == 0) {
                     resolve(data.response);
                 } else {
@@ -483,15 +486,15 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             };
         }
 
-        var promise = promiseGetNotes(params);
-        promise.then(function (res) {
-            console.log('Note', res);
-            $scope.shipmentNotes = res;
-            loadSingShipment(params);
-        }, function (status) {
-        });
-    }
-    function loadSingShipment(params) {
+    //    var promise = promiseGetNotes(params);
+    //    promise.then(function (res) {
+    //        console.log('Note', res);
+    //        $scope.shipmentNotes = res;
+    //        loadSingShipment(params);
+    //    }, function (status) {
+    //    });
+    //}
+    //function loadSingShipment(params) {
         //console.log('PARAMS', params);
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
             console.log("SINGLE-SHIPMENT", graphData);
@@ -501,6 +504,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             }
 
             var info = graphData.response;
+            $scope.shipmentNotes = info.notes;
 
             //--------Remove Light On, Off---------
             for(alert = 0; alert < info.alertSummary.length; alert ++){
@@ -625,19 +629,31 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                     },
                                     mouseOut: function () {
                                         $scope.showAlerts(-1);
-                                    }
-                                }
-                            },
-                            dataLabels: {
-                                enabled:true,
-                                useHTML: true,
-                                formatter: function() {
-                                    var index = 0;
-                                    //return 100;
-                                    for (index = 0; index < noteData.length; index++) {
-                                        if (noteData[index][0].x == this.x) {
-                                            return noteData[index][0].noteNum;
-                                        }
+                                    },
+                                    click: function(e) {
+                                        console.log('THIS', this);
+                                        var point = this;
+                                        var chart1 = document.getElementById("chart1");
+                                        var modalInstance = $modal.open({
+                                            templateUrl: '/app/view-shipment-detail-share/create-note.html',
+                                            controller: 'CreateNoteCtrl',
+                                            backdrop: false,
+                                            size: 'sm',
+                                            appendTo: chart1,
+                                            resolve: {
+                                                point: function () {
+                                                    return point;
+                                                },
+                                                shipmentId: function() {
+
+                                                }
+                                            }
+                                        });
+                                        modalInstance.result.then(
+                                            function(note) {
+                                                $state.go($state.current, {}, { reload: true });
+                                            }
+                                        );
                                     }
                                 }
                             }
@@ -679,32 +695,50 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                         useHTML: true,
                         hideDelay: 500,
                         formatter: function () {
-                            var index;
-                            for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                if(subSeries[$scope.MI][index].x == this.x) break;
-                            }
-                            var color = this.points[0].series.color;
-                            msg = $scope.trackerMsg[index];
-                            var message = "";
-
-                            for(var j = 0; j < msg.length; j ++){
-                                //if this message is for alert show title
-                                if(msg[j].title.indexOf(".png") != -1){
-                                    message += "<div class='tt_title' style='background-color:" + color + "'>"
-                                        + msg[j].title + "<div style='clear:both;'></div></div>";
+                            if (this.points) {
+                                var index;
+                                for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                    if(subSeries[$scope.MI][index].x == this.x) break;
                                 }
-                                message += "<div class='tt_body'>";
-                                for(var k = 0; k < msg[j].lines.length; k ++){
-                                    message += "<div>" + msg[j].lines[k] + "</div>";
-                                }
-                                message += "</div>";
-                            }
 
-                            var cont = "";
-                            cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
-                            cont += message;
-                            cont += "</div>";
-                            return cont;
+                                //console.log('POINTS', this.points[0]);
+
+                                var color = this.points[0].series.color;
+                                msg = $scope.trackerMsg[index];
+                                var message = "";
+
+                                for(var j = 0; j < msg.length; j ++){
+                                    //if this message is for alert show title
+                                    if(msg[j].title.indexOf(".png") != -1){
+                                        message += "<div class='tt_title' style='background-color:" + color + "'>"
+                                            + msg[j].title + "<div style='clear:both;'></div></div>";
+                                    }
+                                    message += "<div class='tt_body'>";
+                                    for(var k = 0; k < msg[j].lines.length; k ++){
+                                        message += "<div>" + msg[j].lines[k] + "</div>";
+                                    }
+                                    message += "</div>";
+                                }
+
+                                var cont = "";
+                                cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
+                                cont += message;
+                                cont += "</div>";
+                                return cont;
+                            } else {
+                                //--flags
+                                console.log('THIS-POINT', this.point);
+                                var color = this.point.color;
+                                var c = "";
+                                c += "<div class='ttbox' style='z-index: 100; min-width:100px; border-color:" + color + "'>";
+                                c += "<div class='tt_title' style='background-color:" + color + "'>"
+                                c += "Note " + this.point.noteNum + "</div>"
+                                c += "<div class='tt_body'>";
+                                c += this.point.noteText;
+                                c += "</div>"
+                                c += "</div>"
+                                return c;
+                            }
                         }
                     },
                     yAxis:{
@@ -801,6 +835,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
+            id: 'dataseries',
             marker: {
                 symbol: 'url(theme/img/dot.png)'
             },
@@ -850,30 +885,39 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         }
 
         //-- notes
-        angular.forEach(noteData, function(val, key) {
+        /*angular.forEach($scope.noteData, function(val, key) {
             chartSeries.push({
                 name: "Notes",
                 color: "#e5e5e5",
                 data: val
             });
+        })*/
+        chartSeries.push({
+            name: "Notes",
+            type: 'flags',
+            onSeries : 'dataseries',
+            shape : 'circlepin',
+            width : 16,
+            data:$scope.noteData
         })
-        console.log('Chart-series', chartSeries);
     }
 
     function prepareNoteChartSeries() {
-        console.log('ShipmentNotes', $scope.shipmentNotes);
-        noteData.length = 0; //reset noteData
-        //noteData = $scope.shipmentNotes;
+        //console.log('ShipmentNotes', $scope.shipmentNotes);
+        $scope.noteData.length = 0; //reset $scope.noteData
 
-        angular.forEach($scope.shipmentNotes, function(val, key) {
-            var tmpArray = new Array();
+        $scope.noteData = orderBy($scope.shipmentNotes, 'x').map(function(val) {
+            /*var tmpArray = new Array();
             val.marker = {
                 enabled: true,
                 //symbol: 'url(theme/img/alerts.png)'
             }
             tmpArray.push(val);
-            noteData.push(tmpArray);
-        })
+            return tmpArray;*/
+            val.title=val.noteNum;
+            val.text=val.noteText;
+            return val;
+        });
     }
     function prepareAlertHighchartSeries(){
         lightPlotBand.length = 0;
@@ -971,7 +1015,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         }
         
         lastPoint = subSeries[$scope.MI].length - 1;
-        console.log('LastPoint', lastPoint);
+        //console.log('LastPoint', lastPoint);
         //Destination
         obj = {};
         obj.x = subSeries[$scope.MI][lastPoint].x;
@@ -1025,18 +1069,16 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             if(tempMax == null){
                 tempMax = tempMin = locations[0].temperature;
             }
-
+            //$scope.shipmentNotes = $scope.trackers[i].notes;
 
 
 
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
-                updateNote(locations[j]);
-
-
+                var check = updateNote(locations[j]);
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
-                        if((locations[j].alerts.length == 0) && !updateNote(locations[j])){
+                        if((locations[j].alerts.length == 0) && !check){
                             continue;
                         }
                     } else {
@@ -1049,9 +1091,11 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 temp = {};
                 temp.x = parseDate(locations[j].timeISO);
                 temp.y = locations[j].temperature;
+                temp.timeISO = locations[j].timeISO;
                 temp.alerts = locations[j].alerts;
                 temp.lat = locations[j].lat;
                 temp.lng = locations[j].long;
+                temp.shipmentId = $scope.trackers[i].shipmentId;
                 temp.tripCount = $scope.trackers[i].tripCount;
                 temp.deviceSN = $scope.trackers[i].deviceSN;
 
@@ -1197,6 +1241,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             });
         }
     };
+
     $scope.EditDescription = function(Id) {
         var modalInstance = $modal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',
@@ -1210,6 +1255,23 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         modalInstance.result.then(
             function(result) {
                 $scope.trackerInfo.shipmentDescription = result;
+            }
+        );
+    }
+    $scope.EditNote = function(note) {
+        console.log('EditNote');
+        var modalInstance = $modal.open({
+            templateUrl: '/app/view-shipment-detail-share/edit-note.html',
+            controller: 'EditNoteCtrl',
+            resolve: {
+                note : function() {
+                    return note;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function(result) {
+                //$scope.trackerInfo.shipmentDescription = result;
             }
         );
     }

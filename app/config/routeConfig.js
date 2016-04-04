@@ -154,6 +154,8 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
             'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
             'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
+            'app/view-shipment-detail-share/create-note.js?v=' + version,
+            'app/view-shipment-detail-share/edit-note.js?v=' + version,
             'app/global/filters/filters.js?v=' + version
         ]
     },

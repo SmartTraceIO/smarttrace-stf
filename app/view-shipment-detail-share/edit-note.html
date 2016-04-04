@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit Note #{{note.noteNum}}</h3>
+</div>
+<div class="modal-body">
+    <form class="form">
+        <textarea class="form-control" ng-model="note.noteText" rows="3"></textarea>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn green" ng-click="saveNote()">OK</button>
+    <button class="btn green" ng-click="cancel()">Cancel</button>
+</div>
