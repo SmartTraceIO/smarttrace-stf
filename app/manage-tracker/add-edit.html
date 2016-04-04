@@ -213,7 +213,7 @@
                                    class="fa fa-info-circle"/>
                         </div>
                     </div>
-                    <div ng-if="getRole() > roles.Admin">
+                    <div ng-if="getRole() > roles.Normal">
                         <div class="row">
                             <h3>Billing</h3>
                         </div>
@@ -224,10 +224,10 @@
                             </div>
                             <div class="col-sm-3">
                                 <h5>Activation Date</h5>
-                                <span>7:22am 12 Mar 2016</span>
+                                <span>-</span>
                             </div>
                             <div class="col-sm-2 pull-right">
-                                <button class="btn green" ng-click="confirmDeactive()">Deactivate Now</button>
+                                <button class="btn green" ng-click="confirmDeactive(tracker.lastShipmentId)">Deactivate Now</button>
                             </div>
                         </div>
                         <div class="row" ng-if="!tracker.active">

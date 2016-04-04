@@ -9,10 +9,11 @@ appCtrls.controller('ConfirmShutdownCtrl', ['$scope', '$modalInstance', 'webSvc'
             webSvc.shutdownDevice(id).success(function(data) {
                 if (data.status.code == 0) {
                     toastr.success("Success. The shutdown process has been triggered for this device");
-                    $modalInstance.close()
                 } else {
                     toastr.error("You have no permission to shutdown this device!");
                 }
+                //--close anyway
+                $modalInstance.close()
             })
 
         }

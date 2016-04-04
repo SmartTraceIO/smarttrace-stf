@@ -129,8 +129,9 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
             });
         };
 }]);
-appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams', 'rootSvc', 'localDbSvc', 'webSvc', '$window',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window) {
+appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams',
+    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$modal',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $modal) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -262,37 +263,22 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             $("#confirmModel").modal("show");
         }*/
 
-        $scope.deactivateNow = function () {
-            $("#confirmDeactive").modal("hide");
-            $scope.tracker.active = false; //-- deactivate
-            webSvc.saveDevice($scope.tracker).success(function(data){
-                console.log('DEACTIVATE-DEVICE', data);
-                if (data.status.code == 0) {
-                    toastr.success("Device has just deactivated successfully")
-                    $state.go('tracker');
-                } else {
-                    toastr.error('Can\'t deactivate device!');
-                }
-            });
-        }
+        //$scope.deactivateNow = function () {
+        //    $("#confirmDeactive").modal("hide");
+        //    $scope.tracker.active = false; //-- deactivate
+        //    webSvc.saveDevice($scope.tracker).success(function(data){
+        //        console.log('DEACTIVATE-DEVICE', data);
+        //        if (data.status.code == 0) {
+        //            toastr.success("Device has just deactivated successfully")
+        //            $state.go('tracker');
+        //        } else {
+        //            toastr.error('Can\'t deactivate device!');
+        //        }
+        //    });
+        //}
 
-        $scope.confirmDeactive = function() {
-            //-- check if this device shutdown already or not
-            var shipmentId = $scope.tracker.lastShipmentId;
-            /*if (shipmentId == null) {
-                toastr.warning('There is no shipmentId with this device!');
-                webSvc.saveDevice($scope.tracker).success(function(data){
-                    if (data.status.code == 0) {
-                        toastr.success("Device has just deactivated successfully")
-                        $state.go('tracker');
-                    } else {
-                        toastr.error('Can\'t deactivate device!');
-                    }
-                });
-                return;
-            }*/
+        $scope.confirmDeactive = function(shipmentId) {
             webSvc.getSingleShipment(shipmentId).success(function(resp) {
-                console.log('SINGLE', resp);
                 if (resp.status.code == 0) {
                     $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
                 } else {
@@ -302,7 +288,22 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             }).then(function() {
                 if ($scope.arrivalTimeISO != null){
                     if ($scope.tracker.active) {
-                        $("#confirmDeactive").modal("show");
+                        var modalInstance = $modal.open({
+                            templateUrl: '/app/manage-tracker/confirm-deactivate.html',
+                            controller: 'ConfirmDeactivateCtrl',
+                            resolve: {
+                                tracker: function () {
+                                    return $scope.tracker;
+                                }
+                            }
+                        });
+                        modalInstance.result.then(
+                            function() {
+                                //$scope.trackerInfo.shutdownTime = moment.tz($rootScope.RunningTimeZoneId).format("h:mmA DD MMM YYYY");
+                                //$scope.trackerInfo.status = 'Ended';
+                                //$scope.shutdownAlready = true;
+                            }
+                        );
                     } else {
                         toastr.warning('This device was deactivated!');
                     }
@@ -310,7 +311,6 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                     toastr.warning('You must shut the device down first!')
                 }
             })
-
         };
     }]);
 /**
