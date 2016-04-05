@@ -84,13 +84,28 @@
                                     </i>
                                 </label>
                                 <br />
-                                <select style="width:100%"
+                                <!--ng-change="ChangeNotiScheduleForArrival()"-->
+                                <ui-select multiple
+                                           on-select="VerifyStartLocations()"
+                                           ng-model="AutoStartShipment.start_locations"
+                                           theme="select2"
+                                           ng-disabled="disabled"
+                                           style="width:100%">
+                                    <ui-select-match placeholder="Select location for auto detection of shipmentFrom">
+                                        {{$item.DisplayText}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="loc in FromLocationList | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                                        <div ng-bind-html="loc.DisplayText | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <!--<select style="width:100%"
                                     multiple ui-select2="OptionsShipmentFrom"
                                     ng-model="AutoStartShipment.startLocations"
                                     data-placeholder="Select location for auto detection of shipmentFrom">
                                     <option ng-repeat="location in FromLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
-                                </select>
+                                </select>-->
                                 <br />
                             </div>
                         </div>
@@ -105,13 +120,26 @@
                                     </i>
                                 </label>
                                 <br />
-                                <select style="width:100%"
+                                <ui-select multiple
+                                           on-select="VerifyInterimLocations()"
+                                           ng-model="AutoStartShipment.interim_stops"
+                                           theme="select2"
+                                           ng-disabled="disabled"
+                                           style="width:100%">
+                                    <ui-select-match placeholder="Select location for auto detection of interim stops">
+                                        {{$item.DisplayText}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="loc in InterimLocationList | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                                        <div ng-bind-html="loc.DisplayText | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <!--<select style="width:100%"
                                         multiple ui-select2="OptionsShipmentFrom"
                                         ng-model="AutoStartShipment.interimStops"
                                         data-placeholder="Select location for auto detection of shipmentFrom">
                                     <option ng-repeat="location in InterimLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
-                                </select>
+                                </select>-->
                                 <br />
                             </div>
                         </div>
@@ -126,13 +154,27 @@
                                        tooltip-placement="top"
                                        class="fa fa-info-circle"/>
                                 </label>
-                                <select style="width:100%"
+                                <ui-select multiple
+                                           on-select="VerifyEndLocations()"
+                                           ng-model="AutoStartShipment.end_locations"
+                                           theme="select2"
+                                           ng-disabled="disabled"
+                                           style="width:100%">
+                                    <ui-select-match placeholder="Select location for auto detection of shipment to">
+                                        {{$item.DisplayText}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="loc in ToLocationList | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                                        <div ng-bind-html="loc.DisplayText | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <!--<select style="width:100%"
                                         multiple ui-select2="OptionsShipmentTo"
                                         ng-model="AutoStartShipment.endLocations"
                                         data-placeholder="Select location for auto detection of shipment to">
                                     <option ng-repeat="location in ToLocationList"
                                             value="{{location.locationId}}">{{location.DisplayText}}</option>
-                                </select>
+                                </select>-->
                             </div>
                         </div>
                     </div>
@@ -201,14 +243,29 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select style="width:100%"
+
+                        <ui-select multiple
+                                   on-select="ChangeNotiScheduleForAlert()"
+                                   ng-model="AutoStartShipment.alerts_notification_schedules"
+                                   theme="select2"
+                                   ng-disabled="disabled"
+                                   style="width:100%">
+                            <ui-select-match placeholder="Select Notification Schedule For Alert Profile">
+                                {{$item.notificationScheduleName}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="noti in NotificationList | propsFilter: {notificationScheduleId: $select.search, notificationScheduleName: $select.search}">
+                                <div ng-bind-html="noti.notificationScheduleName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <!--<select style="width:100%"
                                 ng-change="ChangeNotiScheduleForAlert()"
                                 multiple ui-select2="NotificationScheduleOption"
                                 ng-model="AutoStartShipment.alertsNotificationSchedules"
                                 data-placeholder="Select Notification Schedule For Alert Profile">
                             <option ng-repeat="noti in NotificationList"
                                     value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select>
+                        </select>-->
                         <small class="text-muted control-label">
                             {{AlertNotiRule}}
                         </small>
@@ -316,14 +373,28 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </label>
-                        <select style="width:100%"
+                        <ui-select multiple
+                                   on-select="ChangeNotiScheduleForArrival()"
+                                   ng-model="AutoStartShipment.arrival_notification_schedules"
+                                   theme="select2"
+                                   ng-disabled="disabled"
+                                   style="width:100%">
+                            <ui-select-match placeholder="Select Notification Schedule For Arrival">
+                                {{$item.notificationScheduleName}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="noti in NotificationList | propsFilter: {notificationScheduleId: $select.search, notificationScheduleName: $select.search}">
+                                <div ng-bind-html="noti.notificationScheduleName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <!--<select style="width:100%"
                                 ng-change="ChangeNotiScheduleForArrival()"
                                 multiple ui-select2="NotificationScheduleOption"
                                 ng-model="AutoStartShipment.arrivalNotificationSchedules"
                                 data-placeholder="Select Notification Schedule For Arrival">
                             <option ng-repeat="noti in NotificationList"
                                     value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select>
+                        </select>-->
                         <br />
                         <small class="text-muted control-label">
                             {{ArrivalNotiRule}}
