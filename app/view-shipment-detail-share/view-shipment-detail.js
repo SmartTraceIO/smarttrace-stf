@@ -134,7 +134,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     $scope.ViewReading = function($e, sn, trip) {
         $e.preventDefault();
-        //$state.go('viewshipmentdetailtable', {sn:sn, trip: trip})
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
         //window.open('/#'+url,'');
         window.open('/#'+url,"_blank", "toolbar=0, titlebar=0, location=0, resizable=no, menubar=0, status=0, width=800, height=600");
@@ -485,17 +484,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 }
             };
         }
-
-    //    var promise = promiseGetNotes(params);
-    //    promise.then(function (res) {
-    //        console.log('Note', res);
-    //        $scope.shipmentNotes = res;
-    //        loadSingShipment(params);
-    //    }, function (status) {
-    //    });
-    //}
-    //function loadSingShipment(params) {
-        //console.log('PARAMS', params);
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
             console.log("SINGLE-SHIPMENT", graphData);
             if(graphData.status.code !=0){
@@ -631,29 +619,78 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                         $scope.showAlerts(-1);
                                     },
                                     click: function(e) {
-                                        console.log('THIS', this);
-                                        var point = this;
-                                        var chart1 = document.getElementById("chart1");
-                                        var modalInstance = $modal.open({
-                                            templateUrl: '/app/view-shipment-detail-share/create-note.html',
-                                            controller: 'CreateNoteCtrl',
-                                            backdrop: false,
-                                            size: 'sm',
-                                            appendTo: chart1,
-                                            resolve: {
-                                                point: function () {
-                                                    return point;
-                                                },
-                                                shipmentId: function() {
+                                        console.log('THIS', e);
+                                        if (!this.noteNum) {
+                                            var point = this;
+                                            var chart1 = document.getElementById("chart1");
+                                            var modalInstance = $modal.open({
+                                                templateUrl: '/app/view-shipment-detail-share/create-note.html',
+                                                controller: 'CreateNoteCtrl',
+                                                backdrop: false,
+                                                size: 'sm',
+                                                appendTo: chart1,
+                                                resolve: {
+                                                    point: function () {
+                                                        return point;
+                                                    },
+                                                    shipmentId: function() {
 
+                                                    }
                                                 }
-                                            }
-                                        });
-                                        modalInstance.result.then(
-                                            function(note) {
-                                                $state.go($state.current, {}, { reload: true });
-                                            }
-                                        );
+                                            });
+                                            modalInstance.result.then(
+                                                function(note) {
+                                                    //getNotes
+                                                    var params = null;
+                                                    if ($scope.ShipmentId) {
+                                                        params = {
+                                                            params: {
+                                                                shipmentId: $scope.ShipmentId
+                                                            }
+                                                        };
+                                                    } else {
+                                                        params = {
+                                                            params: {
+                                                                sn: $scope.sn,
+                                                                trip: $scope.trip
+                                                            }
+                                                        };
+                                                    }
+
+                                                    var promise = promiseGetNotes(params);
+                                                    promise.then(
+                                                        function (res) {
+                                                            console.log('Note', res);
+                                                            $scope.trackerInfo.notes = res;
+                                                            $scope.shipmentNotes = res;
+                                                            prepareMainHighchartSeries();
+                                                            prepareNoteChartSeries();
+                                                            refreshHighchartSeries();
+                                                        },
+                                                        function (status) {
+                                                        }
+                                                    );
+                                                    //$state.go($state.current, {}, { reload: true });
+                                                }
+                                            );
+                                        } else {
+                                            var note = this;
+                                            var modalInstance = $modal.open({
+                                                templateUrl: '/app/view-shipment-detail-share/edit-note.html',
+                                                controller: 'EditNoteCtrl',
+                                                resolve: {
+                                                    note : function() {
+                                                        return note;
+                                                    }
+                                                }
+                                            });
+                                            modalInstance.result.then(
+                                                function(result) {
+                                                    //$scope.trackerInfo.shipmentDescription = result;
+                                                }
+                                            );
+                                        }
+
                                     }
                                 }
                             }
@@ -727,13 +764,13 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                 return cont;
                             } else {
                                 //--flags
-                                console.log('THIS-POINT', this.point);
                                 var color = this.point.color;
                                 var c = "";
-                                c += "<div class='ttbox' style='z-index: 100; min-width:100px; border-color:" + color + "'>";
+                                c += "<div class='ttbox' style='z-index: 100; min-width: 300px; border-color:" + color + "'>";
                                 c += "<div class='tt_title' style='background-color:" + color + "'>"
                                 c += "Note " + this.point.noteNum + "</div>"
-                                c += "<div class='tt_body'>";
+                                c += "<div style='clear:both;'></div>";
+                                c += "<div class='tt_body wordwrap'>";
                                 c += this.point.noteText;
                                 c += "</div>"
                                 c += "</div>"
@@ -879,19 +916,10 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 name: "Alerts",
                 color: "#b3bcbf",
                 lineWidth: 3,
-                enableMouseTracking: false,
+                //enableMouseTracking: false,
                 data: alertData[i]
             });
         }
-
-        //-- notes
-        /*angular.forEach($scope.noteData, function(val, key) {
-            chartSeries.push({
-                name: "Notes",
-                color: "#e5e5e5",
-                data: val
-            });
-        })*/
         chartSeries.push({
             name: "Notes",
             type: 'flags',
@@ -1070,9 +1098,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 tempMax = tempMin = locations[0].temperature;
             }
             //$scope.shipmentNotes = $scope.trackers[i].notes;
-
-
-
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);
@@ -1098,19 +1123,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 temp.shipmentId = $scope.trackers[i].shipmentId;
                 temp.tripCount = $scope.trackers[i].tripCount;
                 temp.deviceSN = $scope.trackers[i].deviceSN;
-
-                //temp.push(parseDate(locations[j].timeISO)); //--[0] x
-                //temp.push(locations[j].temperature);        //--[1] y
-                //temp.push(locations[j].alerts);             //--[2]
-                //temp.push(locations[j].lat);                //--[3]
-                //temp.push(locations[j].long);               //--[4]
-                ////--
-                //temp.push($scope.trackers[i].tripCount);    //--[5]
-                //temp.push($scope.trackers[i].deviceSN);     //--[6]
-
-                //--
-                //temp.push($scope.trackers[i].startLocationForMap);
-                //temp.push($scope.trackers[i].endLocationForMap);
 
                 if(tempMax < locations[j].temperature){
                     tempMax = locations[j].temperature;
@@ -1259,7 +1271,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         );
     }
     $scope.EditNote = function(note) {
-        console.log('EditNote');
         var modalInstance = $modal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-note.html',
             controller: 'EditNoteCtrl',
@@ -1272,6 +1283,38 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         modalInstance.result.then(
             function(result) {
                 //$scope.trackerInfo.shipmentDescription = result;
+            }
+        );
+    }
+    $scope.DeleteNote = function(note) {
+        var modalInstance = $modal.open({
+            templateUrl: '/app/view-shipment-detail-share/delete-note.html',
+            controller: 'DeleteNoteCtrl',
+            resolve: {
+                note : function() {
+                    return note;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function(result) {
+                if (result !=null) {
+                    console.log('NoteNum', result);
+                    console.log('Note', $scope.trackerInfo.notes);
+                    for (var i = 0; i< $scope.trackerInfo.notes.length; i++) {
+                        var tmp = $scope.trackerInfo.notes[i];
+
+                        if (tmp.noteNum == result) {
+                            $scope.trackerInfo.notes.splice(i, 1);
+                            break;
+                        }
+                    }
+                    //console.log($scope.trackerInfo);
+                    prepareMainHighchartSeries();
+                    prepareNoteChartSeries();
+                    refreshHighchartSeries();
+                }
+                //$state.go($state.current, {}, { reload: true });
             }
         );
     }

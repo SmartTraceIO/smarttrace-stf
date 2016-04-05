@@ -149,7 +149,10 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			var url = Api.url + 'saveNote/' + localDbSvc.getToken();
 			return $http.post(url, note);
 		},
-
+		deleteNote: function(params) {
+			var url = Api.url + 'deleteNote/' + localDbSvc.getToken();
+			return $http.get(url, params);
+		},
 		getLocations: function(pageSize, pageIndex, sc, so){
 			var url = Api.url + 'getLocations/' + localDbSvc.getToken();
 			var params = {

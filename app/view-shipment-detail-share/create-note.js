@@ -25,9 +25,9 @@ appCtrls.controller('CreateNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'po
                     $modalInstance.close($scope.note)
                 } else {
                     toastr.error("You have no permission to create note!");
+                    $modalInstance.close(null)
                 }
                 //--close anyway
-                $modalInstance.close(null)
             })
 
         }
