@@ -46,4 +46,11 @@
         return $cookies.get('degree_units');
     }
 
+    this.setUserTimezone = function(timeZone) {
+        $cookies.put("user_timezone", timeZone);
+    }
+    this.getUserTimezone = function() {
+        return $cookies.get("user_timezone");
+    }
+
 }]);

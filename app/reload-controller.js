@@ -158,6 +158,7 @@
             webSvc.getUserTime().success( function (timeData) {
                 //console.log('USER-TIME', timeData);
                 if (timeData.status.code == 0) {
+                    localDbSvc.setUserTimezone(timeData.response.timeZoneId);
                     $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
                     $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
                     $scope.tickInterval = 1000 //ms

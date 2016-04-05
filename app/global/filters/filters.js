@@ -27,3 +27,14 @@ appFilters.filter('temperature', function (localDbSvc) {
         }
     }
 });
+
+appFilters.filter('convertDate', function(localDbSvc) {
+    return function (input) {
+        if (input) {
+            var dt = moment.tz(input, localDbSvc.getUserTimezone());
+            return dt.format('hh:mmA DD MMM YYYY');
+        } else  {
+            return '';
+        }
+    }
+})

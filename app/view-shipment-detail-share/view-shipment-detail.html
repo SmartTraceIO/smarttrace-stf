@@ -6,15 +6,10 @@
             <i class="fa fa-truck fa-lg"></i> View shipment details
         </div>
         <div class="tools hidden-print">
-             <!--<button class="btn btn-link btn-sm uppercase" type="button" style="color:#ffffff" ng-click="viewReading()">View Readings</button>-->
-            <!--<a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}">
-                <u>View Readings</u>
-            </a>-->
-            <!--<button class="btn default btn-sm uppercase" type="button" ng-click="ViewReading(trackerInfo.deviceSN, trackerInfo.tripCount)">View Reading</button>-->
-            <!--<a href="#" class="btn btn-default btn-sm uppercase" ng-click="ViewReading(trackerInfo.deviceSN, trackerInfo.tripCount)">View Reading</a>-->
             <a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}"
                ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
-                <button class="btn default btn-sm uppercase">View Readings</button></a>
+                <span class="btn default btn-sm uppercase">View Readings</span>
+            </a>
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                 <i class="fa fa-print"></i>
                 <span>Print</span>
@@ -253,7 +248,7 @@
                             </div>
                         </td></tr>
                         <tr>
-                            <td>Alerts Fired</td>
+                            <td>Alerts fired:</td>
                             <td>
                                 <div>{{trackerInfo.alertFired}}</div>
                             </td>
@@ -560,12 +555,22 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <table class="tracker-desc"><tr>
-                                <td><img src="theme/img/tinyLocationStart.png"></td>
-                                <td>
-                                    <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
-                                    <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
-                                </td>
+                            <table class="tracker-desc">
+                                <tr>
+                                    <td><img src="theme/img/tinyLocationStart.png"></td>
+                                    <td>
+                                        <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
+                                        <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="itm in trackerInfo.interimStops">
+                                    <td><img src="theme/img/tinyInterimLocation.png"></td>
+                                    <td>
+                                        <div class="strong">{{itm.location.locationName}}</div>
+                                        <span style="color:#AAA">
+                                            <span class="light-bold-font uppercase">Stopped at:</span>
+                                            {{itm.date | convertDate}}</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><img src="theme/img/tinyLocationStop.png"></td>
@@ -636,7 +641,7 @@
                                 </td>
                                 </tr>
                                 <tr>
-                                    <td>Alerts Fired</td>
+                                    <td>Alerts fired:</td>
                                     <td>
                                         <div>{{trackerInfo.alertFired}}</div>
                                     </td>

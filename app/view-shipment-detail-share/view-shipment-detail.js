@@ -136,7 +136,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         $e.preventDefault();
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
         //window.open('/#'+url,'');
-        window.open('/#'+url,"_blank", "toolbar=0, titlebar=0, location=0, resizable=no, menubar=0, status=0, width=800, height=600");
+        window.open('/#'+url,"_blank", "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, width=800, height=600");
     }
 
     function updateMapData(index){
