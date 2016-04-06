@@ -1,7 +1,5 @@
-appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location, $templateCache, $timeout, $window) {
-
-	 //$templateCache.remove('login.html');
-	 //console.log("cleared cache");
+appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $log,
+										   $rootScope, $location, $templateCache, $timeout, $window) {
     if ($rootScope.isOut == true) {
         $window.location.reload();
         $rootScope.isOut = false;
@@ -27,6 +25,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
         loginTimer = $timeout(loginTimeOut, 5000);
 		webSvc.login($scope.username, $scope.password).success(
 			function(data) {
+                $log.debug('Login', data);
 				$timeout.cancel(loginTimer);
 				if (data.status.code == 0) {
 					localDbSvc.setToken(data.response.token, data.response.expired);
@@ -49,6 +48,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	}
     $scope.loadUserAndMove = function(url) {
         webSvc.getUser().success(function (data) {
+            $log.debug('Login.User', data);
             $rootScope.User = data.response;
 			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
         })

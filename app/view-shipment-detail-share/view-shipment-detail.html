@@ -117,8 +117,9 @@
                             <div class="portlet-title">
                                 <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-xs-6" style="overflow: hidden; padding-left: 0px; padding-right: 10px;"><strong class="grey-out"><u>{{note.createdBy}}</u></strong></div>
-                                        <div class="col-xs-6" style="overflow: hidden; padding-left: 10px; padding-right: 0px;"><strong class="grey-out"><u>{{note.creationDate}}</u></strong></div>
+                                        <div ng-if="note.createdByName" class="col-xs-6" style="overflow: hidden; padding-left: 0px; padding-right: 10px;"><span class="grey-out">{{note.createdByName}}</span></div>
+                                        <div ng-if="!note.createdByName" class="col-xs-6" style="overflow: hidden; padding-left: 0px; padding-right: 10px;"><span class="grey-out">{{note.createdBy}}</span></div>
+                                        <div class="col-xs-6" style="overflow: hidden; padding-left: 10px; padding-right: 0px;"><span class="grey-out">{{note.creationDate}}</span></div>
                                     </div>
                                 </div>
                             </div>

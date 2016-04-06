@@ -1,4 +1,4 @@
-﻿appSvcs.service("localDbSvc", ["$cookies", function ($cookies) {
+﻿appSvcs.service("localDbSvc", ["$cookies", "$log", function ($cookies, $log) {
 
     //set localstorage item
     this.set = function (key, value) {
@@ -14,6 +14,10 @@
     };
     //set token to the cookie
     this.setToken = function(token, expireDate){
+        var exp = new Date(expireDate);
+        $log.debug('SetToken', token, expireDate);
+        $log.debug('Exp', exp);
+
         $cookies.put('Token', token);
     }
     //get token from the cookie
