@@ -15,77 +15,300 @@
         <div class="container-fluid">
             <div class="row" style="margin-bottom: 25px;margin-top:15px">
                 <div class="col-sm-3 col-xs-12">
-                    <div>
-                        <strong>Shipment Description</strong>
-                        <span>{{trackerInfo.shipmentDescription}}</span>
-                    </div>
-                    <div>
-                        <strong>Comment</strong>
-                        <span>{{trackerInfo.commentsForReceiver}}</span>
-                    </div>
-                    <div ng-show="trackerInfo.assetNum"><strong>Asset Num:</strong><span>{{trackerInfo.assetNum}}</span></div>
-                    <div ng-show="trackerInfo.assetType"><strong>Asset Type:</strong><span>{{trackerInfo.assetType}}</span></div>
-                    <div ng-show="trackerInfo.palletId"><strong>Pallet ID:</strong><span>{{trackerInfo.palletId}}</span></div>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                    <div>
-                        <strong>Shipped From</strong>
-                        <span>{{trackerInfo.startLocation}}</span>
-                    </div>
-                    <div>
-                        <strong>Date Shipped</strong>
-                        <span>{{trackerInfo.startTime}}</span>
-                    </div>
-                    <div>
-                        <strong>Shipped To</strong>
-                        <span>{{trackerInfo.endLocation}}</span>
-                    </div>
-                    <div>
-                        <strong>Time of Arrival</strong>
-                        <span>{{trackerInfo.arrivalTime}}</span>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                    <div>
-                        <strong>Current status</strong>
-                        <span>{{trackerInfo.status}}</span>
-                    </div>
-                    <div>
-                        <strong>Schedule(s)</strong>
-                        <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
-                            {{p.notificationScheduleName}}
-                            <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                    <div class="panel panel-default" style="border: #dddddd solid 0.5px!important;">
+                        <div class="panel-heading">
+                            <span class="uppercase">Goods being monitored</span>
+                            <i tooltip="The Tracker (and Trip) featured in the chart, the map and the content down left side panel"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </div>
+                        <div class="panel-body">
+                            <a href="" class="tracker-info">
+                                <div>
+                                    <img class="tiny-icon15" ng-src="theme/img/Tracker{{trackerInfo.index + 1}}.png">
+                                    <span class="tracker-id">Tracker {{trackerInfo.deviceSN}}({{trackerInfo.tripCount}})</span>
+                                    <img class="tiny-icon17" ng-repeat="p in trackerInfo.alertSummary" ng-src="theme/img/alert{{p}}.png">
+                                </div>
+                            </a>
+                            <div ng-show="trackerInfo.assetNum"><strong>Asset Num:</strong><span>{{trackerInfo.assetNum}}</span></div>
+                            <div ng-show="trackerInfo.assetType"><strong>Asset Type:</strong><span>{{trackerInfo.assetType}}</span></div>
+                            <div ng-show="trackerInfo.palletId"><strong>Pallet ID:</strong><span>{{trackerInfo.palletId}}</span></div>
+
+                            <div>
+                                <div class="portlet-title">
+                                    <span>
+                                        <strong>Description:</strong>
+                                    </span>
+                                    <i tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                    <a href="" class="pull-right" ng-click="EditDescription(trackerInfo.shipmentId)">Edit</a>
+                                </div>
+                                <div class="">
+                                    <span>{{trackerInfo.shipmentDescription}}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="portlet-title">
+                                        <span>
+                                            <strong>Comment:</strong>
+                                        </span>
+                                    <i tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                    <a href="" class="pull-right" ng-click="EditComment(trackerInfo.shipmentId)">Edit</a>
+                                </div>
+                                <div class="">
+                                    <span>{{trackerInfo.commentsForReceiver}}</span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                    <div>
-                        <strong>Time of shutdown</strong>
-                        {{trackerInfo.shutdownTime}}
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <div class="panel panel-default" style="border: #dddddd solid 0.5px!important;">
+                        <div class="panel-heading">
+                            <span class="uppercase">Route</span>
+                            <i tooltip="The start and end location for this shipment"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </div>
+
+                        <div class="panel-body">
+                            <table class="tracker-desc">
+                                <tr>
+                                    <td><img src="theme/img/tinyLocationStart.png"></td>
+                                    <td>
+                                        <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
+                                        <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="itm in trackerInfo.interimStops">
+                                    <td><img src="theme/img/tinyInterimLocation.png"></td>
+                                    <td>
+                                        <div class="strong">{{itm.location.locationName}}</div>
+                                    <span style="color:#AAA">
+                                        <span class="light-bold-font uppercase">Stopped at:</span>
+                                        {{itm.date | convertDate}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="theme/img/tinyLocationStop.png"></td>
+                                    <td>
+                                        <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
+                                        <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
+                                        <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
+                                        <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
+                                        <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+                                <strong>Status:</strong>
+                                <span>{{trackerInfo.status}}</span>
+                                <span>
+                                    <i ng-if="trackerInfo.status=='InProgress'"
+                                       tooltip="An active shipment with manually entered shipment data."
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                    <i ng-if="trackerInfo.status=='Default'"
+                                       tooltip="An active shipment generated via an Autostart Template."
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                    <i ng-if="trackerInfo.status=='Arrived'"
+                                       tooltip="A shipment that has reached its destination."
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                    <i ng-if="trackerInfo.status=='Ended'"
+                                       tooltip="A shipment that has ended but has no known destination."
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-xs-12">
-                    <div>
-                        <strong>Alert Profile</strong>
-                        <span>{{trackerInfo.alertProfileName}}</span>
-                    </div>
-                    <div>
-                        <strong>Alerts fired:</strong>
-                        <div>{{trackerInfo.alertFired}}</div>
-                    </div>
-                    <!--<div>
-                        <strong> Alerts Yet To Fire</strong>
-                        <div ng-repeat="al in trackerInfo.alertYetToFire">
-                            {{al}}
+                    <div class="pane panel-default" style="border: #dddddd solid 0.5px!important;">
+                        <div class="panel-heading">
+                            <span class="uppercase">Alerts</span>
+                            <i tooltip="Waiting your tooltip text"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
                         </div>
-                    </div>-->
-                    <div>
-                        <strong>Notify when</strong>
-                        <span>{{trackerInfo.arrivalNotificationWithinKm}} Km away</span>
+                        <div class="panel-body">
+                            <!--<div>-->
+                                <!--<strong>Current status</strong>-->
+                                <!--<span>{{trackerInfo.status}}</span>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<strong>Schedule(s)</strong>-->
+                                <!--<div ng-repeat="p in trackerInfo.alertsNotificationSchedules">-->
+                                    <!--{{p.notificationScheduleName}}-->
+                                    <!--<span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<strong>Time of shutdown</strong>-->
+                                <!--{{trackerInfo.shutdownTime}}-->
+                            <!--</div>-->
+                            <table class="tracker-desc">
+                                <tr><td>Alert Profile:</td><td>{{trackerInfo.alertProfileName}}</td></tr>
+                                <tr><td>Who to notify:</td><td>{{trackerInfo.alertPeopleToNotify}}</td></tr>
+                                <tr><td>Schedule(s):</td><td>
+                                    <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
+                                        {{p.notificationScheduleName}}
+                                        <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td>Alerts fired:</td>
+                                    <td>
+                                        <div>{{trackerInfo.alertFired}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" ng-if="getRole() >= roles.Normal">
+                                        <a href="" ng-click="confirmSuppress(trackerInfo.shipmentId)"><u ng-class="{'grey-out':(isEndedOrArrived || suppressAlready)}">Suppress further alerts</u></a>
+                                        <i tooltip="Suppress further alerts (and arrival notification) from firing during this shipment."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div><strong>Notified at</strong>
-                        <span>{{trackerInfo.arrivalNotificationTime}}</span></div>
-                    <div>
-                        <strong>Who to notify</strong>
-                        <span>{{trackerInfo.alertPeopleToNotify}}</span>
+                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <div class="panel panel-default" style="border: #dddddd solid 0.5px!important;">
+                        <div class="panel-heading">
+                            <span class="uppercase">Arrival</span>
+                            <i tooltip="Waiting your tooltip text"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </div>
+                        <div class="panel-body">
+                            <table class="tracker-desc">
+                                <tr ng-show="trackerInfo.arrivalTime">
+                                    <td>
+                                        <span>Time of arrival</span>
+                                        <i tooltip="Waiting your tooltip text"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>
+                                        {{trackerInfo.arrivalTime}}
+                                    </td>
+                                </tr>
+                                <tr ng-show="trackerInfo.isNotifying">
+                                    <td>
+                                        <span>Notify when</span>
+                                        <i tooltip="Notify when"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>
+                                        {{trackerInfo.arrivalNotificationText}}
+                                    </td>
+                                </tr>
+                                <tr ng-show="!trackerInfo.isNotifying">
+                                    <td>
+                                        <span>Notify when</span>
+                                        <i tooltip="Notify when"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>Don't notify</td>
+                                </tr>
+                                <tr ng-show="trackerInfo.isNotifying">
+                                    <td>
+                                        <span>Notified at</span>
+                                        <i tooltip="Notified at"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>
+                                        {{trackerInfo.arrivalNotificationTime}}
+                                    </td>
+                                </tr>
+                                <tr ng-show="trackerInfo.isNotifying">
+                                    <td>
+                                        <span>Who to notify</span>
+                                        <i tooltip="Notify to people"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>{{trackerInfo.alertPeopleToNotify}}</td>
+                                </tr>
+                                <tr ng-show="trackerInfo.isNotifying">
+                                    <td>Schedule(s):</td><td>
+                                    <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
+                                        {{p.notificationScheduleName}}
+                                        <span ng-show="p.index != trackerInfo.alertsNotificationSchedules.length - 1">,</span>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Time of shutdown</span>
+                                        <i tooltip="Time of shutdown"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                    <td>
+                                        <span ng-show="trackerInfo.shutdownTime">{{trackerInfo.shutdownTime}}</span>
+                                        <span ng-show="trackerInfo.shutdownDeviceAfterMinutes && !trackerInfo.shutdownTime">{{trackerInfo.shutdownDeviceAfterMinutesText}}</span>
+                                        <span ng-show="trackerInfo.shutDownAfterStartMinutes && !trackerInfo.shutdownTime">, {{trackerInfo.shutDownAfterStartMinutesText}}</span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="getRole() >= roles.Normal">
+                                    <td colspan="2">
+                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
+                                        <i tooltip="Shutdown this device now, provided this is the latest shipment for this device."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
