@@ -6,6 +6,13 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
 
+    var tempUnits = localDbSvc.getDegreeUnits();
+    if (tempUnits == 'Celsius') {
+        tempUnits = 'C';
+    } else {
+        tempUnits = 'F';
+    }
+
     var orderBy = $filter('orderBy');
 
     $scope.AuthToken = localDbSvc.getToken();
@@ -67,7 +74,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     var subSeries = new Array();
     var alertData = new Array();
     var lightPlotBand = new Array();
-    $scope.noteData = new Array();
+    var noteData = new Array();
 
     var currentShipmentId = null;
     var currentShipment = {};
@@ -192,21 +199,11 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     );
                 }
             }
-            // $scope.normalMarkers.push({index: $scope.normalMarkers.length, oi: i, data: locations[i], iconUrl: "theme/img/edot.png", len: 12, normal: true});
         }
 
-        //map bound part
-        // console.log($scope.mapInfo);
-        //if($scope.mapInfo.endLocationForMap != null)
-        //    bounds.extend(new google.maps.LatLng($scope.mapInfo.endLocationForMap.latitude, $scope.mapInfo.endLocationForMap.longitude));
-        //if($scope.mapInfo.startLocationForMap != null)
-        //bounds.extend(new google.maps.LatLng($scope.mapInfo.startLocationForMap.latitude, $scope.mapInfo.startLocationForMap.longitude));
-        
         if(trackerRoute != null){
             trackerRoute.setMap(null);
         }
-
-//        console.log('TrackerPath', $scope.trackerPath);
 
         trackerRoute = new google.maps.Polyline({
             path: $scope.trackerPath,
@@ -214,7 +211,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             strokeOpacity: 1,
             strokeWeight: 5
         });
-        // console.log($scope.vm.map, bounds);
         if($scope.vm.map != undefined){
             $scope.vm.map.fitBounds(bounds);
             trackerRoute.setMap($scope.vm.map);
@@ -232,20 +228,19 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     }
 
     $scope.changeActiveTracker = function(index){
-
         $scope.MI = index;
         if($scope.trackers[index].locations.length == 0){
             toastr.warning("No data recorded yet!", "Empty Track");
             return;
         }
+        $scope.shipmentNotes = $scope.trackers[$scope.MI].notes;
+        //console.log("SHIPMENT-NOTES", $scope.shipmentNotes);
 
-        //console.log($scope.trackerInfo);
         prepareMainHighchartSeries();
         prepareTrackerMessage();
         prepareAlertHighchartSeries();
         prepareNoteChartSeries();
         refreshHighchartSeries();
-
         //-------PREPARE HIGHCHART DATA-------
         // prepareHighchartSeries();
         //Map start and end location info
@@ -492,8 +487,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             }
 
             var info = graphData.response;
-            $scope.shipmentNotes = info.notes;
-
             //--------Remove Light On, Off---------
             for(alert = 0; alert < info.alertSummary.length; alert ++){
                 if(info.alertSummary[alert].toLowerCase() == "lighton" 
@@ -642,17 +635,17 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                                 function(note) {
                                                     //getNotes
                                                     var params = null;
-                                                    if ($scope.ShipmentId) {
+                                                    if (note.shipmentId) {
                                                         params = {
                                                             params: {
-                                                                shipmentId: $scope.ShipmentId
+                                                                shipmentId: note.shipmentId
                                                             }
                                                         };
                                                     } else {
                                                         params = {
                                                             params: {
-                                                                sn: $scope.sn,
-                                                                trip: $scope.trip
+                                                                sn: note.sn,
+                                                                trip: note.trip
                                                             }
                                                         };
                                                     }
@@ -789,7 +782,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                         title: {
                             align: 'middle',
                             offset: 40,
-                            text: 'Temperature °C',
+                            //text: 'Temperature °C',
+                            text: 'Temperature °'+ tempUnits,
                             y: -10
                         },
                         labels:{
@@ -925,23 +919,19 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             type: 'flags',
             onSeries : 'dataseries',
             shape : 'circlepin',
-            width : 16,
-            data:$scope.noteData
+            //width : 16,
+            data:noteData
         })
     }
 
     function prepareNoteChartSeries() {
-        //console.log('ShipmentNotes', $scope.shipmentNotes);
-        $scope.noteData.length = 0; //reset $scope.noteData
-
-        $scope.noteData = orderBy($scope.shipmentNotes, 'x').map(function(val) {
-            /*var tmpArray = new Array();
-            val.marker = {
-                enabled: true,
-                //symbol: 'url(theme/img/alerts.png)'
-            }
-            tmpArray.push(val);
-            return tmpArray;*/
+        noteData.length = 0; //reset noteData
+        angular.forEach($scope.shipmentNotes, function(val, key) {
+            $scope.shipmentNotes[key].x = parseDate(val.timeOnChart);
+        });
+        var sortedNotes = orderBy($scope.shipmentNotes, 'x');
+        console.log('SortedNotes', sortedNotes);
+        noteData = sortedNotes.map(function(val) {
             val.title=val.noteNum;
             val.text=val.noteText;
             return val;
@@ -1055,10 +1045,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         };
     }
 
-    var sol = 0;
+    //var sol = 0;
     function updateNote(location) {
-        for (var i = sol; i< $scope.shipmentNotes.length; i++) {
-            $scope.shipmentNotes[i].x=parseDate($scope.shipmentNotes[i].timeOnChart);
+        for (var i = 0; i< $scope.shipmentNotes.length; i++) {
             var time = parseDate(location.timeISO);
             if ($scope.shipmentNotes[i].x == time) {
                 $scope.shipmentNotes[i].y = location.temperature;
@@ -1072,19 +1061,17 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     function prepareMainHighchartSeries(){
         subSeries.length = 0;
-
         //calculate chart arrange and cut down the others
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
         var endTime = parseDate($scope.trackers[$scope.MI].locations[$scope.trackers[$scope.MI].locations.length - 1].timeISO);
         
         var gap = (endTime - startTime) / 25;
-
         startTime -= gap;
         endTime += gap;
 
         //Add siblings tracker data to the subSeries
         var tempMin = null, tempMax = null;   //to calculate y-axis interval;
-//        console.log('TrackerI', $scope.trackers);
+        //console.log('TrackerI', $scope.trackers);
         for(i = 0; i < $scope.trackers.length; i++){
             if(!$scope.trackers[i].loaded) {
                 subSeries.push(new Array());
@@ -1097,7 +1084,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             if(tempMax == null){
                 tempMax = tempMin = locations[0].temperature;
             }
-            //$scope.shipmentNotes = $scope.trackers[i].notes;
+
+
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);

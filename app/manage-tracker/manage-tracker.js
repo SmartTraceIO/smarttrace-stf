@@ -318,7 +318,20 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
  */
 appFilters.filter('volt', function() {
     return function (input) {
-        return Number(input/1000).toFixed(1) + 'V';
+        if (input <= 3355) {
+            return '0%';
+        } else if (input <= 3441.3) {
+            return '10%';
+        } else if (input <=3527.6) {
+            return '20%';
+        } else if (input <= 4131.7) {
+            return '90%';
+        } else if (input < 4218) {
+            return '95%';
+        } else {
+            return '100%';
+        }
+       //return Number(input/1000).toFixed(1) + 'V';
     }
 });
 appFilters.filter('friendlyDate', function() {
