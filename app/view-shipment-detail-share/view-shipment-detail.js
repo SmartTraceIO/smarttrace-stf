@@ -863,7 +863,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     function refreshHighchartSeries(){
         chartSeries.length=0;
-
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
             id: 'dataseries',
@@ -919,6 +918,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             type: 'flags',
             onSeries : 'dataseries',
             shape : 'circlepin',
+            color: $scope.trackers[$scope.MI].siblingColor,
             //width : 16,
             data:noteData
         })

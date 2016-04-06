@@ -135,7 +135,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         $scope.AutoStartShipment.detectLocationForShippedFrom = false;
         $scope.AutoStartShipment.shutdownDeviceAfterMinutes = "120";
         $scope.AutoStartShipment.alertSuppressionMinutes = 120;
-        $scope.AutoStartShipment.addDateShipped = false;
+        $scope.AutoStartShipment.addDateShipped = true;
         $scope.AutoStartShipment.excludeNotificationsIfNoAlerts = false;
 
         $scope.NotificationScheduleOption = {

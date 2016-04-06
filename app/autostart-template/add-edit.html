@@ -55,7 +55,7 @@
                                type="text"
                                class="form-control"
                                placeholder="Enter Shipment Description" />
-                        <span ng-if="frmAddEditTemplate.$invalid" ng-cloak>
+                        <span ng-if="frmAddEditTemplate.$invalid && frmAddEditTemplate.$submitted" ng-cloak>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.desc.$error.required">Please enter template description</span>
                             <span ng-cloak class="text-danger" ng-if="frmAddEditTemplate.desc.$error.maxlength">Template description must be less than or equal to 120 chars</span>
                         </span>
@@ -63,7 +63,11 @@
                     <div class="col-sm-4 control-label" style="text-align:left">
                         <br />
                         <span class="hidden-xs">-&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span><input type="checkbox" ng-model="AutoStartShipment.addDateShipped" id="add-date-shipped"> Add date shipped to shipment Description</span>
+                        <span>
+                            <input type="checkbox" ng-model="AutoStartShipment.addDateShipped"
+                                   id="add-date-shipped">
+                            Add date shipped to shipment Description
+                        </span>
                     </div>
                 </div>
                 <div class="clearfix"></div>

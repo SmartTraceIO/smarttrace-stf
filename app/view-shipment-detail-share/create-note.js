@@ -20,8 +20,7 @@ appCtrls.controller('CreateNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'po
             //console.log('NOTE', $scope.note);
             webSvc.saveNote($scope.note).success(function(data) {
                 if (data.status.code == 0) {
-                    toastr.success("Success. one note was created");
-                    //console.log('After saveNote', data);
+                    toastr.success("Success. A new note was added.");
                     $modalInstance.close($scope.note)
                 } else {
                     toastr.error("You have no permission to create note!");
