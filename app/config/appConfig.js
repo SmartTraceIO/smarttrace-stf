@@ -31,9 +31,9 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
 });
 
 app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$provide',
-    '$httpProvider', '$compileProvider', '$filterProvider', '$injector',
+    '$httpProvider', '$compileProvider', '$filterProvider', '$injector', '$logProvider',
     function ($locationProvider, $stateProvider, $controllerProvider, $provide,
-              $httpProvider, $compileProvider, $filterProvider, $injector) {
+              $httpProvider, $compileProvider, $filterProvider, $injector, $logProvider) {
     ////register controller,service,factory,value,constant etc....
     appCtrls.controller = $controllerProvider.register;
     appDirs.directive = $compileProvider.directive;;
@@ -42,6 +42,9 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     appSvcs.service = $provide.service;
     appValues.value = $provide.value;
     appConstants.constant = $provide.constant;
+
+        //--enable debug
+        $logProvider.debugEnabled(true);
    
     //#endregion Register Controllers,Services,Factorys,Values,Constants,Directives & Filters
     $httpProvider.defaults.useXDomain = true;

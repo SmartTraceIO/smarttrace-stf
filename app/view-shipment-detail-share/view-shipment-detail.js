@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
+function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q, $log,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location)
 {
     rootSvc.SetPageTitle('View Shipment Detail');
@@ -148,7 +148,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     function updateMapData(index){
         var locations = subSeries[index];
-
         $scope.trackerPath.length = 0;
         $scope.specialMarkers.length = 0;
         $scope.normalMarkers.length = 0;
@@ -222,19 +221,19 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     }
 
     $scope.switchTracker = function(index){
+        $log.debug('SwithTracker...', index)
         $scope.chartConfig.redraw= true;
-        updateMapData(index);
         $scope.changeActiveTracker(index);
     }
 
     $scope.changeActiveTracker = function(index){
+        $log.debug('changeActiveTracker...', index);
         $scope.MI = index;
         if($scope.trackers[index].locations.length == 0){
             toastr.warning("No data recorded yet!", "Empty Track");
             return;
         }
         $scope.shipmentNotes = $scope.trackers[$scope.MI].notes;
-        //console.log("SHIPMENT-NOTES", $scope.shipmentNotes);
 
         prepareMainHighchartSeries();
         prepareTrackerMessage();
@@ -242,8 +241,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         prepareNoteChartSeries();
         refreshHighchartSeries();
         //-------PREPARE HIGHCHART DATA-------
-        // prepareHighchartSeries();
-        //Map start and end location info
         $scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
         $scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
         $scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
@@ -275,7 +272,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         $scope.shutdownAlready=false;
         $scope.suppressAlready=false;
         currentShipmentId = $scope.trackerInfo.shipmentId;
-        webSvc.getShipment(currentShipmentId).success(function(data) {
+
+        var promise = webSvc.getShipment(currentShipmentId).success(function(data) {
             //console.log('CURRENT-SHIPMENT',currentShipmentId, data)
             currentShipment = data.response;
             if (currentShipment.shutdownTime) {
@@ -296,10 +294,11 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     $scope.isLatest = true;
                 }
             })
-        })
-
-
-        updatePlotLines();
+        });
+        $q.all([promise]).then(function() {
+            updatePlotLines();
+            updateMapData($scope.MI);
+        });
     }
 
     function updatePlotLines(){
@@ -368,10 +367,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     function prepareTrackerMessage(){
 
         var info = subSeries[$scope.MI];
-        while($scope.trackerMsg.length > 0){
-            $scope.trackerMsg.pop();
-        }
-
+        $scope.trackerMsg.length = 0;
         for(i = 0; i < subSeries[$scope.MI].length; i++){
                     //prepare tracker message data
             var obj = {};
@@ -404,10 +400,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         if(!$scope.$$phase) {
             $scope.$apply();
         }
-        // if($scope.markerData.data.alerts[0].type == "LastReading"){
-            // $scope.diagColor = $scope.trackerColor;
-        // }
-        // updateMapMarker();
     }
     $scope.hideAlertsUI = function(){
         $scope.ttShow = false;
@@ -462,7 +454,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         })
     }
 
-    loadTrackerData();    
+    loadTrackerData();
 
     function loadTrackerData() {
 
@@ -496,13 +488,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     info.alertSummary.splice(alert --, 1);
                 }
             }
-            //--------Remove Light On, Off---------
-            //console.log(info);
-
-            
-
-            // console.log("******", info.locations.length);
-
             //------------PREPARE TRACKERS INFO  BEGIN-------------
             var tempObj = {};
             for(var k in info){
@@ -514,9 +499,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
             tempObj.loaded = true;
             tempObj.loadedForIcon = true;
-            //console.log("MainTracker", tempObj.locations.length);
-            //$scope.trackers[0] is the main tracker here.
-            //at the first time, it addes new tracker info to the $scope.trackers
             //next time, it only updates the main tracker info, not insert it to $scope.trackers
             if($scope.trackers.length == 0){
                 $scope.trackers.push(tempObj);
@@ -528,26 +510,14 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             else
                 $scope.trackers[0] = tempObj;
 
-            //Load Sibling Shipment details
-            
-            //refresh siblings
-            
-            //reload sibling info
-            for(i = 0; i < info.siblings.length; i++){
-                $scope.trackers[i + 1].loadedForIcon = false;
-
-                /*var params = {
-                 params: {
-                 shipmentId: shipmentId
-                 }
-                 };*/
+            var promiseSibling = [];
+            angular.forEach(info.siblings, function(val, key) {
                 var params = {
                     params: {
-                        shipmentId: info.siblings[i].shipmentId
+                        shipmentId: val.shipmentId
                     }
                 }
-                //console.log('PARAMS', params)
-                webSvc.getSingleShipmentShare(params).success( function (graphData) {
+                var p = webSvc.getSingleShipmentShare(params).success( function (graphData) {
                     if(graphData.status.code != 0) return;
                     dt = graphData.response;
                     // debugger;
@@ -568,7 +538,40 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                         }
                     }
                 });
-            }
+                promiseSibling.push(p);
+            });
+            $q.all(promiseSibling);
+
+            //for(i = 0; i < info.siblings.length; i++){
+            //    $scope.trackers[i + 1].loadedForIcon = false;
+            //
+            //    var params = {
+            //        params: {
+            //            shipmentId: info.siblings[i].shipmentId
+            //        }
+            //    }
+            //    webSvc.getSingleShipmentShare(params).success( function (graphData) {
+            //        if(graphData.status.code != 0) return;
+            //        dt = graphData.response;
+            //        // debugger;
+            //        for(j = 1; j < $scope.trackers.length; j++){
+            //            if($scope.trackers[j].shipmentId == dt.shipmentId){
+            //                for(var k in dt){
+            //                    if(dt.hasOwnProperty(k)){
+            //                        $scope.trackers[j][k] = dt[k];
+            //                    }
+            //                }
+            //                if($scope.trackers[j].alertYetToFire != null)
+            //                    $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
+            //                $scope.trackers[j].loaded = true;
+            //                $scope.trackers[j].loadedForIcon = true;
+            //                prepareMainHighchartSeries();
+            //                refreshHighchartSeries();
+            //                break;
+            //            }
+            //        }
+            //    });
+            //}
             for(i = 0; i < $scope.trackers.length; i++){
                 $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
                 $scope.trackers[i].index = i;
@@ -588,7 +591,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             $scope.currentPoint.loc = locations[0];
             $scope.currentPoint.iconUrl = "theme/img/edot.png";
             $scope.changeActiveTracker($scope.MI);
-            updateMapData($scope.MI);
+
 
             // console.log($scope.trackerPath);
             $scope.chartConfig = {
@@ -606,15 +609,13 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                                 break;
                                             }
                                         }
-                                        // $scope.firstPoint = $scope.trackers[$scope.MI].locations[idx];
-                                        // console.log(idx);
                                         $scope.showAlerts(idx);
                                     },
                                     mouseOut: function () {
                                         $scope.showAlerts(-1);
                                     },
                                     click: function(e) {
-                                        console.log('THIS', e);
+                                        //console.log('THIS', e);
                                         if (!this.noteNum) {
                                             var point = this;
                                             var chart1 = document.getElementById("chart1");
@@ -938,7 +939,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             $scope.shipmentNotes[key].x = parseDate(val.timeOnChart);
         });
         var sortedNotes = orderBy($scope.shipmentNotes, 'x');
-        console.log('SortedNotes', sortedNotes);
+        $log.debug('SortedNotes', sortedNotes);
         noteData = sortedNotes.map(function(val) {
             val.title=val.noteNum;
             val.text=val.noteText;
@@ -1234,16 +1235,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
             toastr.warning('Warning. This device can only suppress alert from latest shipment ' + link);
         } else if ($scope.suppressAlready) {
-            //var temShipmentNumber = currentDevice.shipmentNumber;
-            //if (temShipmentNumber){
-            //    var idx1 = temShipmentNumber.indexOf('(');
-            //    var idx2 = temShipmentNumber.indexOf(')');
-            //    var n = temShipmentNumber.substr(idx1+1, idx2-1);
-            //    currentDevice.tripCount = parseInt(n);
-            //}
-            //currentDevice.sn = parseInt(currentDevice.sn);
-            //var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
-
             toastr.warning('Alerts have already been suppressed for this shipment.');
         } else {
             var modalInstance = $modal.open({
