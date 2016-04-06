@@ -15,10 +15,7 @@
     //set token to the cookie
     this.setToken = function(token, expireDate){
         var exp = new Date(expireDate);
-        $log.debug('SetToken', token, expireDate);
-        $log.debug('Exp', exp);
-
-        $cookies.put('Token', token);
+        $cookies.put('Token', token, {'expires': exp});
     }
     //get token from the cookie
     this.getToken = function(){

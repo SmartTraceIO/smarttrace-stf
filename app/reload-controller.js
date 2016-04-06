@@ -14,18 +14,18 @@
         var v = (new Date()).getTime();
         $http.get('/app/config/version.json?v='+v).then(
             function(response) {
+                $rootScope = $rootScope.$new(true);
                 var nxt = response.data.version;
                 if (nxt != version) {
                     $rootScope.isOut = true;
                 }
-                $state.go('login');
             },
             function(response) {
+                $rootScope = $rootScope.$new(true);
                 $rootScope.isOut = true;
-                $state.go('login');
             }
         ).finally(function() {
-
+            $state.go('login');
         })
     };
     $scope.clearCache = function() {
@@ -110,26 +110,14 @@
         });
     }
     $interval(loadNotifications, 10*60*1000); // 10 minutes
-    /*$rootScope.updateUserTime = function() {
-        webSvc.getUserTime().success( function (timeData) {
-            console.log('USER-TIME', timeData);
-            if (timeData.status.code == 0) {
-                $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
-                $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-                $scope.tickInterval = 1000 //ms
-                var tick = function () {
-                    $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                    $timeout(tick, $scope.tickInterval); // reset the timer
-                }
-                // Start the timer
-                $timeout(tick, $scope.tickInterval);
-            }
-        });
-    }
-
-    $rootScope.updateUserTime();*/
-
     $scope.reload = function() {
+        //-- check authenticate
+        if (localDbSvc.getToken() == '_') {
+            //--
+            toastr.warning('Your session was expired!')
+            $scope.logout();
+            return;
+        }
         reloadUserIfNeed();
         if ($state.current.name == $rootScope.previousState.name) {
             $state.go($state.current, {}, { reload: true });
@@ -163,8 +151,10 @@
                     $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
                     $scope.tickInterval = 1000 //ms
                     var tick = function () {
-                        $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                        $timeout(tick, $scope.tickInterval); // reset the timer
+                        if ($rootScope.moment) {
+                            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                            $timeout(tick, $scope.tickInterval); // reset the timer
+                        }
                     }
                     // Start the timer
                     $timeout(tick, $scope.tickInterval);

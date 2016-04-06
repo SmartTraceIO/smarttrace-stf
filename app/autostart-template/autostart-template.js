@@ -55,10 +55,8 @@
                 }
             }
         })
-
         modalInstance.result.then(
             function() {
-                //--TODO, update list without refresh
                 BindAutoShipmentList();
             }
         );

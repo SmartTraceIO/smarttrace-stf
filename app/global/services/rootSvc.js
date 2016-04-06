@@ -15,6 +15,5 @@
         getTrackerColor: function(index){
             return trackerColor[index];
         },
-
     }
 }]);
