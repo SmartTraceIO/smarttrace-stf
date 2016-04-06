@@ -643,7 +643,14 @@ h3 span.info {
     color: #ddd;
 }
 .grey-out{
-    color: #ddd;
+    color: #AAA;
+}
+.circle {
+    width: 15px;
+    height: 15px;
+    color: #FFF;
+    font-size: 10px;
+    text-align: center;
 }
 .portlet.box.green > .portlet-title > .caption {
     padding-top:16px;
