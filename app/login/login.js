@@ -23,29 +23,29 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 		}
         // console.log("Updating tracker data...");
         loginTimer = $timeout(loginTimeOut, 5000);
-		webSvc.login($scope.username, $scope.password).success(
-			function(data) {
+        var promise0 = webSvc.login($scope.username, $scope.password).success(function(data) {
 				$timeout.cancel(loginTimer);
 				if (data.status.code == 0) {
+                    console.log('Login', data);
 					localDbSvc.setToken(data.response.token, data.response.expired);
-					$scope.AuthToken = data.response.token;
-					$rootScope.AuthToken = data.response.token;
-					if ($rootScope.redirectUrl == "" || $rootScope.redirectUrl == undefined) {
-						$rootScope.redirectUrl = "/view-shipment";
-					}
-					$rootScope.showHeader = false;
-                    $scope.loadUserAndMove($rootScope.redirectUrl);
-                    //$location.url($rootScope.redirectUrl);
-					$rootScope.redirectUrl = "";
+					//$scope.AuthToken = data.response.token;
+					//$rootScope.AuthToken = data.response.token;
+
 					toastr.success("Successfully logged in.");
 				} else {
 					toastr.warning("User e-mail address or password is incorrect.");
 				}
 			});
+        promise0.then(function() {
+            if ($rootScope.redirectUrl == "" || $rootScope.redirectUrl == undefined) {
+                $rootScope.redirectUrl = "/view-shipment";
+            }
+            $rootScope.showHeader = false;
+            loadUserAndMove($rootScope.redirectUrl);
+        });
 	}
-    $scope.loadUserAndMove = function(url) {
+    var loadUserAndMove = function(url) {
         var promise1 = webSvc.getUser().success(function (data) {
-            $log.debug('Login.User', data);
             $rootScope.User = data.response;
 			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
 			localDbSvc.setUserTimezone(data.response.timeZone);

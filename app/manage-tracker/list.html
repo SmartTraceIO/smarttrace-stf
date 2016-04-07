@@ -18,7 +18,7 @@
                 <option value="100">100</option>
             </select>
         </div>
-         <div ng-if="getRole() >= roles.SmartTraceAdmin" class="pull-right">
+         <div ng-if="getRole() >= Role.SmartTraceAdmin" class="pull-right">
             <a class="btn btn-default pull-right" href="/#/add-tracker">
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker
             </a>
@@ -149,8 +149,8 @@
                         </span>
                     </th>
 
-                    <th ng-if="getRole() >= roles.Admin"></th>
-                    <!--<th ng-if="getRole() >= roles.SmartTraceAdmin"></th>-->
+                    <th ng-if="getRole() >= Role.Admin"></th>
+                    <!--<th ng-if="getRole() >= Role.SmartTraceAdmin"></th>-->
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
                     <td>{{tracker.sn}}</td>
@@ -213,10 +213,10 @@
                             <span ng-if="tracker.lastShipmentId!=null">{{tracker.lastReadingBattery | volt}}</span>
                         </td>
 
-                    <td class="text-center" ng-if="getRole() >= roles.Admin">
+                    <td class="text-center" ng-if="getRole() >= Role.Admin">
                         <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
-                    <!--<td class="text-center" ng-if="getRole() >= roles.SmartTraceAdmin">
+                    <!--<td class="text-center" ng-if="getRole() >= Role.SmartTraceAdmin">
                         <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
                     </td>-->
 

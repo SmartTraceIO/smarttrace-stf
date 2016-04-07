@@ -1,8 +1,9 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
-    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc, $window) {
+    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc, $window, Role) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
+        $scope.Role = Role;
 
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
@@ -69,32 +70,31 @@
                 }
             });
         }
-        $scope.roles = {};
-        $scope.roles.SmartTraceAdmin = 1000;
-        $scope.roles.Admin = 999;
-        $scope.roles.Normal = 99;
-        $scope.roles.Basic = 9;
+        var User = localDbSvc.getUserProfile();
         $scope.getRole = function () {
-            if (!$rootScope.User || !$rootScope.User.roles) {
-                return $scope.roles.Basic;
+            if (!User || !User.roles) {
+                return Role.Basic;
             }
-            else if ($rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
-                return $scope.roles.SmartTraceAdmin;
-            } else if ($rootScope.User.roles.indexOf('Admin') >= 0) {
-                return $scope.roles.Admin;
-            } else if ($rootScope.User.roles.indexOf('Normal') >= 0) {
-                return $scope.roles.Normal;
+            else if (User.roles.indexOf('SmartTraceAdmin') >= 0) {
+                return Role.SmartTraceAdmin;
+            } else if (User.roles.indexOf('Admin') >= 0) {
+                return Role.Admin;
+            } else if (User.roles.indexOf('Normal') >= 0) {
+                return Role.Normal;
             } else {
-                return $scope.roles.Basic;
+                return Role.Basic;
             }
         }
 });
-appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window',
-    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window) {
+appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window', 'Role',
+    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window, Role) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Add";
+
+        $scope.Role = Role;
+
         var filter = $filter('filter');
         var param = {
             pageSize: 1000,
@@ -130,30 +130,27 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
         };
 }]);
 appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams',
-    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$modal',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $modal) {
+    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$modal', 'Role',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $modal, Role) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Edit";
+        $scope.Role = Role;
 
-        $scope.roles = {};
-        $scope.roles.SmartTraceAdmin = 1000;
-        $scope.roles.Admin = 999;
-        $scope.roles.Normal = 99;
-        $scope.roles.Basic = 9;
+        var User = localDbSvc.getUserProfile();
         $scope.getRole = function () {
-            if (!$rootScope.User || !$rootScope.User.roles) {
-                return $scope.roles.Basic;
+            if (!User || !User.roles) {
+                return Role.Basic;
             }
-            else if ($rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
-                return $scope.roles.SmartTraceAdmin;
-            } else if ($rootScope.User.roles.indexOf('Admin') >= 0) {
-                return $scope.roles.Admin;
-            } else if ($rootScope.User.roles.indexOf('Normal') >= 0) {
-                return $scope.roles.Normal;
+            else if (User.roles.indexOf('SmartTraceAdmin') >= 0) {
+                return Role.SmartTraceAdmin;
+            } else if (User.roles.indexOf('Admin') >= 0) {
+                return Role.Admin;
+            } else if (User.roles.indexOf('Normal') >= 0) {
+                return Role.Normal;
             } else {
-                return $scope.roles.Basic;
+                return Role.Basic;
             }
         }
         $scope.Print = function() {
@@ -257,25 +254,6 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
 
             }
         };
-
-        /*$scope.confirm = function (deviceImei) {
-            $scope.deviceImei = deviceImei;
-            $("#confirmModel").modal("show");
-        }*/
-
-        //$scope.deactivateNow = function () {
-        //    $("#confirmDeactive").modal("hide");
-        //    $scope.tracker.active = false; //-- deactivate
-        //    webSvc.saveDevice($scope.tracker).success(function(data){
-        //        console.log('DEACTIVATE-DEVICE', data);
-        //        if (data.status.code == 0) {
-        //            toastr.success("Device has just deactivated successfully")
-        //            $state.go('tracker');
-        //        } else {
-        //            toastr.error('Can\'t deactivate device!');
-        //        }
-        //    });
-        //}
 
         $scope.confirmDeactive = function(shipmentId) {
             webSvc.getSingleShipment(shipmentId).success(function(resp) {

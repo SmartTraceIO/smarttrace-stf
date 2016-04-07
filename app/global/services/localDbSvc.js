@@ -1,4 +1,10 @@
-﻿appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $log, $q) {
+﻿appConstants.constant('Role', {
+    SmartTraceAdmin:1000,
+    Admin : 999,
+    Normal : 99,
+    Basic : 9
+});
+appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $log, $q) {
 
     //set localstorage item
     this.set = function (key, value) {
@@ -15,7 +21,8 @@
     //set token to the cookie
     this.setToken = function(token, expireDate){
         var exp = new Date(expireDate);
-        $cookies.put('Token', token, {'expires': exp});
+        $cookies.put('Token', token);
+        //$cookies.put('Token', token, {'expires': exp});
     }
     // expire now
     this.expireNow = function() {
@@ -47,10 +54,16 @@
     }
 
     this.setUserProfile = function(userProfile) {
-        $cookies.put("profile", userProfile);
+        $cookies.put("profile", JSON.stringify(userProfile));
     }
     this.getUserProfile = function() {
-        return $cookies.get("profile");
+        var user = null;
+        try {
+            user = JSON.parse($cookies.get("profile"));
+        } catch (err) {
+            user = null;
+        }
+        return user;
     }
 
     this.setDegreeUnits = function(dunit) {

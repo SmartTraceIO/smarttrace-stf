@@ -202,7 +202,7 @@
                             </h5>
                             <span>{{tracker.shipmentStatus}}</span>
                         </div>
-                        <div class="col-sm-2" ng-if="getRole() >= roles.Admin">
+                        <div class="col-sm-2" ng-if="getRole() >= Role.Admin">
                             <button type="button" class="btn"
                                     ng-class="{green:(tracker.shipmentStatus!='Ended' && tracker.shipmentStatus!='Arrived')}"
                                     ng-click="confirmShutdown()">Shutdown Now</button>
@@ -213,7 +213,7 @@
                                    class="fa fa-info-circle"/>
                         </div>
                     </div>
-                    <div ng-if="getRole() >= roles.Admin">
+                    <div ng-if="getRole() >= Role.Admin">
                         <div class="row">
                             <h3>Billing</h3>
                         </div>
@@ -224,7 +224,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <h5>Activation Date</h5>
-                                <span>-</span>
+                                <span ng-if="tracker.lastUpdateStatusDate">tracker.lastUpdateStatusDate</span>
                             </div>
                             <div class="col-sm-2 pull-right">
                                 <button class="btn green" ng-click="confirmDeactive(tracker.lastShipmentId)">Deactivate Now</button>
@@ -236,7 +236,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <h5>Deactivation Date</h5>
-                                <span>-</span>
+                                <span ng-if="tracker.lastUpdateStatusDate">tracker.lastUpdateStatusDate</span>
                             </div>
                             <div class="col-sm-6 pull-right">
                                 <span>Please contact <a href="mailto:support@smarttrace.com"><u><strong>support@smartTrace.com.au</strong></u></a> to reactivate this device</span>
@@ -250,21 +250,6 @@
             </div>
         </div>
     </div>
-    <!--<div class="modal fade" tabindex="-1" id="confirmDeactive" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Are you sure you want to deactivate this device? There is a re-connection fee and a 24hr delay if you need to reactivate it later</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="button" class="btn btn-primary" ng-click="deactivateNow()">Deactivate</button>
-                </div>
-            </div>
-        </div>
-    </div>-->
     <div class="modal fade" tabindex="-1" id="confirmShutdown" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -279,17 +264,3 @@
             </div>
         </div>
     </div>
-   <!-- <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Any unsaved changes will be lost including delete, are you sure you want to cancel?</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="button" class="btn btn-primary" ng-click="DeleteDevice()">Ok</button>
-                </div>
-            </div>
-        </div>
-    </div>-->
