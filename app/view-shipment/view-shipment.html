@@ -393,12 +393,12 @@
                             </tr>
                             <tr ng-repeat="shipment in ShipmentList">
                                 <!--<td>
-                                    <a href="/#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                                    <a href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
                                         <u>{{shipment.shipmentId}}</u>
                                     </a>
                                 </td>-->
                                 <td class="text-left">
-                                    <a href="/#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                                    <a href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
                                         <u>{{shipment.deviceSN}} ({{shipment.tripCount}})</u>
                                     </a>
                                 </td>
@@ -437,9 +437,9 @@
                                 {{shipment.shipmentDescription}}
                             </div>
                             <div class="pull-right" style="margin-top:6px">
-                                <a href="/#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
+                                <a href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
                                    class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
-                                <!--<a href="/#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>-->
+                                <!--<a href="#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>-->
                             </div>
                         </div>
                         <div class="portlet-body" style="position:relative">
