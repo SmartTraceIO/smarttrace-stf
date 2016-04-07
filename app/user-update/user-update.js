@@ -1,11 +1,11 @@
-appCtrls.controller('UserUpdateCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location) {
+appCtrls.controller('UserUpdateCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $window) {
 
 	$scope.AuthToken = localDbSvc.getToken();
 	$scope.User = $rootScope.User;
 
     if($scope.User == undefined){
         webSvc.getUser().success( function (data) {
-            $rootScope.User = data.response;
+			$rootScope.User = data.response;
             $scope.User = data.response;
         });
     }

@@ -1,4 +1,4 @@
-﻿appSvcs.service("localDbSvc", ["$cookies", "$log", function ($cookies, $log) {
+﻿appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $log, $q) {
 
     //set localstorage item
     this.set = function (key, value) {
@@ -16,6 +16,12 @@
     this.setToken = function(token, expireDate){
         var exp = new Date(expireDate);
         $cookies.put('Token', token, {'expires': exp});
+    }
+    // expire now
+    this.expireNow = function() {
+        var deferred = $q.defer();
+        this.setToken('_', -1);
+        return deferred.promise;
     }
     //get token from the cookie
     this.getToken = function(){
@@ -38,6 +44,13 @@
     //get password
     this.getPassword = function(){
         return $cookies.get("login_password");
+    }
+
+    this.setUserProfile = function(userProfile) {
+        $cookies.put("profile", userProfile);
+    }
+    this.getUserProfile = function() {
+        return $cookies.get("profile");
     }
 
     this.setDegreeUnits = function(dunit) {

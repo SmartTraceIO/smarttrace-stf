@@ -202,7 +202,7 @@
                             </h5>
                             <span>{{tracker.shipmentStatus}}</span>
                         </div>
-                        <div class="col-sm-2" ng-if="getRole() >= roles.Normal">
+                        <div class="col-sm-2" ng-if="getRole() >= roles.Admin">
                             <button type="button" class="btn"
                                     ng-class="{green:(tracker.shipmentStatus!='Ended' && tracker.shipmentStatus!='Arrived')}"
                                     ng-click="confirmShutdown()">Shutdown Now</button>
@@ -213,7 +213,7 @@
                                    class="fa fa-info-circle"/>
                         </div>
                     </div>
-                    <div ng-if="getRole() > roles.Normal">
+                    <div ng-if="getRole() >= roles.Admin">
                         <div class="row">
                             <h3>Billing</h3>
                         </div>
@@ -250,7 +250,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" tabindex="-1" id="confirmDeactive" role="dialog">
+    <!--<div class="modal fade" tabindex="-1" id="confirmDeactive" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -264,7 +264,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="modal fade" tabindex="-1" id="confirmShutdown" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -279,7 +279,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
+   <!-- <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -292,4 +292,4 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->

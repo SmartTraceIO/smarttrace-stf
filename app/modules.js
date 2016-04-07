@@ -5,9 +5,31 @@ var appProviders = angular.module('appProviders', []);
 var appValues = angular.module('appValues', []);
 var appConstants = angular.module('appConstants', []);
 var appFilters = angular.module('appFilters', []);
-var app = angular.module("app", ['highcharts-ng', 'ngMap', 'ui.select2', 'ui.select', 'ngSanitize', 'ngTouch', 'ui.bootstrap', 'ui.bootstrap.tpls',
-    'ui.router', 'ngResource', 'ngCookies', 'appCtrls', 'appDirs', 'appSvcs', 'appProviders', 'appValues', 'appConstants',
-    'appFilters', 'ngSanitize', 'ngAnimate'], function ($rootScopeProvider) {
+var app = angular.module("app",
+    [
+        'highcharts-ng',
+        'ngMap',
+        'ui.select2',
+        'ui.select',
+        'ngSanitize',
+        'ngTouch',
+        'ui.bootstrap',
+        'ui.bootstrap.tpls',
+        'ui.router',
+        'ngResource',
+        'ngCookies',
+        'appCtrls',
+        'appDirs',
+        'appSvcs',
+        'appProviders',
+        'appValues',
+        'appConstants',
+        'appFilters',
+        'ngSanitize',
+        'ngAnimate'
+    ],
+
+    function ($rootScopeProvider) {
     ////this method skip error of $digest and $watch Error: $digest reaches maximum iteration
     $rootScopeProvider.digestTtl(25);
 });

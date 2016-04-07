@@ -526,5 +526,5 @@ app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'routes',
             $stateProvider.state(route.name, route.config);
         });
         //$urlRouterProvider.otherwise('/new-shipment');
-        $urlRouterProvider.otherwise('/view-shipment');
+        $urlRouterProvider.otherwise('/login');
     }]);

@@ -1,5 +1,5 @@
 appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $log,
-										   $rootScope, $location, $templateCache, $timeout, $window) {
+										   $rootScope, $location, $templateCache, $timeout, $window, $q) {
     if ($rootScope.isOut == true) {
         $window.location.reload();
         $rootScope.isOut = false;
@@ -44,12 +44,14 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 			});
 	}
     $scope.loadUserAndMove = function(url) {
-        webSvc.getUser().success(function (data) {
+        var promise1 = webSvc.getUser().success(function (data) {
             $log.debug('Login.User', data);
             $rootScope.User = data.response;
 			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
-        })
-        webSvc.getUserTime().success( function (timeData) {
+			localDbSvc.setUserTimezone(data.response.timeZone);
+			localDbSvc.setUserProfile(data.response);
+        });
+        var promise2 = webSvc.getUserTime().success( function (timeData) {
             //console.log('USER-TIME', timeData);
             if (timeData.status.code == 0) {
                 localDbSvc.setUserTimezone(timeData.response.timeZoneId);
@@ -63,8 +65,8 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
                 // Start the timer
                 $timeout(tick, $scope.tickInterval);
             }
-        }).then(function(){
-            //move to new url after update user-time
+        });
+		$q.all([promise1, promise2]).then(function(){
             $location.url(url);
         });
     }

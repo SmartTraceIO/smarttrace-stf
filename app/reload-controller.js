@@ -1,4 +1,4 @@
-﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval,
+﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval, $window, $log, $q,
                                             localDbSvc, webSvc, $timeout, $document, $templateCache, $http) {
     $rootScope.closeText = "";
     $rootScope.loading = false;
@@ -11,8 +11,10 @@
         //$scope.reloadUserIfNeed();
     }
     $scope.logout = function() {
+        console.log('Logout...');
+        var promise = localDbSvc.expireNow();
         var v = (new Date()).getTime();
-        $http.get('/app/config/version.json?v='+v).then(
+        var promise2 = $http.get('/app/config/version.json?v='+v, {noCancelOnRouteChange:true}).then(
             function(response) {
                 $rootScope = $rootScope.$new(true);
                 var nxt = response.data.version;
@@ -22,12 +24,16 @@
             },
             function(response) {
                 $rootScope = $rootScope.$new(true);
-                $rootScope.isOut = true;
+                    $rootScope.isOut = true;
             }
         ).finally(function() {
+        });
+
+        $q.all([promise, promise2]).then(function() {
             $state.go('login');
-        })
+        });
     };
+
     $scope.clearCache = function() {
         $templateCache.removeAll();
         toastr.info("Cleared cache");
@@ -113,10 +119,8 @@
     $scope.reload = function() {
         //-- check authenticate
         if (localDbSvc.getToken() == '_') {
-            //--
             toastr.warning('Your session was expired!')
-            $scope.logout();
-            return;
+            return $scope.logout();
         }
         reloadUserIfNeed();
         if ($state.current && $rootScope.previousState) {
@@ -135,6 +139,7 @@
             $rootScope.closedNotification = [];
             webSvc.getUser().success(function (data) {
                 if(data.status.code == 0){
+                    //$rootScope.User = data.response;
                     $rootScope.User = data.response;
                     //--update User
                     localDbSvc.setDegreeUnits(data.response.temperatureUnits);

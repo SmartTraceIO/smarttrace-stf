@@ -1,4 +1,4 @@
-appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $location) {
+appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $window) {
 
 	$scope.AuthToken = localDbSvc.getToken();
 	$scope.User = $rootScope.User;
