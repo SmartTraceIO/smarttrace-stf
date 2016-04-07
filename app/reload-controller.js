@@ -119,8 +119,10 @@
             return;
         }
         reloadUserIfNeed();
-        if ($state.current.name == $rootScope.previousState.name) {
-            $state.go($state.current, {}, { reload: true });
+        if ($state.current && $rootScope.previousState) {
+            if ($state.current.name == $rootScope.previousState.name) {
+                $state.go($state.current, {}, { reload: true });
+            }
         }
     };
     function reloadUserIfNeed () {
