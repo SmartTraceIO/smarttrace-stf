@@ -17,9 +17,10 @@ appCtrls.controller('EditNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'note
 
         $scope.saveNote = function(isInvalid) {
             if (!isInvalid) {
+                if (!$scope.note.noteText) $scope.note.noteText = "";
                 webSvc.saveNote($scope.note).success(function(data) {
                     if (data.status.code == 0) {
-                        toastr.success("Success. one note was created");
+                        toastr.success("Success. one note was updated.");
                         $modalInstance.close($scope.note);
                     } else {
                         console.log('ERROR', data);
