@@ -704,12 +704,20 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr ng-if="trackerInfo.alertsSuppressionTime">
+                                    <td>
+                                        <div>Alerts suppressed at:</div> </td>
+                                    <td>
+                                        <div>{{trackerInfo.alertsSuppressionTime}}</div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td colspan="2" ng-if="getRole() >= roles.Normal">
                                         <a href="" ng-click="confirmSuppress(trackerInfo.shipmentId)">
                                             <u ng-class="{'grey-out':(isEndedOrArrived || suppressAlready)}">Suppress further alerts</u>
                                         </a>
-                                        <i tooltip="Suppress further alerts (and arrival notification) from firing during this shipment."
+                                        <i tooltip="Suppress further alerts (and arrival notification) from firing
+                                         during this shipment."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
