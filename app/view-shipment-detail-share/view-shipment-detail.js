@@ -285,6 +285,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             if (currentShipment.alertSuppressedDate) {
                 $scope.suppressAlready = true;
             }
+        }).then(function() {
             webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
                 //console.log('CURRENT-DEVICE', dd);
                 currentDevice = dd.response;
@@ -293,8 +294,10 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 } else {
                     $scope.isLatest = true;
                 }
-            })
+            });
         });
+
+
         $q.all([promise]).then(function() {
             updatePlotLines();
             updateMapData($scope.MI);
@@ -303,8 +306,11 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     function updatePlotLines(){
         plotLines.length = 0;
-
-        var ti = $scope.trackers[$scope.MI].locations;
+        console.log('SubSeries', subSeries);
+        console.log('Tracker.MI', $scope.trackers[$scope.MI]);
+        console.log('MI', $scope.MI);
+        var ti = subSeries[$scope.MI];
+        //var ti = $scope.trackers[$scope.MI].locations;
         var lastPoint = ti.length - 1;
 
         var mainTrackerPeriod = parseDate(ti[lastPoint].timeISO) - parseDate(ti[0].timeISO);
@@ -315,8 +321,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         plotLines.push({
             color: color, // Color value
             dashStyle: 'solid', // Style of the plot line. Default to solid
-            value: parseDate($scope.mapInfo.startTimeISO), // Value of where the line will appear
-            width: width, // Width of the line    
+            value: parseDate(ti[0].timeISO), // Value of where the line will appear
+            //value: parseDate($scope.mapInfo.startTimeISO), // Value of where the line will appear
+            width: width, // Width of the line
             label: {
                 text: '<table><tr><td style="vertical-align:top;"><img src="theme/img/locationStart.png"></td>' + 
                         '<td><br/>' + 
@@ -454,8 +461,90 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         })
     }
 
-    loadTrackerData();
+    //--double click implementation
+    var doubleClicker = {
+        timeBetweenClicks:1000,
+    };
+    var resetDoubleClick = function() {
+        clearTimeout(doubleClicker.timer);
+        doubleClicker.timer = null;
+        doubleClicker.clickedOnce = false;
+    };
 
+    // the actual callback for a double-click event
+    var ondbclick = function(e, point) {
+        if (!point.noteNum) {
+            //var point = point;
+            var chart1 = document.getElementById("chart1");
+            var modalInstance = $modal.open({
+                templateUrl: '/app/view-shipment-detail-share/create-note.html',
+                controller: 'CreateNoteCtrl',
+                backdrop: false,
+                size: 'sm',
+                appendTo: chart1,
+                resolve: {
+                    point: function () {
+                        return point;
+                    },
+                    shipmentId: function() {
+
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function(note) {
+                    //getNotes
+                    var params = null;
+                    if (note.shipmentId) {
+                        params = {
+                            params: {
+                                shipmentId: note.shipmentId
+                            }
+                        };
+                    } else {
+                        params = {
+                            params: {
+                                sn: note.sn,
+                                trip: note.trip
+                            }
+                        };
+                    }
+
+                    var promise = promiseGetNotes(params);
+                    promise.then(
+                        function (res) {
+                            console.log('Note', res);
+                            $scope.trackerInfo.notes = res;
+                            $scope.shipmentNotes = res;
+                            prepareMainHighchartSeries();
+                            prepareNoteChartSeries();
+                            refreshHighchartSeries();
+                        },
+                        function (status) {
+                        }
+                    );
+                }
+            );
+        } else {
+            var note = point;
+            var modalInstance = $modal.open({
+                templateUrl: '/app/view-shipment-detail-share/edit-note.html',
+                controller: 'EditNoteCtrl',
+                resolve: {
+                    note : function() {
+                        return note;
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function(result) {
+                    //$scope.trackerInfo.shipmentDescription = result;
+                }
+            );
+        }
+    };
+
+    loadTrackerData();
     function loadTrackerData() {
 
         var params = null;
@@ -615,78 +704,15 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                                         $scope.showAlerts(-1);
                                     },
                                     click: function(e) {
-                                        //console.log('THIS', e);
-                                        if (!this.noteNum) {
-                                            var point = this;
-                                            var chart1 = document.getElementById("chart1");
-                                            var modalInstance = $modal.open({
-                                                templateUrl: '/app/view-shipment-detail-share/create-note.html',
-                                                controller: 'CreateNoteCtrl',
-                                                backdrop: false,
-                                                size: 'sm',
-                                                appendTo: chart1,
-                                                resolve: {
-                                                    point: function () {
-                                                        return point;
-                                                    },
-                                                    shipmentId: function() {
-
-                                                    }
-                                                }
-                                            });
-                                            modalInstance.result.then(
-                                                function(note) {
-                                                    //getNotes
-                                                    var params = null;
-                                                    if (note.shipmentId) {
-                                                        params = {
-                                                            params: {
-                                                                shipmentId: note.shipmentId
-                                                            }
-                                                        };
-                                                    } else {
-                                                        params = {
-                                                            params: {
-                                                                sn: note.sn,
-                                                                trip: note.trip
-                                                            }
-                                                        };
-                                                    }
-
-                                                    var promise = promiseGetNotes(params);
-                                                    promise.then(
-                                                        function (res) {
-                                                            console.log('Note', res);
-                                                            $scope.trackerInfo.notes = res;
-                                                            $scope.shipmentNotes = res;
-                                                            prepareMainHighchartSeries();
-                                                            prepareNoteChartSeries();
-                                                            refreshHighchartSeries();
-                                                        },
-                                                        function (status) {
-                                                        }
-                                                    );
-                                                    //$state.go($state.current, {}, { reload: true });
-                                                }
-                                            );
+                                        if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
+                                            resetDoubleClick();
+                                            ondbclick(e, this);
                                         } else {
-                                            var note = this;
-                                            var modalInstance = $modal.open({
-                                                templateUrl: '/app/view-shipment-detail-share/edit-note.html',
-                                                controller: 'EditNoteCtrl',
-                                                resolve: {
-                                                    note : function() {
-                                                        return note;
-                                                    }
-                                                }
-                                            });
-                                            modalInstance.result.then(
-                                                function(result) {
-                                                    //$scope.trackerInfo.shipmentDescription = result;
-                                                }
-                                            );
+                                            doubleClicker.clickedOnce = true;
+                                            doubleClicker.timer = setTimeout(function(){
+                                                resetDoubleClick();
+                                            }, doubleClicker.timeBetweenClicks);
                                         }
-
                                     }
                                 }
                             }
@@ -830,6 +856,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 series: chartSeries,
                 useHighStocks: true,
                 func : function(chart) {
+                    //#--
+                    //var hChart = $("#chart-print").highcharts();
+                    //hChart.
                     if (!$scope.loaded) {
                         $scope.loaded = true;
                         if (window.matchMedia) {

@@ -1,12 +1,21 @@
 <div class="modal-header">
     <h3 class="modal-title">Create a Note</h3>
 </div>
+<form class="form" name="formCreateNote">
 <div class="modal-body">
-    <form class="form">
-        <textarea class="form-control" ng-model="note.noteText" rows="3"></textarea>
-    </form>
+        <textarea class="form-control"
+                  name="noteText"
+                  ng-maxlength="1000"
+                  ng-model="note.noteText"
+                  rows="3"></textarea>
+        <span ng-if="formCreateNote.$invalid && formCreateNote.$submitted" ng-cloak>
+            <span ng-cloak class="text-danger" ng-if="formCreateNote.noteText.$error.maxlength">
+                Note must be less than or equal to 1000 chars
+            </span>
+        </span>
 </div>
 <div class="modal-footer">
-    <button class="btn green" ng-click="saveNote()">OK</button>
+    <button class="btn green" ng-click="saveNote(formCreateNote.$invalid)" type="submit">OK</button>
     <button class="btn green" ng-click="cancel()">Cancel</button>
 </div>
+</form>

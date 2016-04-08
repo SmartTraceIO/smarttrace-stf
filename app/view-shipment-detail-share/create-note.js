@@ -16,18 +16,21 @@ appCtrls.controller('CreateNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'po
         $scope.note.trip=point.tripCount;
         $scope.note.timeOnChart=point.timeISO;
 
-        $scope.saveNote = function() {
-            //console.log('NOTE', $scope.note);
-            webSvc.saveNote($scope.note).success(function(data) {
-                if (data.status.code == 0) {
-                    toastr.success("Success. A new note was added.");
-                    $modalInstance.close($scope.note)
-                } else {
-                    toastr.error("You have no permission to create note!");
-                    $modalInstance.close(null)
-                }
-                //--close anyway
-            })
+        $scope.saveNote = function(isValid) {
+            if (isValid) {
+                webSvc.saveNote($scope.note).success(function(data) {
+                    if (data.status.code == 0) {
+                        toastr.success("Success. A new note was added.");
+                        $modalInstance.close($scope.note)
+                    } else {
+                        toastr.error("You have no permission to create note!");
+                        $modalInstance.close(null)
+                    }
+                    //--close anyway
+                })
+            } else {
+                toastr.warning('Note must be less than 1000 characters!')
+            }
 
         }
 

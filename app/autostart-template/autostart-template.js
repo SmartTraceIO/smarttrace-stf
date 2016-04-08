@@ -182,41 +182,50 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         if (isValid) {
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
-            $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function(val) {
-                return val.locationId;
-            });
+            if ($scope.AutoStartShipment.start_locations) {
+                $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function(val) {
+                    return val.locationId;
+                });
+            } else {
+                $scope.AutoStartShipment.startLocations = [];
+            }
+            //--#
+            if ($scope.AutoStartShipment.interim_stops) {
+                $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function(val) {
+                    return val.locationId;
+                })
+            } else {
+                $scope.AutoStartShipment.interimStops = [];
+            }
+            //--#
+            if ($scope.AutoStartShipment.end_locations) {
+                $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function(val) {
+                    return val.locationId;
+                })
+            } else {
+                $scope.AutoStartShipment.endLocations = [];
+            }
 
-            $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function(val) {
-                return val.locationId;
-            })
-            $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function(val) {
-                return val.locationId;
-            })
             $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes);
             $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes);
             $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm);
             $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes);
             $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes);
 
-            $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function(val) {
-                return val.locationId;
-            });
-
-            $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function(val) {
-                return val.locationId;
-            })
-            $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function(val) {
-                return val.locationId;
-            })
-
-            $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function(val) {
-                return val.notificationScheduleId;
-            })
-            $scope.AutoStartShipment.alertsNotificationSchedules = $scope.AutoStartShipment.alerts_notification_schedules.map(function(val) {
-                return val.notificationScheduleId;
-            })
-
-
+            if ($scope.AutoStartShipment.arrival_notification_schedules) {
+                $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function(val) {
+                    return val.notificationScheduleId;
+                })
+            } else {
+                $scope.AutoStartShipment.arrivalNotificationSchedules = [];
+            }
+            if ($scope.AutoStartShipment.alerts_notification_schedules) {
+                $scope.AutoStartShipment.alertsNotificationSchedules = $scope.AutoStartShipment.alerts_notification_schedules.map(function(val) {
+                    return val.notificationScheduleId;
+                })
+            } else {
+                $scope.AutoStartShipment.alertsNotificationSchedules = [];
+            }
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -493,30 +502,39 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                  $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
                  }
 
-                $scope.AutoStartShipment.start_locations = $scope.AutoStartShipment.startLocations.map(function(val) {
-                    var loc = filter($scope.FromLocationList, {locationId: val}, true);
-                    if (loc && loc.length > 0) return loc[0];
-                    else return null;
-                })
+                if ($scope.AutoStartShipment.startLocations) {
+                    $scope.AutoStartShipment.start_locations = $scope.AutoStartShipment.startLocations.map(function (val) {
+                        var loc = filter($scope.FromLocationList, {locationId: val}, true);
+                        if (loc && loc.length > 0) return loc[0];
+                        else return null;
+                    })
+                }
 
-                $scope.AutoStartShipment.interim_stops = $scope.AutoStartShipment.interimStops.map(function(val) {
-                    var loc = filter($scope.InterimLocationList, {locationId: val}, true);
-                    if (loc && loc.length > 0) return loc[0];
-                    else return null;
-                })
-                $scope.AutoStartShipment.end_locations = $scope.AutoStartShipment.endLocations.map(function(val) {
-                    var loc = filter($scope.ToLocationList, {locationId: val}, true);
-                    if (loc && loc.length > 0) return loc[0];
-                })
-
-                $scope.AutoStartShipment.arrival_notification_schedules = $scope.AutoStartShipment.arrivalNotificationSchedules.map(function(val) {
-                    var noti = filter($scope.NotificationList, {notificationScheduleId:val} , true)
-                    if (noti && noti.length>0) return noti[0];
-                })
-                $scope.AutoStartShipment.alerts_notification_schedules = $scope.AutoStartShipment.alertsNotificationSchedules.map(function(val) {
-                    var noti = filter($scope.NotificationList, {notificationScheduleId:val} , true)
-                    if (noti && noti.length>0) return noti[0];
-                })
+                if ($scope.AutoStartShipment.interimStops) {
+                    $scope.AutoStartShipment.interim_stops = $scope.AutoStartShipment.interimStops.map(function (val) {
+                        var loc = filter($scope.InterimLocationList, {locationId: val}, true);
+                        if (loc && loc.length > 0) return loc[0];
+                        else return null;
+                    });
+                }
+                if ($scope.AutoStartShipment.endLocations) {
+                    $scope.AutoStartShipment.end_locations = $scope.AutoStartShipment.endLocations.map(function (val) {
+                        var loc = filter($scope.ToLocationList, {locationId: val}, true);
+                        if (loc && loc.length > 0) return loc[0];
+                    });
+                }
+                if ($scope.AutoStartShipment.arrivalNotificationSchedules) {
+                    $scope.AutoStartShipment.arrival_notification_schedules = $scope.AutoStartShipment.arrivalNotificationSchedules.map(function (val) {
+                        var noti = filter($scope.NotificationList, {notificationScheduleId: val}, true)
+                        if (noti && noti.length > 0) return noti[0];
+                    });
+                }
+                if ($scope.AutoStartShipment.alertsNotificationSchedules) {
+                    $scope.AutoStartShipment.alerts_notification_schedules = $scope.AutoStartShipment.alertsNotificationSchedules.map(function (val) {
+                        var noti = filter($scope.NotificationList, {notificationScheduleId: val}, true)
+                        if (noti && noti.length > 0) return noti[0];
+                    });
+                }
                  $scope.ChangeNotiScheduleForAlert();
                  $scope.ChangeNotiScheduleForArrival();
             } else {
@@ -569,23 +587,35 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
 
-            $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function(val) {
-                return val.locationId;
-            });
+            if ($scope.AutoStartShipment.start_locations) {
+                $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function (val) {
+                    return val.locationId;
+                });
+            }
 
-            $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function(val) {
-                return val.locationId;
-            })
-            $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function(val) {
-                return val.locationId;
-            })
+            if ($scope.AutoStartShipment.interim_stops) {
+                $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function (val) {
+                    return val.locationId;
+                })
+            }
 
-            $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function(val) {
-                return val.notificationScheduleId;
-            })
-            $scope.AutoStartShipment.alertsNotificationSchedules = $scope.AutoStartShipment.alerts_notification_schedules.map(function(val) {
-                return val.notificationScheduleId;
-            })
+            if ($scope.AutoStartShipment.end_locations) {
+                $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function (val) {
+                    return val.locationId;
+                });
+            }
+
+            if ($scope.AutoStartShipment.arrival_notification_schedules) {
+                $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function (val) {
+                    return val.notificationScheduleId;
+                });
+            }
+
+            if ($scope.AutoStartShipment.alerts_notification_schedules) {
+                $scope.AutoStartShipment.alertsNotificationSchedules = $scope.AutoStartShipment.alerts_notification_schedules.map(function (val) {
+                    return val.notificationScheduleId;
+                });
+            }
 
             webSvc.saveAutoStartShipment($scope.AutoStartShipment)
                 .success(function (data, textStatus, XmlHttpRequest) {
