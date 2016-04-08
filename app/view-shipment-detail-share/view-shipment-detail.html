@@ -110,11 +110,19 @@
                     <div class="portlet-body">
                         <div ng-repeat="note in trackerInfo.notes">
                             <div class="portlet-title">
-                                <strong>Note <span class="badge">{{note.noteNum}}</span></strong>
-                                <a href="" class="pull-right hidden-print" ng-click="EditNote(note)">Edit</a>
+                                <table>
+                                    <tr>
+                                        <td class="bold-font" style="font-size: 15px">Note </td>
+                                        <td><div class="circle" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
+                                        <td width="100%">
+                                            <a href="" class="pull-right hidden-print" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
+                                            <a href="" class="pull-right hidden-print" ng-click="DeleteNote(note)">Del</a>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <div>{{note.noteText}}</div>
-                            <div class="portlet-title">
+                            <div class="portlet-title" style="border-bottom: #AAA dashed 1px;margin-bottom: 15px;margin-top: 5px; padding-bottom: 5px;">
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div ng-if="note.createdByName" class="col-xs-6" style="overflow: hidden; padding-left: 0px; padding-right: 10px;"><span class="grey-out">{{note.createdByName}}</span></div>
@@ -123,7 +131,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr/>
                         </div>
                     </div>
                 </div>
@@ -493,17 +500,10 @@
                                             <td><div class="circle" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
                                             <td width="100%">
                                                 <a href="" class="pull-right" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
-                                                <a href="" class="pull-right" ng-click="DeleteNote(note)">Delete</a>
+                                                <a href="" class="pull-right" ng-click="DeleteNote(note)">Del</a>
                                             </td>
                                         </tr>
                                     </table>
-                                    <!--<div class="bold-font">
-                                        <span>Note</span>
-                                    <span>
-
-                                    </span>
-                                    </div>-->
-
                                 </div>
                                 <div>{{note.noteText}}</div>
                                 <div class="portlet-title" style="border-bottom: #AAA dashed 1px;margin-bottom: 15px;margin-top: 5px; padding-bottom: 5px;">
@@ -515,7 +515,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

@@ -142,8 +142,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
     $scope.ViewReading = function($e, sn, trip) {
         $e.preventDefault();
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
-        //window.open('/#'+url,'');
-        window.open('/#'+url,"_blank", "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, width=800, height=600");
+        var w = window.innerWidth * 0.7; //70% of fullwidth
+        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
+        window.open('/#'+url,"_blank", options);
     }
 
     function updateMapData(index){
@@ -357,8 +358,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             value: time,//mainData[lastPoint][0], // Value of where the line will appear
             width: width, // Width of the line    
             label: {
-                text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' + 
-                        '<span style="text-align:right;float:right">' + 
+                //text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' +
+                text:   '<img src="theme/img/tinyLocationStop.png" style="float:right; vertical-align:bottom;">' +
+                        '<span style="text-align:right;float:right">' +
                             '<b class="bold-font">' + $scope.mapInfo.endLocation + '</b><br/>' + 
                             dottext + 
                         '</span>',
