@@ -17,18 +17,21 @@ appCtrls.controller('EditNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'note
 
         console.log('Edit', note);
 
-        $scope.saveNote = function() {
-            webSvc.saveNote($scope.note).success(function(data) {
-                if (data.status.code == 0) {
-                    toastr.success("Success. one note was created");
-                } else {
-                    console.log('ERROR', data);
-                    toastr.error("You have no permission to create note!");
-                }
-                //--close anyway
-                $modalInstance.close()
-            })
-
+        $scope.saveNote = function(isInvalid) {
+            if (!isInvalid) {
+                webSvc.saveNote($scope.note).success(function(data) {
+                    if (data.status.code == 0) {
+                        toastr.success("Success. one note was created");
+                    } else {
+                        console.log('ERROR', data);
+                        toastr.error("You have no permission to create note!");
+                    }
+                    //--close anyway
+                    $modalInstance.close()
+                })
+            } else {
+                toastr.warning('Note must be less than 1000 characters');
+            }
         }
 
         $scope.cancel = function() {

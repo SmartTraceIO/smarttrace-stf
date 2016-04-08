@@ -8,10 +8,8 @@
                   ng-maxlength="1000"
                   ng-model="note.noteText"
                   rows="3"></textarea>
-        <span ng-if="formCreateNote.$invalid && formCreateNote.$submitted" ng-cloak>
-            <span ng-cloak class="text-danger" ng-if="formCreateNote.noteText.$error.maxlength">
-                Note must be less than or equal to 1000 chars
-            </span>
+        <span ng-cloak class="text-danger" ng-if="formCreateNote.noteText.$error.maxlength">
+            Note must be less than or equal to 1000 characters
         </span>
 </div>
 <div class="modal-footer">

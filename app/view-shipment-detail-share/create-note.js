@@ -16,8 +16,8 @@ appCtrls.controller('CreateNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'po
         $scope.note.trip=point.tripCount;
         $scope.note.timeOnChart=point.timeISO;
 
-        $scope.saveNote = function(isValid) {
-            if (isValid) {
+        $scope.saveNote = function(isInvalid) {
+            if (!isInvalid) {
                 webSvc.saveNote($scope.note).success(function(data) {
                     if (data.status.code == 0) {
                         toastr.success("Success. A new note was added.");
