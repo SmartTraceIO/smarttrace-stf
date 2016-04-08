@@ -541,6 +541,37 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             modalInstance.result.then(
                 function(result) {
                     //$scope.trackerInfo.shipmentDescription = result;
+                    console.log('Result', result);
+                    if (result) {
+                        var params = null;
+                        if (result.shipmentId) {
+                            params = {
+                                params: {
+                                    shipmentId: result.shipmentId
+                                }
+                            };
+                        } else {
+                            params = {
+                                params: {
+                                    sn: result.sn,
+                                    trip: result.trip
+                                }
+                            };
+                        }
+                        var promise = promiseGetNotes(params);
+                        promise.then(
+                            function (res) {
+                                console.log('Note', res);
+                                $scope.trackerInfo.notes = res;
+                                $scope.shipmentNotes = res;
+                                prepareMainHighchartSeries();
+                                prepareNoteChartSeries();
+                                refreshHighchartSeries();
+                            },
+                            function (status) {
+                            }
+                        );
+                    }
                 }
             );
         }
@@ -1313,6 +1344,37 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         modalInstance.result.then(
             function(result) {
                 //$scope.trackerInfo.shipmentDescription = result;
+                console.log('Result', result);
+                if (result) {
+                    var params = null;
+                    if (result.shipmentId) {
+                        params = {
+                            params: {
+                                shipmentId: result.shipmentId
+                            }
+                        };
+                    } else {
+                        params = {
+                            params: {
+                                sn: result.sn,
+                                trip: result.trip
+                            }
+                        };
+                    }
+                    var promise = promiseGetNotes(params);
+                    promise.then(
+                        function (res) {
+                            console.log('Note', res);
+                            $scope.trackerInfo.notes = res;
+                            $scope.shipmentNotes = res;
+                            prepareMainHighchartSeries();
+                            prepareNoteChartSeries();
+                            refreshHighchartSeries();
+                        },
+                        function (status) {
+                        }
+                    );
+                }
             }
         );
     }
