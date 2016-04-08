@@ -28,6 +28,27 @@ appFilters.filter('temperature', function (localDbSvc) {
     }
 });
 
+appFilters.filter('volt', function() {
+    return function (input) {
+        if (input) {
+            var v = Number(parseInt(input, 10)/1000).toFixed(1) + "V";
+            if (input <= 3355) {
+                return '0% (' + v + ")";
+            } else if (input <= 3441.3) {
+                return '10% (' + v + ")";
+            } else if (input <=3527.6) {
+                return '20% (' + v + ")";
+            } else if (input <= 4131.7) {
+                return '90% (' + v + ")";
+            } else if (input < 4218) {
+                return '95% (' + v + ")";
+            } else {
+                return '100% (' + v + ")";
+            }
+        }
+        //return Number(input/1000).toFixed(1) + 'V';
+    }
+});
 appFilters.filter('convertDate', function(localDbSvc) {
     return function (input) {
         if (input) {

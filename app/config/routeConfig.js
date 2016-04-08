@@ -186,7 +186,8 @@ appConstants.constant('routes', [
         },
         dependencies: [
             'app/manage-tracker/manage-tracker.js?v=' + version,
-            'app/manage-tracker/confirm-deactivate.js?v=' + version
+            'app/manage-tracker/confirm-deactivate.js?v=' + version,
+            'app/global/filters/filters.js?v=' + version
         ]
     },
     {

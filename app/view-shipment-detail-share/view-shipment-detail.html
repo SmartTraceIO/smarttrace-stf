@@ -320,6 +320,41 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="portlet box grey">
+                    <div class="portlet-title">
+                        <div class="caption uppercase">
+                            <span>Last Reading</span>
+                            <i tooltip="Last Reading"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse"> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <table>
+                            <tr>
+                                <td><span class="bold-font">Time of last reading:&nbsp;</span></td>
+                                <td>{{trackerInfo.lastReadingTime}}</td>
+                            </tr>
+                            <tr>
+                                <td class="bold-font">Temperature:</td>
+                                <td>{{trackerInfo.lastReadingTemperature | temperature}}</td>
+                            </tr>
+                            <tr>
+                                <td class="bold-font">Battery Level:</td>
+                                <td>{{trackerInfo.batteryLevel | volt}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <div class="row"><div class="portlet box grey">
                 <div class="portlet-title">
                     <div class="caption uppercase">
@@ -804,12 +839,43 @@
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
+                                <span>Last Reading</span>
+                                <i tooltip="Last Reading"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse"> </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <table>
+                                <tr>
+                                    <td><span class="bold-font">Time of last reading:&nbsp;</span></td>
+                                    <td>{{trackerInfo.lastReadingTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bold-font">Temperature:</td>
+                                    <td>{{trackerInfo.lastReadingTemperature | temperature}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bold-font">Battery Level:</td>
+                                    <td>{{trackerInfo.batteryLevel | volt}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="portlet box grey">
+                        <div class="portlet-title">
+                            <div class="caption uppercase">
                                 Timeline / Corrective Action
                                 <i tooltip="Timeline / Corrective Action"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
-                                   class="fa fa-info-circle"></i>
+                                   class="fa fa-info-circle"/>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="expand"> </a>
