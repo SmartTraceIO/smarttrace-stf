@@ -38,6 +38,18 @@ appFilters.filter('volt', function() {
                 return '10% (' + v + ")";
             } else if (input <=3527.6) {
                 return '20% (' + v + ")";
+            } else if (input <= 3613.9) {
+                return '30% (' + v + ")";
+            } else if (input <= 3700.2) {
+                return '40% (' + v + ")";
+            } else if (input <= 3786.5) {
+                return '50% (' + v + ")";
+            } else if (input <= 3872.8) {
+                return '60% (' + v + ")";
+            } else if (input <= 3959.1) {
+                return '70% (' + v + ")";
+            } else if (input <= 4045.4) {
+                return '80% (' + v + ")";
             } else if (input <= 4131.7) {
                 return '90% (' + v + ")";
             } else if (input < 4218) {

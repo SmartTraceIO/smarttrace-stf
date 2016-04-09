@@ -603,6 +603,10 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             }
 
             var info = graphData.response;
+            if (info == null) {
+                $log.error('GRAPHDATA', graphData);
+                return;
+            }
             //--------Remove Light On, Off---------
             for(alert = 0; alert < info.alertSummary.length; alert ++){
                 if(info.alertSummary[alert].toLowerCase() == "lighton" 
