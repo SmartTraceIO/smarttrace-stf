@@ -61,27 +61,31 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window) {
+appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
-    $scope.InternalCompany = localDbSvc.get("InternalCompany");
+    $scope.company = localDbSvc.get("InternalCompany");
+
     $scope.Action = "Add";
     $scope.AddUser = true;
+
+    $scope.Print = function() {
+        $window.print();
+    }
+
     var BindRoles = function () {
-        webSvc.getRoles().success(function(data){
+        return webSvc.getRoles().success(function(data){
             console.log('ROLELIST', data);
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
         });
     }
-    $scope.Print = function() {
-        $window.print();
-    }
+
     var BindLanguages = function () {
-        webSvc.getLanguages().success(function(data){
+        return webSvc.getLanguages().success(function(data){
             if (data.status.code == 0) {
                 $scope.LanguageList = data.response;
             }
@@ -90,7 +94,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
 
 
     var BindTimezones = function () {
-        webSvc.getTimeZones().success(function(data){
+        return webSvc.getTimeZones().success(function(data){
             if (data.status.code == 0) {
                 console.log('TIMEZONELIST', data.response);
                 $scope.TimezoneList = data.response;
@@ -99,16 +103,13 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
     }
 
     var BindDeviceGroups = function () {
-        webSvc.getDeviceGroups().success(function(data){
+        return webSvc.getDeviceGroups().success(function(data){
             if (data.status.code == 0) {
                 $scope.DeviceGroupList = data.response;
             }
         });
     }
-        BindRoles();
-        BindLanguages();
-        BindTimezones();
-        BindDeviceGroups();
+    $q.all([BindRoles(), BindLanguages(), BindTimezones(), BindDeviceGroups()]).then(function() {
         $scope.User = {};
         $scope.User.user = {};
         $scope.User.user.temperatureUnits = "Celsius";
@@ -118,21 +119,39 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
         $scope.User.user.external = false;
         $scope.User.resetOnLogin = false;
         $scope.User.user.active = true;
-        if ($scope.InternalCompany)
-            $scope.User.user.externalCompany = $scope.InternalCompany;
+        $scope.User.user.internalCompany = $scope.company;
+        //if ($scope.InternalCompany)
+        //    $scope.User.user.externalCompany = $scope.InternalCompany;
+    });
+    //$scope.$watch("User.user.external", function (nVal, oVal) {
+    //    if ($scope.User && $scope.User.user) {
+    //        if (!nVal) {
+    //            $scope.User.user.externalCompany = $scope.InternalCompany
+    //        }
+    //        else {
+    //            $scope.User.user.externalCompany = $scope.externalCompany;
+    //        }
+    //    }
+    //});
 
     $scope.$watch("User.user.external", function (nVal, oVal) {
         if ($scope.User && $scope.User.user) {
             if (!nVal) {
-                $scope.User.user.externalCompany = $scope.InternalCompany
+                $scope.company = $scope.User.user.internalCompany
             }
             else {
-                $scope.User.user.externalCompany = $scope.externalCompany;
+                $scope.company = $scope.User.user.externalCompany;
             }
         }
     });
+
     $scope.SaveData = function (isValid) {
         if (isValid) {
+            if ($scope.User.user.external) {
+                $scope.User.user.externalCompany = $scope.company;
+            } else {
+                $scope.User.user.externalCompany = "";
+            }
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
                 console.log('USER-TO-CREATE', $scope.User);
                 if (data.status.code == 0) {
@@ -153,27 +172,29 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
 });
 
 //-- edit user
-appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window) {
+appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window, $q) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     $scope.AddUser = false;
-    $scope.InternalCompany = localDbSvc.get("InternalCompany");
+
+    $scope.Print = function() {
+        $window.print();
+    }
+
+
     var BindRoles = function () {
-        webSvc.getRoles().success(function(data){
+        return webSvc.getRoles().success(function(data){
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
         });
     }
-    $scope.Print = function() {
-        $window.print();
-    }
 
     var BindLanguages = function () {
-        webSvc.getLanguages().success(function(data){
+        return webSvc.getLanguages().success(function(data){
         // .get({ action: "getLanguages", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.LanguageList = data.response;
@@ -183,7 +204,7 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
 
 
     var BindTimezones = function () {
-        webSvc.getTimeZones().success(function(data){
+        return webSvc.getTimeZones().success(function(data){
         // .get({ action: "getTimeZones ", token: $scope.AuthToken }, function (data) {
             if (data.status.code == 0) {
                 $scope.TimezoneList = data.response;
@@ -192,14 +213,36 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
     }
 
     var BindDeviceGroups = function () {
-        webSvc.getDeviceGroups().success(function(data){
+        return webSvc.getDeviceGroups().success(function(data){
             if (data.status.code == 0) {
                 $scope.DeviceGroupList = data.response;
             }
         });
     }
 
-    $scope.Init = function() {
+    $q.all([BindRoles(), BindLanguages(), BindTimezones(),BindDeviceGroups()]).then(function() {
+        $scope.UId = $stateParams.uId;
+        $scope.User = {};
+        if ($scope.UId) {
+            var param = {
+                userId: $scope.UId
+            };
+            webSvc.getUser(param).success(function(data){
+                console.log('USER', data);
+                if (data.status.code == 0) {
+                    $scope.User = {};
+                    $scope.User.user = data.response;
+                    if ($scope.User.user.external) {
+                        $scope.company = data.response.externalCompany
+                    } else {
+                        $scope.company = data.response.internalCompany;
+                    }
+                }
+            });
+        }
+    });
+
+    /*$scope.Init = function() {
         $scope.UId = $stateParams.uId;
         $scope.User = {};
         if ($scope.UId) {
@@ -218,15 +261,15 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
         BindLanguages();
         BindTimezones();
         BindDeviceGroups();
-    }
+    }*/
 
     $scope.$watch("User.user.external", function (nVal, oVal) {
         if ($scope.User && $scope.User.user) {
             if (!nVal) {
-                $scope.User.user.externalCompany = $scope.InternalCompany
+                $scope.company = $scope.User.user.internalCompany
             }
             else {
-                $scope.User.user.externalCompany = $scope.externalCompany;
+                $scope.company = $scope.User.user.externalCompany;
             }
         }
     });
@@ -234,8 +277,13 @@ appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSv
 
     $scope.SaveData = function (isValid) {
         if (isValid) {
+            if ($scope.User.user.external) {
+                $scope.User.user.externalCompany = $scope.company;
+            } else {
+                $scope.User.user.externalCompany = "";
+            }
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                console.log(data);
+                console.log('EditUser', data);
                 if (data.status.code == 0) {
                     toastr.success("User updated successfully")
                 } else {

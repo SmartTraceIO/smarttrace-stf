@@ -63,7 +63,8 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
-                        <label class="control-label">Company:&nbsp;
+                        <label class="control-label">
+                            <span>Company:</span>
                             <i tooltip="Company" tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -73,7 +74,8 @@
                                maxlength="30"
                                placeholder="Enter a Company Name"
                                class="form-control"
-                               ng-model="User.user.externalCompany"
+                               ng-model="company"
+                               ng-class="{'grey-out': !User.user.external}"
                                ng-disabled="!User.user.external"
                                ng-required="User.user.external" />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
@@ -142,13 +144,27 @@
                         <label class="control-label pull-right">
                             <span class="text-error">*</span>
                         </label>
-                        <select required style="width:100%"
+                        <!--<select required style="width:100%"
                                 multiple ui-select2="RoleOption"
                                 name="Roles"
                                 ng-model="User.user.roles"
                                 data-placeholder="Select Roles For User">
                             <option ng-repeat="role in RoleList" value="{{role}}">{{role}}</option>
-                        </select>
+                        </select>-->
+
+                        <ui-select multiple name="Roles"
+                                   ng-model="User.user.roles"
+                                   theme="select2"
+                                   ng-disabled="disabled"
+                                   style="width:100%">
+                            <ui-select-match placeholder="Select Roles For User">
+                                {{$item}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="role in (RoleList | filter: $select.search)">
+                                <div ng-bind="role | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger"
                                   ng-if="frmAddEditUser.Roles.$error.required">Please select atleast one role</span>

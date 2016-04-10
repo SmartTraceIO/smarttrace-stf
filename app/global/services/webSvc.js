@@ -32,11 +32,12 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(Api.url + '/resetPassword', params);
 		},
 
-		getUser: function(param){
-			var params = {
-					params: param
+		getUser: function(param, noAbort){
+			var config = {
+					params: param,
+                    noCancelOnRouteChange: noAbort
 				};
-			return $http.get(Api.url + '/getUser/' + localDbSvc.getToken(), params);
+			return $http.get(Api.url + '/getUser/' + localDbSvc.getToken(), config);
 		},
 
 		getUsers: function(pageSize, pageIndex, sc, so){
@@ -87,9 +88,12 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(Api.url + '/getTimeZones/' + localDbSvc.getToken());
 		},
 
-		getUserTime: function(){
+		getUserTime: function(noAbort){
 			var url = Api.url + 'getUserTime/' + localDbSvc.getToken();
-			return $http.get(url);
+            var config = {
+                noCancelOnRouteChange: noAbort
+            }
+			return $http.get(url, config);
 		},
 
 		getDeviceGroups: function(){

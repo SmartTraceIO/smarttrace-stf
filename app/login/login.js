@@ -28,9 +28,6 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 				if (data.status.code == 0) {
                     console.log('Login', data);
 					localDbSvc.setToken(data.response.token, data.response.expired);
-					//$scope.AuthToken = data.response.token;
-					//$rootScope.AuthToken = data.response.token;
-
 					toastr.success("Successfully logged in.");
 				} else {
 					toastr.warning("User e-mail address or password is incorrect.");
@@ -45,14 +42,14 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
         });
 	}
     var loadUserAndMove = function(url) {
-        var promise1 = webSvc.getUser().success(function (data) {
+        var promise1 = webSvc.getUser({}, {noCancelOnRouteChange:true}).success(function (data) {
             $rootScope.User = data.response;
 			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
 			localDbSvc.setUserTimezone(data.response.timeZone);
+            localDbSvc.set('InternalCompany', data.response.internalCompany);
 			localDbSvc.setUserProfile(data.response);
         });
-        var promise2 = webSvc.getUserTime().success( function (timeData) {
-            //console.log('USER-TIME', timeData);
+        var promise2 = webSvc.getUserTime({}, {noCancelOnRouteChange:true}).success( function (timeData) {
             if (timeData.status.code == 0) {
                 localDbSvc.setUserTimezone(timeData.response.timeZoneId);
                 $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone

@@ -131,17 +131,18 @@
     };
     function reloadUserIfNeed () {
         $scope.AuthToken = localDbSvc.getToken();
+
         if ($rootScope.AuthToken != $scope.AuthToken) {
             $rootScope.AuthToken = $scope.AuthToken;
             //--reset
             $rootScope.readNotification = [];
             $rootScope.unreadNotification = [];
             $rootScope.closedNotification = [];
-            webSvc.getUser().success(function (data) {
+            webSvc.getUser({}, true).success(function (data) {
                 if(data.status.code == 0){
                     //$rootScope.User = data.response;
                     $rootScope.User = data.response;
-                    //--update User
+                    localDbSvc.set('InternalCompany', data.response.internalCompany);
                     localDbSvc.setDegreeUnits(data.response.temperatureUnits);
                     loadNotifications();
                 }
@@ -150,7 +151,7 @@
 
         if ($rootScope.RunningTime == null) {
             //reload user-time
-            webSvc.getUserTime().success( function (timeData) {
+            webSvc.getUserTime(true).success( function (timeData) {
                 //console.log('USER-TIME', timeData);
                 if (timeData.status.code == 0) {
                     localDbSvc.setUserTimezone(timeData.response.timeZoneId);

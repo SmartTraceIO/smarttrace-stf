@@ -7,7 +7,7 @@
 appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $log, $q) {
 
     //set localstorage item
-    this.set = function (key, value) {
+    /*this.set = function (key, value) {
         localStorage.setItem(key, value);
     }
     //remove local storage item
@@ -17,7 +17,18 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $lo
     //get local storage item
     this.get = function(key){
         return localStorage.getItem(key);
-    };
+    };*/
+
+    this.set = function(key, value) {
+        $cookies.put(key, value);
+    }
+    this.remove = function(key) {
+        $cookies.remove(key);
+    }
+    this.get = function(key) {
+        return $cookies.get(key);
+    }
+
     //set token to the cookie
     this.setToken = function(token, expireDate){
         var exp = new Date(expireDate);
