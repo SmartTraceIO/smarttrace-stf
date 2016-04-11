@@ -1,0 +1,97 @@
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <img src="../../theme/img/headerTrackers.png" />
+            <span>List of tracker groups</span>
+        </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="GroupList.Print()">
+                <i class="fa fa-print"></i>
+                <span>Print</span>
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="pull-left">
+            <span>Show</span>
+            <select class="form-control" style="width:auto;display:inline-block" ng-change="GroupList.PageSizeChanged()" ng-model="PageSize">
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <div class="pull-right hidden-print">
+            <a class="btn btn-default pull-right" href="/#/manage/add-group">
+                <i class="fa fa-plus"></i>&nbsp;Add New Tracker Group</a>
+        </div>
+        <div class="clearfix"></div>
+        <br />
+        <hr />
+        <div class="clearfix"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th ng-click="GroupList.Sorting('name')">
+                        <span>Tracker Group</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
+                    <th ng-click="Sorting('description')">
+                        <span>Description</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc=='description'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc=='description'}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
+                    <th ng-click="Sorting('')">
+                        <span>Trackers</span>
+                        <i tooltip="Wait for info text"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                        <span class="pull-right" style="position:relative;">
+                            <a ng-class="{'active-sort':So=='asc' && Sc==''}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                            <a ng-class="{'active-sort':So=='desc' && Sc==''}"><i class="fa fa-sort-desc"></i></a>
+                        </span>
+                    </th>
+                    <th class="hidden-print"></th>
+                    <th class="hidden-print"></th>
+                </tr>
+                <tr ng-repeat="group in GroupList.groupList">
+                    <td>{{group.name}}</td>
+                    <td>{{group.description}}</td>
+                    <td>{{group.deviceList | arrayToString}}</td>
+
+                    <td class="text-center hidden-print" width="5%">
+                        <a class="btn green" href="/#/manage/edit-group/{{group.name}}">
+                            <i class="fa fa-pencil"></i>
+                            <span>Edit</span>
+                        </a>
+                    </td>
+                    <td class="text-center hidden-print" width="5%">
+                        <a class="btn green" ng-click="GroupList.confirm(group);">
+                            <i class="fa fa-remove"></i>
+                            <span>Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)"
+                    total-items="NotificationList.totalCount" page="PageIndex" items-per-page="PageSize"
+                    boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+    </div>
+</div>

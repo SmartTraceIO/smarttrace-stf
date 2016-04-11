@@ -1,0 +1,51 @@
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <img src="../../theme/img/headerTrackers.png" />
+            <span>Add a new tracker groups</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="container-fluid" style="padding-top: 15px; padding-bottom:15px">
+            <div class="row">
+                <div class="col-md-6 col-sm-8">
+                    <form class="form" name="frmAddGroup">
+                        <div class="form-group">
+                            <label for="group-name">Group Name:</label>
+                            <input class="form-control" name="groupName" id="group-name" ng-maxlength="20" ng-model="AddGroup.name"
+                                   placeholder="Enter a name for group">
+                            <span ng-if="frmAddGroup.$invalid">
+                                <span class="text-danger" ng-if="frmAddGroup.groupName.$error.maxlength">Name of group must be less than 20</span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="group-desc">Group Description:</label>
+                            <input class="form-control", id="group-desc" ng-model="AddGroup.description" placeholder="Enter a description for group">
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 col-sm-4">
+                    <form class="form">
+                        <label>Add device(s) to group</label>
+                        <ui-select multiple
+                                   ng-model="AddGroup.deviceListToAdd"
+                                   theme="select2"
+                                   ng-disabled="disabled"
+                                   style="width:100%">
+                            <ui-select-match placeholder="Select Device to add">
+                                {{$item.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="device in AddGroup.deviceList | propsFilter: {name: $select.search, imei: $select.search}">
+                                <div ng-bind-html="device.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </form>
+                </div>
+            </div>
+            <div class="row text-center">
+                <button class="btn green" type="submit" ng-click="AddGroup.addGroup(this)">Save</button>
+                <button class="btn green" type="submit" ng-click="AddGroup.cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

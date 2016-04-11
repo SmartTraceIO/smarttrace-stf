@@ -269,6 +269,53 @@ appConstants.constant('routes', [
               'app/manage-alert/manage-alert.js?v=' + version,
           ]
       },
+    {
+        name: 'manage.group',
+        config: {
+            url: '/trackers-group',
+            views: {
+                "sub-content": {
+                    templateUrl: 'app/manage-group/list.html?v='+version,
+                    controller: 'ListGroupCtrl as GroupList',
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-group/group-list.js?v=' + version,
+            'app/manage-group/delete-group.js?v=' + version,
+            'app/global/filters/filters.js?v=' + version
+        ]
+    },
+    {
+        name: 'manage.addgroup',
+        config: {
+            url: '/add-group',
+            views: {
+                "sub-content": {
+                    templateUrl: 'app/manage-group/add-group.html?v='+version,
+                    controller: 'AddGroupCtrl as AddGroup',
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-group/add-group.js?v='+version
+        ]
+    },
+    {
+        name: 'manage.editgroup',
+        config: {
+            url: '/edit-group/:name',
+            views: {
+                "sub-content": {
+                    templateUrl: 'app/manage-group/edit-group.html?v='+version,
+                    controller: 'EditGroupCtrl as EditGroup'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-group/edit-group.js?v='+version
+        ]
+    },
       {
           name: 'manage.noti',
           config: {

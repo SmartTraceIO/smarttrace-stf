@@ -96,11 +96,63 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, config);
 		},
 
+		//-- device group
+		saveDeviceGroup: function(group) {
+			var url = Api.url + 'saveDeviceGroup/' + localDbSvc.getToken();
+			return $http.post(url, group);
+		},
+        addDeviceToGroup: function(groupName, deviceId) {
+            var config = {
+                params:{
+                    groupName: groupName,
+                    device:deviceId
+                }
+            }
+            var url = Api.url + 'addDeviceToGroup/' + localDbSvc.getToken();
+            return $http.get(url, config);
+        },
+        removeDeviceFromGroup: function(groupName, deviceId) {
+            var config = {
+                params: {
+                    groupName: groupName,
+                    device: deviceId
+                }
+            }
+            var url = Api.url + 'removeDeviceFromGroup/' + localDbSvc.getToken();
+            return $http.get(url, config);
+        },
+        getDevicesOfGroup: function(groupName) {
+            var config = {
+                params: {
+                    groupName: groupName
+                }
+            }
+            var url = Api.url + 'getDevicesOfGroup/' + localDbSvc.getToken();
+            return $http.get(url, config);
+        },
 		getDeviceGroups: function(){
 			var url = Api.url + 'getDeviceGroups/' + localDbSvc.getToken();
 			return $http.get(url);
 		},
 
+        getDeviceGroup: function(groupName) {
+            var url = Api.url + 'getDeviceGroup/' + localDbSvc.getToken();
+            var config = {
+                params: {
+                    name: groupName
+                }
+            }
+            return $http.get(url, config);
+        },
+        deleteDeviceGroup: function(groupName) {
+            var url = Api.url + 'deleteDeviceGroup/' + localDbSvc.getToken();
+            var config = {
+                params: {
+                    name: groupName
+                }
+            }
+            return $http.get(url, config);
+        },
 		updateUserDetails: function(data){
 			var url = Api.url + 'updateUserDetails/' + localDbSvc.getToken();
 			return $http.post(url, data);

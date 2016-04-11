@@ -596,13 +596,20 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             };
         }
         webSvc.getSingleShipmentShare(params).success( function (graphData) {
-            console.log("SINGLE-SHIPMENT", graphData);
+            $log.debug("SINGLE-SHIPMENT", graphData);
+
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
             }
 
             var info = graphData.response;
+            var numberOfSiblings = info.siblings.length;
+            console.log('number siblings', numberOfSiblings);
+            if (numberOfSiblings >= 9) {
+                info.siblings.splice(9);
+                $scope.notListed = numberOfSiblings - 10;
+            }
             if (info == null) {
                 $log.error('GRAPHDATA', graphData);
                 return;
@@ -632,9 +639,9 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     $scope.trackers.push(info.siblings[i]);
                     $scope.trackers[i + 1].loaded = false;
                 }
-            }
-            else
+            } else {
                 $scope.trackers[0] = tempObj;
+            }
 
             var promiseSibling = [];
             angular.forEach(info.siblings, function(val, key) {

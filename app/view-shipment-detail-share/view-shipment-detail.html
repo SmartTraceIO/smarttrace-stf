@@ -579,7 +579,7 @@
                                             <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
                                             <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
                                         </div>
-                                    </a>
+                                        </a>
                                     <div class="tools">
                                         <a href="javascript:;" class="expand"> </a>
                                     </div>
@@ -587,6 +587,9 @@
                                 <div class="portlet-body" style="display:none;">
                                     <div class="shipment-desc">{{t.shipmentDescription}}</div>
                                 </div>
+                            </div>
+                            <div class="" ng-if="notListed>0">
+                                <span>{{notListed}} others not listed</span>
                             </div>
                         </div>
                     </div>
