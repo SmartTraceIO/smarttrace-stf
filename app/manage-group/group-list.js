@@ -31,7 +31,9 @@ function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q) {
                 var dl = response.response;
                 if (dl) {
                     self.groupList[key].deviceList = dl.map(function(val) {
-                        return val.name;
+                        var sn = parseInt(val.sn, 10);
+                        var name = val.name ? val.name.substr(0, 15) : '';
+                        return sn+"["+name+"]";
                     })
                 }
                 //self.groupList[key].deviceList = response.response;

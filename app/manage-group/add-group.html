@@ -35,8 +35,11 @@
                             <ui-select-match placeholder="Select Device to add">
                                 {{$item.name}}
                             </ui-select-match>
-                            <ui-select-choices repeat="device in AddGroup.deviceList | propsFilter: {name: $select.search, imei: $select.search}">
-                                <div ng-bind-html="device.name | highlight: $select.search"></div>
+                            <ui-select-choices repeat="device in AddGroup.deviceList | propsFilter: {sn: $select.search, imei: $select.search, name: $select.search}">
+                                <div ng-bind-html="device.sn | highlight: $select.search"></div>
+                                <small>
+                                    {{device.name}}
+                                </small>
                             </ui-select-choices>
                         </ui-select>
                     </form>
