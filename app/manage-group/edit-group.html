@@ -27,19 +27,15 @@
                 <div class="col-md-6 col-sm-4">
                     <form class="form">
                         <label>Add device(s) to group</label>
-                        <ui-select multiple
+                        <ui-select multiple sortable="true" close-on-select="false"
                                    ng-model="EditGroup.deviceListToAdd"
                                    theme="select2"
                                    ng-disabled="disabled"
                                    style="width:100%">
-                            <ui-select-match placeholder="Select Device to add">
-                                {{$item.name}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="device in EditGroup.deviceList | propsFilter: {sn: $select.search, imei: $select.search, name: $select.search}">
+                            <ui-select-match placeholder="Select Device to add">{{$item.sn}}&lt;{{$item.name}}&gt;</ui-select-match>
+                            <ui-select-choices repeat="device in EditGroup.deviceList | propsFilter: {name: $select.search, sn: $select.search}">
                                 <div ng-bind-html="device.sn | highlight: $select.search"></div>
-                                <small>
-                                    {{device.name}}
-                                </small>
+                                <small>{{device.name}}</small>
                             </ui-select-choices>
                         </ui-select>
                     </form>

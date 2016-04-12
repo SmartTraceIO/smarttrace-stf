@@ -14,47 +14,53 @@ function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $q) {
     self.origDeviceList = [];
     self.all = $q.all;
 
-    if (self.name) {
-        //load current device group
-    }
-    //$rootScope.RunningTime =
-
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Add Tracker Groups");
-
-
     //get all Devices
-    var p1 = self.WebSvc.getDevices(1000, 1, 'description', 'asc').success(function(response) {
-        if (response.status.code == 0) {
-            self.deviceList = response.response;
-        }
-    });
     var p2 = self.GetDeviceGroup(self.name);
-
+    self.all([p2]).then(function() {
+        console.log('deviceList', self.deviceList);
+        console.log('deviceListToAdd', self.deviceListToAdd);
+    })
 }
 
 EditGroupCtrl.prototype.GetDeviceGroup = function(name){
+    var self = this;
     if (!name) {
         return null;
     }
-    var self = this;
-    var p1 = self.WebSvc.getDeviceGroup(name).success (function(data) {
-        console.log("Data", data);
+
+    var imeiList = [];
+    var p1 = self.WebSvc.getDevices(1000, 1, 'description', 'asc').success(function(response) {
+        if (response.status.code == 0) {
+            self.deviceList = response.response;
+            imeiList = self.deviceList.map(function(val) {
+                return val.imei;
+            })
+        }
+    }).then(function() {
+        self.WebSvc.getDevicesOfGroup(name).success(function(data) {
+            if (data.status.code == 0) {
+                angular.forEach(data.response, function(val, key) {
+                    var idx = imeiList.indexOf(val.imei);
+                    if (idx >= 0) {
+                        self.deviceListToAdd.push(self.deviceList[idx]);
+                        self.origDeviceList.push(self.deviceList[idx]);
+                    }
+                });
+            } else {
+                toastr.error('An error occured while get devices of group #' + name);
+            }
+        });
+    });
+
+    var p11 = self.WebSvc.getDeviceGroup(name).success (function(data) {
         if (data.status.code == 0) {
             self.description = data.response.description;
         }
     });
-    var p2 = self.WebSvc.getDevicesOfGroup(name).success(function(data) {
-        console.log('DevicesInGroup', data);
-        if (data.status.code == 0) {
-            self.deviceListToAdd = data.response;
-            self.origDeviceList = data.response;
-        } else {
-            toastr.error('An error occured while get devices of group #' + name);
-        }
-    });
-    return self.all([p1, p2]);
+    return self.all([p1, p11]);
 }
 
 EditGroupCtrl.prototype.saveGroup = function() {
@@ -94,6 +100,17 @@ EditGroupCtrl.prototype.addDevices = function() {
 EditGroupCtrl.prototype.cancel = function() {
     var self = this;
     self.state.go('manage.group');
+}
+
+EditGroupCtrl.prototype.buildDeviceObject = function(object) {
+    var d = {};
+    d.sn = object.sn;
+    d.imei = object.imei;
+    d.name = object.name;
+    d.description = object.description;
+    d.active = object.active;
+    d.autostartTemplateId = object.autostartTemplateId;
+    return d;
 }
 
 appFilters.filter('propsFilter', function() {
