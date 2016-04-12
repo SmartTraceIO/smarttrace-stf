@@ -82,7 +82,6 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </div>
-
                         <div class="panel-body">
                             <table class="tracker-desc">
                                 <tr>
@@ -98,7 +97,9 @@
                                         <div class="strong">{{itm.location.locationName}}</div>
                                     <span style="color:#AAA">
                                         <span class="light-bold-font uppercase">Stopped at:</span>
-                                        {{itm.date | convertDate}}</span>
+                                        <span ng-if="itm.stopDate">{{itm.stopDate}}</span>
+                                        <span ng-if="!itm.stopDate">{{itm.date | convertDate}}</span>
+                                    </span>
                                     </td>
                                 </tr>
                                 <tr>

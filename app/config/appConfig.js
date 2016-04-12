@@ -1,6 +1,6 @@
 ﻿app.constant("Api", { url: "https://smarttrace.com.au/web/vf/rest/" });
 // executes only once for an app, calls evertime when page refreshed by user
-app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $templateCache) {
+app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $templateCache, $modalStack) {
   
     $rootScope.go = function(url){
         $state.go(url);
@@ -24,8 +24,9 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
                 $rootScope.previousState = fromState
             };
 
-            if ($rootScope.modalInstance)
-                $rootScope.modalInstance.close('cancel');
+            /*if ($rootScope.modalInstance)
+                $rootScope.modalInstance.close('cancel');*/
+            $modalStack.dismissAll();
 
         });
 });

@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Autostart templates");
+    rootSvc.SetPageHeader("Autostart Templates");
     var filter = $filter('filter');
     var BindAutoShipmentList = function () {
         var param = {
@@ -65,9 +65,9 @@
 
 appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window,
                                                  $filter, arrayToStringFilter, $modal, $rootScope) {
-    rootSvc.SetPageTitle('Add Auto Shipment');
+    rootSvc.SetPageTitle('Add an Autostart template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Auto Shipment");
+    rootSvc.SetPageHeader("Autostart Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
 
@@ -402,9 +402,9 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
 appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
                                                   $state, $filter, $rootScope, $modal, webSvc, $window, $q){
-    rootSvc.SetPageTitle('Edit AutoStart Shipment');
+    rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("AutoStart Shipment");
+    rootSvc.SetPageHeader("Autostart Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     var filter = $filter('filter');

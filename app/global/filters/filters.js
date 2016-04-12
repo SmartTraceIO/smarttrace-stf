@@ -65,7 +65,7 @@ appFilters.filter('convertDate', function(localDbSvc) {
     return function (input) {
         if (input) {
             var dt = moment.tz(input, localDbSvc.getUserTimezone());
-            return dt.format('hh:mmA DD MMM YYYY');
+            return dt.format('HH:mm DD-MMM-YYYY');
         } else  {
             return '';
         }
