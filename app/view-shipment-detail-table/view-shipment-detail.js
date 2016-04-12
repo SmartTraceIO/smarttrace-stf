@@ -113,53 +113,9 @@
             //next time, it only updates the main tracker info, not insert it to $scope.trackers
             if($scope.trackers.length == 0){
                 $scope.trackers.push(tempObj);
-                for(i = 0; i < info.siblings.length; i++){
-                    $scope.trackers.push(info.siblings[i]);
-                    $scope.trackers[i + 1].loaded = false;
-                }
-            }
-            else
-                $scope.trackers[0] = tempObj;
+            } else $scope.trackers[0] = tempObj;
 
-            //Load Sibling Shipment details
-            
-            //refresh siblings
-            
-            //reload sibling info
-            for(i = 0; i < info.siblings.length; i++){
-                $scope.trackers[i + 1].loadedForIcon = false;
 
-                /*var params = {
-                 params: {
-                 shipmentId: shipmentId
-                 }
-                 };*/
-                var params = {
-                    params: {
-                        shipmentId: info.siblings[i].shipmentId
-                    }
-                }
-                //console.log('PARAMS', params)
-                webSvc.getSingleShipmentShare(params).success( function (graphData) {
-                    if(graphData.status.code != 0) return;
-                    dt = graphData.response;
-                    // debugger;
-                    for(j = 1; j < $scope.trackers.length; j++){
-                        if($scope.trackers[j].shipmentId == dt.shipmentId){
-                            for(var k in dt){
-                                if(dt.hasOwnProperty(k)){
-                                    $scope.trackers[j][k] = dt[k];
-                                }
-                            }
-                            if($scope.trackers[j].alertYetToFire != null)
-                                $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
-                            $scope.trackers[j].loaded = true;
-                            $scope.trackers[j].loadedForIcon = true;
-                            break;
-                        }
-                    }
-                });
-            }
             for(i = 0; i < $scope.trackers.length; i++){
                 $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
                 $scope.trackers[i].index = i;
