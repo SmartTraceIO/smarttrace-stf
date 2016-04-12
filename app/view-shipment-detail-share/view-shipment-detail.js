@@ -579,7 +579,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
 
     loadTrackerData();
     function loadTrackerData() {
-
         var params = null;
         if ($scope.ShipmentId) {
             params = {
@@ -595,345 +594,381 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                 }
             };
         }
-        webSvc.getSingleShipmentShare(params).success( function (graphData) {
-            $log.debug("SINGLE-SHIPMENT", graphData);
 
-            if(graphData.status.code !=0){
-                toastr.error(graphData.status.message, "Error");
-                return;
-            }
-
-            var info = graphData.response;
-            var numberOfSiblings = info.siblings.length;
-            console.log('number siblings', numberOfSiblings);
-            if (numberOfSiblings >= 9) {
-                info.siblings.splice(9);
-                $scope.notListed = numberOfSiblings - 10;
-            }
-            if (info == null) {
-                $log.error('GRAPHDATA', graphData);
-                return;
-            }
-            //--------Remove Light On, Off---------
-            for(alert = 0; alert < info.alertSummary.length; alert ++){
-                if(info.alertSummary[alert].toLowerCase() == "lighton" 
-                    || info.alertSummary[alert].toLowerCase() == "lightoff") {
-                    info.alertSummary.splice(alert --, 1);
-                }
-            }
-            //------------PREPARE TRACKERS INFO  BEGIN-------------
-            var tempObj = {};
-            for(var k in info){
-                if(info.hasOwnProperty(k)){
-                    tempObj[k] = info[k];
-                }
-            }
-            if(tempObj.alertYetToFire != null)
-                tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
-            tempObj.loaded = true;
-            tempObj.loadedForIcon = true;
-            //next time, it only updates the main tracker info, not insert it to $scope.trackers
-            if($scope.trackers.length == 0){
-                $scope.trackers.push(tempObj);
-                for(i = 0; i < info.siblings.length; i++){
-                    $scope.trackers.push(info.siblings[i]);
-                    $scope.trackers[i + 1].loaded = false;
-                }
-            } else {
-                $scope.trackers[0] = tempObj;
-            }
-
-            var promiseSibling = [];
-            angular.forEach(info.siblings, function(val, key) {
-                var params = {
-                    params: {
-                        shipmentId: val.shipmentId
+        var deviceList = [];
+        var deviceSnList = [];
+        var groupList = [];
+        var deviceListSameGroup = [];
+        var deviceSnListSameGroup = [];
+        var device = null;
+        var sn = parseInt($scope.sn, 10);
+        webSvc.getDevices(99999, 1, '', '').success(function(data) {
+            if (data.status.code == 0) {
+                deviceList = data.response;
+                deviceSnList = deviceList.map(function(val) {
+                    return parseInt(val.sn, 10);
+                })
+                for (var i = 0; i < deviceList.length; i++) {
+                    var dlsn = parseInt(deviceList[i].sn, 10);
+                    if (dlsn == sn) {
+                        device = deviceList[i];
+                        break;
                     }
                 }
-                var p = webSvc.getSingleShipmentShare(params).success( function (graphData) {
-                    if(graphData.status.code != 0) return;
-                    dt = graphData.response;
-                    // debugger;
-                    for(j = 1; j < $scope.trackers.length; j++){
-                        if($scope.trackers[j].shipmentId == dt.shipmentId){
-                            for(var k in dt){
-                                if(dt.hasOwnProperty(k)){
-                                    $scope.trackers[j][k] = dt[k];
-                                }
-                            }
-                            if($scope.trackers[j].alertYetToFire != null)
-                                $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
-                            $scope.trackers[j].loaded = true;
-                            $scope.trackers[j].loadedForIcon = true;
-                            prepareMainHighchartSeries();
-                            refreshHighchartSeries();
-                            break;
+                console.log('Device-list', deviceList);
+                console.log('Device', device);
+            } else {
+                toastr.warning('Cannot get devices list');
+                return;
+            }
+        }).then(function() {
+            //get device group
+            return webSvc.getGroupsOfDevice(device.imei).success(function(data) {
+                if (data.status.code == 0) {
+                    groupList = data.response;
+                } else {
+                    toastr.warning('Cannot get group list');
+                }
+            })
+        }).then(function() {
+            var promises = [];
+            angular.forEach(groupList, function(val, key) {
+                var p = webSvc.getDevicesOfGroup(val.name).success(function(data) {
+                    console.log('DevicesOfGroup#'+key, data);
+                    angular.forEach(data.response, function(val, key) {
+                        var snIdx = deviceSnList.indexOf(parseInt(val.sn, 10));
+                        var devIdx = deviceSnListSameGroup.indexOf(parseInt(val.sn, 10));
+                        if ((snIdx >= 0) && (devIdx < 0)) {
+                            deviceListSameGroup.push(deviceList[snIdx]);
+                            deviceSnListSameGroup.push(parseInt(val.sn, 10));
+                        }
+                    })
+                });
+                promises.push(p);
+            })
+            $q.all(promises);
+        }).then(function() {
+            return webSvc.getSingleShipmentShare(params).success( function (graphData) {
+                $log.debug("SINGLE-SHIPMENT", graphData);
+
+                if(graphData.status.code !=0){
+                    toastr.error(graphData.status.message, "Error");
+                    return;
+                }
+                var info = graphData.response;
+
+                console.log('Info', info);
+                var numberOfSiblings = info.siblings.length;
+                console.log('number siblings', numberOfSiblings);
+                console.log('siblings', info.siblings);
+                //-- modify siblings
+                var siblings = [];
+                for(var i = 0; i<numberOfSiblings; i++) {
+                    if (deviceSnListSameGroup.indexOf(parseInt(info.siblings[i].deviceSN, 10)) >= 0) {
+                        siblings.push(info.siblings[i]);
+                    }
+                }
+
+                numberOfSiblings = siblings.length;
+                if (numberOfSiblings >= 9) {
+                    siblings.splice(9);
+                    $scope.notListed = numberOfSiblings - 10;
+                }
+                info.siblings = siblings;
+                if (info == null) {
+                    $log.error('GRAPHDATA', graphData);
+                    return;
+                }
+                //--------Remove Light On, Off---------
+                for(alert = 0; alert < info.alertSummary.length; alert ++){
+                    if(info.alertSummary[alert].toLowerCase() == "lighton"
+                        || info.alertSummary[alert].toLowerCase() == "lightoff") {
+                        info.alertSummary.splice(alert --, 1);
+                    }
+                }
+                //------------PREPARE TRACKERS INFO  BEGIN-------------
+                var tempObj = {};
+                for(var k in info){
+                    if(info.hasOwnProperty(k)){
+                        tempObj[k] = info[k];
+                    }
+                }
+                if(tempObj.alertYetToFire != null)
+                    tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
+                tempObj.loaded = true;
+                tempObj.loadedForIcon = true;
+                //next time, it only updates the main tracker info, not insert it to $scope.trackers
+                if($scope.trackers.length == 0){
+                    $scope.trackers.push(tempObj);
+                    for(i = 0; i < info.siblings.length; i++){
+                        $scope.trackers.push(info.siblings[i]);
+                        $scope.trackers[i + 1].loaded = false;
+                    }
+                } else {
+                    $scope.trackers[0] = tempObj;
+                }
+
+                var promiseSibling = [];
+                angular.forEach(info.siblings, function(val, key) {
+                    var params =     {
+                        params: {
+                            shipmentId: val.shipmentId
                         }
                     }
+                    var p = webSvc.getSingleShipmentShare(params).success( function (graphData) {
+                        if(graphData.status.code != 0) return;
+                        dt = graphData.response;
+                        // debugger;
+                        for(j = 1; j < $scope.trackers.length; j++){
+                            if($scope.trackers[j].shipmentId == dt.shipmentId){
+                                for(var k in dt){
+                                    if(dt.hasOwnProperty(k)){
+                                        $scope.trackers[j][k] = dt[k];
+                                    }
+                                }
+                                if($scope.trackers[j].alertYetToFire != null)
+                                    $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
+                                $scope.trackers[j].loaded = true;
+                                $scope.trackers[j].loadedForIcon = true;
+                                prepareMainHighchartSeries();
+                                refreshHighchartSeries();
+                                break;
+                            }
+                        }
+                    });
+                    promiseSibling.push(p);
                 });
-                promiseSibling.push(p);
-            });
-            $q.all(promiseSibling);
+                $q.all(promiseSibling);
+                for(i = 0; i < $scope.trackers.length; i++){
+                    $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
+                    $scope.trackers[i].index = i;
+                }
+                //------------PREPARE TRACKERS INFO    END-------------
 
-            //for(i = 0; i < info.siblings.length; i++){
-            //    $scope.trackers[i + 1].loadedForIcon = false;
-            //
-            //    var params = {
-            //        params: {
-            //            shipmentId: info.siblings[i].shipmentId
-            //        }
-            //    }
-            //    webSvc.getSingleShipmentShare(params).success( function (graphData) {
-            //        if(graphData.status.code != 0) return;
-            //        dt = graphData.response;
-            //        // debugger;
-            //        for(j = 1; j < $scope.trackers.length; j++){
-            //            if($scope.trackers[j].shipmentId == dt.shipmentId){
-            //                for(var k in dt){
-            //                    if(dt.hasOwnProperty(k)){
-            //                        $scope.trackers[j][k] = dt[k];
-            //                    }
-            //                }
-            //                if($scope.trackers[j].alertYetToFire != null)
-            //                    $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
-            //                $scope.trackers[j].loaded = true;
-            //                $scope.trackers[j].loadedForIcon = true;
-            //                prepareMainHighchartSeries();
-            //                refreshHighchartSeries();
-            //                break;
-            //            }
-            //        }
-            //    });
-            //}
-            for(i = 0; i < $scope.trackers.length; i++){
-                $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
-                $scope.trackers[i].index = i;
-            }
-            //------------PREPARE TRACKERS INFO    END-------------
+                //set tracker information
+                angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
+                    child.index = index;
+                });
 
-            //set tracker information
-            angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
-                child.index = index;
-            });
+                //start and end location info
 
-            //start and end location info
-
-            var locations = info.locations;
-            //google map data
-            $scope.firstPoint = locations[0];
-            $scope.currentPoint.loc = locations[0];
-            $scope.currentPoint.iconUrl = "theme/img/edot.png";
-            $scope.changeActiveTracker($scope.MI);
+                var locations = info.locations;
+                //google map data
+                $scope.firstPoint = locations[0];
+                $scope.currentPoint.loc = locations[0];
+                $scope.currentPoint.iconUrl = "theme/img/edot.png";
+                $scope.changeActiveTracker($scope.MI);
 
 
-            // console.log($scope.trackerPath);
-            $scope.chartConfig = {
-                redraw: false,
-                options:{
-                    plotOptions: {
-                        series: {
-                            point: {
-                                events: {
-                                    mouseOver: function () {
-                                        var idx;
-                                        for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                            if(subSeries[$scope.MI][index].x == this.x){
-                                                idx = index;
-                                                break;
+                // console.log($scope.trackerPath);
+                $scope.chartConfig = {
+                    redraw: false,
+                    options:{
+                        plotOptions: {
+                            series: {
+                                point: {
+                                    events: {
+                                        mouseOver: function () {
+                                            var idx;
+                                            for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                                if(subSeries[$scope.MI][index].x == this.x){
+                                                    idx = index;
+                                                    break;
+                                                }
+                                            }
+                                            $scope.showAlerts(idx);
+                                        },
+                                        mouseOut: function () {
+                                            $scope.showAlerts(-1);
+                                        },
+                                        click: function(e) {
+                                            if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
+                                                resetDoubleClick();
+                                                ondbclick(e, this);
+                                            } else {
+                                                doubleClicker.clickedOnce = true;
+                                                doubleClicker.timer = setTimeout(function(){
+                                                    resetDoubleClick();
+                                                }, doubleClicker.timeBetweenClicks);
                                             }
                                         }
-                                        $scope.showAlerts(idx);
-                                    },
-                                    mouseOut: function () {
-                                        $scope.showAlerts(-1);
-                                    },
-                                    click: function(e) {
-                                        if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
-                                            resetDoubleClick();
-                                            ondbclick(e, this);
-                                        } else {
-                                            doubleClicker.clickedOnce = true;
-                                            doubleClicker.timer = setTimeout(function(){
-                                                resetDoubleClick();
-                                            }, doubleClicker.timeBetweenClicks);
-                                        }
                                     }
                                 }
                             }
-                        }
-                    },
-                    scrollbar : {
-                        enabled : false,
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    rangeSelector: {
-                        selected: 2,
-                        enabled: true,
-                        inputEnabled: false,
-                        buttonTheme: {
-                            visibility: 'hidden'
                         },
-                        labelStyle: {
-                            visibility: 'hidden'
-                        }
-                    },
-                    navigator: {
-                        enabled: true
-                    },
-                    // yAxis: {
-                    //  title: {
-                    //      align: 'left',
-                    //      text: "Temperature <sup>o</sup>C"
-                    //  }
-                    // },
-                    tooltip: {
-                        style: {
-                            padding: '0px',
+                        scrollbar : {
+                            enabled : false,
                         },
-                        shadow: false,
-                        backgroundColor: 'rgba(249, 249, 249, 0)',
-                        borderWidth: 0,
-                        useHTML: true,
-                        hideDelay: 500,
-                        formatter: function () {
-                            if (this.points) {
-                                var index;
-                                for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                    if(subSeries[$scope.MI][index].x == this.x) break;
-                                }
-
-                                //console.log('POINTS', this.points[0]);
-
-                                var color = this.points[0].series.color;
-                                msg = $scope.trackerMsg[index];
-                                var message = "";
-
-                                for(var j = 0; j < msg.length; j ++){
-                                    //if this message is for alert show title
-                                    if(msg[j].title.indexOf(".png") != -1){
-                                        message += "<div class='tt_title' style='background-color:" + color + "'>"
-                                            + msg[j].title + "<div style='clear:both;'></div></div>";
-                                    }
-                                    message += "<div class='tt_body'>";
-                                    for(var k = 0; k < msg[j].lines.length; k ++){
-                                        message += "<div>" + msg[j].lines[k] + "</div>";
-                                    }
-                                    message += "</div>";
-                                }
-
-                                var cont = "";
-                                cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
-                                cont += message;
-                                cont += "</div>";
-                                return cont;
-                            } else {
-                                //--flags
-                                var color = this.point.color;
-                                var c = "";
-                                c += "<div class='ttbox' style='z-index: 100; min-width: 300px; border-color:" + color + "'>";
-                                c += "<div class='tt_title' style='background-color:" + color + "'>"
-                                c += "Note " + this.point.noteNum + "</div>"
-                                c += "<div style='clear:both;'></div>";
-                                c += "<div class='tt_body wordwrap'>";
-                                c += this.point.noteText;
-                                c += "</div>"
-                                c += "</div>"
-                                return c;
-                            }
-                        }
-                    },
-                    yAxis:{
-                        labelAlign: 'left',
-                        opposite: false,
-                        gridLineColor: '#CCC',
-                        lineColor:"#000",
-                        tickColor:"#000",
-                        lineWidth:1,
-                        tickWidth: 1,
-                        title: {
-                            align: 'middle',
-                            offset: 40,
-                            //text: 'Temperature °C',
-                            text: 'Temperature °'+ tempUnits,
-                            y: -10
-                        },
-                        labels:{
-                            align:'right',
-                            x:-10
-                        },
-                        tickInterval: tickInterval,
-                        plotBands: [{
-                            from: 0,
-                            to: 5,
-                            color: 'rgba(0, 255, 0, 0.2)',
-                        }, {
-                            from: -25,
-                            to: -18,
-                            color: 'rgba(0, 0, 255, 0.2)',
-                        }]
-                    },
-                    xAxis:{
-                        type: 'datetime',
-                        labels: {
-                            formatter: function() {
-                                // return this.value + "Date";
-                                return formatDateAxis(this.value);
-                            },
-                        },
-                        plotBands: lightPlotBand,
-                        lineWidth:1,
-                        ordinal: false,
-                        lineColor:"#000",
-                        tickColor:"#000",
-                        gridLineDashStyle: "Solid",
-                        gridLineWidth: 1,
-                        plotLines: plotLines
-                    },
-                    navigation: {
-                        buttonOptions: {
+                        credits: {
                             enabled: false
-                        }
-                    }
-                },
-                series: chartSeries,
-                useHighStocks: true,
-                func : function(chart) {
-                    //#--
-                    //var hChart = $("#chart-print").highcharts();
-                    //hChart.
-                    if (!$scope.loaded) {
-                        $scope.loaded = true;
-                        if (window.matchMedia) {
-                            var mediaQueryList = window.matchMedia("print");
-                            mediaQueryList.addListener(function (mql) {
-                                if (mql.matches) {
-                                    if (chart && ($location.path() == '/view-shipment-detail')) {
-                                        chart = $("#chart-print").highcharts();
-                                        chart.reflow();
+                        },
+                        rangeSelector: {
+                            selected: 2,
+                            enabled: true,
+                            inputEnabled: false,
+                            buttonTheme: {
+                                visibility: 'hidden'
+                            },
+                            labelStyle: {
+                                visibility: 'hidden'
+                            }
+                        },
+                        navigator: {
+                            enabled: true
+                        },
+                        // yAxis: {
+                        //  title: {
+                        //      align: 'left',
+                        //      text: "Temperature <sup>o</sup>C"
+                        //  }
+                        // },
+                        tooltip: {
+                            style: {
+                                padding: '0px',
+                            },
+                            shadow: false,
+                            backgroundColor: 'rgba(249, 249, 249, 0)',
+                            borderWidth: 0,
+                            useHTML: true,
+                            hideDelay: 500,
+                            formatter: function () {
+                                if (this.points) {
+                                    var index;
+                                    for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                        if(subSeries[$scope.MI][index].x == this.x) break;
                                     }
+
+                                    //console.log('POINTS', this.points[0]);
+
+                                    var color = this.points[0].series.color;
+                                    msg = $scope.trackerMsg[index];
+                                    var message = "";
+
+                                    for(var j = 0; j < msg.length; j ++){
+                                        //if this message is for alert show title
+                                        if(msg[j].title.indexOf(".png") != -1){
+                                            message += "<div class='tt_title' style='background-color:" + color + "'>"
+                                                + msg[j].title + "<div style='clear:both;'></div></div>";
+                                        }
+                                        message += "<div class='tt_body'>";
+                                        for(var k = 0; k < msg[j].lines.length; k ++){
+                                            message += "<div>" + msg[j].lines[k] + "</div>";
+                                        }
+                                        message += "</div>";
+                                    }
+
+                                    var cont = "";
+                                    cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
+                                    cont += message;
+                                    cont += "</div>";
+                                    return cont;
                                 } else {
+                                    //--flags
+                                    var color = this.point.color;
+                                    var c = "";
+                                    c += "<div class='ttbox' style='z-index: 100; min-width: 300px; border-color:" + color + "'>";
+                                    c += "<div class='tt_title' style='background-color:" + color + "'>"
+                                    c += "Note " + this.point.noteNum + "</div>"
+                                    c += "<div style='clear:both;'></div>";
+                                    c += "<div class='tt_body wordwrap'>";
+                                    c += this.point.noteText;
+                                    c += "</div>"
+                                    c += "</div>"
+                                    return c;
+                                }
+                            }
+                        },
+                        yAxis:{
+                            labelAlign: 'left',
+                            opposite: false,
+                            gridLineColor: '#CCC',
+                            lineColor:"#000",
+                            tickColor:"#000",
+                            lineWidth:1,
+                            tickWidth: 1,
+                            title: {
+                                align: 'middle',
+                                offset: 40,
+                                //text: 'Temperature °C',
+                                text: 'Temperature °'+ tempUnits,
+                                y: -10
+                            },
+                            labels:{
+                                align:'right',
+                                x:-10
+                            },
+                            tickInterval: tickInterval,
+                            plotBands: [{
+                                from: 0,
+                                to: 5,
+                                color: 'rgba(0, 255, 0, 0.2)',
+                            }, {
+                                from: -25,
+                                to: -18,
+                                color: 'rgba(0, 0, 255, 0.2)',
+                            }]
+                        },
+                        xAxis:{
+                            type: 'datetime',
+                            labels: {
+                                formatter: function() {
+                                    // return this.value + "Date";
+                                    return formatDateAxis(this.value);
+                                },
+                            },
+                            plotBands: lightPlotBand,
+                            lineWidth:1,
+                            ordinal: false,
+                            lineColor:"#000",
+                            tickColor:"#000",
+                            gridLineDashStyle: "Solid",
+                            gridLineWidth: 1,
+                            plotLines: plotLines
+                        },
+                        navigation: {
+                            buttonOptions: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    series: chartSeries,
+                    useHighStocks: true,
+                    func : function(chart) {
+                        //#--
+                        //var hChart = $("#chart-print").highcharts();
+                        //hChart.
+                        if (!$scope.loaded) {
+                            $scope.loaded = true;
+                            if (window.matchMedia) {
+                                var mediaQueryList = window.matchMedia("print");
+                                mediaQueryList.addListener(function (mql) {
+                                    if (mql.matches) {
+                                        if (chart && ($location.path() == '/view-shipment-detail')) {
+                                            chart = $("#chart-print").highcharts();
+                                            chart.reflow();
+                                        }
+                                    } else {
+                                    }
+                                });
+                            }
+                            window.addEventListener("beforeprint", function (ev) {
+                                chart = $("#chart-print").highcharts();
+                                if (chart && ($location.path() == '/view-shipment-detail')) {
+                                    //chart.oldParams = [chart.chartWidth, chart.chartHeight, false];
+                                    //chart.setSize(590, 400, false);
+                                    chart.reflow();
+                                }
+                            });
+                            window.addEventListener("afterprint", function (ev) {
+                                if (chart && ($location.path() == '/view-shipment-detail')) {
+                                    chart.setSize.apply(chart, chart.oldParams)
                                 }
                             });
                         }
-                        window.addEventListener("beforeprint", function (ev) {
-                            chart = $("#chart-print").highcharts();
-                            if (chart && ($location.path() == '/view-shipment-detail')) {
-                                //chart.oldParams = [chart.chartWidth, chart.chartHeight, false];
-                                //chart.setSize(590, 400, false);
-                                chart.reflow();
-                            }
-                        });
-                        window.addEventListener("afterprint", function (ev) {
-                            if (chart && ($location.path() == '/view-shipment-detail')) {
-                                chart.setSize.apply(chart, chart.oldParams)
-                            }
-                        });
                     }
                 }
-            }
 
+            })
         });
     }   
 
@@ -1006,7 +1041,6 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             data:noteData
         })
     }
-
     function prepareNoteChartSeries() {
         noteData.length = 0; //reset noteData
         angular.forEach($scope.shipmentNotes, function(val, key) {
