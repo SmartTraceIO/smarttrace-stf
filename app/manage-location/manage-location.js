@@ -74,6 +74,7 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     $scope.Print = function() {
         $window.print();
     }
+    $scope.fromModalPopup = false;
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true
     }
@@ -250,7 +251,6 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
                 webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
                     toastr.success("Location added successfully")
                     if (closeModalPopup) {
-                        $scope.fromModalPopup = false;
                         $rootScope.modalInstance.close('cancel');
                     }
                     else {
@@ -278,6 +278,7 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
     }
     $scope.Action = "Edit";
     $scope.AuthToken = localDbSvc.getToken();
+    $scope.fromModalPopup = false;
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
@@ -287,10 +288,12 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
     $scope.locationId = $stateParams.lId
     if ($scope.locationId || $rootScope.locationIdForModalPopup) {
         var locId;
-        if ($scope.locationId)
+        if ($scope.locationId) {
             locId = $scope.locationId;
-        else
+        }
+        else {
             locId = $rootScope.locationIdForModalPopup;
+        }
 
         webSvc.getLocation(locId).success(function(data){
             if (data.status.code == 0) {
@@ -397,7 +400,7 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         legendDiv.innerHTML = "Drag and drop to point on the map to create a location at that point.";
         $scope.map.controls[google.maps.ControlPosition.LEFT_TOP].push(legendDiv);
 
-        $scope.SetAddress();
+        //$scope.SetAddress();
     }
     //this function is use to draw circle with given radious
     $scope.ChangeRadious = function (radious) {
@@ -465,7 +468,6 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
                 webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
                     toastr.success("Location updated successfully")
                     if (closeModalPopup) {
-                        $scope.fromModalPopup = false;
                         $rootScope.modalInstance.close('cancel');
                     }
                     else {

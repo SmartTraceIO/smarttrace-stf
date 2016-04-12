@@ -690,6 +690,8 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
                     $scope.ChangeShipmentTo();
                 });
             });
+        } else {
+            toastr.warning('There is no location for edit!');
         }
     };
     $scope.openAddAlert = function () {

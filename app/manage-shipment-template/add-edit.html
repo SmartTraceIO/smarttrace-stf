@@ -71,8 +71,18 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <label class="control-label">Shipment From:&nbsp;<i tooltip="Shipment from" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
-                                <select ng-change="ChangeShipmentFrom()" ng-model="ShipmentTemplate.shippedFrom" ng-options="location as location.DisplayText for location in FromLocationList track by location.locationId" class="form-control input-sm">
+                                <label class="control-label">
+                                    <span>Shipment From:&nbsp;</span>
+                                    <i tooltip="Shipment from"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"/>
+                                </label>
+                                <select ng-change="ChangeShipmentFrom()"
+                                        ng-model="ShipmentTemplate.shippedFrom"
+                                        ng-options="location as location.DisplayText for location in FromLocationList track by location.locationId"
+                                        class="form-control input-sm">
                                     <option value="">-- Please Select --</option>
                                 </select>
                                 <small class="text-muted">
@@ -81,7 +91,14 @@
                             </div>
                             <div class="col-sm-2 control-label" style="text-align:left">
                                 <br />
-                                <a href=""><i class="fa fa-pencil" ng-click="openEditLocation(ShipmentTemplate.shippedFrom.locationId)" tooltip="Edit this Shipped From Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
+                                <a href="">
+                                    <i class="fa fa-pencil"
+                                       ng-click="openEditLocation(ShipmentTemplate.shippedFrom.locationId)"
+                                       tooltip="Edit this Shipped From Location"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"/>
+                                </a>
                                 &nbsp;
                                 <a href="" ng-click="openAddLocation()"><i class="fa fa-plus" tooltip="Add New Shipped From Location" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"></i></a>
                             </div>
