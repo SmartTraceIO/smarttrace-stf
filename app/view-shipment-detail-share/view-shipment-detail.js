@@ -359,7 +359,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             width: width, // Width of the line    
             label: {
                 //text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' +
-                text:   '<img src="theme/img/tinyLocationStop.png" style="float:right; vertical-align:bottom;">' +
+                text:   '<img src="theme/img/tinyLocationStop.png" class="rev-horizon" style="float:right; vertical-align:bottom;">' +
                         '<span style="text-align:right;float:right">' +
                             '<b class="bold-font">' + $scope.mapInfo.endLocation + '</b><br/>' + 
                             dottext + 
@@ -997,9 +997,10 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             color: $scope.trackers[$scope.MI].siblingColor,
             stackDistance: 16,
             width: 8,
+            useHTML: true,
             style: {
                 fontSize: '8px',
-                fontWeight: 'bold',
+                fontWeight: 'normal',
                 textAlign: 'center',
             },
             data:noteData
@@ -1013,6 +1014,8 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         });
         var sortedNotes = orderBy($scope.shipmentNotes, 'x');
         $log.debug('SortedNotes', sortedNotes);
+
+
         noteData = sortedNotes.map(function(val) {
             val.title=val.noteNum;
             val.text=val.noteText;
@@ -1279,7 +1282,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
                     }
                 );
             } else {
-                toastr.warning ('You have already shutdown this device!');
+                toastr.warning ('Device has already been shutdown during this shipment.');
             }
         } else {
             var temShipmentNumber = currentDevice.shipmentNumber;

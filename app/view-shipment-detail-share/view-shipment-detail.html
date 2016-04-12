@@ -97,7 +97,7 @@
                     <div class="portlet-title">
                         <div class="caption uppercase">
                             <span>Notes added to chart</span>
-                            <i tooltip="Notes added to chart"
+                            <i tooltip="Double click at a point on the curve to add a note"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -112,8 +112,8 @@
                             <div class="portlet-title">
                                 <table>
                                     <tr>
-                                        <td class="bold-font" style="font-size: 15px">Note </td>
-                                        <td><div class="circle" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
+                                        <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
+                                        <td><div class="circle text-center" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
                                         <td width="100%">
                                             <a href="" class="pull-right hidden-print" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                             <a href="" class="pull-right hidden-print" ng-click="DeleteNote(note)">Del</a>
@@ -388,7 +388,7 @@
                                 <b>{{mapInfo.endLocation}}</b><br/>
                                 <!-- {{mapInfo.eta}} -->
                             </td>
-                            <td><img src="theme/img/locationStop.png"></td>
+                            <td><img class="rev-horizon" src="theme/img/tinyLocationStop.png"></td>
                         </tr></table>
                     </div>
                 </custom-marker>
@@ -516,7 +516,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Notes added to chart</span>
-                                <i tooltip="Add notes to chart by clicking on the chart at prefered point"
+                                <i tooltip="Double click at a point on the curve to add a note"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -531,8 +531,8 @@
                                 <div class="portlet-title">
                                     <table>
                                         <tr>
-                                            <td class="bold-font" style="font-size: 15px">Note </td>
-                                            <td><div class="circle" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
+                                            <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
+                                            <td><div class="circle text-center" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
                                             <td width="100%">
                                                 <a href="" class="pull-right" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                                 <a href="" class="pull-right" ng-click="DeleteNote(note)">Del</a>
@@ -626,7 +626,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><img src="theme/img/tinyLocationStop.png"></td>
+                                    <td><img class="rev-horizon" src="theme/img/tinyLocationStop.png"></td>
                                     <td>
                                         <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
                                         <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
@@ -917,7 +917,7 @@
                                         <b>{{mapInfo.endLocation}}</b><br/>
                                         <!-- {{mapInfo.eta}} -->
                                     </td>
-                                    <td><img src="theme/img/locationStop.png"></td>
+                                    <td><img src="theme/img/tinyLocationStop.png"></td>
                                 </tr></table>
                             </div>
                         </custom-marker>

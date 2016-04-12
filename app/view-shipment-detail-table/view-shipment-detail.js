@@ -202,7 +202,7 @@
                     }
                 })
             } else {
-                toastr.warning ('You have already shutdown this device!');
+                toastr.warning ('Device has already been shutdown during this shipment.');
             }
 
         } else {
