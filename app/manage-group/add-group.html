@@ -2,7 +2,7 @@
     <div class="portlet-title">
         <div class="caption">
             <img src="../../theme/img/headerTrackers.png" />
-            <span>Add a new tracker groups</span>
+            <span>Add a tracker group</span>
         </div>
     </div>
     <div class="portlet-body form">
@@ -12,6 +12,11 @@
                     <form class="form" name="frmAddGroup">
                         <div class="form-group">
                             <label for="group-name">Group Name:</label>
+                            <i tooltip="A short name for this group of trackers (20 char max)"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
                             <input class="form-control" name="groupName" id="group-name" ng-maxlength="20" ng-model="AddGroup.name"
                                    placeholder="Enter a name for group">
                             <span ng-if="frmAddGroup.$invalid">
@@ -20,13 +25,27 @@
                         </div>
                         <div class="form-group">
                             <label for="group-desc">Group Description:</label>
-                            <input class="form-control", id="group-desc" ng-model="AddGroup.description" placeholder="Enter a description for group">
+                            <i tooltip="A longer description for this group of trackers"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                            <input class="form-control", id="group-desc" ng-model="AddGroup.description"
+                                   name="description" ng-maxlength="50" placeholder="Enter a description for group">
+                            <span ng-if="frmAddGroup.$invalid">
+                                <span class="text-danger" ng-if="frmAddGroup.description.$error.maxlength">Description of group must be less than 50</span>
+                            </span>
                         </div>
                     </form>
                 </div>
                 <div class="col-md-6 col-sm-4">
                     <form class="form">
-                        <label>Add device(s) to group</label>
+                        <label>Add tracker(s) to group</label>
+                        <i tooltip="The number<and name> of trackers belonging to this group"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
                         <ui-select multiple sortable="true" close-on-select="false"
                                    ng-model="AddGroup.deviceListToAdd"
                                    theme="select2"

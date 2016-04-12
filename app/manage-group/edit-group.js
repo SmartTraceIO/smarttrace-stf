@@ -16,7 +16,7 @@ function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $q) {
 
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
-    rootSvc.SetPageHeader("Add Tracker Groups");
+    rootSvc.SetPageHeader("Tracker Groups");
     //get all Devices
     var p2 = self.GetDeviceGroup(self.name);
     self.all([p2]).then(function() {
