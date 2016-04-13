@@ -604,38 +604,42 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         break;
                     }
                 }
-                console.log('Device-list', deviceList);
-                console.log('Device', device);
+                //console.log('Device-list', deviceList);
+                //console.log('Device', device);
             } else {
                 toastr.warning('Cannot get devices list');
                 return;
             }
         }).then(function() {
             //get device group
-            return webSvc.getGroupsOfDevice(device.imei).success(function(data) {
-                if (data.status.code == 0) {
-                    groupList = data.response;
-                } else {
-                    toastr.warning('Cannot get group list');
-                }
-            })
+            if (device != null) {
+                return webSvc.getGroupsOfDevice(device.imei).success(function(data) {
+                    if (data.status.code == 0) {
+                        groupList = data.response;
+                    } else {
+                        toastr.warning('Cannot get group list');
+                    }
+                })
+            }
         }).then(function() {
             var promises = [];
-            angular.forEach(groupList, function(val, key) {
-                var p = webSvc.getDevicesOfGroup(val.name).success(function(data) {
-                    console.log('DevicesOfGroup#'+key, data);
-                    angular.forEach(data.response, function(val, key) {
-                        var snIdx = deviceSnList.indexOf(parseInt(val.sn, 10));
-                        var devIdx = deviceSnListSameGroup.indexOf(parseInt(val.sn, 10));
-                        if ((snIdx >= 0) && (devIdx < 0)) {
-                            deviceListSameGroup.push(deviceList[snIdx]);
-                            deviceSnListSameGroup.push(parseInt(val.sn, 10));
-                        }
-                    })
-                });
-                promises.push(p);
-            })
-            $q.all(promises);
+            if (groupList.length > 0) {
+                angular.forEach(groupList, function(val, key) {
+                    var p = webSvc.getDevicesOfGroup(val.name).success(function(data) {
+                        console.log('DevicesOfGroup#'+key, data);
+                        angular.forEach(data.response, function(val, key) {
+                            var snIdx = deviceSnList.indexOf(parseInt(val.sn, 10));
+                            var devIdx = deviceSnListSameGroup.indexOf(parseInt(val.sn, 10));
+                            if ((snIdx >= 0) && (devIdx < 0)) {
+                                deviceListSameGroup.push(deviceList[snIdx]);
+                                deviceSnListSameGroup.push(parseInt(val.sn, 10));
+                            }
+                        })
+                    });
+                    promises.push(p);
+                })
+                $q.all(promises);
+            }
         }).then(function() {
             return webSvc.getSingleShipmentShare(params).success( function (graphData) {
                 $log.debug("SINGLE-SHIPMENT", graphData);
@@ -645,11 +649,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     return;
                 }
                 var info = graphData.response;
-
+                if (info == null) {
+                    $log.debug('Current user does not own this shipment!');
+                    $state.go('viewshipment'); //move to shipment-list
+                    return;
+                }
                 console.log('Info', info);
                 var numberOfSiblings = info.siblings.length;
-                console.log('number siblings', numberOfSiblings);
-                console.log('siblings', info.siblings);
+                //console.log('number siblings', numberOfSiblings);
+                //console.log('siblings', info.siblings);
                 //-- modify siblings
                 var siblings = [];
                 for(var i = 0; i<numberOfSiblings; i++) {
