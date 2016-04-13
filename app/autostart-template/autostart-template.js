@@ -1,8 +1,29 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
     var filter = $filter('filter');
+
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+
     var BindAutoShipmentList = function () {
         var param = {
             pageSize: $scope.PageSize,
@@ -70,7 +91,27 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     rootSvc.SetPageHeader("Autostart Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
-
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     $scope.Print = function() {
         $window.print();
     }
@@ -408,6 +449,28 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     var filter = $filter('filter');
+
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
 
     $scope.Print = function() {
         $window.print();

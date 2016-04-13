@@ -4,6 +4,7 @@
 appCtrls.controller('EditGroupCtrl', EditGroupCtrl);
 function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $q) {
     var self = this;
+
     self.state = $state;
     self.WebSvc = webSvc;
     //properties

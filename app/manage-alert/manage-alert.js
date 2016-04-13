@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
@@ -7,6 +7,27 @@
     $scope.Print = function() {
         $window.print();
     }
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     var BindAlertList = function () {
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
@@ -78,6 +99,28 @@
 });
 
 appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $window) {
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
+
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Alert');
         rootSvc.SetActiveMenu('Setup');
@@ -216,6 +259,28 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
 });
 
 appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout, $window) {
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
+
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Alert');
         rootSvc.SetActiveMenu('Setup');

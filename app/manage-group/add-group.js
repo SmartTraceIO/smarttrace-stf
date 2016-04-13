@@ -2,7 +2,7 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
-function AddGroupCtrl(rootSvc, $state, webSvc, $q) {
+function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout) {
     var self = this;
 
     self.state = $state;

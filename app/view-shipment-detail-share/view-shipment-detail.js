@@ -1,7 +1,7 @@
-﻿appCtrls.controller('ViewShipmentDetailShareCtrl',
-function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q, $log,
-              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location)
-{
+﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
+
+function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q, $log,
+              $filter, $sce, $rootScope, $timeout, $window, $location) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -29,29 +29,18 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
         if ($rootScope.User) {
             return $rootScope.User;
         } else {
-            webSvc.getUser().success(function (data) {
-                if(data.status.code == 0){
-                    $rootScope.User = data.response;
-                }
-            });
+            $rootScope.User = localDbSvc.getUserProfile();
         }
-
         if ($rootScope.RunningTime == null) {
-            //reload user-time
-            webSvc.getUserTime().success( function (timeData) {
-                //console.log('USER-TIME', timeData);
-                if (timeData.status.code == 0) {
-                    $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
-                    $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-                    $scope.tickInterval = 1000 //ms
-                    var tick = function () {
-                        $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                        $timeout(tick, $scope.tickInterval); // reset the timer
-                    }
-                    // Start the timer
-                    $timeout(tick, $scope.tickInterval);
-                }
-            });
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
         }
     }
     reloadIfNeed();
@@ -1474,7 +1463,7 @@ function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q,
             }
         );
     }
-});
+};
 
 appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$modalInstance', 'webSvc', 'editId',
 function($scope, $modalInstance, webSvc, editId) {

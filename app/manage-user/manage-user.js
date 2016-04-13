@@ -61,23 +61,42 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
+appCtrls.controller('AddUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.company = localDbSvc.get("InternalCompany");
-
     $scope.Action = "Add";
     $scope.AddUser = true;
 
     $scope.Print = function() {
         $window.print();
     }
-
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     var BindRoles = function () {
         return webSvc.getRoles().success(function(data){
-            console.log('ROLELIST', data);
+            //console.log('ROLELIST', data);
             if (data.status.code == 0) {
                 $scope.RoleList = data.response;
             }
@@ -120,19 +139,7 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
         $scope.User.resetOnLogin = false;
         $scope.User.user.active = true;
         $scope.User.user.internalCompany = $scope.company;
-        //if ($scope.InternalCompany)
-        //    $scope.User.user.externalCompany = $scope.InternalCompany;
     });
-    //$scope.$watch("User.user.external", function (nVal, oVal) {
-    //    if ($scope.User && $scope.User.user) {
-    //        if (!nVal) {
-    //            $scope.User.user.externalCompany = $scope.InternalCompany
-    //        }
-    //        else {
-    //            $scope.User.user.externalCompany = $scope.externalCompany;
-    //        }
-    //    }
-    //});
 
     $scope.$watch("User.user.external", function (nVal, oVal) {
         if ($scope.User && $scope.User.user) {
@@ -172,14 +179,34 @@ appCtrls.controller('AddUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc
 });
 
 //-- edit user
-appCtrls.controller('EditUserCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window, $q) {
+appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window, $q) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     $scope.AddUser = false;
-
+//--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     $scope.Print = function() {
         $window.print();
     }
