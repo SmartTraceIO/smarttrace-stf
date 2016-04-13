@@ -74,6 +74,29 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     $scope.Print = function() {
         $window.print();
     }
+
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
+
     $scope.fromModalPopup = false;
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true
@@ -276,6 +299,29 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         $scope.ActiveMenu = 'Setup';
         $scope.PageHeader = "Locations";
     }
+
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
+
     $scope.Action = "Edit";
     $scope.AuthToken = localDbSvc.getToken();
     $scope.fromModalPopup = false;

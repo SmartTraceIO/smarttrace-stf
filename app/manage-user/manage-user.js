@@ -61,7 +61,7 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
+appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -115,7 +115,7 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $scope, rootSvc, webSvc
     var BindTimezones = function () {
         return webSvc.getTimeZones().success(function(data){
             if (data.status.code == 0) {
-                console.log('TIMEZONELIST', data.response);
+                //console.log('TIMEZONELIST', data.response);
                 $scope.TimezoneList = data.response;
             }
         });
@@ -179,7 +179,7 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $scope, rootSvc, webSvc
 });
 
 //-- edit user
-appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $filter, $window, $q) {
+appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state,$timeout, $filter, $window, $q) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");

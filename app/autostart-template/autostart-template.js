@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window, $timeout) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -85,7 +85,7 @@
 });
 
 appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window,
-                                                 $filter, arrayToStringFilter, $modal, $rootScope) {
+                                                 $filter, arrayToStringFilter, $modal, $rootScope, $timeout) {
     rootSvc.SetPageTitle('Add an Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -442,7 +442,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
-                                                  $state, $filter, $rootScope, $modal, webSvc, $window, $q){
+                                                  $state, $filter, $rootScope, $timeout, $modal, webSvc, $window, $q){
     rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");

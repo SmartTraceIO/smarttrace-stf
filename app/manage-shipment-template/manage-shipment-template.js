@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListShipTempCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListShipTempCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout) {
     rootSvc.SetPageTitle('List Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -17,6 +17,7 @@
             }
         });
     }
+
     $scope.Print = function() {
         $window.print();
     }
@@ -57,12 +58,33 @@
 
 });
 
-appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter, $modal, $rootScope, $window) {
+appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter, $modal, $rootScope, $window, $timeout) {
     rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     var BindLocations = function (cb) {
         webSvc.getLocations(1000000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
@@ -411,12 +433,33 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $modal, webSvc, $window) {
+appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter, $rootScope, $timeout, $modal, webSvc, $window) {
     rootSvc.SetPageTitle('Edit Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
+    //--
+    function reloadIfNeed() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTime = localDbSvc.getUserTimezone();
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            $scope.tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, $scope.tickInterval); // reset the timer
+            }
+            $timeout(tick, $scope.tickInterval);
+        }
+    }
+    reloadIfNeed();
+    //--
     var BindLocations = function (cb) {
 
     }

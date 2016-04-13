@@ -2,9 +2,24 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
-function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout) {
+function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, localDbSvc) {
     var self = this;
-
+    if ($rootScope.User) {
+        return $rootScope.User;
+    } else {
+        $rootScope.User = localDbSvc.getUserProfile();
+    }
+    if ($rootScope.RunningTime == null) {
+        $rootScope.RunningTime = localDbSvc.getUserTimezone();
+        $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+        $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+        var tickInterval = 1000 //ms
+        var tick = function () {
+            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+            $timeout(tick, tickInterval); // reset the timer
+        }
+        $timeout(tick, tickInterval);
+    }
     self.state = $state;
     self.WebSvc = webSvc;
     //properties
