@@ -43,7 +43,13 @@
                     <div class="form-body">
                         <div class="form-group">
                             <div class="col-md-offset-3 col-md-3">
-                                <label class="pull-left">Name:&nbsp;<i tooltip="Alert Profile Name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                                <label class="pull-left">Name:&nbsp;
+                                    <i tooltip="Alert Profile Name"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"></i>
+                                </label>
                                 <label class="control-label pull-right"><span class="text-error">*</span></label>
                                 <input maxlength="40" type="text" name="Name" class="form-control" placeholder="Enter Alert Name" ng-model="Alert.alertProfileName" required />
                                 <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
@@ -53,7 +59,13 @@
                             </div>
                             <div class="visible-xs col-md-12">&nbsp;</div>
                             <div class="col-md-3">
-                                <label>Description:&nbsp;<i tooltip="Alert Profile Description" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                                <label>Description:&nbsp;
+                                    <i tooltip="Alert Profile Description"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"></i>
+                                </label>
                                 <label class="control-label pull-right"><span class="text-error">&nbsp;</span></label>
                                 <input maxlength="120" type="text" name="Description" class="form-control" placeholder="Enter Alert Description" ng-model="Alert.alertProfileDescription" />
                                 <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
@@ -65,7 +77,13 @@
                             <div class="col-md-12">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <h3 class="caption-subject font-green-sharp bold">Low Temperature Alerts<span class="info">&nbsp;<i tooltip="Low Temperature Alerts" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></span></h3>
+                                        <h3 class="caption-subject font-green-sharp bold">Low Temperature Alerts<span class="info">&nbsp;
+                                            <i tooltip="Low Temperature Alerts"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"></i>
+                                        </span></h3>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +148,15 @@
                                 <div class="col-md-2 text-right">
                                     <label class="control-label" ng-click="DeleteColdObject(coldAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
                                     <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
-                                    <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;<i tooltip="Delete this row. The Delete action is finalised when page is saved." tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></span></label>
+                                    <label class="control-label">
+                                        <span style="color:black;text-decoration:none">&nbsp;
+                                        <i tooltip="Delete this row. The Delete action is finalised when page is saved."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-md-12" ng-if="coldAlerts.length > 0">
@@ -144,7 +170,13 @@
                             <div class="col-md-12">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <h3 class="caption-subject font-green-sharp bold">High Temperature Alerts<span class="info">&nbsp;<i tooltip="High Temperature Alerts" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></span></h3>
+                                        <h3 class="caption-subject font-green-sharp bold">High Temperature Alerts<span class="info">&nbsp;
+                                            <i tooltip="High Temperature Alerts"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"></i>
+                                        </span></h3>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +240,11 @@
                                 <div class="visible-xs col-md-12">&nbsp;</div>
                                 <div class="col-md-2 text-right">
                                     <label class="control-label" ng-click="DeleteHotObject(hotAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
-                                    <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;<i tooltip="Delete this row. The Delete action is finalised when page is saved." tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></span></label>
+                                    <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;
+                                        <i tooltip="Delete this row. The Delete action is finalised when page is saved."
+                                           tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+                                           tooltip-placement="top" class="fa fa-info-circle"></i></span>
+                                    </label>
                                     <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
                                 </div>
                             </div>
@@ -235,7 +271,12 @@
                                         <div class="col-md-offset-3 col-md-6 ">
                                             <div class="checkbox-list">
                                                 <label for="enterbrightenv">
-                                                    <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;<i tooltip="Alert For Enter Bright Environment" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                                    <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;
+                                                    <i tooltip="Alert For Enter Bright Environment"
+                                                       tooltip-append-to-body="true"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
                                         </div>
@@ -265,7 +306,12 @@
                                         <div class="col-md-offset-3 col-md-3">
                                             <div class="checkbox-list">
                                                 <label for="btrlow">
-                                                    <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;<img src="../../theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;<i tooltip="Alert For Battery Low" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                                    <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;<img src="../../theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;
+                                                    <i tooltip="Alert For Battery Low"
+                                                       tooltip-append-to-body="true"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
                                         </div>

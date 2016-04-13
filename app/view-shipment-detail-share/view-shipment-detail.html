@@ -23,7 +23,7 @@
                     <div class="panel-heading portlet-page">
                         <h4 class="panel-title uppercase">
                             Goods Being Monitored
-                            <i tooltip="Waiting your tooltip text"
+                            <i tooltip="List of goods that are under monitored"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -141,7 +141,7 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
-                        <i tooltip="Waiting your tooltip text"
+                        <i tooltip="List of tracker that might be on the same trip"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -176,7 +176,7 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">Route</span>
-                        <i tooltip="Waiting your tooltip text"
+                        <i tooltip="Information about route of this shipment."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -239,7 +239,11 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">Alerts</span>
-                        <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                        <i tooltip="Infomation about alerts of this shipment."
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="expand"> </a>
@@ -278,7 +282,11 @@
                     <div class="portlet-title">
                         <div class="caption uppercase">
                             Arrival
-                            <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                            <i tooltip="Information about arrival."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
                         </div>
                         <div class="tools">
                             <a href="javascript:;" class="expand"> </a>
@@ -289,7 +297,7 @@
                             <tr>
                                 <td>
                                     <span>Time of arrival</span>
-                                    <i tooltip="Waiting your tooltip text"
+                                    <i tooltip="Time of arrival"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -301,10 +309,20 @@
                             </tr>
                             <tr><td>Notify when:</td><td>
                                 {{trackerInfo.arrivalNotificationWithinKm}} Km away
-                                <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
+                                <i tooltip="Notify when."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </td></tr>
                             <tr><td>Notified at:</td><td>
                                 {{trackerInfo.arrivalNotificationTime}}
-                                <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
+                                <i tooltip="Notified at."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </td></tr>
                             <tr><td>Who to notify:</td><td>{{trackerInfo.alertPeopleToNotify}}</td></tr>
                             <tr><td>Schedule(s):</td><td>
                                 <div ng-repeat="p in trackerInfo.alertsNotificationSchedules">
@@ -315,7 +333,12 @@
                             <tr><td>Comments:</td><td>{{trackerInfo.commentsForReceiver}}</td></tr>
                             <tr><td>Time of shutdown:</td><td>
                                 {{trackerInfo.shutdownTime}}
-                                <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></td></tr>
+                                <i tooltip="Time of shutdown."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </td></tr>
                         </table>
                     </div>
                 </div>
@@ -359,7 +382,11 @@
                 <div class="portlet-title">
                     <div class="caption uppercase">
                         Timeline / Corrective Action
-                        <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                        <i tooltip="Timeline / Corrective Action"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="expand"> </a>

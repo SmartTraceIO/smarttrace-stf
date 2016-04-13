@@ -21,7 +21,13 @@
                         <div class="form-group">
                             <!--<input type="hidden" ng-model="Location.Lat" />-->
                             <!--<input type="hidden" ng-model="Location.Lang" />-->
-                            <label class="pull-left">Location Name:&nbsp;<i tooltip="Location name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <label class="pull-left">Location Name:&nbsp;
+                                <i tooltip="Location name"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </label>
                             <label class="control-label pull-right"><span class="text-error">*</span></label>
                             <input type="text" name="LocationName" ng-model="Location.locationName" maxlength="50" class="form-control" required />
                             <span ng-cloak ng-if="frmAddEditLocation.$invalid && frmAddEditLocation.$submitted">
@@ -30,14 +36,26 @@
                             </span>
                         </div>
                         <div class="form-group">
-                            <label>Company:&nbsp;<i tooltip="Company Name" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <label>Company:&nbsp;
+                                <i tooltip="Company Name"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </label>
                             <input type="text" name="Company" ng-model="Location.companyName" maxlength="50" class="form-control" />
                             <span ng-cloak ng-if="frmAddEditLocation.$invalid && frmAddEditLocation.$submitted">
                                 <span ng-cloak class="text-danger" ng-if="frmAddEditLocation.Company.$error.maxlength">Company must be less than or equal to 50 chars</span>
                             </span>
                         </div>
                         <div class="form-group">
-                            <label>Notes:&nbsp;<i tooltip="Notes" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <label>Notes:&nbsp;
+                                <i tooltip="Notes for this location. Maximum 120 characters."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </label>
                             <input type="text"
                                    name="LocationNotes"
                                    ng-model="Location.notes"
@@ -49,7 +67,7 @@
                         </div>
                         <div class="form-group">
                             <label class="pull-left">Address:&nbsp;
-                                <i tooltip="Address"
+                                <i tooltip="Address of this location."
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -67,7 +85,13 @@
                             </span>-->
                         </div>
                         <div class="form-group">
-                            <label>Radius&nbsp;<i tooltip="Radius in Meters" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <label>Radius&nbsp;
+                                <i tooltip="Radius in Meters"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
+                            </label>
                             <div class="btn-group " role="group" aria-label="...">
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-default" ng-class="{'active': radious == 500}" ng-click="ChangeRadious(500)">500m</button>
@@ -86,21 +110,37 @@
                         <div class="form-group">
                                 <div class="checkbox-list">
                                     <label for="startloc">
-                                        <input type="checkbox" ng-model="Location.startFlag" id="startloc"> Shipped From&nbsp;<i tooltip="Location start flag" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                        <input type="checkbox" ng-model="Location.startFlag" id="startloc"> Shipped From&nbsp;
+                                        <i tooltip="Location start flag"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle">
+                                        </i>
                                     </label>
                                 </div>
                         </div>
                         <div class="form-group">
                                 <div class="checkbox-list">
                                     <label for="interimstop">
-                                        <input type="checkbox" ng-model="Location.interimFlag" id="interimstop"> Interim Stop&nbsp;<i tooltip="Location interim flag" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                        <input type="checkbox" ng-model="Location.interimFlag" id="interimstop"> Interim Stop&nbsp;
+                                        <i tooltip="Location interim flag"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
                                     </label>
                                 </div>
                         </div>
                         <div class="form-group">
                                 <div class="checkbox-list">
                                     <label for="entloc">
-                                        <input type="checkbox" ng-model="Location.endFlag" id="entloc"> Shipped To&nbsp;<i tooltip="Location end flag" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                        <input type="checkbox" ng-model="Location.endFlag" id="entloc"> Shipped To&nbsp;
+                                        <i tooltip="Location end flag"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
                                     </label>
                                 </div>
                         </div>
