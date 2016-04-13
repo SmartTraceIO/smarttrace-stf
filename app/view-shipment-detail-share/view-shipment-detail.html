@@ -481,11 +481,13 @@
                             <div class="portlet box grey sub-portlet">
                                 <div class="portlet-title">
                                     <a href="" class="tracker-info">
-                                        <div>
-                                            <img class="tiny-icon15" ng-src="theme/img/Tracker{{trackers[MI].index + 1}}.png">
-                                            <span class="tracker-id">Tracker {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span>
-                                            <img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                        </div>
+                                        <table>
+                                            <tr>
+                                                <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>
+                                                <td><span class="tracker-id">Tracker {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span></td>
+                                                <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
+                                            </tr>
+                                        </table>
                                     </a>
                                     <div class="tools">
                                         <a href="javascript:;" class="collapse"> </a>
@@ -600,12 +602,21 @@
                             <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
                                 <div class="portlet-title">
                                     <a href="" class="tracker-info" ng-click="switchTracker(t.index)">
-                                        <div>
+                                        <table>
+                                            <tr>
+                                                <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>
+                                                <td><span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span></td>
+                                                <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
+                                                <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
+                                            </tr>
+                                        </table>
+
+                                        <!--<div>
                                             <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
                                             <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
                                             <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
                                             <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                        </div>
+                                        </div>-->
                                         </a>
                                     <div class="tools">
                                         <a href="javascript:;" class="expand"> </a>
