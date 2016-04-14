@@ -625,8 +625,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var promises = [];
             if (groupList.length > 0) {
                 angular.forEach(groupList, function(val, key) {
-                    var p = webSvc.getDevicesOfGroup(val.name).success(function(data) {
-                        console.log('DevicesOfGroup#'+key, data);
+                    var p = webSvc.getDevicesOfGroup(val.id).success(function(data) {
+                        $log.debug('DevicesOfGroup#'+key, data);
                         angular.forEach(data.response, function(val, key) {
                             var snIdx = deviceSnList.indexOf(parseInt(val.sn, 10));
                             var devIdx = deviceSnListSameGroup.indexOf(parseInt(val.sn, 10));
@@ -667,9 +667,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 }
 
                 numberOfSiblings = siblings.length;
-                if (numberOfSiblings >= 9) {
-                    siblings.splice(9);
-                    $scope.notListed = numberOfSiblings - 10;
+                if (numberOfSiblings >= 5) {
+                    siblings.splice(5);
+                    $scope.notListed = numberOfSiblings - 5;
                 }
                 info.siblings = siblings;
                 if (info == null) {

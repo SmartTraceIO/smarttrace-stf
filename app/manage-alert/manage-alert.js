@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window) {
+﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
@@ -161,7 +161,7 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
         $scope.Alert = {};
         $scope.Alert.watchBatteryLow = true;
         $scope.Alert.watchEnterBrightEnvironment = true;
-        //$scope.Alert.watchEnterDarkEnvironment = true;
+        $scope.Alert.watchEnterDarkEnvironment = true;
         $scope.Alert.watchMovementStart = false;
         $scope.Alert.watchMovementStop = true;
 
