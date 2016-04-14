@@ -140,7 +140,10 @@
                                        tooltip-placement="top"
                                        class="fa fa-info-circle"></i>
                                 </label>
-                                <select ng-change="ChangeShipmentTo()" ng-model="ShipmentTemplate.shippedTo" ng-options="location as location.DisplayText for location in ToLocationList track by location.locationId" class="form-control input-sm">
+                                <select ng-change="ChangeShipmentTo()"
+                                        ng-model="ShipmentTemplate.shippedTo"
+                                        ng-options="location as location.DisplayText for location in ToLocationList track by location.locationId"
+                                        class="form-control input-sm">
                                     <option value="">-- Please Select --</option>
                                 </select>
                                 <small class="text-muted">
@@ -216,9 +219,30 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
                         </label>
-                        <br /><select style="width:100%" ng-change="ChangeNotiScheduleForAlert()" multiple ui-select2="NotificationScheduleOption" ng-model="ShipmentTemplate.alertsNotificationSchedules" data-placeholder="Select Notification Schedule For Alert Profile">
-                            <option ng-repeat="noti in NotificationList" value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select><br />
+                        <br />
+                        <!--<ui-select multiple
+                                   ng-change="ChangeNotiScheduleForAlert()"
+                                   ng-model="ShipmentTemplate.alertsNotificationSchedules"
+                                   theme="select2"
+                                   ng-disabled="disabled"
+                                   style="width:100%">
+                            <ui-select-match placeholder="Select Notification Schedule For Alert Profile">
+                                {{$item.notificationScheduleName}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="noti in NotificationList | propsFilter: {notificationScheduleId: $select.search, notificationScheduleName: $select.search}">
+                                <div ng-bind-html="noti.notificationScheduleName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>-->
+                        <select style="width:100%"
+                                ng-change="ChangeNotiScheduleForAlert()"
+                                multiple ui-select2="NotificationScheduleOption"
+                                ng-model="ShipmentTemplate.alertsNotificationSchedules"
+                                data-placeholder="Select Notification Schedule For Alert Profile">
+                            <option ng-repeat="noti in NotificationList"
+                                    value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}
+                            </option>
+                        </select>
+                        <br />
                         <small class="text-muted control-label">
                             {{AlertNotiRule}}
                         </small>

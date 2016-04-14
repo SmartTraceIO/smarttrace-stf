@@ -101,30 +101,30 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			var url = Api.url + 'saveDeviceGroup/' + localDbSvc.getToken();
 			return $http.post(url, group);
 		},
-        addDeviceToGroup: function(groupName, deviceId) {
+        addDeviceToGroup: function(id, deviceId) {
             var config = {
                 params:{
-                    groupName: groupName,
+					groupId: id,
                     device:deviceId
                 }
             }
             var url = Api.url + 'addDeviceToGroup/' + localDbSvc.getToken();
             return $http.get(url, config);
         },
-        removeDeviceFromGroup: function(groupName, deviceId) {
+        removeDeviceFromGroup: function(id, deviceId) {
             var config = {
                 params: {
-                    groupName: groupName,
+					groupId: id,
                     device: deviceId
                 }
             }
             var url = Api.url + 'removeDeviceFromGroup/' + localDbSvc.getToken();
             return $http.get(url, config);
         },
-        getDevicesOfGroup: function(groupName) {
+        getDevicesOfGroup: function(id) {
             var config = {
                 params: {
-                    groupName: groupName
+					groupId: id
                 }
             }
             var url = Api.url + 'getDevicesOfGroup/' + localDbSvc.getToken();
@@ -143,20 +143,20 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			}
 			return $http.get(url, config);
 		},
-        getDeviceGroup: function(groupName) {
+        getDeviceGroup: function(id) {
             var url = Api.url + 'getDeviceGroup/' + localDbSvc.getToken();
             var config = {
                 params: {
-                    name: groupName
+					id: id
                 }
             }
             return $http.get(url, config);
         },
-        deleteDeviceGroup: function(groupName) {
+        deleteDeviceGroup: function(id) {
             var url = Api.url + 'deleteDeviceGroup/' + localDbSvc.getToken();
             var config = {
                 params: {
-                    name: groupName
+					id: id
                 }
             }
             return $http.get(url, config);

@@ -3,7 +3,7 @@
  */
 appCtrls.controller('ListGroupCtrl', ListGroupCtrl);
 
-function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q) {
+function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q, $log) {
     var self = this;
 
     rootSvc.SetPageTitle('List Tracker Groups');
@@ -20,14 +20,14 @@ function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q) {
     self.GetDeviceGroups(
         function(data){
             self.groupList = data;
+            $log.debug('GroupList', self.groupList);
         },
         function(data){}).then(function() {
         var promises = [];
         angular.forEach(self.groupList, function(val, key) {
             //self.groupList[key].deviceList = [];
             //get device for each group
-            var p = self.WebSvc.getDevicesOfGroup(val.name).success(function(response) {
-                console.log('Device In Group', response);
+            var p = self.WebSvc.getDevicesOfGroup(val.id).success(function(response) {
                 var dl = response.response;
                 if (dl) {
                     self.groupList[key].deviceList = dl.map(function(val) {
@@ -40,7 +40,9 @@ function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q) {
             });
             promises.push(p);
         });
-        self.all(promises);
+        self.all(promises).then(function() {
+            console.log('Get done!')
+        });
     });
 };
 ListGroupCtrl.prototype.Print = function() {

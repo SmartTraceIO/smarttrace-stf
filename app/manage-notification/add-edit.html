@@ -95,7 +95,10 @@
                                        class="fa fa-info-circle"></i>
                                 </label>
                                 <label class="control-label pull-right"><span class="text-error">*</span></label>
-                                <select ng-change="GetSelectedUserPositionCompany(person)" class="form-control" ng-init="valUserId = 'valUserId'+ $index" name="{{valUserId}}" ng-options="user.id as user.fullName for user in UserList" ng-model="person.userId" required>
+                                <select ng-change="GetSelectedUserPositionCompany(person)"
+                                        class="form-control" ng-init="valUserId = 'valUserId'+ $index"
+                                        name="{{valUserId}}" ng-options="user.id as user.fullName for user in UserList"
+                                        ng-model="person.userId" required>
                                     <option value="">-- Select User --</option>
                                 </select>
                                 <small class="text-muted control-label">
@@ -132,7 +135,8 @@
                                 <div class="row" style="margin-bottom:1.25%">
                                     <div class="col-md-12">
                                         <div class="input-group">
-                                            <select class="form-control input-sm" ng-model="person.fromTime" ng-change="CheckFromTime(person,$index)">
+                                            <select class="form-control input-sm" ng-model="person.fromTime"
+                                                    ng-change="CheckFromTime(person,$index)">
                                                 <option>- Select -</option>
                                                 <option value="00:00">00:00</option>
                                                 <option value="01:00">01:00</option>
@@ -160,7 +164,9 @@
                                                 <option value="23:00">23:00</option>
                                             </select>
                                             <span class="input-group-addon" style="margin:0 1%" id="basic-addon1">To</span>
-                                            <select class="form-control input-sm" ng-init="valToTime = 'valToTime'+ $index;" name="{{valToTime}}" ng-model="person.toTime" ng-change="CheckToTime(person,$index)">
+                                            <select class="form-control input-sm"
+                                                    ng-init="valToTime = 'valToTime'+ $index;" name="{{valToTime}}"
+                                                    ng-model="person.toTime" ng-change="CheckToTime(person,$index)">
                                                 <option>- Select -</option>
                                                 <option value="00:59">00:59</option>
                                                 <option value="01:59">01:59</option>

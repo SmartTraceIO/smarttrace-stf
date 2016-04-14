@@ -304,7 +304,7 @@ appConstants.constant('routes', [
     {
         name: 'manage.editgroup',
         config: {
-            url: '/edit-group/:name',
+            url: '/edit-group/:id',
             views: {
                 "sub-content": {
                     templateUrl: 'app/manage-group/edit-group.html?v='+version,

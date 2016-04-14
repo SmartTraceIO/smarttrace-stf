@@ -11,7 +11,7 @@ function DeleteGroupCtrl($modalInstance, webSvc, group) {
 
 DeleteGroupCtrl.prototype.delete = function() {
     var self = this;
-    self.WebSvc.deleteDeviceGroup(self.group.name).success(function(data) {
+    self.WebSvc.deleteDeviceGroup(self.group.id).success(function(data) {
         if (data.status.code == 0) {
             self.modalInstance.close(self.group);
         } else {

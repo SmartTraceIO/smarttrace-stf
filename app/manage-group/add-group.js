@@ -2,24 +2,11 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
-function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, localDbSvc) {
+function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, localDbSvc) {
+
+    console.log('Add group!');
+
     var self = this;
-    if ($rootScope.User) {
-        return $rootScope.User;
-    } else {
-        $rootScope.User = localDbSvc.getUserProfile();
-    }
-    if ($rootScope.RunningTime == null) {
-        $rootScope.RunningTime = localDbSvc.getUserTimezone();
-        $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-        $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-        var tickInterval = 1000 //ms
-        var tick = function () {
-            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-            $timeout(tick, tickInterval); // reset the timer
-        }
-        $timeout(tick, tickInterval);
-    }
     self.state = $state;
     self.WebSvc = webSvc;
     //properties
@@ -27,20 +14,42 @@ function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, localDb
     self.description = '';
     self.deviceList = [];
     self.all = $q.all;
+    self.debug = $log.debug;
     //$rootScope.RunningTime =
 
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Tracker Groups");
 
-
     //get all Devices
-    self.WebSvc.getDevices(1000, 1, 'description', 'asc').success(function(response) {
+    self.WebSvc.getDevices(100000, 1, 'description', 'asc').success(function(response) {
         if (response.status.code == 0) {
             self.deviceList = response.response;
+            console.log('DeviceList', self.deviceList);
         }
+    }).then(function() {
+        self.reloadIfNeed();
     })
 
+    self.reloadIfNeed = function() {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            //$rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+            var tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, tickInterval); // reset the timer
+            }
+            $timeout(tick, tickInterval);
+        }
+
+    }
 }
 
 AddGroupCtrl.prototype.addGroup = function() {
@@ -50,6 +59,10 @@ AddGroupCtrl.prototype.addGroup = function() {
         var data = response.data;
         if (data.status.code == 0) {
             toastr.success('A new device group was added');
+            console.log('After added', response);
+            if (data.response) {
+                self.id = data.response.deviceGroupId;
+            }
             self.state.go('manage.group')
         } else {
             toastr.error('An error has occured while trying to create new device group');
@@ -63,11 +76,11 @@ AddGroupCtrl.prototype.addDevices = function() {
     var self = this;
     var promise = [];
     angular.forEach(self.deviceListToAdd, function(val, key) {
-        var p = self.WebSvc.addDeviceToGroup(self.name, val.imei);
+        var p = self.WebSvc.addDeviceToGroup(self.id, val.imei);
         promise.push(p);
     });
     self.all(promise).then(function() {
-        console.log('Add all device');
+        self.debug('Add all device');
     });
 }
 AddGroupCtrl.prototype.cancel = function() {

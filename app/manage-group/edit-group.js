@@ -2,50 +2,56 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('EditGroupCtrl', EditGroupCtrl);
-function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $rootScope, $timeout, $q, localDbSvc) {
+function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $rootScope, $timeout, $q, localDbSvc, $log) {
     var self = this;
-
-    if ($rootScope.User) {
-        return $rootScope.User;
-    } else {
-        $rootScope.User = localDbSvc.getUserProfile();
-    }
-    if ($rootScope.RunningTime == null) {
-        $rootScope.RunningTime = localDbSvc.getUserTimezone();
-        $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-        $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-        var tickInterval = 1000 //ms
-        var tick = function () {
-            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-            $timeout(tick, tickInterval); // reset the timer
-        }
-        $timeout(tick, tickInterval);
-    }
 
     self.state = $state;
     self.WebSvc = webSvc;
     //properties
-    self.name = $stateParams.name;
+    //self.name = $stateParams.name;
+    self.id = $stateParams.id;
     self.description = '';
     self.deviceList = [];
     self.deviceListToAdd = [];
     self.origDeviceList = [];
     self.all = $q.all;
+    self.error = $log.error;
+    self.debug = $log.debug;
 
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Tracker Groups");
     //get all Devices
-    var p2 = self.GetDeviceGroup(self.name);
-    self.all([p2]).then(function() {
+    var p2 = self.GetDeviceGroup(self.id);
+    self.all([p2]).then(function () {
         console.log('deviceList', self.deviceList);
         console.log('deviceListToAdd', self.deviceListToAdd);
-    })
-}
+    }).then(function () {
+        self.reloadIfNeed();
+    });
+    self.reloadIfNeed = function () {
+        if ($rootScope.User) {
+            return $rootScope.User;
+        } else {
+            $rootScope.User = localDbSvc.getUserProfile();
+        }
+        if ($rootScope.RunningTime == null) {
+            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
+            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
+            //$rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+            var tickInterval = 1000 //ms
+            var tick = function () {
+                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                $timeout(tick, tickInterval); // reset the timer
+            }
+            $timeout(tick, tickInterval);
+        }
+    }
+};
 
-EditGroupCtrl.prototype.GetDeviceGroup = function(name){
+EditGroupCtrl.prototype.GetDeviceGroup = function(id){
     var self = this;
-    if (!name) {
+    if (!id) {
         return null;
     }
 
@@ -58,7 +64,7 @@ EditGroupCtrl.prototype.GetDeviceGroup = function(name){
             })
         }
     }).then(function() {
-        self.WebSvc.getDevicesOfGroup(name).success(function(data) {
+        self.WebSvc.getDevicesOfGroup(id).success(function(data) {
             if (data.status.code == 0) {
                 angular.forEach(data.response, function(val, key) {
                     var idx = imeiList.indexOf(val.imei);
@@ -68,22 +74,24 @@ EditGroupCtrl.prototype.GetDeviceGroup = function(name){
                     }
                 });
             } else {
-                toastr.error('An error occured while get devices of group #' + name);
+                self.error('Error get devices!', data);
+                toastr.error('An error occured while get devices of group #' + id);
             }
         });
     });
 
-    var p11 = self.WebSvc.getDeviceGroup(name).success (function(data) {
+    var p11 = self.WebSvc.getDeviceGroup(id).success (function(data) {
         if (data.status.code == 0) {
             self.description = data.response.description;
+            self.name = data.response.name;
         }
     });
     return self.all([p1, p11]);
-}
+};
 
 EditGroupCtrl.prototype.saveGroup = function() {
     var self = this;
-    var deviceGroup = {'name':this.name, 'description':this.description};
+    var deviceGroup = {'id': self.id, 'name':self.name, 'description':self.description};
     self.WebSvc.saveDeviceGroup(deviceGroup).then(function(response) {
         var data = response.data;
         if (data.status.code == 0) {
@@ -95,41 +103,39 @@ EditGroupCtrl.prototype.saveGroup = function() {
     }).then(function() {
         self.addDevices();
     });
-}
+};
 
 EditGroupCtrl.prototype.addDevices = function() {
     var self = this;
+    self.debug('Adding devices');
+    self.debug('origDeviceList', self.origDeviceList)
+    self.debug('deviceListToAdd', self.deviceListToAdd)
     var promises = [];
     angular.forEach(self.origDeviceList, function(val, key) {
         if (self.deviceListToAdd.indexOf(val) < 0) {
-            var p = self.WebSvc.removeDeviceFromGroup(self.name, val.imei);
+            var p = self.WebSvc.removeDeviceFromGroup(self.id, val.imei);
             promises.push(p);
         }
     });
     angular.forEach(self.deviceListToAdd, function(val, key) {
         if (self.origDeviceList.indexOf(val) < 0) {
-            var p = self.WebSvc.addDeviceToGroup(self.name, val.imei);
+            var p = self.WebSvc.addDeviceToGroup(self.id, val.imei).success(function(resp) {
+                console.log('PROM', resp);
+            });
             promises.push(p);
         }
     });
-    self.all(promises);
-}
+
+    console.log('PROMISES', promises);
+    self.all(promises).then(function() {
+        self.debug('Updated group!');
+    });
+};
 
 EditGroupCtrl.prototype.cancel = function() {
     var self = this;
     self.state.go('manage.group');
-}
-
-EditGroupCtrl.prototype.buildDeviceObject = function(object) {
-    var d = {};
-    d.sn = object.sn;
-    d.imei = object.imei;
-    d.name = object.name;
-    d.description = object.description;
-    d.active = object.active;
-    d.autostartTemplateId = object.autostartTemplateId;
-    return d;
-}
+};
 
 appFilters.filter('propsFilter', function() {
     return function(items, props) {
@@ -157,4 +163,4 @@ appFilters.filter('propsFilter', function() {
         }
         return out;
     };
-});
+})
