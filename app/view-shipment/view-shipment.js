@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, $rootScope, $window) {
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, $rootScope, $window, $log) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -58,11 +58,22 @@
     var BindShipmentList = function () {
         $scope.loading = true;
 
+        if ($scope.ViewShipment.shippedFromLocation) {
+            $scope.ViewShipment.shippedFrom = $scope.ViewShipment.shippedFromLocation.map(function(val) {
+                return val.locationId;
+            });
+        }
+        if ($scope.ViewShipment.shippedToLocation) {
+            $scope.ViewShipment.shippedTo = $scope.ViewShipment.shippedToLocation.map(function(val) {
+                return val.locationId;
+            });
+        }
+
         webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
                 $scope.ShipmentList = data.response;
-                console.log('SHIPMENT', $scope.ShipmentList);
+                $log.debug('SHIPMENT', $scope.ShipmentList);
                 $scope.ShipmentList.totalCount = data.totalCount;
             } else if(data.status.code == 1){
                 $rootScope.redirectUrl = "/view-shipment";
@@ -228,4 +239,35 @@
     $scope.showCard = function() {
         $scope.viewCard = true;
     }
+});
+
+appFilters.filter('propsFilter', function() {
+    return function(items, props) {
+        var out = [];
+
+        if (angular.isArray(items)) {
+            items.forEach(function(item) {
+                var itemMatches = false;
+
+                var keys = Object.keys(props);
+                for (var i = 0; i < keys.length; i++) {
+                    var prop = keys[i];
+                    var text = props[prop].toLowerCase();
+                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                        itemMatches = true;
+                        break;
+                    }
+                }
+
+                if (itemMatches) {
+                    out.push(item);
+                }
+            });
+        } else {
+            // Let the output be the input untouched
+            out = items;
+        }
+
+        return out;
+    };
 });

@@ -104,15 +104,29 @@
         <div class="row">
             <div class="col-sm-3">
                 <label>Shipped From</label>
-                <select style="width:100%" multiple ui-select2="LocationOptions" ng-model="ViewShipment.shippedFrom" data-placeholder="Select Shipped From">
-                    <option ng-repeat="location in LocationListFrom" value="{{location.locationId}}">{{location.DisplayText}}</option>
-                </select>
+                <ui-select multiple
+                           ng-model="ViewShipment.shippedFromLocation"
+                           theme="select2"
+                           ng-disabled="disabled"
+                           style="width:100%">
+                    <ui-select-match placeholder="Select Shipped From">{{$item.DisplayText}}</ui-select-match>
+                    <ui-select-choices repeat="location in LocationListFrom | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                        <div ng-bind-html="location.DisplayText | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="col-sm-3">
                 <label>Shipped To</label>
-                <select style="width:100%" multiple ui-select2="LocationOptions" ng-model="ViewShipment.shippedTo" data-placeholder="Select Shipped To">
-                    <option ng-repeat="location in LocationListTo" value="{{location.locationId}}">{{location.DisplayText}}</option>
-                </select>
+                <ui-select multiple
+                           ng-model="ViewShipment.shippedToLocation"
+                           theme="select2"
+                           ng-disabled="disabled"
+                           style="width:100%">
+                    <ui-select-match placeholder="Select Shipped To">{{$item.DisplayText}}</ui-select-match>
+                    <ui-select-choices repeat="location in LocationListTo | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                        <div ng-bind-html="location.DisplayText | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="col-sm-2">
                 <label>Goods</label>
