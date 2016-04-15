@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout) {
+﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout, $log, $modal) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
@@ -84,6 +84,7 @@
 
     $scope.confirm = function (alertId) {
         $scope.AlertIdToDeleteAlertProfile = alertId;
+        $log.debug('ALertId', alertId);
         $("#confirmModel").modal("show");
     }
 
@@ -93,6 +94,8 @@
             if (data.status.code == 0) {
                 toastr.success("Alert profile deleted successfully");
                 BindAlertList();
+            } else {
+                toastr.warning('Warning. Cannot delete this alert profile.');
             }
         });
     }
