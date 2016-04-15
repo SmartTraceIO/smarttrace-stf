@@ -57,7 +57,10 @@
                                 </label>
                                 <label class="control-label pull-right"><span class="text-error">*</span></label>
                                 <div class="clearfix"></div>
-                                <select class="form-control" name="tracker" required ng-model="NewShipment.shipment.deviceImei" ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in TrackerList">
+                                <select class="form-control"
+                                        name="tracker"
+                                        required ng-model="NewShipment.shipment.deviceImei"
+                                        ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in TrackerList">
                                     <option value="">-- Please Select --</option>
                                 </select>
                                 <small class="text-muted">Choose a tracker that is accessible by your user group</small>

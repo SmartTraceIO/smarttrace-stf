@@ -134,7 +134,9 @@
             </div>
             <div class="col-sm-2">
                 <label>Device</label>
-                <select class="form-control " ng-model="ViewShipment.deviceImei" ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in TrackerList">
+                <select class="form-control "
+                        ng-model="ViewShipment.deviceImei"
+                        ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in TrackerList">
                     <option value="">-- Please Select --</option>
                 </select>
             </div>

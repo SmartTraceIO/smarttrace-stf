@@ -9,7 +9,6 @@ var app = angular.module("app",
     [
         'highcharts-ng',
         'ngMap',
-        'ui.select2',
         'ui.select',
         'ngSanitize',
         'ngTouch',
