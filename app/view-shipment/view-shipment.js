@@ -74,7 +74,7 @@
                 $scope.$apply();
             }
         }).error( function (xmlHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
+            //alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             $scope.loading = false;
         }).then(function() {
             angular.forEach($scope.ShipmentList, function(v, k) {

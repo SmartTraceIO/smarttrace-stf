@@ -296,9 +296,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     function updatePlotLines(){
         plotLines.length = 0;
-        console.log('SubSeries', subSeries);
-        console.log('Tracker.MI', $scope.trackers[$scope.MI]);
-        console.log('MI', $scope.MI);
+        $log.debug('SubSeries', subSeries);
+        $log.debug('Tracker.MI', $scope.trackers[$scope.MI]);
+        $log.debug('MI', $scope.MI);
         var ti = subSeries[$scope.MI];
         //var ti = $scope.trackers[$scope.MI].locations;
         var lastPoint = ti.length - 1;
@@ -654,7 +654,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     $state.go('viewshipment'); //move to shipment-list
                     return;
                 }
-                console.log('Info', info);
+                $log.debug('Info', info);
                 var numberOfSiblings = info.siblings.length;
                 //console.log('number siblings', numberOfSiblings);
                 //console.log('siblings', info.siblings);
