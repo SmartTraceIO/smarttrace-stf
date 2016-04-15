@@ -36,7 +36,7 @@
                 <tr>
                     <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert Profile Name</span>
-                        <i tooltip="A short name for this alert profile."
+                        <i uib-tooltip="A short name for this alert profile."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -48,7 +48,7 @@
                     </th>
                     <th ng-click="Sorting('alertProfileDescription')">
                         <span class="pull-left">Description</span>
-                        <i tooltip="A longer description for this alert profile."
+                        <i uib-tooltip="A longer description for this alert profile."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -60,7 +60,7 @@
                     </th>
                     <th ng-click="Sorting('alertRuleList')">
                         <span class="pull-left">Alert Rules</span>
-                        <i tooltip="A list of rule that may apply to this alert profie."
+                        <i uib-tooltip="A list of rule that may apply to this alert profie."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -91,7 +91,7 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="AlertList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+        <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="AlertList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

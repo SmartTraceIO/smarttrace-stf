@@ -32,7 +32,7 @@
                 <tr>
                     <th class="text-center" ng-click="Sorting('sn')">
                         <span class="pull-left">Tracker Num
-                            <i tooltip="The unique 6 digit number of this tracker."
+                            <i uib-tooltip="The unique 6 digit number of this tracker."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -45,7 +45,7 @@
                     </th>
                     <th ng-click="Sorting('name')">
                         <span class="pull-left">Tracker Name
-                            <i tooltip="A meaningful name given to this tracker. Can be changed via EDIT button."
+                            <i uib-tooltip="A meaningful name given to this tracker. Can be changed via EDIT button."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -58,7 +58,7 @@
                     </th>
                     <th ng-click="Sorting('autostartTemplateName')">
                         <span class="pull-left">Autostart Template
-                            <i tooltip="The Autostart Template assigned to this tracker. An Autostart Template provides default shipment data when a tracker is switched on. This default data can be overwritten by entering actual shipment data via New Manual Shipment."
+                            <i uib-tooltip="The Autostart Template assigned to this tracker. An Autostart Template provides default shipment data when a tracker is switched on. This default data can be overwritten by entering actual shipment data via New Manual Shipment."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -71,7 +71,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('active')">
                         <span class="pull-left">Active
-                            <i tooltip="Active trackers are available for usage. Inactive trackers can be re-activated by contacting SmartTrace."
+                            <i uib-tooltip="Active trackers are available for usage. Inactive trackers can be re-activated by contacting SmartTrace."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -84,7 +84,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('shipmentNumber')">
                         <span class="pull-left">Latest Shipment
-                            <i tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
+                            <i uib-tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -97,7 +97,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('shipmentStatus')">
                         <span class="pull-left">Status
-                            <i tooltip="The status of latest shipment."
+                            <i uib-tooltip="The status of latest shipment."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -110,7 +110,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('lastReadingTimeISO')">
                         <span class="pull-left">Last Reading
-                            <i tooltip="The time of the last known reading for this tracker."
+                            <i uib-tooltip="The time of the last known reading for this tracker."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -123,7 +123,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('lastReadingTemperature')">
                         <span class="pull-left">Temp.
-                            <i tooltip="The temperature for this last reading."
+                            <i uib-tooltip="The temperature for this last reading."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -136,7 +136,7 @@
                     </th>
                     <th class="text-center" ng-click="Sorting('lastReadingBattery')">
                         <span class="pull-left">Battery
-                            <i tooltip="The Battery level at the last reading.
+                            <i uib-tooltip="The Battery level at the last reading.
                                 A battery alert is sent when the battery has 10% remaining life (3.2V)."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
@@ -223,7 +223,7 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm"
+        <uib-pagination class="pagination-sm"
                     max-size="5"
                     on-select-page="PageChanged(page)"
                     total-items="TrackerList.totalCount"

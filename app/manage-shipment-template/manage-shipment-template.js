@@ -59,7 +59,7 @@
 });
 
 appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter,
-                                                 $modal, $rootScope, $window, $timeout, $log) {
+                                                 $uibModal, $rootScope, $window, $timeout, $log) {
     rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -270,7 +270,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     }
     $scope.openAddLocation = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
@@ -293,7 +293,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.openEditLocation = function (locationId) {
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
@@ -315,7 +315,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     };
     $scope.openAddAlert = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
@@ -333,7 +333,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.openEditAlert = function (alertId) {
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
@@ -350,7 +350,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     };
     $scope.openAddNoti = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
@@ -372,7 +372,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
                 notiId = notiId[0];
             }
             $rootScope.notiIdForModalPopup = notiId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
@@ -431,7 +431,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter,
-                                                  $rootScope, $timeout, $modal, webSvc, $window, $log, $q) {
+                                                  $rootScope, $timeout, $uibModal, webSvc, $window, $log, $q) {
     rootSvc.SetPageTitle('Edit Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -703,7 +703,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         }
     }
     $scope.openAddLocation = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
@@ -729,7 +729,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     $scope.openEditLocation = function (locationId) {
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
@@ -756,7 +756,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         }
     };
     $scope.openAddAlert = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
@@ -774,7 +774,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     $scope.openEditAlert = function (alertId) {
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
@@ -791,7 +791,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         }
     };
     $scope.openAddNoti = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
@@ -813,7 +813,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
                 notiId = notiId[0];
             }
             $rootScope.notiIdForModalPopup = notiId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });

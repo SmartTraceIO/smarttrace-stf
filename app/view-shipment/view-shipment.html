@@ -67,7 +67,12 @@
             <div class="col-sm-offset-3 col-sm-3">
                 <label>Date From</label>
                 <div class="input-group">
-                    <input show-button-bar="false" id="DateFrom" type="text" class="form-control" placeholder="Select Date From" datepicker-popup="dd-MMM-yyyy" ng-model="ViewShipment.shipmentDateFrom" close-text="Close" />
+                    <input show-button-bar="false" id="DateFrom" type="text"
+                           class="form-control" placeholder="Select Date From"
+                           uib-datepicker-popup="dd-MMM-yyyy"
+                           is-open="popupFrom"
+                           ng-click="popupFrom = true"
+                           ng-model="ViewShipment.shipmentDateFrom" close-text="Close" />
                     <label for="DateFrom" class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </label>
@@ -76,7 +81,12 @@
             <div class="col-sm-3">
                 <label>Date To</label>
                 <div class="input-group">
-                    <input show-button-bar="false" id="txtDateTo" type="text" class="form-control" min="ViewShipment.shipmentDateFrom" placeholder="Select Date To" datepicker-popup="dd-MMM-yyyy" ng-model="ViewShipment.shipmentDateTo" close-text="Close" />
+                    <input show-button-bar="false" id="txtDateTo" type="text" class="form-control"
+                           min="ViewShipment.shipmentDateFrom" placeholder="Select Date To"
+                           is-open="popupTo"
+                           ng-click="popupTo = true"
+                           uib-datepicker-popup="dd-MMM-yyyy"
+                           ng-model="ViewShipment.shipmentDateTo" close-text="Close" />
                     <label for="txtDateTo" class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </label>
@@ -254,7 +264,7 @@
                             <tr>
                                 <!--<th class="text-center" ng-click="Sorting('shipmentId')">
                                     <span class="pull-left">ID
-                                        <i tooltip="Shipment ID"
+                                        <i uib-tooltip="Shipment ID"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -267,7 +277,7 @@
                                 </th>-->
                                 <th ng-click="Sorting('deviceSN')">
                                     <span class="pull-left">Tracker (Trip)
-                                        <i tooltip="A meaningful short name you assign to each tracker"
+                                        <i uib-tooltip="A meaningful short name you assign to each tracker"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -280,7 +290,7 @@
                                 </th>
                                 <th ng-click="Sorting('shipmentDescription')">
                                     <span class="pull-left">Shipment Description
-                                        <i tooltip="A meaningful description you assign to each tracker"
+                                        <i uib-tooltip="A meaningful description you assign to each tracker"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -293,7 +303,7 @@
                                 </th>
                                 <th ng-click="Sorting('shippedFrom')">
                                     <span class="pull-left">Shipment From
-                                        <i tooltip="Shipment From"
+                                        <i uib-tooltip="Shipment From"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -306,7 +316,7 @@
                                 </th>
                                 <th ng-click="Sorting('shipmentDate')">
                                     <span class="pull-left">Shipment Date
-                                        <i tooltip="Shipment Date"
+                                        <i uib-tooltip="Shipment Date"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -319,7 +329,7 @@
                                 </th>
                                 <th ng-click="Sorting('shippedTo')">
                                     <span class="pull-left">Shipment To
-                                        <i tooltip="Shipment To"
+                                        <i uib-tooltip="Shipment To"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -332,7 +342,7 @@
                                 </th>
                                 <th ng-click="Sorting('actualArrivalDate')">
                                     <span class="pull-left">Arrival Date
-                                        <i tooltip="Arrival Date"
+                                        <i uib-tooltip="Arrival Date"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -345,7 +355,7 @@
                                 </th>
                                 <th ng-click="Sorting('status')">
                                     <span class="pull-left">Status
-                                        <i tooltip="Status"
+                                        <i uib-tooltip="Status"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -358,7 +368,7 @@
                                 </th>
                                 <th ng-click="Sorting('siblingCount')">
                                     <span class="pull-left">Siblings
-                                        <i tooltip="Sibling Count"
+                                        <i uib-tooltip="Sibling Count"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -371,7 +381,7 @@
                                 </th>
                                 <th ng-click="Sorting('lastReadingTimeISO')">
                                     <span class="pull-left">Last Reading
-                                        <i tooltip="Last reading time"
+                                        <i uib-tooltip="Last reading time"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -384,7 +394,7 @@
                                 </th>
                                 <th ng-click="Sorting('lastReadingTemperature')">
                                     <span class="pull-left">Temp.
-                                        <i tooltip="Last reading temperature"
+                                        <i uib-tooltip="Last reading temperature"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -397,7 +407,7 @@
                                 </th>
                                 <th ng-click="Sorting('alertSummary')">
                                     <span class="pull-left">Alerts
-                                        <i tooltip="Alert summary"
+                                        <i uib-tooltip="Alert summary"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -509,14 +519,14 @@
                                     </div>
                                 </div>
                                 <div class="text-center shipment-marker" ng-show="shipment.siblingCount > 0">
-                                    {{shipment.siblingCount}} others <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                    {{shipment.siblingCount}} others <i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+            <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
 
         </div>
     </div>

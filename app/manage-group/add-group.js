@@ -3,9 +3,6 @@
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
 function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, localDbSvc) {
-
-    console.log('Add group!');
-
     var self = this;
     self.state = $state;
     self.WebSvc = webSvc;
@@ -16,7 +13,7 @@ function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, l
     self.all = $q.all;
     self.debug = $log.debug;
     //$rootScope.RunningTime =
-
+    self.debug('Add group!');
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Tracker Groups");
@@ -25,7 +22,7 @@ function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, l
     self.WebSvc.getDevices(100000, 1, 'description', 'asc').success(function(response) {
         if (response.status.code == 0) {
             self.deviceList = response.response;
-            console.log('DeviceList', self.deviceList);
+            self.debug('DeviceList', self.deviceList);
         }
     }).then(function() {
         self.reloadIfNeed();
@@ -59,7 +56,7 @@ AddGroupCtrl.prototype.addGroup = function() {
         var data = response.data;
         if (data.status.code == 0) {
             toastr.success('A new device group was added');
-            console.log('After added', response);
+            self.debug('After added', response);
             if (data.response) {
                 self.id = data.response.deviceGroupId;
             }

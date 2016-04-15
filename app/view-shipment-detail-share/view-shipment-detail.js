@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
-function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal, $state, $q, $log,
+function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
               $filter, $sce, $rootScope, $timeout, $window, $location) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
@@ -467,7 +467,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         if (!point.noteNum) {
             //var point = point;
             var chart1 = document.getElementById("chart1");
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: '/app/view-shipment-detail-share/create-note.html',
                 controller: 'CreateNoteCtrl',
                 backdrop: false,
@@ -518,7 +518,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             );
         } else {
             var note = point;
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: '/app/view-shipment-detail-share/edit-note.html',
                 controller: 'EditNoteCtrl',
                 resolve: {
@@ -1296,7 +1296,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     $scope.confirmShutdown = function(shipmentId) {
         if ($scope.isLatest) {
             if (!$scope.shutdownAlready) {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: '/app/view-shipment-detail-share/confirm-shutdown.html',
                     controller: 'ConfirmShutdownCtrl',
                     resolve: {
@@ -1344,7 +1344,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
             toastr.warning('Warning. This shipment was ended or arrived ' + link);
         } else {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: '/app/view-shipment-detail-share/confirm-suppress.html',
                 controller: 'ConfirmSuppressCtrl',
                 resolve: {
@@ -1361,7 +1361,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     };
 
     $scope.EditDescription = function(Id) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',
             controller: 'EditShipmentDetailDescription',
             resolve: {
@@ -1377,7 +1377,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         );
     }
     $scope.EditNote = function(note) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-note.html',
             controller: 'EditNoteCtrl',
             resolve: {
@@ -1424,7 +1424,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         );
     }
     $scope.DeleteNote = function(note) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/delete-note.html',
             controller: 'DeleteNoteCtrl',
             resolve: {
@@ -1456,7 +1456,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         );
     }
     $scope.EditComment = function(Id) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-comment.html',
             controller: 'EditShipmentDetailComment',
             resolve: {
@@ -1473,8 +1473,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 };
 
-appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$modalInstance', 'webSvc', 'editId',
-function($scope, $modalInstance, webSvc, editId) {
+appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
+function($scope, $uibModalInstance, webSvc, editId) {
     $scope.editId = editId;
     webSvc.getShipment(editId).success(function(data) {
         if (data.status.code == 0) {
@@ -1495,14 +1495,14 @@ function($scope, $modalInstance, webSvc, editId) {
                 toastr.error('You have no permission to update shipment');
             }
         })
-        $modalInstance.close($scope.shipment.shipmentDescription);
+        $uibModalInstance.close($scope.shipment.shipmentDescription);
     }
     $scope.cancelEdit = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }]);
-appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'webSvc', 'editId',
-    function($scope, $modalInstance, webSvc, editId) {
+appCtrls.controller('EditShipmentDetailComment', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
+    function($scope, $uibModalInstance, webSvc, editId) {
         $scope.editId = editId;
         webSvc.getShipment(editId).success(function(data) {
             if (data.status.code == 0) {
@@ -1522,9 +1522,9 @@ appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'w
                     toastr.error('You have no permission to update shipment');
                 }
             })
-            $modalInstance.close($scope.shipment.commentsForReceiver);
+            $uibModalInstance.close($scope.shipment.commentsForReceiver);
         }
         $scope.cancelEdit = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 }]);

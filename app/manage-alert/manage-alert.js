@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout, $log, $modal) {
+﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout, $log, $uibModal) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");

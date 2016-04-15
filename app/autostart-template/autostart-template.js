@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $modal, rootSvc, localDbSvc, webSvc, $window, $timeout) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $uibModal, rootSvc, localDbSvc, webSvc, $window, $timeout) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -67,7 +67,7 @@
     }
 
     $scope.confirmDelete = function(shipmentTempId) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'app/autostart-template/confirm-delete.html',
             controller: 'ConfirmDeleteAutoStartCtrl',
             resolve: {
@@ -85,7 +85,7 @@
 });
 
 appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window,
-                                                 $filter, arrayToStringFilter, $modal, $rootScope, $timeout) {
+                                                 $filter, arrayToStringFilter, $uibModal, $rootScope, $timeout) {
     rootSvc.SetPageTitle('Add an Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -281,7 +281,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     }
     $scope.openAddLocation = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
@@ -304,7 +304,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.openEditLocation = function (locationId) {
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
@@ -326,7 +326,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     };
     $scope.openAddAlert = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
@@ -344,7 +344,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.openEditAlert = function (alertId) {
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
@@ -361,7 +361,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         }
     };
     $scope.openAddNoti = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
@@ -383,7 +383,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
                 notiId = notiId[0];
             }
             $rootScope.notiIdForModalPopup = notiId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
@@ -442,7 +442,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
-                                                  $state, $filter, $rootScope, $timeout, $modal, webSvc, $window, $q){
+                                                  $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q){
     rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -691,7 +691,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     }
     $scope.openAddLocation = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
@@ -717,7 +717,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.openEditLocation = function (locationId) {
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
@@ -742,7 +742,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     };
     $scope.openAddAlert = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
@@ -760,7 +760,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.openEditAlert = function (alertId) {
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
@@ -777,7 +777,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
     };
     $scope.openAddNoti = function () {
-        $rootScope.modalInstance = $modal.open({
+        $rootScope.modalInstance = $uibModal.open({
             templateUrl: '/app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
@@ -799,7 +799,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                 notiId = notiId[0];
             }
             $rootScope.notiIdForModalPopup = notiId;
-            $rootScope.modalInstance = $modal.open({
+            $rootScope.modalInstance = $uibModal.open({
                 templateUrl: '/app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });

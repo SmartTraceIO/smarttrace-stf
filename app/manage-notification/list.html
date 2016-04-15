@@ -42,7 +42,7 @@
                 <tr>
                     <th ng-click="Sorting('notificationScheduleName')">
                         <span>Schedule Name</span>
-                        <i tooltip="A short name of this notification."
+                        <i uib-tooltip="A short name of this notification."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -54,7 +54,7 @@
                     </th>
                     <th ng-click="Sorting('notificationScheduleDescription')">
                         <span>Description</span>
-                        <i tooltip="A longer description of this notification."
+                        <i uib-tooltip="A longer description of this notification."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -66,7 +66,7 @@
                     </th>
                     <th ng-click="Sorting('peopleToNotify')">
                         <span>People To Notify</span>
-                        <i tooltip="List of people who will receive message when this notification fired."
+                        <i uib-tooltip="List of people who will receive message when this notification fired."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -98,7 +98,7 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="NotificationList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+        <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="NotificationList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

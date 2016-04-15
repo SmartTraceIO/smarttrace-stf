@@ -1,8 +1,8 @@
 /**
  * Created by beou on 31/03/2016.
  */
-appCtrls.controller('ConfirmDeleteAutoStartCtrl', ['$scope', '$modalInstance', 'webSvc', 'templateId',
-    function($scope, $modalInstance, webSvc, templateId) {
+appCtrls.controller('ConfirmDeleteAutoStartCtrl', ['$scope', '$uibModalInstance', 'webSvc', 'templateId',
+    function($scope, $uibModalInstance, webSvc, templateId) {
         $scope.templateId = templateId;
         //console.log('ShipmentId', $scope.shipmentId);
         $scope.deleteTemplate = function(templateId) {
@@ -13,11 +13,11 @@ appCtrls.controller('ConfirmDeleteAutoStartCtrl', ['$scope', '$modalInstance', '
                     toastr.error('You have no permission to delete this template!')
                 }
             }).finally(function() {
-                $modalInstance.close();
+                $uibModalInstance.close();
             });
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
     }]);

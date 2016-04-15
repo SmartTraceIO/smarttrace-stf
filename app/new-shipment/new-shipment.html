@@ -21,7 +21,7 @@
                         <div class="form-group">
                             <div class="col-md-4 col-sm-offset-3">
                                 <label class="control-label">Shipment Template:&nbsp;
-                                    <i tooltip="Existing Shipment Template"
+                                    <i uib-tooltip="Existing Shipment Template"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <div class="col-sm-4">
                                 <label class="control-label pull-left">Tracker:&nbsp;
-                                    <i tooltip="Choose a tracker that is accessible by your user group"
+                                    <i uib-tooltip="Choose a tracker that is accessible by your user group"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -73,7 +73,7 @@
                             <div class="col-sm-8">
                                 <label class="control-label pull-left">
                                     <span>Shipment Description:</span>
-                                    <i tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                                    <i uib-tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -103,7 +103,7 @@
                             <div class="col-sm-offset-4 col-sm-4">
                                 <label class="control-label">
                                     <span>Pallet Id:</span>
-                                    <i tooltip="Pallet unique Identity If available"
+                                    <i uib-tooltip="Pallet unique Identity If available"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -125,7 +125,7 @@
                             <div class="col-sm-4">
                                 <label class="control-label">
                                     <span>Asset Num:</span>
-                                    <i tooltip="Enter the identity of the asset carrying the goods"
+                                    <i uib-tooltip="Enter the identity of the asset carrying the goods"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -153,7 +153,7 @@
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <label class="control-label">Shipment From:&nbsp;
-                                    <i tooltip="Shipment from"
+                                    <i uib-tooltip="Shipment from"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -172,7 +172,7 @@
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-6">
                                 <label class="control-label">Shipment To:&nbsp;
-                                    <i tooltip="Shipment to"
+                                    <i uib-tooltip="Shipment to"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -189,10 +189,12 @@
                                 </small>
                             </div>
                             <div class="col-sm-12">&nbsp;</div>
+
+                            <!--date-time-picker-->
                             <div class="col-sm-4">
                                 <label>&nbsp;</label>
                                 <label class="control-label">Date Shipped:&nbsp;
-                                    <i tooltip="Date shipped"
+                                    <i uib-tooltip="Date shipped"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -200,16 +202,20 @@
                                 </label>
                                 <div class="input-group">
                                     <input show-button-bar="false" id="txtDate" type="text" class="form-control"
-                                           max="maxDate" placeholder="Select Date" datepicker-popup="dd-MMM-yyyy"
+                                           max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
+                                           is-open="popup.opened"
+                                           ng-click="popup.opened = true";
                                            ng-model="date1" close-text="Close" />
                                     <label for="txtDate" class="input-group-addon">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </label>
                                 </div>
                             </div>
+
+
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-4">
-                                <timepicker ng-model="time1" show-meridian='showMeridian' />
+                                <uib-timepicker ng-model="time1" show-meridian='showMeridian' />
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -222,7 +228,7 @@
                         <div class="form-group">
                             <div class="col-sm-4">
                                 <label class="control-label">Alert Profile:&nbsp;
-                                    <i tooltip="Alert Profile"
+                                    <i uib-tooltip="Alert Profile"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -241,7 +247,7 @@
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-3">
                                 <label class="control-label">Alert Suppression:&nbsp;
-                                    <i tooltip="Alert suppression during cool down"
+                                    <i uib-tooltip="Alert suppression during cool down"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -258,7 +264,7 @@
                             <div class="col-sm-5">
                                 <label class="control-label">
                                     <span>Notification Schedule(s) For Alerts</span>
-                                    <i tooltip="Notification schedule(s) for alerts"
+                                    <i uib-tooltip="Notification schedule(s) for alerts"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -291,7 +297,7 @@
                         <div class="form-group">
                             <div class="col-sm-4">
                                 <label class="control-label">Comments For Receiver:&nbsp;
-                                    <i tooltip="Comments for Receiver"
+                                    <i uib-tooltip="Comments for Receiver"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -302,7 +308,7 @@
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-3">
                                 <label class="control-label">Arrival Notification:&nbsp;
-                                    <i tooltip="Arrival notification"
+                                    <i uib-tooltip="Arrival notification"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -318,7 +324,7 @@
                                 </select>
                                 <label class="checkbox-inline" for="exc-noti">
                                     <input type="checkbox" id="exc-noti" ng-model="NewShipment.shipment.excludeNotificationsIfNoAlerts"> only notify if alerts fired&nbsp;
-                                    <i tooltip="Exclude Notification"
+                                    <i uib-tooltip="Exclude Notification"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -329,7 +335,7 @@
                             <div class="col-sm-5">
                                 <label class="control-label">
                                     <span>Schedule(s) For Arrival Notification:</span>
-                                    <i tooltip="Schedule(s) for arrival notification"
+                                    <i uib-tooltip="Schedule(s) for arrival notification"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -354,7 +360,7 @@
                             <div class="col-sm-12">&nbsp;</div>
                             <div class="col-sm-4">
                                 <label class="control-label">Shutdown Device:&nbsp;
-                                    <i tooltip="Shutdown device"
+                                    <i uib-tooltip="Shutdown device"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -384,7 +390,7 @@
                             <div class="col-sm-12 visible-xs">&nbsp;</div>
                             <div class="col-sm-4">
                                 <label class="control-label">Template Name:&nbsp;
-                                    <i tooltip="Template name"
+                                    <i uib-tooltip="Template name"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"

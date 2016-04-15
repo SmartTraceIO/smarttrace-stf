@@ -61,7 +61,7 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $modal, $window, $q) {
+appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $uibModal, $window, $q) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");

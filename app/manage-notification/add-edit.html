@@ -46,7 +46,7 @@
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-4">
                             <label class="control-label pull-left">Schedule Name:&nbsp;
-                                <i tooltip="Notification Schedule Name"
+                                <i uib-tooltip="Notification Schedule Name"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -62,7 +62,7 @@
                         <div class="col-sm-12 hidden-md hidden-lg">&nbsp;</div>
                         <div class="col-md-4">
                             <label class="control-label">Description:&nbsp;
-                                <i tooltip="Notification Schedule Description"
+                                <i uib-tooltip="Notification Schedule Description"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label pull-left">Person:&nbsp;
-                                    <i tooltip="Person" tooltip-append-to-body="true"
+                                    <i uib-tooltip="Person" tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter" tooltip-placement="top"
                                        class="fa fa-info-circle"></i>
                                 </label>
@@ -215,7 +215,7 @@
                             <div class="col-md-1 text-right">
                                 <label class="control-label" ng-if="Noti.schedules.length > 1" ng-click="DeletePerson(person)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
                                 <label class="control-label" ng-if="Noti.schedules.length > 1"><span style="color:black;text-decoration:none">&nbsp;
-                                    <i tooltip="Delete this row. The Delete action is finalised when page is saved."
+                                    <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"

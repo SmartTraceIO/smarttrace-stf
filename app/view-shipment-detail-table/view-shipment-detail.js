@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentDetailTableCtrl',
-    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $modal,
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal,
               $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
     rootSvc.SetPageTitle('View Shipment Detail in Table');
     rootSvc.SetActiveMenu('View Shipment');
@@ -220,7 +220,7 @@
         }
     }
     $scope.EditDescription = function(Id) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-description.html',
             controller: 'EditShipmentDetailDescription',
             resolve: {
@@ -236,7 +236,7 @@
         );
     }
     $scope.EditComment = function(Id) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: '/app/view-shipment-detail-share/edit-comment.html',
             controller: 'EditShipmentDetailComment',
             resolve: {
@@ -253,8 +253,8 @@
     }
 });
 
-appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$modalInstance', 'webSvc', 'editId',
-function($scope, $modalInstance, webSvc, editId) {
+appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
+function($scope, $uibModalInstance, webSvc, editId) {
     $scope.editId = editId;
     webSvc.getShipment(editId).success(function(data) {
         if (data.status.code == 0) {
@@ -275,14 +275,14 @@ function($scope, $modalInstance, webSvc, editId) {
                 toastr.error('You have no permission to update shipment');
             }
         })
-        $modalInstance.close($scope.shipment.shipmentDescription);
+        $uibModalInstance.close($scope.shipment.shipmentDescription);
     }
     $scope.cancelEdit = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }]);
-appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'webSvc', 'editId',
-    function($scope, $modalInstance, webSvc, editId) {
+appCtrls.controller('EditShipmentDetailComment', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
+    function($scope, $uibModalInstance, webSvc, editId) {
         $scope.editId = editId;
         webSvc.getShipment(editId).success(function(data) {
             if (data.status.code == 0) {
@@ -302,10 +302,10 @@ appCtrls.controller('EditShipmentDetailComment', ['$scope', '$modalInstance', 'w
                     toastr.error('You have no permission to update shipment');
                 }
             })
-            $modalInstance.close($scope.shipment.commentsForReceiver);
+            $uibModalInstance.close($scope.shipment.commentsForReceiver);
         }
         $scope.cancelEdit = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 }]);
 

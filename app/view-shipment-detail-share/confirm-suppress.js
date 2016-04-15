@@ -1,8 +1,8 @@
 /**
  * Created by beou on 30/03/2016.
  */
-appCtrls.controller('ConfirmSuppressCtrl', ['$scope', '$modalInstance', 'webSvc', 'shipmentId',
-    function($scope, $modalInstance, webSvc, shipmentId) {
+appCtrls.controller('ConfirmSuppressCtrl', ['$scope', '$uibModalInstance', 'webSvc', 'shipmentId',
+    function($scope, $uibModalInstance, webSvc, shipmentId) {
         $scope.shipmentId = shipmentId;
         console.log('ShipmentId', $scope.shipmentId);
         $scope.suppressFurtherAlert = function(id) {
@@ -15,11 +15,11 @@ appCtrls.controller('ConfirmSuppressCtrl', ['$scope', '$modalInstance', 'webSvc'
             }).error(function(){
                 toastr.error('Not implemented!')
             }).finally(function() {
-                $modalInstance.close()
+                $uibModalInstance.close()
             })
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
     }])

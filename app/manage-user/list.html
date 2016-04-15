@@ -42,7 +42,7 @@
                 <tr>
                     <th ng-click="Sorting('email')">
                         <span class="pull-left">UserName</span>
-                        <i tooltip="An user name"
+                        <i uib-tooltip="An user name"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -54,7 +54,7 @@
                     </th>
                     <th ng-click="Sorting('firstName')">
                         <span class="pull-left">FirstName</span>
-                        <i tooltip="First name"
+                        <i uib-tooltip="First name"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -66,7 +66,7 @@
                     </th>
                     <th ng-click="Sorting('lastName')">
                         <span class="pull-left">LastName</span>
-                        <i tooltip="Last name"
+                        <i uib-tooltip="Last name"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -78,7 +78,7 @@
                     </th>
                     <th ng-click="Sorting('companyName')">
                         <span class="pull-left">Company</span>
-                        <i tooltip="Company"
+                        <i uib-tooltip="Company"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -90,7 +90,7 @@
                     </th>
                     <th ng-click="Sorting('position')">
                         <span class="pull-left">Position</span>
-                        <i tooltip="Position. e.g. Manager, Admin ..."
+                        <i uib-tooltip="Position. e.g. Manager, Admin ..."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -102,7 +102,7 @@
                     </th>
                     <th ng-click="Sorting('roles')">
                         <span class="pull-left">Roles</span>
-                        <i tooltip="Roles. e.g. Admin, Normal ..."
+                        <i uib-tooltip="Roles. e.g. Admin, Normal ..."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -114,7 +114,7 @@
                     </th>
                     <th ng-click="Sorting('active')" class="text-center">
                         <span >Active</span>
-                        <i tooltip="Indicate that this user is active or not."
+                        <i uib-tooltip="Indicate that this user is active or not."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -140,7 +140,7 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="UserList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+        <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="UserList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

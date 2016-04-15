@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
                         <label class="control-label pull-left">Autostart Shipment Template Name:&nbsp;
-                            <i tooltip="Shipment template name"
+                            <i uib-tooltip="Shipment template name"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -40,7 +40,7 @@
                     <div class="col-sm-4">
                         <label class="control-label pull-left">
                             <span>Shipment Description:</span>
-                            <i tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                            <i uib-tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -82,7 +82,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Shipment From&nbsp;
-                                    <i tooltip="Options for auto-detection of Shipment From"
+                                    <i uib-tooltip="Options for auto-detection of Shipment From"
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                        tooltip-placement="top" class="fa fa-info-circle">
                                     </i>
@@ -118,7 +118,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Interim Stop
-                                    <i tooltip="Options for auto-detection of Interim Stop"
+                                    <i uib-tooltip="Options for auto-detection of Interim Stop"
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                        tooltip-placement="top" class="fa fa-info-circle">
                                     </i>
@@ -152,7 +152,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Shipment To&nbsp;
-                                    <i tooltip="Options for auto-detection of Shipment To"
+                                    <i uib-tooltip="Options for auto-detection of Shipment To"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -198,7 +198,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Alert Profile&nbsp;
-                            <i tooltip="Alert Profile" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Alert Profile" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
                         </label>
                         <select ng-model="AutoStartShipment.alertProfileId"
                                 ng-change="CreateAlertRule()"
@@ -218,7 +218,7 @@
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-2">
                         <label class="control-label">Alert Suppression in cooldown&nbsp;
-                            <i tooltip="Alert suppression during cool down" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <i uib-tooltip="Alert suppression during cool down" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
                         <div class="btn-group" role="group">
                             <button type="button"
                                     ng-class="{'active':AutoStartShipment.alertSuppressionMinutes==0}"
@@ -242,7 +242,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             <span>Notification Schedule(s) For Alerts</span>
-                            <i tooltip="Notification schedule(s) for alerts"
+                            <i uib-tooltip="Notification schedule(s) for alerts"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -287,7 +287,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Suppress All Alert On Arrival&nbsp;
-                            <i tooltip="No alert after arrival minutes"
+                            <i uib-tooltip="No alert after arrival minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -305,7 +305,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             Suppress All Alerts After Time Period
-                            <i tooltip="No alert after start minutes"
+                            <i uib-tooltip="No alert after start minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -338,7 +338,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Comments For Receiver&nbsp;
-                            <i tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
                         </label>
                         <textarea maxlength="300"
                                   name="comment"
@@ -352,7 +352,7 @@
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-3">
                         <label class="control-label">Arrival Notification&nbsp;
-                            <i tooltip="Arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
                         </label>
                         <select class="form-control " ng-model="AutoStartShipment.arrivalNotificationWithinKm">
                             <option value="">No notification needed</option>
@@ -365,14 +365,14 @@
                         <label class="checkbox-inline" for="exc-noti">
                             <input ng-model="AutoStartShipment.excludeNotificationsIfNoAlerts" type="checkbox" id="exc-noti">
                                 Only notify if alerts fired&nbsp;
-                                <i tooltip="Exclude Notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                                <i uib-tooltip="Exclude Notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
                         </label>
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">
                             <span>Schedule(s) For Arrival Notification</span>
-                            <i tooltip="Schedule(s) for arrival notification"
+                            <i uib-tooltip="Schedule(s) for arrival notification"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -423,7 +423,7 @@
                     <div class="col-sm-12">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">Shutdown Device On Arrival
-                            <i tooltip="Shutdown device after minutes"
+                            <i uib-tooltip="Shutdown device after minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -441,7 +441,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             Shutdown Device After Time Period
-                            <i tooltip="Shutdown after start minutes"
+                            <i uib-tooltip="Shutdown after start minutes"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"

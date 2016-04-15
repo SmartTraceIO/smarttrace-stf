@@ -1,8 +1,8 @@
 /**
  * Created by beou on 29/03/2016.
  */
-appCtrls.controller('ConfirmShutdownCtrl', ['$scope', '$modalInstance', 'webSvc', 'shipmentId',
-    function($scope, $modalInstance, webSvc, shipmentId) {
+appCtrls.controller('ConfirmShutdownCtrl', ['$scope', '$uibModalInstance', 'webSvc', 'shipmentId',
+    function($scope, $uibModalInstance, webSvc, shipmentId) {
         $scope.shipmentId = shipmentId;
         console.log('ShipmentId', $scope.shipmentId);
         $scope.shutdownNow = function(id) {
@@ -13,12 +13,12 @@ appCtrls.controller('ConfirmShutdownCtrl', ['$scope', '$modalInstance', 'webSvc'
                     toastr.error("You have no permission to shutdown this device!");
                 }
                 //--close anyway
-                $modalInstance.close()
+                $uibModalInstance.close()
             })
 
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
 }])

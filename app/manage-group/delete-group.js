@@ -2,9 +2,9 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('DeleteGroupCtrl', DeleteGroupCtrl);
-function DeleteGroupCtrl($modalInstance, webSvc, group) {
+function DeleteGroupCtrl($uibModalInstance, webSvc, group) {
     var self = this;
-    self.modalInstance = $modalInstance;
+    self.modalInstance = $uibModalInstance;
     self.WebSvc = webSvc;
     self.group = group;
 }

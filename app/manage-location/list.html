@@ -42,7 +42,7 @@
                 <tr>
                     <th ng-click="Sorting('locationName')">
                         <span class="pull-left">Location Name</span>
-                        <i tooltip="A short name for this location."
+                        <i uib-tooltip="A short name for this location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -54,7 +54,7 @@
                     </th>
                     <th ng-click="Sorting('companyName')">
                         <span class="pull-left">Company</span>
-                        <i tooltip="Name of company that monitor this location."
+                        <i uib-tooltip="Name of company that monitor this location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -66,7 +66,7 @@
                     </th>
                     <th ng-click="Sorting('address')">
                         <span class="pull-left">Address</span>
-                        <i tooltip="Address of this location."
+                        <i uib-tooltip="Address of this location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -78,7 +78,7 @@
                     </th>
                     <th ng-click="Sorting('radiusMeters')">
                         <span class="pull-left">Radius</span>
-                        <i tooltip="Radius in metters of this location."
+                        <i uib-tooltip="Radius in metters of this location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -90,7 +90,7 @@
                     </th>
                     <th ng-click="Sorting('startFlag')">
                         <span class="pull-left">Start</span>
-                        <i tooltip="True if this location is a start point."
+                        <i uib-tooltip="True if this location is a start point."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -102,7 +102,7 @@
                     </th>
                     <th ng-click="Sorting('interimFlag')">
                         <span class="pull-left">Interim</span>
-                        <i tooltip="True if this location is an interim location."
+                        <i uib-tooltip="True if this location is an interim location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -114,7 +114,7 @@
                     </th>
                     <th ng-click="Sorting('endFlag')">
                         <span class="pull-left">End</span>
-                        <i tooltip="True if this location is an end location."
+                        <i uib-tooltip="True if this location is an end location."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -158,7 +158,7 @@
                 </tr>
             </table>
         </div>
-        <pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="LocationList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></pagination>
+        <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="LocationList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

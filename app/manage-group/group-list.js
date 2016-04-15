@@ -3,7 +3,7 @@
  */
 appCtrls.controller('ListGroupCtrl', ListGroupCtrl);
 
-function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q, $log) {
+function ListGroupCtrl($uibModal, rootSvc, $window, webSvc, $q, $log) {
     var self = this;
 
     rootSvc.SetPageTitle('List Tracker Groups');
@@ -14,13 +14,13 @@ function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q, $log) {
     self.PrintService = $window;
     self.WebSvc = webSvc;
     self.all = $q.all;
-    self.modal = $modal;
-
+    self.modal = $uibModal;
+    self.debug = $log.debug;
 
     self.GetDeviceGroups(
         function(data){
             self.groupList = data;
-            $log.debug('GroupList', self.groupList);
+            self.debug('GroupList', self.groupList);
         },
         function(data){}).then(function() {
         var promises = [];
@@ -41,7 +41,7 @@ function ListGroupCtrl($modal, rootSvc, $window, webSvc, $q, $log) {
             promises.push(p);
         });
         self.all(promises).then(function() {
-            console.log('Get done!')
+            self.debug('Get done!')
         });
     });
 };

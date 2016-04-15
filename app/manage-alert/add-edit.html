@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <div class="col-md-offset-3 col-md-3">
                                 <label class="pull-left">Name:&nbsp;
-                                    <i tooltip="Alert Profile Name"
+                                    <i uib-tooltip="Alert Profile Name"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -60,7 +60,7 @@
                             <div class="visible-xs col-md-12">&nbsp;</div>
                             <div class="col-md-3">
                                 <label>Description:&nbsp;
-                                    <i tooltip="Alert Profile Description"
+                                    <i uib-tooltip="Alert Profile Description"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -78,7 +78,7 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <h3 class="caption-subject font-green-sharp bold">Low Temperature Alerts<span class="info">&nbsp;
-                                            <i tooltip="Low Temperature Alerts"
+                                            <i uib-tooltip="Low Temperature Alerts"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
@@ -151,7 +151,7 @@
                                     <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
                                     <label class="control-label">
                                         <span style="color:black;text-decoration:none">&nbsp;
-                                        <i tooltip="Delete this row. The Delete action is finalised when page is saved."
+                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -172,7 +172,7 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <h3 class="caption-subject font-green-sharp bold">High Temperature Alerts<span class="info">&nbsp;
-                                            <i tooltip="High Temperature Alerts"
+                                            <i uib-tooltip="High Temperature Alerts"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
@@ -243,7 +243,7 @@
                                 <div class="col-md-2 text-right">
                                     <label class="control-label" ng-click="DeleteHotObject(hotAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
                                     <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;
-                                        <i tooltip="Delete this row. The Delete action is finalised when page is saved."
+                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
                                            tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                            tooltip-placement="top" class="fa fa-info-circle"></i></span>
                                     </label>
@@ -274,7 +274,7 @@
                                             <div class="checkbox-list">
                                                 <label for="enterbrightenv">
                                                     <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;
-                                                    <i tooltip="Alert For Enter Bright Environment"
+                                                    <i uib-tooltip="Alert For Enter Bright Environment"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
                                                        tooltip-placement="top"
@@ -285,7 +285,7 @@
                                         <!--<div class="col-md-3">
                                             <div class="checkbox-list">
                                                 <label for="darkenv">
-                                                    <input type="checkbox" ng-model="Alert.watchEnterDarkEnvironment" id="darkenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOff.png" /> &nbsp;&nbsp;Enter Dark Environment&nbsp;&nbsp;<i tooltip="Alert For Enter Dark Environment" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                                    <input type="checkbox" ng-model="Alert.watchEnterDarkEnvironment" id="darkenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOff.png" /> &nbsp;&nbsp;Enter Dark Environment&nbsp;&nbsp;<i uib-tooltip="Alert For Enter Dark Environment" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
                                         </div>-->
@@ -301,7 +301,7 @@
                                         <!--<div class="col-md-offset-3 col-md-3">
                                             <div class="checkbox-list">
                                                 <label for="shock">
-                                                    <input type="checkbox" ng-model="Alert.watchMovementStart" id="shock">&nbsp;&nbsp;<img src="../../theme/img/alertShock.png" />&nbsp;&nbsp;Shock (Product abuse)&nbsp;&nbsp;<i tooltip="Alert For Shock" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                                    <input type="checkbox" ng-model="Alert.watchMovementStart" id="shock">&nbsp;&nbsp;<img src="../../theme/img/alertShock.png" />&nbsp;&nbsp;Shock (Product abuse)&nbsp;&nbsp;<i uib-tooltip="Alert For Shock" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
                                         </div>-->
@@ -309,7 +309,7 @@
                                             <div class="checkbox-list">
                                                 <label for="btrlow">
                                                     <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;<img src="../../theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;
-                                                    <i tooltip="Alert For Battery Low"
+                                                    <i uib-tooltip="Alert For Battery Low"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
                                                        tooltip-placement="top"

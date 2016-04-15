@@ -1,8 +1,8 @@
 /**
  * Created by beou on 04/04/2016.
  */
-appCtrls.controller('EditNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'note',
-    function($scope, $modalInstance, webSvc, note) {
+appCtrls.controller('EditNoteCtrl', ['$scope', '$uibModalInstance', 'webSvc', 'note',
+    function($scope, $uibModalInstance, webSvc, note) {
         $scope.note = {};
         $scope.note.activeFlag = note.activeFlag;
         $scope.note.createdBy = note.createdBy;
@@ -21,11 +21,11 @@ appCtrls.controller('EditNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'note
                 webSvc.saveNote($scope.note).success(function(data) {
                     if (data.status.code == 0) {
                         toastr.success("Success. one note was updated.");
-                        $modalInstance.close($scope.note);
+                        $uibModalInstance.close($scope.note);
                     } else {
                         console.log('ERROR', data);
                         toastr.error("You have no permission to create note!");
-                        $modalInstance.close(null);
+                        $uibModalInstance.close(null);
                     }
                 })
             } else {
@@ -34,6 +34,6 @@ appCtrls.controller('EditNoteCtrl', ['$scope', '$modalInstance', 'webSvc', 'note
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
     }])

@@ -24,7 +24,7 @@
                     <div class="panel-heading portlet-page">
                         <h4 class="panel-title uppercase">
                             Goods Being Monitored
-                            <i tooltip="List of goods that are under monitored"
+                            <i uib-tooltip="List of goods that are under monitored"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -67,7 +67,7 @@
                                             <span>
                                                 <strong>Description:</strong>
                                             </span>
-                                        <i tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
+                                        <i uib-tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -83,7 +83,7 @@
                                         <span>
                                             <strong>Comment:</strong>
                                         </span>
-                                        <i tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
+                                        <i uib-tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -105,7 +105,7 @@
                     <div class="portlet-title">
                         <div class="caption uppercase">
                             <span>Notes added to chart</span>
-                            <i tooltip="Double click at a point on the curve to add a note"
+                            <i uib-tooltip="Double click at a point on the curve to add a note"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -149,7 +149,7 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
-                        <i tooltip="List of tracker that might be on the same trip"
+                        <i uib-tooltip="List of tracker that might be on the same trip"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -184,7 +184,7 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">Route</span>
-                        <i tooltip="Information about route of this shipment."
+                        <i uib-tooltip="Information about route of this shipment."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -247,7 +247,7 @@
                 <div class="portlet-title">
                     <div>
                         <span class="caption uppercase">Alerts</span>
-                        <i tooltip="Infomation about alerts of this shipment."
+                        <i uib-tooltip="Infomation about alerts of this shipment."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -281,7 +281,7 @@
                     </table>
                     <!-- <a href="#" ng-show="trackerInfo.alertYetToFire != null" class="bold-font" style="text-decoration:underline;">
                         Suppress further notifications
-                        <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                        <i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                     </a> -->
                 </div>
             </div></div>
@@ -290,7 +290,7 @@
                     <div class="portlet-title">
                         <div class="caption uppercase">
                             Arrival
-                            <i tooltip="Information about arrival."
+                            <i uib-tooltip="Information about arrival."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -305,7 +305,7 @@
                             <tr>
                                 <td>
                                     <span>Time of arrival</span>
-                                    <i tooltip="Time of arrival"
+                                    <i uib-tooltip="Time of arrival"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -317,7 +317,7 @@
                             </tr>
                             <tr><td>Notify when:</td><td>
                                 {{trackerInfo.arrivalNotificationWithinKm}} Km away
-                                <i tooltip="Notify when."
+                                <i uib-tooltip="Notify when."
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -325,7 +325,7 @@
                             </td></tr>
                             <tr><td>Notified at:</td><td>
                                 {{trackerInfo.arrivalNotificationTime}}
-                                <i tooltip="Notified at."
+                                <i uib-tooltip="Notified at."
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -341,7 +341,7 @@
                             <tr><td>Comments:</td><td>{{trackerInfo.commentsForReceiver}}</td></tr>
                             <tr><td>Time of shutdown:</td><td>
                                 {{trackerInfo.shutdownTime}}
-                                <i tooltip="Time of shutdown."
+                                <i uib-tooltip="Time of shutdown."
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -357,7 +357,7 @@
                     <div class="portlet-title">
                         <div class="caption uppercase">
                             <span>Last Reading</span>
-                            <i tooltip="Last Reading"
+                            <i uib-tooltip="Last Reading"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -390,7 +390,7 @@
                 <div class="portlet-title">
                     <div class="caption uppercase">
                         Timeline / Corrective Action
-                        <i tooltip="Timeline / Corrective Action"
+                        <i uib-tooltip="Timeline / Corrective Action"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -478,7 +478,7 @@
                         <div class="panel-heading portlet-page">
                             <h4 class="panel-title uppercase">
                                 Goods Being Monitored
-                                <i tooltip="The Tracker (and Trip) featured in the chart, the map and the content down left side panel"
+                                <i uib-tooltip="The Tracker (and Trip) featured in the chart, the map and the content down left side panel"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -516,7 +516,7 @@
                                             <span>
                                                 <strong>Description:</strong>
                                             </span>
-                                            <i tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
+                                            <i uib-tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
@@ -532,7 +532,7 @@
                                         <span>
                                             <strong>Comment:</strong>
                                         </span>
-                                            <i tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
+                                            <i uib-tooltip="Add a comment that will be helpful for people looking at this shipment. Max 300 chars"
                                                tooltip-append-to-body="true"
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
@@ -553,7 +553,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Notes added to chart</span>
-                                <i tooltip="Double click at a point on the curve to add a note"
+                                <i uib-tooltip="Double click at a point on the curve to add a note"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -595,7 +595,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>TRACKERS POSSIBLY ON SAME TRIP</span>
-                                <i tooltip="Other trackers that are travelling on a similar path at the same time and
+                                <i uib-tooltip="Other trackers that are travelling on a similar path at the same time and
                                  hence likely to be on same vehicle"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
@@ -670,7 +670,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Route</span>
-                                <i tooltip="The start and end location for this shipment"
+                                <i uib-tooltip="The start and end location for this shipment"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -745,7 +745,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Alerts</span>
-                                <i tooltip="Alert details for this shipment"
+                                <i uib-tooltip="Alert details for this shipment"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -792,7 +792,7 @@
                                         <a href="" ng-click="confirmSuppress(trackerInfo.shipmentId)">
                                             <u ng-class="{'grey-out':(isEndedOrArrived || suppressAlready)}">Suppress further alerts</u>
                                         </a>
-                                        <i tooltip="Suppress further alerts (and arrival notification) from firing
+                                        <i uib-tooltip="Suppress further alerts (and arrival notification) from firing
                                          during this shipment."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
@@ -803,7 +803,7 @@
                             </table>
                             <!-- <a href="#" ng-show="trackerInfo.alertYetToFire != null" class="bold-font" style="text-decoration:underline;">
                                 Suppress further notifications
-                                <i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                <i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                             </a> -->
                         </div>
                     </div>
@@ -811,7 +811,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Arrival</span>
-                                <i tooltip="Arrival details for this shipment"
+                                <i uib-tooltip="Arrival details for this shipment"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -826,7 +826,7 @@
                                 <tr ng-show="trackerInfo.arrivalTime">
                                     <td>
                                         <span>Time of arrival</span>
-                                        <i tooltip="Waiting your tooltip text"
+                                        <i uib-tooltip="Waiting your tooltip text"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -839,7 +839,7 @@
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
-                                        <i tooltip="Notify when"
+                                        <i uib-tooltip="Notify when"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -852,7 +852,7 @@
                                 <tr ng-show="!trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
-                                        <i tooltip="Notify when"
+                                        <i uib-tooltip="Notify when"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -863,7 +863,7 @@
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notified at</span>
-                                        <i tooltip="Notified at"
+                                        <i uib-tooltip="Notified at"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -876,7 +876,7 @@
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Who to notify</span>
-                                        <i tooltip="Notify to people"
+                                        <i uib-tooltip="Notify to people"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -895,7 +895,7 @@
                                 <tr>
                                     <td>
                                         <span>Time of shutdown</span>
-                                        <i tooltip="Time of shutdown"
+                                        <i uib-tooltip="Time of shutdown"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -910,7 +910,7 @@
                                 <tr ng-if="getRole() >= roles.Normal">
                                     <td colspan="2">
                                         <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
-                                        <i tooltip="Shutdown this device now, provided this is the latest shipment for this device."
+                                        <i uib-tooltip="Shutdown this device now, provided this is the latest shipment for this device."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -924,7 +924,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 <span>Last Reading</span>
-                                <i tooltip="Last Reading"
+                                <i uib-tooltip="Last Reading"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
@@ -955,7 +955,7 @@
                         <div class="portlet-title">
                             <div class="caption uppercase">
                                 Timeline / Corrective Action
-                                <i tooltip="Timeline / Corrective Action"
+                                <i uib-tooltip="Timeline / Corrective Action"
                                    tooltip-append-to-body="true"
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"

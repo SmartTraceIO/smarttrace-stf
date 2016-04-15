@@ -1,8 +1,8 @@
 /**
  * Created by beou on 04/04/2016.
  */
-appCtrls.controller('ConfirmDeactivateCtrl', ['$scope', '$modalInstance', '$state', 'webSvc', 'tracker',
-    function($scope, $modalInstance, $state, webSvc, tracker) {
+appCtrls.controller('ConfirmDeactivateCtrl', ['$scope', '$uibModalInstance', '$state', 'webSvc', 'tracker',
+    function($scope, $uibModalInstance, $state, webSvc, tracker) {
         $scope.tracker = tracker;
         console.log('tracker', $scope.tracker);
         $scope.deactivateNow = function() {
@@ -15,11 +15,11 @@ appCtrls.controller('ConfirmDeactivateCtrl', ['$scope', '$modalInstance', '$stat
                 } else {
                     toastr.error('Can\'t deactivate device!');
                 }
-                $modalInstance.close()
+                $uibModalInstance.close()
             });
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
     }])

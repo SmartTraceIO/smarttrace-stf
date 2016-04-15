@@ -130,8 +130,8 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
         };
 }]);
 appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams',
-    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$modal', 'Role',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $modal, Role) {
+    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$uibModal', 'Role',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $uibModal, Role) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -266,7 +266,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             }).then(function() {
                 if ($scope.arrivalTimeISO != null){
                     if ($scope.tracker.active) {
-                        var modalInstance = $modal.open({
+                        var modalInstance = $uibModal.open({
                             templateUrl: '/app/manage-tracker/confirm-deactivate.html',
                             controller: 'ConfirmDeactivateCtrl',
                             resolve: {

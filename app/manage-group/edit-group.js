@@ -24,8 +24,8 @@ function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $rootScope, $timeo
     //get all Devices
     var p2 = self.GetDeviceGroup(self.id);
     self.all([p2]).then(function () {
-        console.log('deviceList', self.deviceList);
-        console.log('deviceListToAdd', self.deviceListToAdd);
+        self.debug('deviceList', self.deviceList);
+        self.debug('deviceListToAdd', self.deviceListToAdd);
     }).then(function () {
         self.reloadIfNeed();
     });
@@ -120,13 +120,13 @@ EditGroupCtrl.prototype.addDevices = function() {
     angular.forEach(self.deviceListToAdd, function(val, key) {
         if (self.origDeviceList.indexOf(val) < 0) {
             var p = self.WebSvc.addDeviceToGroup(self.id, val.imei).success(function(resp) {
-                console.log('PROM', resp);
+                self.debug('addDeviceToGroup', resp);
             });
             promises.push(p);
         }
     });
 
-    console.log('PROMISES', promises);
+    self.debug('PROMISES', promises);
     self.all(promises).then(function() {
         self.debug('Updated group!');
     });
