@@ -1,4 +1,4 @@
-appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $window) {
+appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $rootScope, $log) {
 
 	$scope.AuthToken = localDbSvc.getToken();
 	$scope.User = $rootScope.User;
@@ -33,18 +33,18 @@ appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSv
     	userData.language = $scope.User.language;
     	userData.timeZone = $scope.User.timeZone;
 
-        console.log('BEFORE-UPDATE', userData);
+        $log.debug('User', userData);
 
         webSvc.updateUserDetails(userData).success( function (data, textStatus, XmlHttpRequest) {
             if(data.status.code == 0){
                 toastr.success("Successfully updated the user preferences");
-                //toastr.info("Please login again...");
-                //$state.go("login");
+                toastr.info("Please login again...");
+                $state.go("login");
 
             }
         }).error( function (xmlHttpRequest, textStatus, errorThrown) {
             toastr.warning("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-        }).then(function() {
+        })/*.then(function() {
             webSvc.getUserTime().success( function (timeData) {
                 if (timeData.status.code == 0) {
                     console.log('UPDATE-USER', timeData);
@@ -53,7 +53,7 @@ appCtrls.controller('PreferenceCtrl', function ($cookies, $scope, rootSvc, webSv
                     $rootScope.RunningTimeZoneId = $scope.User.timeZone;
                 }
             });
-        })
+        })*/
     }
 
 	BindLanguages();

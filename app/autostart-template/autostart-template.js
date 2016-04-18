@@ -441,7 +441,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter,
+appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $log,
                                                   $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q){
     rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
@@ -558,11 +558,13 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
 
                  //-- noAlertsAfterArrivalMinutes
                  if (response.noAlertsAfterArrivalMinutes) {
-                 $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
+                    $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
+                 } else {
+                     $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = "";
                  }
                  //-- noAlertsAfterStartMinutes -- seems not done on server side
                  if (response.noAlertsAfterStartMinutes) {
-                 $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
+                    $scope.AutoStartShipment.noAlertsAfterStartMinutes = response.noAlertsAfterStartMinutes.toString();
                  }
 
                 if ($scope.AutoStartShipment.startLocations) {
@@ -647,6 +649,8 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             if (!$scope.AutoStartShipment.arrivalNotificationWithinKm)
                 $scope.AutoStartShipment.arrivalNotificationWithinKm = null;
 
+
+
             $scope.AutoStartShipment.maxTimesAlertFires = null;
             $scope.AutoStartShipment.useCurrentTimeForDateShipped = true;
 
@@ -654,32 +658,53 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                 $scope.AutoStartShipment.startLocations = $scope.AutoStartShipment.start_locations.map(function (val) {
                     return val.locationId;
                 });
+            } else {
+                $scope.AutoStartShipment.startLocations = [];
             }
 
             if ($scope.AutoStartShipment.interim_stops) {
                 $scope.AutoStartShipment.interimStops = $scope.AutoStartShipment.interim_stops.map(function (val) {
                     return val.locationId;
                 })
+            } else {
+                $scope.AutoStartShipment.interimStops = [];
             }
 
             if ($scope.AutoStartShipment.end_locations) {
                 $scope.AutoStartShipment.endLocations = $scope.AutoStartShipment.end_locations.map(function (val) {
                     return val.locationId;
                 });
+            } else {
+                $scope.AutoStartShipment.endLocations = [];
             }
 
             if ($scope.AutoStartShipment.arrival_notification_schedules) {
                 $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function (val) {
                     return val.notificationScheduleId;
                 });
+            } else {
+                $scope.AutoStartShipment.arrivalNotificationSchedules = [];
             }
 
             if ($scope.AutoStartShipment.alerts_notification_schedules) {
                 $scope.AutoStartShipment.alertsNotificationSchedules = $scope.AutoStartShipment.alerts_notification_schedules.map(function (val) {
                     return val.notificationScheduleId;
                 });
+            } else {
+                $scope.AutoStartShipment.alertsNotificationSchedules = [];
             }
 
+            if (!$scope.AutoStartShipment.noAlertsAfterStartMinutes) {
+                $scope.AutoStartShipment.noAlertsAfterStartMinutes = null;
+            }
+
+            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes, 10);
+            $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes, 10);
+            $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm, 10);
+            $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes, 10);
+            $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
+
+            $log.debug('UpdateAutostart', $scope.AutoStartShipment);
             webSvc.saveAutoStartShipment($scope.AutoStartShipment)
                 .success(function (data, textStatus, XmlHttpRequest) {
                 toastr.success("Auto Start Shipment updated successfully")
