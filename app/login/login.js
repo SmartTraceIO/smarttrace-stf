@@ -43,11 +43,13 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	}
     var loadUserAndMove = function(url) {
         var promise1 = webSvc.getUser({}, {noCancelOnRouteChange:true}).success(function (data) {
-            $rootScope.User = data.response;
-			localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
-			localDbSvc.setUserTimezone(data.response.timeZone);
-            localDbSvc.set('InternalCompany', data.response.internalCompany);
-			localDbSvc.setUserProfile(data.response);
+            if (data.response) {
+                $rootScope.User = data.response;
+                localDbSvc.setDegreeUnits(data.response.temperatureUnits); //Celsius or Fahrenheit
+                localDbSvc.setUserTimezone(data.response.timeZone);
+                localDbSvc.set('InternalCompany', data.response.internalCompany);
+                localDbSvc.setUserProfile(data.response);
+            }
         });
         var promise2 = webSvc.getUserTime({}, {noCancelOnRouteChange:true}).success( function (timeData) {
             if (timeData.status.code == 0) {
