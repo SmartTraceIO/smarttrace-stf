@@ -271,8 +271,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
                     toastr.success("Shipment template added successfully")
+                    $state.go('manage.autotemp')
+                } else {
+                    toastr.warning('Warning. An error has occured while creating autostart template');
                 }
-                $state.go('manage.autotemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
@@ -705,10 +707,13 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
 
             $log.debug('UpdateAutostart', $scope.AutoStartShipment);
-            webSvc.saveAutoStartShipment($scope.AutoStartShipment)
-                .success(function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Auto Start Shipment updated successfully")
-                $state.go('manage.autotemp')
+            webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(function (data, textStatus, XmlHttpRequest) {
+                if (data.status.code == 0) {
+                    toastr.success("Auto Start Shipment updated successfully")
+                    $state.go('manage.autotemp')
+                } else {
+                    toastr.warning('Warning. An error has occured while saving autostart template!');
+                }
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
             });
