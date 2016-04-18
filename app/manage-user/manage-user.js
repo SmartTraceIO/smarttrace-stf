@@ -61,7 +61,8 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc, $state, $filter, $uibModal, $window, $q) {
+appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc,
+                                             $state, $filter, $uibModal, $window, $q, $log) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -160,7 +161,7 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
                 $scope.User.user.externalCompany = "";
             }
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                console.log('USER-TO-CREATE', $scope.User);
+                $log.debug('USER-TO-CREATE', $scope.User);
                 if (data.status.code == 0) {
                     toastr.success("User added successfully");
                 } else {
@@ -179,14 +180,15 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
 });
 
 //-- edit user
-appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state,$timeout, $filter, $window, $q) {
+appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state,
+                                              $timeout, $filter, $window, $q, $log) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     $scope.AddUser = false;
-//--
+    //--
     function reloadIfNeed() {
         if ($rootScope.User) {
             return $rootScope.User;
@@ -310,7 +312,7 @@ appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSv
                 $scope.User.user.externalCompany = "";
             }
             webSvc.saveUser($scope.User).success( function (data, textStatus, XmlHttpRequest) {
-                console.log('EditUser', data);
+                $log.debug('EditUser', data);
                 if (data.status.code == 0) {
                     toastr.success("User updated successfully")
                 } else {

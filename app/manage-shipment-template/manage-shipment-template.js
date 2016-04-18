@@ -262,7 +262,11 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success(
                 function (data, textStatus, XmlHttpRequest) {
                 $log.debug('SAVED', data);
-                toastr.success("Shipment template added successfully")
+                    if (data.status.code == 0) {
+                        toastr.success("Shipment template added successfully")
+                    } else {
+                        toastr.warning("Warning. An error has occurred while create new shipment template");
+                    }
                 $state.go('manage.shiptemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
@@ -692,7 +696,11 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
             }
 
             webSvc.saveShipmentTemplate($scope.ShipmentTemplate).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Shipment template added successfully")
+                if (data.status.code == 0) {
+                    toastr.success("Shipment template added successfully")
+                } else {
+                    toastr.warning('Warning. An error has occurred while update shipment template.')
+                }
                 $state.go('manage.shiptemp')
             }).error( function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);

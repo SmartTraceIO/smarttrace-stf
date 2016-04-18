@@ -272,7 +272,11 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
                 webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Location added successfully")
+                    if (data.status.code == 0) {
+                        toastr.success("Location added successfully")
+                    } else {
+                        toastr.warning('Warning. An error has occurred while creating location');
+                    }
                     if (closeModalPopup) {
                         $rootScope.modalInstance.close('cancel');
                     }
@@ -512,7 +516,11 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
                 webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
-                    toastr.success("Location updated successfully")
+                    if (data.status.code == 0) {
+                        toastr.success("Location updated successfully")
+                    } else {
+                        toastr.warning('Warning. An error has occurred while updating location.');
+                    }
                     if (closeModalPopup) {
                         $rootScope.modalInstance.close('cancel');
                     }

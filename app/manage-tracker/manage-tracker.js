@@ -86,8 +86,8 @@
             }
         }
 });
-appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window', 'Role',
-    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window, Role) {
+appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window', 'Role', '$log',
+    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window, Role, $log) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -104,7 +104,7 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
         };
         webSvc.getAutoStartShipments(param).success(function(data) {
             if (data.status.code == 0) {
-                console.log('AutoShipment', data.response);
+                $log.debug('AutoShipment', data.response);
                 $scope.AutoStartShipmentList = data.response;
                 //$scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
             }
@@ -117,7 +117,7 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
             }
             webSvc.saveDevice($scope.tracker).success(function(resp) {
-                console.log('UPDATED', resp);
+                $log.debug('UPDATED', resp);
                 if (resp.status.code == 0) {
                     //success
                     toastr.success('You\'v created a device: ' + $scope.tracker.imei);
@@ -130,8 +130,8 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
         };
 }]);
 appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams',
-    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$uibModal', 'Role',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $uibModal, Role) {
+    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$uibModal', 'Role', '$log',
+    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $uibModal, Role, $log) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -198,7 +198,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
             }
             webSvc.saveDevice($scope.tracker).success(function(resp) {
-                console.log('UPDATED', resp);
+                $log.debug('UPDATED', resp);
                 if (resp.status.code == 0) {
                     //success
                     toastr.success('"Changes saved for Device ' + $scope.tracker.sn);
@@ -291,29 +291,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
             })
         };
     }]);
-/**
- * Created by beou on 09/03/2016.
- */
-//appFilters.filter('volt', function() {
-//    return function (input) {
-//        if (input) {
-//            if (input <= 3355) {
-//                return '0%';
-//            } else if (input <= 3441.3) {
-//                return '10%';
-//            } else if (input <=3527.6) {
-//                return '20%';
-//            } else if (input <= 4131.7) {
-//                return '90%';
-//            } else if (input < 4218) {
-//                return '95%';
-//            } else {
-//                return '100%';
-//            }
-//        }
-//       //return Number(input/1000).toFixed(1) + 'V';
-//    }
-//});
+
 appFilters.filter('friendlyDate', function() {
     return function (input) {
         if (input == null) {

@@ -245,7 +245,11 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
             });
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Alert profile saved successfully")
+                if (data.status.code==0) {
+                    toastr.success("Alert profile saved successfully")
+                } else {
+                    toastr.warning('Warning. An error has occured while creating new alert!');
+                }
                 if (closeModalPopup) {
                     $rootScope.modalInstance.close('cancel');
                     $scope.fromModalPopup = false;
@@ -405,7 +409,11 @@ appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $sta
             });
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Alert profile updated successfully")
+                if (data.status.code == 0) {
+                    toastr.success("Alert profile updated successfully")
+                } else {
+                    toastr.warning('Warning. An error has occured while updating current alert');
+                }
                 if (closeModalPopup) {
                     $rootScope.modalInstance.close('cancel');
                     $scope.fromModalPopup = false;

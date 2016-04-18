@@ -171,7 +171,11 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
 
         if (isValid) {    
             webSvc.saveNotificationSchedule($scope.Noti).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Notification added successfully")
+                if (data.status.code == 0) {
+                    toastr.success("Notification added successfully")
+                } else {
+                    toastr.warning("Warning. An error has occured while creating Notification")
+                }
                 if (closeModalPopUp) {
                     $rootScope.modalInstance.close('cancel');
                     $scope.fromModalPopup = false;
@@ -332,7 +336,11 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
     $scope.SaveNoti = function (isValid, closeModalPopup) {
         if (isValid) {
             webSvc.saveNotificationSchedule($scope.Noti).success( function (data, textStatus, XmlHttpRequest) {
-                toastr.success("Notification updated successfully")
+                if (data.status.code==0) {
+                    toastr.success("Notification updated successfully")
+                } else {
+                    toastr.warning('Warning. An error has occurred while updating current notification!');
+                }
                 if (closeModalPopup) {
                     $scope.fromModalPopup = false;
                     $rootScope.modalInstance.close('cancel');
