@@ -1,8 +1,20 @@
-﻿appCtrls.controller('ListLocCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $window) {
+﻿appCtrls.controller('ListLocCtrl', function ($rootScope, $scope, $state, webSvc, rootSvc, localDbSvc, $window, $log, $timeout, $interval, $controller) {
     rootSvc.SetPageTitle('Manage Location');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Locations");
-    $scope.AuthToken = localDbSvc.getToken();
+
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
+
+
     var BindLocationList = function () {
         webSvc.getLocations($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
@@ -54,7 +66,9 @@
     }
 });
 
-appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $window) {
+appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $interval, $window, $log, $controller) {
+
+
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Location');
         rootSvc.SetActiveMenu('Setup');
@@ -75,27 +89,16 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
         $window.print();
     }
 
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
 
     $scope.fromModalPopup = false;
     if ($rootScope.modalInstance) {
@@ -292,7 +295,8 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     }
 });
 
-appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $window, $rootScope, $timeout) {
+appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state,
+                                             $window, $rootScope, $timeout, $interval, $log, $controller) {
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Location');
         rootSvc.SetActiveMenu('Setup');
@@ -304,27 +308,16 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         $scope.PageHeader = "Locations";
     }
 
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
 
     $scope.Action = "Edit";
     $scope.AuthToken = localDbSvc.getToken();

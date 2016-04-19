@@ -2,9 +2,19 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('EditGroupCtrl', EditGroupCtrl);
-function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $rootScope, $timeout, $q, localDbSvc, $log) {
-    var self = this;
+function EditGroupCtrl($rootScope, rootSvc, $state, $stateParams, webSvc, $timeout, $interval, $q, localDbSvc, $log, $controller) {
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
 
+    var self = this;
     self.state = $state;
     self.WebSvc = webSvc;
     //properties
@@ -26,27 +36,7 @@ function EditGroupCtrl(rootSvc, $state, $stateParams, webSvc, $rootScope, $timeo
     self.all([p2]).then(function () {
         self.debug('deviceList', self.deviceList);
         self.debug('deviceListToAdd', self.deviceListToAdd);
-    }).then(function () {
-        self.reloadIfNeed();
     });
-    self.reloadIfNeed = function () {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            //$rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-            var tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, tickInterval); // reset the timer
-            }
-            $timeout(tick, tickInterval);
-        }
-    }
 };
 
 EditGroupCtrl.prototype.GetDeviceGroup = function(id){

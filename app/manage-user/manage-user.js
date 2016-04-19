@@ -1,8 +1,18 @@
-﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $window, $scope, rootSvc, webSvc, $window) {
+﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $state, $window, $scope, rootSvc, webSvc, localDbSvc, $window,
+                                              $log, $timeout, $interval, $controller) {
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
-
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
     var BindUserList = function () {
         webSvc.getUsers($scope.pageSize, $scope.pageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
@@ -62,7 +72,7 @@
 });
 
 appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc,
-                                             $state, $filter, $uibModal, $window, $q, $log) {
+                                             $state, $filter, $uibModal, $window, $q, $log, $interval, $controller) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -74,27 +84,16 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
     $scope.Print = function() {
         $window.print();
     }
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
     var BindRoles = function () {
         return webSvc.getRoles().success(function(data){
             //console.log('ROLELIST', data);
@@ -181,34 +180,23 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
 
 //-- edit user
 appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state,
-                                              $timeout, $filter, $window, $q, $log) {
+                                              $timeout, $interval, $filter, $window, $q, $log, $controller) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
     $scope.AddUser = false;
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
     $scope.Print = function() {
         $window.print();
     }

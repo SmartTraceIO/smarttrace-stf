@@ -1,10 +1,19 @@
 ﻿appCtrls.controller('ViewShipmentDetailTableCtrl',
-    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal,
-              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $location) {
+    function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $log, $interval,
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $controller) {
     rootSvc.SetPageTitle('View Shipment Detail in Table');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail  in Table");
-
+        {
+            this.rootScope  = $rootScope;
+            this.state      = $state;
+            this.log        = $log;
+            this.webSvc     = webSvc;
+            this.localDbSvc = localDbSvc;
+            this.timeout    = $timeout;
+            this.interval   = $interval;
+            $controller('BaseCtrl', {VM:this});
+        }
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Print = function() {
         $window.print();

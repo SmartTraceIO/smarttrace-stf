@@ -1,9 +1,19 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
-    function ($scope, $rootScope, $filter, rootSvc, localDbSvc, webSvc, $window, Role) {
+    function ($scope, $rootScope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, $log, $timeout, $interval, $controller) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Role = Role;
+        {
+            this.rootScope  = $rootScope;
+            this.state      = $state;
+            this.log        = $log;
+            this.webSvc     = webSvc;
+            this.localDbSvc = localDbSvc;
+            this.timeout    = $timeout;
+            this.interval   = $interval;
+            $controller('BaseCtrl', {VM:this});
+        }
 
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
@@ -86,15 +96,23 @@
             }
         }
 });
-appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc', 'localDbSvc', 'webSvc','$window', 'Role', '$log',
-    function($scope, $state, $filter, rootSvc, localDbSvc, webSvc, $window, Role, $log) {
+appCtrls.controller('AddTrackerCtrl',
+    function($rootScope, $scope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, $timeout, $interval, $log, $controller) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Add";
-
         $scope.Role = Role;
-
+        {
+            this.rootScope  = $rootScope;
+            this.state      = $state;
+            this.log        = $log;
+            this.webSvc     = webSvc;
+            this.localDbSvc = localDbSvc;
+            this.timeout    = $timeout;
+            this.interval   = $interval;
+            $controller('BaseCtrl', {VM:this});
+        }
         var filter = $filter('filter');
         var param = {
             pageSize: 1000,
@@ -128,15 +146,24 @@ appCtrls.controller('AddTrackerCtrl', ['$scope', '$state', '$filter', 'rootSvc',
                 }
             });
         };
-}]);
-appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filter', '$stateParams',
-    'rootSvc', 'localDbSvc', 'webSvc', '$window', '$uibModal', 'Role', '$log',
-    function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, webSvc, $window, $uibModal, Role, $log) {
+});
+appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc,
+                                                webSvc, $window, $uibModal, Role, $log, $timeout, $interval, $controller) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Edit";
         $scope.Role = Role;
+        {
+            this.rootScope  = $rootScope;
+            this.state      = $state;
+            this.log        = $log;
+            this.webSvc     = webSvc;
+            this.localDbSvc = localDbSvc;
+            this.timeout    = $timeout;
+            this.interval   = $interval;
+            $controller('BaseCtrl', {VM:this});
+        }
 
         var User = localDbSvc.getUserProfile();
         $scope.getRole = function () {
@@ -290,7 +317,7 @@ appCtrls.controller('EditTrackerCtrl', ['$scope', '$rootScope', '$state', '$filt
                 }
             })
         };
-    }]);
+    });
 
 appFilters.filter('friendlyDate', function() {
     return function (input) {

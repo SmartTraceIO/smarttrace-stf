@@ -1,33 +1,23 @@
-﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout, $log, $uibModal) {
+﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $window,
+                                               $timeout, $log, $uibModal, $interval, $controller) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
 
-    $scope.AuthToken = localDbSvc.getToken();
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
+
     $scope.Print = function() {
         $window.print();
     }
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
-    //--
     var BindAlertList = function () {
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
@@ -48,12 +38,12 @@
             }
         });
     }
-
-    $scope.TempType = localDbSvc.get("CurrentUserTempUnits") == "Celsius" ? "C" : "F";
+    $scope.TempType = localDbSvc.getDegreeUnits() == "Celsius" ? "C" : "F";
     if ($scope.TempType == "C") {
         $scope.minRange = -20;
         $scope.maxRange = 50;
     }
+
     else if ($scope.TempType == "F") {
         $scope.minRange = -4;
         $scope.maxRange = 122;
@@ -101,28 +91,18 @@
     }
 });
 
-appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSvc, $state, $rootScope, $timeout, $window) {
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $state, $timeout, $interval,
+                                              $window,$log, $controller) {
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
 
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Add Alert');
@@ -142,7 +122,7 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
     $scope.Print = function() {
         $window.print();
     }
-    $scope.TempType = localDbSvc.get("CurrentUserTempUnits") == "Celsius" ? "C" : "F";
+    $scope.TempType = localDbSvc.getDegreeUnits() == "Celsius" ? "C" : "F";
     if ($scope.TempType == "C") {
         $scope.minRange = -20;
         $scope.maxRange = 50;
@@ -265,28 +245,18 @@ appCtrls.controller('AddAlertCtrl', function ($scope, rootSvc, localDbSvc, webSv
     }
 });
 
-appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, webSvc, $state, $rootScope, $timeout, $window) {
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state,
+                                               $timeout, $interval, $window, $log, $controller) {
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
-    //--
 
     if (!$rootScope.modalInstance) {
         rootSvc.SetPageTitle('Edit Alert');
@@ -321,7 +291,7 @@ appCtrls.controller('EditAlertCtrl', function ($scope, rootSvc, localDbSvc, $sta
     $scope.Print = function() {
         $window.print();
     }
-    $scope.TempType = localDbSvc.get("CurrentUserTempUnits") == "Celsius" ? "C" : "F";
+    $scope.TempType = localDbSvc.getDegreeUnits() == "Celsius" ? "C" : "F";
     if ($scope.TempType == "C") {
         $scope.minRange = -20;
         $scope.maxRange = 50;

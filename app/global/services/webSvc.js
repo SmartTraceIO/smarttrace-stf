@@ -173,12 +173,13 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 
 		getNotifications: function(includeRead){
 			var url = Api.url + 'getNotifications/' + localDbSvc.getToken();
-			var params = {
+			var config = {
 				params: {
-					includeRead: includeRead
-				}
+					includeRead: includeRead,
+				},
+				noCancelOnRouteChange: true
 			};
-			return $http.get(url, params);
+			return $http.get(url, config);
 		},
 
 		getSingleShipment: function(shipmentId){

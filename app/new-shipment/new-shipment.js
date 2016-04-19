@@ -1,9 +1,20 @@
-﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state, $filter, $timeout, $rootScope, $window) {
+﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state,
+                                                 $filter, $timeout, $interval, $rootScope, $window, $log, $controller) {
     rootSvc.SetPageTitle('New Manual Shipment');
     rootSvc.SetActiveMenu('New Manual Shipment');
     rootSvc.SetPageHeader("New Manual Shipment");
     
     $scope.AuthToken = localDbSvc.getToken();
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
     webSvc.getAlertProfiles(1000000, 1, 'alertProfileName', 'asc').success( function (data) {
         
         if (data.status.code == 0) {

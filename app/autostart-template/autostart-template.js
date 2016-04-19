@@ -1,28 +1,18 @@
-﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $uibModal, rootSvc, localDbSvc, webSvc, $window, $timeout) {
+﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $uibModal, rootSvc, localDbSvc,
+                                                  webSvc, $window, $timeout, $interval, $log, $controller) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
     var filter = $filter('filter');
 
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
+    this.rootScope = $rootScope;
+    this.state = $state;
+    this.log = $log;
+    this.webSvc = webSvc;
+    this.localDbSvc = localDbSvc;
+    this.timeout = $timeout;
+    this.interval = $interval;
+    $controller('BaseCtrl', {VM:this});
 
     var BindAutoShipmentList = function () {
         var param = {
@@ -84,38 +74,45 @@
     }
 });
 
-appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window,
-                                                 $filter, arrayToStringFilter, $uibModal, $rootScope, $timeout) {
+appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window, $log, $controller,
+                                                 $filter, arrayToStringFilter, $uibModal, $rootScope, $timeout, $interval) {
     rootSvc.SetPageTitle('Add an Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
     //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
-    //--
+
     $scope.Print = function() {
         $window.print();
     }
+    this.rootScope  = $rootScope;
+    this.state      = $state;
+    this.log        = $log;
+    this.webSvc     = webSvc;
+    this.localDbSvc = localDbSvc;
+    this.timeout    = $timeout;
+    this.interval   = $interval;
+    $controller('BaseCtrl', {VM:this});
 
+    var BindAutoShipmentList = function () {
+        var param = {
+            pageSize: $scope.PageSize,
+            pageIndex: $scope.PageIndex,
+            so: $scope.So,
+            sc: $scope.Sc
+        };
+
+        webSvc.getAutoStartShipments(param).success(function(data){
+            if (data.status.code == 0) {
+                $scope.AutoStartShipmentList = data.response;
+                $scope.AutoStartShipmentList.totalCount = data.totalCount;
+                console.log('AutoStartShipmentList', $scope.AutoStartShipmentList);
+            } else {
+                toastr.error('Cannot get list of AutoStartShipment');
+            }
+        });
+    }
     var BindLocations = function (cb) {
         webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
             if (data.status.code == 0) {
@@ -443,8 +440,8 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
 });
 
-appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $log,
-                                                  $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q){
+appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $log, $controller,
+                                                  $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q, $interval){
     rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -452,27 +449,14 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.Action = "Edit";
     var filter = $filter('filter');
 
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
-    //--
+    this.rootScope  = $rootScope;
+    this.state      = $state;
+    this.log        = $log;
+    this.webSvc     = webSvc;
+    this.localDbSvc = localDbSvc;
+    this.timeout    = $timeout;
+    this.interval   = $interval;
+    $controller('BaseCtrl', {VM:this});
 
     $scope.Print = function() {
         $window.print();

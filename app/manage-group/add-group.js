@@ -2,7 +2,18 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
-function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, localDbSvc) {
+function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $interval, $log, localDbSvc, $controller) {
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
+
     var self = this;
     self.state = $state;
     self.WebSvc = webSvc;
@@ -24,29 +35,7 @@ function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $log, l
             self.deviceList = response.response;
             self.debug('DeviceList', self.deviceList);
         }
-    }).then(function() {
-        self.reloadIfNeed();
-    })
-
-    self.reloadIfNeed = function() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            //$rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-            var tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, tickInterval); // reset the timer
-            }
-            $timeout(tick, tickInterval);
-        }
-
-    }
+    });
 }
 
 AddGroupCtrl.prototype.addGroup = function() {

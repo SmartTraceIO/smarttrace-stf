@@ -3,7 +3,18 @@
  */
 appCtrls.controller('ListGroupCtrl', ListGroupCtrl);
 
-function ListGroupCtrl($uibModal, rootSvc, $window, webSvc, $q, $log) {
+function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, localDbSvc, $timeout, $interval, $q, $log, $controller) {
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
+
     var self = this;
 
     rootSvc.SetPageTitle('List Tracker Groups');

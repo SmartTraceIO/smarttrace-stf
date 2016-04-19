@@ -1,8 +1,19 @@
-﻿appCtrls.controller('ListShipTempCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $window, $timeout) {
+﻿appCtrls.controller('ListShipTempCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $window,
+                                                  $timeout, $interval, $log, $controller) {
     rootSvc.SetPageTitle('List Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
-    $scope.AuthToken = localDbSvc.getToken();
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
+    }
+
     var BindShipmentList = function () {
         var param = {
             pageSize: $scope.PageSize, 
@@ -59,32 +70,23 @@
 });
 
 appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter,
-                                                 $uibModal, $rootScope, $window, $timeout, $log) {
+                                                 $uibModal, $rootScope, $window, $timeout, $log, $interval, $controller) {
     rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Add";
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
+
     $scope.Print = function() {
         $window.print();
     }
@@ -435,7 +437,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter,
-                                                  $rootScope, $timeout, $uibModal, webSvc, $window, $log, $q) {
+                                                  $rootScope, $timeout, $uibModal, webSvc, $window, $log, $q, $interval, $controller) {
     rootSvc.SetPageTitle('Edit Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -443,26 +445,16 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     $scope.Action = "Edit";
 
     var filter = $filter('filter');
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
+    {
+        this.rootScope  = $rootScope;
+        this.state      = $state;
+        this.log        = $log;
+        this.webSvc     = webSvc;
+        this.localDbSvc = localDbSvc;
+        this.timeout    = $timeout;
+        this.interval   = $interval;
+        $controller('BaseCtrl', {VM:this});
     }
-    reloadIfNeed();
     $scope.Print = function() {
         $window.print();
     }
