@@ -16,7 +16,7 @@
             </select>
         </div>
          <div ng-if="getRole() >= roles.SmartTraceAdmin" class="pull-right">
-            <a class="btn btn-default pull-right" href="/#/add-tracker">
+            <a class="btn btn-default pull-right" href="#/add-tracker">
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker
             </a>
         </div>
@@ -210,7 +210,7 @@
                         </td>
 
                     <td class="text-center" ng-if="getRole() >= roles.Admin">
-                        <a class="btn green" href="/#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        <a class="btn green" href="#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <!--<td class="text-center" ng-if="getRole() >= roles.SmartTraceAdmin">
                         <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
