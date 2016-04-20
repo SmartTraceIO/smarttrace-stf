@@ -18,7 +18,7 @@
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
                 if (data.status.code == 0) {
-                    console.log('TrackerList', data.response);
+                    $log.debug('TrackerList', data.response);
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
 
@@ -194,9 +194,8 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
             so: 'id',
             sc: 'asc'
         };
-        //console.log('PARAM', $scope.tracker.imei);
         webSvc.getDevice($stateParams.imei).success(function(data){
-            //console.log("TRACKER", data);
+            $log.debug("TRACKER", data);
             if (data.status.code == 0) {
                 $scope.tracker = data.response;
             } else {
