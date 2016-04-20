@@ -244,11 +244,21 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
                 $scope.AutoStartShipment.endLocations = [];
             }
 
-            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes);
-            $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes);
-            $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm);
-            $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes);
-            $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes);
+            if (!isNaN($scope.AutoStartShipment.shutdownDeviceAfterMinutes)) {
+                $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.shutDownAfterStartMinutes)) {
+                $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.arrivalNotificationWithinKm)) {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.noAlertsAfterArrivalMinutes)) {
+                $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.noAlertsAfterStartMinutes)) {
+                $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
+            }
 
             if ($scope.AutoStartShipment.arrival_notification_schedules) {
                 $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function(val) {
@@ -529,6 +539,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         }
         webSvc.getAutoStartShipment(params).success(function(data){
             if (data.status.code == 0) {
+                $log.debug('AutoStartShipment', data)
                 var response = data.response;
                  $scope.AutoStartShipment = data.response;
                  //-- correcting
@@ -543,7 +554,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                  $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
 
                  //-- noAlertsAfterArrivalMinutes
-                 if (response.noAlertsAfterArrivalMinutes) {
+                 if (!isNaN(response.noAlertsAfterArrivalMinutes)) {
                     $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
                  } else {
                      $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = "";
@@ -684,11 +695,21 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                 $scope.AutoStartShipment.noAlertsAfterStartMinutes = null;
             }
 
-            $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes, 10);
-            $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes, 10);
-            $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm, 10);
-            $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes, 10);
-            $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
+            if (!isNaN($scope.AutoStartShipment.shutdownDeviceAfterMinutes)) {
+                $scope.AutoStartShipment.shutdownDeviceAfterMinutes = parseInt($scope.AutoStartShipment.shutdownDeviceAfterMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.shutDownAfterStartMinutes)) {
+                $scope.AutoStartShipment.shutDownAfterStartMinutes  = parseInt($scope.AutoStartShipment.shutDownAfterStartMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.arrivalNotificationWithinKm)) {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm = parseInt($scope.AutoStartShipment.arrivalNotificationWithinKm, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.noAlertsAfterArrivalMinutes)) {
+                $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterArrivalMinutes, 10);
+            }
+            if (!isNaN($scope.AutoStartShipment.noAlertsAfterStartMinutes)) {
+                $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
+            }
 
             $log.debug('UpdateAutostart', $scope.AutoStartShipment);
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(function (data, textStatus, XmlHttpRequest) {

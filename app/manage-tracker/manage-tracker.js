@@ -31,9 +31,10 @@
                             var n = temShipmentNumber.substr(idx1+1, idx2-1);
                             var t = temShipmentNumber.substr(0, idx1);
                             $scope.TrackerList[k].tripCount = parseInt(n, 10);
-                            //$scope.TrackerList[k].sn = parseInt(t);
                         }
-                        $scope.TrackerList[k].sn = parseInt(v.sn, 10);
+                        if (!isNaN(v.sn)) {
+                            $scope.TrackerList[k].sn = parseInt(v.sn, 10);
+                        }
                     })
                 }
             })
@@ -217,7 +218,9 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 var n = temShipmentNumber.substr(idx1+1, idx2-1);
                 $scope.tracker.tripCount = parseInt(n, 10);
             }
-            $scope.tracker.sn = parseInt($scope.tracker.sn, 10);
+            if (!isNaN($scope.tracker.sn)) {
+                $scope.tracker.sn = parseInt($scope.tracker.sn, 10);
+            }
         });
 
         $scope.saveTracker = function() {

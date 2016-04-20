@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('NewShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state,
                                                  $filter, $timeout, $interval, $rootScope, $window, $log, $controller) {
     rootSvc.SetPageTitle('New Manual Shipment');
-    rootSvc.SetActiveMenu('New Manual Shipment');
+    rootSvc.SetActiveMenu('New Shipment');
     rootSvc.SetPageHeader("New Manual Shipment");
     
     $scope.AuthToken = localDbSvc.getToken();

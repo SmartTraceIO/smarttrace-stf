@@ -61,11 +61,14 @@
                 </div>
                 <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
                     <ul class="nav navbar-nav">
-                        <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Manual Shipment'}">
-                            <a href="#/new-shipment">
-                                New Manual Shipment
-                                <span class="selected"> </span>
+                        <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'New Shipment'}">
+                            <a href="javascript:void(0)" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                New Shipment<span class="caret"></span>
                             </a>
+                            <ul class="dropdown-menu">
+                                <li class="menu-li" ng-click="reload()"><a href="#/new-shipment">Manual Shipment</a></li>
+                                <li class="menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">AutoStart Shipment</a></li>
+                            </ul>
                         </li>
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
                             <a href="#/view-shipment">
@@ -183,11 +186,17 @@
             <div class="page-sidebar navbar-collapse collapse"> <!-- ng-controller="reloadCtrl">-->
                 <div class="page-sidebar-wrapper">
                     <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed">
-                        <li class="nav-item start ">
-                            <a href="#/new-shipment" class="nav-link">
+                        <li class="nav-item">
+                            <a href="#" id="new-shipment" class="nav-link nav-toggle">
                                 <i class="icon-home"></i>
-                                <span class="title">New Manual Shipment</span>
+                                <span class="title nav-toggler">New Shipment</span>
+                                <span class="arrow"></span>
                             </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item"><a href="#/new-shipment" class="nav-link"><span class="title">Manual Shipment</span></a></li>
+                                <li class="nav-item"><a href="#/new-autostart-shipment" class="nav-link"><span class="title">AutoStart Shipment</span></a></li>
+                            </ul>
+
                         </li>
                         <li class="nav-item ">
                             <a href="#/view-shipment" class="nav-link">

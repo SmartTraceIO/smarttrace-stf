@@ -17,11 +17,11 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	}
 
 	$scope.login = function(){
+        $log.debug('Start login...', $scope.username, $scope.password);
 		if($scope.toggle){
 			localDbSvc.setUsername($scope.username);
 			localDbSvc.setPassword($scope.password);
 		}
-        // console.log("Updating tracker data...");
         loginTimer = $timeout(loginTimeOut, 5000);
         var promise0 = webSvc.login($scope.username, $scope.password).success(function(data) {
 				$timeout.cancel(loginTimer);
@@ -30,6 +30,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 					localDbSvc.setToken(data.response.token, data.response.expired);
 					toastr.success("Successfully logged in.");
 				} else {
+                    $log.debug(data);
 					toastr.warning("User e-mail address or password is incorrect.");
 				}
 			});

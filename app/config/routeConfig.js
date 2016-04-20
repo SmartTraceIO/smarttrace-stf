@@ -92,6 +92,22 @@ appConstants.constant('routes', [
               'app/global/filters/filters.js?v=' + version
           ]
       },
+    {
+        name: 'newautostartshipment',
+        config: {
+            url: "/new-autostart-shipment",
+            views: {
+                'content': {
+                    templateUrl: 'app/new-shipment/new-autostart-shipment.html?v='+version,
+                    controller: 'NewAutoStartShipmentCtrl as VM'
+                }
+            }
+        },
+        dependencies: [
+            'app/new-shipment/new-autostart-shipment.js?v=' + version,
+            'app/global/filters/filters.js?v=' + version
+        ]
+    },
       {
           name: 'viewshipment',
           config: {

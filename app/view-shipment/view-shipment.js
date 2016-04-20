@@ -99,7 +99,9 @@
             $scope.loading = false;
         }).then(function() {
             angular.forEach($scope.ShipmentList, function(v, k) {
-                $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
+                if (!isNaN(v.deviceSN)) {
+                    $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
+                }
             })
         });
     };

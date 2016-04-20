@@ -388,6 +388,15 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
+		createNewAutoSthipment: function(deviceImei) {
+			var url = Api.url + 'createNewAutoSthipment/' + localDbSvc.getToken();
+			var config = {
+				params: {
+					device: deviceImei
+				}
+			}
+			return $http.get(url, config);
+		},
 		//-- AutoStart-Shipment Template
 		getAutoStartShipments: function(param) {
 			var url = Api.url + 'getAutoStartShipments/' + localDbSvc.getToken();
