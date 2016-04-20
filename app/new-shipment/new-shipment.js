@@ -26,7 +26,9 @@
         if (data.status.code == 0) {
             $scope.FromLocationList = [];
             $scope.ToLocationList = [];
+            $scope.InterimLocationList = [];
             $scope.LocationList = data.response;
+            $log.debug('LocationList', $scope.LocationList);
             angular.forEach($scope.LocationList, function (val, key) {
                 if (val.companyName) {
                     var dots = val.companyName.length > 20 ? '...' : '';
@@ -40,6 +42,8 @@
 
                 if (val.startFlag == "Y")
                     $scope.FromLocationList.push(val);
+                if (val.interimFlag == "Y")
+                    $scope.InterimLocationList.push(val);
                 if (val.endFlag == "Y")
                     $scope.ToLocationList.push(val);
             })
@@ -95,13 +99,7 @@
         $scope.date1 = new Date(d1withZone);
         $scope.timeZone = data.response.timeZoneId;
     })
-    //     }
-    // });
 
-
-
-    //$scope.time2 = new Date();
-    //$scope.time2.setHours(7, 30);
     $scope.showMeridian = true;
     $scope.disabled = false;
 
@@ -235,8 +233,7 @@
             webSvc.getShipmentTemplate(param).success(function(data){
                 if (data.status.code == 0) {
                     $scope.NewShipment.shipment = data.response;
-
-                    console.log('NewShipment',$scope.NewShipment.shipment);
+                    $log.debug('Shipment', data.response);
                     if (data.response) {
                         $scope.SelectedTemplateId = data.response.shipmentTemplateId;
                         $scope.ShipmentTemplate.selectedShipmentTemplateId = data.response.shipmentTemplateId;

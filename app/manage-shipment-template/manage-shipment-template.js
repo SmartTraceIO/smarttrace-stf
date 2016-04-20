@@ -506,12 +506,10 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
                 shipmentTemplateId: $scope.STId
             };
             webSvc.getShipmentTemplate(param).success(function(data){
-                // .get({ action: "getShipmentTemplate", token: $scope.AuthToken, shipmentTemplateId: $scope.STId }, function (data) {
                 if (data.status.code == 0) {
                     $scope.ShipmentTemplate = data.response;
                     $log.debug('ShipmentTemplate', data.response);
                     if (data.response) {
-
                         if ($scope.ShipmentTemplate.shutdownDeviceAfterMinutes == 0)
                             $scope.ShipmentTemplate.shutdownDeviceAfterMinutes = "0";
                         else if (data.response.shutdownDeviceAfterMinutes)

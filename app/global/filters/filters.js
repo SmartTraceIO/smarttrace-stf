@@ -29,36 +29,58 @@ appFilters.filter('temperature', function (localDbSvc) {
 });
 
 appFilters.filter('volt', function() {
+    //max 4226 -- 100%
+    // 4220 -- 95%
+    // 4070 -- 60%
+    //3620 -- 10% --> 47
+    //min 3147 -- 0%
     return function (input) {
         if (input) {
             var v = Number(parseInt(input, 10)/1000).toFixed(1) + "V";
-            if (input <= 3355) {
+            if (input <= 3194.3) {
                 return '0% (' + v + ")";
-            } else if (input <= 3441.3) {
+            } else if (input <= 3241.6) {
+                return '1% (' + v + ')';
+            } else if (input <= 3288.9) {
+                return '2% (' + v + ')';
+            } else if (input <= 3336.2) {
+                return '3% (' + v + ')';
+            } else if (input <= 3383.5) {
+                return '4% (' + v + ')';
+            } else if (input <= 3430.8) {
+                return '5% (' + v + ')';
+            } else if (input <= 3478.1) {
+                return '6% (' + v + ')';
+            } else if (input <= 3525.4) {
+                return '7% (' + v + ')';
+            } else if (input <= 3572.7) {
+                return '8% (' + v + ')';
+            } else if (input <= 3620) {
+                return '9% (' + v + ')'; // start rolling out
+            } else if (input <= 3695) {
                 return '10% (' + v + ")";
-            } else if (input <=3527.6) {
+            } else if (input <=3770) {
                 return '20% (' + v + ")";
-            } else if (input <= 3613.9) {
+            } else if (input <= 3845) {
                 return '30% (' + v + ")";
-            } else if (input <= 3700.2) {
+            } else if (input <= 3920) {
                 return '40% (' + v + ")";
-            } else if (input <= 3786.5) {
+            } else if (input <= 3995) {
                 return '50% (' + v + ")";
-            } else if (input <= 3872.8) {
+            } else if (input <= 4070) {
                 return '60% (' + v + ")";
-            } else if (input <= 3959.1) {
+            } else if (input <= 4109) {
                 return '70% (' + v + ")";
-            } else if (input <= 4045.4) {
+            } else if (input <= 4148) {
                 return '80% (' + v + ")";
-            } else if (input <= 4131.7) {
+            } else if (input <= 4187) {
                 return '90% (' + v + ")";
-            } else if (input < 4218) {
+            } else if (input < 4220) {
                 return '95% (' + v + ")";
             } else {
                 return '100% (' + v + ")";
             }
         }
-        //return Number(input/1000).toFixed(1) + 'V';
     }
 });
 appFilters.filter('convertDate', function(localDbSvc) {
