@@ -27,7 +27,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="/#/manage/add-autostart-template">
+            <a class="btn btn-default pull-right" ng-href="#/manage/add-autostart-template">
                 <i class="fa fa-plus"></i>&nbsp;Add New Autostart Template</a>
         </div>
         <div class="clearfix"></div>
@@ -113,7 +113,7 @@
                         {{shipment.alertProfileName}}
                     </td>
                     <td class="text-center hidden-print" width="5%">
-                        <a class="btn green" href="/#/manage/edit-autostart-template/{{shipment.id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        <a class="btn green" ng-href="#/manage/edit-autostart-template/{{shipment.id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center hidden-print" width="5%">
                         <a class="btn green" ng-click="confirmDelete(shipment.id)"><i class="fa fa-remove"></i>&nbsp;Delete</a>

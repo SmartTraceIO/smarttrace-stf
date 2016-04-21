@@ -30,7 +30,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="/#/manage/add-shipment-template"><i class="fa fa-plus"></i>&nbsp;Add New Manual Template</a>
+            <a class="btn btn-default pull-right" ng-href="#/manage/add-shipment-template"><i class="fa fa-plus"></i>&nbsp;Add New Manual Template</a>
         </div>
         <div class="clearfix"></div>
         <br />
@@ -119,7 +119,7 @@
                         {{shipment.alertProfileName}}
                     </td>
                     <td class="text-center hidden-print">
-                        <a class="btn green" href="/#/manage/edit-shipment-template/{{shipment.shipmentTemplateId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        <a class="btn green" ng-href="#/manage/edit-shipment-template/{{shipment.shipmentTemplateId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center hidden-print">
                         <a class="btn green" ng-click="confirm(shipment.shipmentTemplateId)"><i class="fa fa-remove"></i>&nbsp;Delete</a>

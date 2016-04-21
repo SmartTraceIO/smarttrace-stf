@@ -22,7 +22,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="/#/manage/add-group">
+            <a class="btn btn-default pull-right" ng-href="#/manage/add-group">
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker Group</a>
         </div>
         <div class="clearfix"></div>
@@ -90,7 +90,7 @@
                     <td>{{group.deviceList | arrayToString}}</td>
 
                     <td class="text-center hidden-print" width="5%">
-                        <a class="btn green" href="/#/manage/edit-group/{{group.id}}">
+                        <a class="btn green" ng-href="#/manage/edit-group/{{group.id}}">
                             <i class="fa fa-pencil"></i>
                             <span>Edit</span>
                         </a>

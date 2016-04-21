@@ -7,7 +7,7 @@
             <span>View shipment details</span>
         </div>
         <div class="tools hidden-print">
-            <a href="/#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}"
+            <a ng-href="#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}"
                ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
                 <span class="btn default btn-sm uppercase">View Readings</span>
             </a>
