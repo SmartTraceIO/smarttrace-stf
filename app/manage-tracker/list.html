@@ -174,25 +174,25 @@
                         </td>
                         <td>{{tracker.shipmentStatus}}
                             <i ng-if="tracker.shipmentStatus=='InProgress'"
-                               tooltip="An active shipment with manually entered shipment data."
+                               uib-tooltip="An active shipment with manually entered shipment data."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                             <i ng-if="tracker.shipmentStatus=='Default'"
-                               tooltip="An active shipment generated via an Autostart Template."
+                               uib-tooltip="An active shipment generated via an Autostart Template."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                             <i ng-if="tracker.shipmentStatus=='Arrived'"
-                               tooltip="A shipment that has reached its destination."
+                               uib-tooltip="A shipment that has reached its destination."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                             <i ng-if="tracker.shipmentStatus=='Ended'"
-                               tooltip="A shipment that has ended but has no known destination."
+                               uib-tooltip="A shipment that has ended but has no known destination."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
