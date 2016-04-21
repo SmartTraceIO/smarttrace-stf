@@ -31,7 +31,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="#/manage/add-user"><i class="fa fa-plus"></i>&nbsp;Add New User</a>
+            <a class="btn btn-default pull-right" ng-href="#/manage/add-user"><i class="fa fa-plus"></i>&nbsp;Add New User</a>
         </div>
         <div class="clearfix"></div>
         <br />
@@ -135,7 +135,7 @@
                     <td>{{user.position}}</td>
                     <td>{{user.roles}}</td>
                     <td class="text-center"><i class="fa fa-check fa-lg" ng-if="user.active"></i></td>
-                    <td class="text-center hidden-print"><a class="btn green" href="#/manage/edit-user/{{user.id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a></td>
+                    <td class="text-center hidden-print"><a class="btn green" ng-href="#/manage/edit-user/{{user.id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a></td>
                     <td class="text-center hidden-print"><a class="btn green" ng-click="confirm(user.id)"><i class="fa fa-remove"></i>&nbsp;Delete</a></td>
                 </tr>
             </table>

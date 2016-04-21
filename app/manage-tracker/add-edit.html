@@ -183,7 +183,7 @@
                                    tooltip-placement="top"
                                    class="fa fa-info-circle"/>
                             </h5>
-                            <span><a href="#/view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}">
+                            <span><a ng-href="#/view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}">
                                 <!--<u>{{tracker.shipmentNumber}}</u>-->
                                 <u>{{tracker.sn}} ({{tracker.tripCount}})</u>
                             </a></span>
@@ -239,7 +239,7 @@
                                 <span ng-if="tracker.lastUpdateStatusDate">tracker.lastUpdateStatusDate</span>
                             </div>
                             <div class="col-sm-6 pull-right">
-                                <span>Please contact <a href="mailto:support@smarttrace.com"><u><strong>support@smartTrace.com.au</strong></u></a> to reactivate this device</span>
+                                <span>Please contact <a ng-href="mailto:support@smarttrace.com"><u><strong>support@smartTrace.com.au</strong></u></a> to reactivate this device</span>
                             </div>
                         </div>
                         <div class="row">

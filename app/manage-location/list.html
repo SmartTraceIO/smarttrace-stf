@@ -31,7 +31,7 @@
             </select>
         </div>
         <div class="pull-right hidden-print">
-            <a class="btn btn-default pull-right" href="#/manage/add-location" ><i class="fa fa-plus"></i>&nbsp;Add New Location</a>
+            <a class="btn btn-default pull-right" ng-href="#/manage/add-location" ><i class="fa fa-plus"></i>&nbsp;Add New Location</a>
         </div>
         <div class="clearfix"></div>
         <br />
@@ -150,7 +150,7 @@
                         <i class="fa fa-check fa-lg" ng-if="location.endFlag == 'Y'"></i>
                     </td>
                     <td class="text-center hidden-print">
-                        <a class="btn green" href="#/manage/edit-location/{{location.locationId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                        <a class="btn green" ng-href="#/manage/edit-location/{{location.locationId}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
                     </td>
                     <td class="text-center hidden-print">
                         <a class="btn green" ng-click="confirm(location.locationId);"><i class="fa fa-remove"></i>&nbsp;Delete</a>

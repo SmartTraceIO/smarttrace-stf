@@ -156,7 +156,7 @@
                     <td>{{tracker.sn}}</td>
                     <td>{{tracker.name}}</td>
                     <td>
-                        <a href="#/manage/edit-autostart-template/{{tracker.autostartTemplateId}}">
+                        <a ng-href="#/manage/edit-autostart-template/{{tracker.autostartTemplateId}}">
                             <u>{{tracker.autostartTemplateName}}</u>
                         </a>
                     </td>
@@ -168,7 +168,7 @@
                         <i class="fa fa-times"/>
                     </td>
                         <td>
-                            <a href="#view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}" ng-if="tracker.lastShipmentId!=null">
+                            <a ng-href="#view-shipment-detail?sn={{tracker.sn}}&trip={{tracker.tripCount}}" ng-if="tracker.lastShipmentId!=null">
                                 <u>{{tracker.sn}} ({{tracker.tripCount}})</u>
                             </a>
                         </td>

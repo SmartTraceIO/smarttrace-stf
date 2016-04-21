@@ -488,7 +488,7 @@
                         <div class="panel-body">
                             <div class="portlet box grey sub-portlet">
                                 <div class="portlet-title">
-                                    <a href="#/view-shipment-detail?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}" class="tracker-info">
+                                    <a ng-href="#/view-shipment-detail?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}" class="tracker-info">
                                         <table>
                                             <tr>
                                                 <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>
@@ -610,7 +610,7 @@
                             <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
                                 <div class="portlet-title">
                                     <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
-                                    <a href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info">
+                                    <a ng-href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info">
                                         <table>
                                             <tr>
                                                 <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>
