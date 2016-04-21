@@ -55,7 +55,7 @@
         <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green">
             <div class="page-header-inner ">
                 <div class="page-logo">
-                    <a href="index.html">
+                    <a ng-href="/">
                         <img src="theme/img/logo.jpg" alt="logo" class="logo-default" />
                     </a>
                 </div>
@@ -124,7 +124,7 @@
                                     <div class="alert alert-block alert-notification fade in" ng-repeat="data in unreadNotification">
                                         <button type="button" class="close" data-dismiss="alert" ng-click="readNotify(data.notificationId)"></button>
                                         <img ng-src="theme/img/alert{{data.alertType}}.png">
-                                        <h5 class="alert-heading"><a href="{{data.link}}">{{data.Line1}}</a></h5>
+                                        <h5 class="alert-heading"><a ng-href="{{data.link}}">{{data.Line1}}</a></h5>
                                         <p>{{data.Line2}}</p>
                                         <p>{{data.Line3}}</p>
                                         <p class="notification-time">{{data.date}}</p>

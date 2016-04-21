@@ -224,7 +224,7 @@
                 currentDevice.tripCount = parseInt(n);
             }
             currentDevice.sn = parseInt(currentDevice.sn);
-            var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
+            var link = '<a ng-href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
             toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
         }
     }

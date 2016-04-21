@@ -20,6 +20,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
     VM.loadNotifications = function() {
         if (!rootScope.loadedNotification) {
             webSvc.getNotifications(true).success(function (data) {
+                log.debug('Notification', data);
                 if (data == null) return;
                 if(data.status.code == 0){
                     if (angular.isArray(rootScope.readNotification)) {
@@ -37,6 +38,10 @@ appCtrls.controller('BaseCtrl', function(VM) {
                         var obj = data.response[i];
                         var m = moment(obj.date);
                         obj.date = m.fromNow()
+                        //-- manipulate link
+                        var idxLink = obj.link.indexOf('#');
+                        obj.link = obj.link.substr(idxLink);
+
                         if(data.response[i].closed){
                             rootScope.readNotification.push(obj);
                         } else {
