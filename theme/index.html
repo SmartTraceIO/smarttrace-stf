@@ -18,7 +18,7 @@
             var v = (new Date()).getTime();
             var xobj = new XMLHttpRequest();
             xobj.overrideMimeType("application/json");
-            xobj.open('GET', '/app/config/version.json?v=' + v, true);
+            xobj.open('GET', 'app/config/version.json?v=' + v, true);
             xobj.onreadystatechange = function()
             {
                 if (xobj.readyState == 4 && xobj.status == "200")
@@ -56,8 +56,9 @@
             <div class="page-header navbar navbar-fixed-top green">
                 <div class="page-header-inner ">
                     <div class="page-logo">
-                        <a href="index.html">
-                            <img src="theme/img/logo.jpg" alt="logo" class="logo-default" /> </a>
+                        <a href="/">
+                            <img src="theme/img/logo.jpg" alt="Return to SmartTrace home page" class="logo-default" />
+                        </a>
                     </div>
                     <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
                         <ul class="nav navbar-nav">

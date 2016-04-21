@@ -91,7 +91,7 @@
                         <div>
                             <div class="form-group" ng-repeat="coldAlert in coldAlerts">
                                 <div class="col-md-2">
-                                    <label class="control-label"><img src="../../theme/img/alertCold.png" />&nbsp;Less than</label>
+                                    <label class="control-label"><img src="theme/img/alertCold.png" />&nbsp;Less than</label>
                                 </div>
                                 <div class="visible-xs col-md-12">&nbsp;</div>
                                 <div class="col-md-2">
@@ -142,7 +142,7 @@
                                 <div class="col-md-2 text-right">
                                     <label for="criticalCold" class="control-label">
                                         <input type="checkbox" ng-true-value="'CriticalCold'" ng-false-value="'Cold'" ng-model="coldAlert.type" id="criticalCold">&nbsp;
-                                        <img src="../../theme/img/alertCriticalCold.png" />&nbsp;critical
+                                        <img src="theme/img/alertCriticalCold.png" />&nbsp;critical
                                     </label>
                                 </div>
                                 <div class="visible-xs col-md-12">&nbsp;</div>
@@ -185,7 +185,7 @@
                         <div>
                             <div class="form-group" ng-repeat="hotAlert in hotAlerts">
                                 <div class="col-md-2">
-                                    <label class="control-label"><img src="../../theme/img/alertHot.png" />&nbsp;More than</label>
+                                    <label class="control-label"><img src="theme/img/alertHot.png" />&nbsp;More than</label>
                                 </div>
                                 <div class="visible-xs col-md-12">&nbsp;</div>
                                 <div class="col-md-2">
@@ -236,7 +236,7 @@
                                 <div class="col-md-2 text-right">
                                     <label for="criticalHot" class="control-label">
                                         <input type="checkbox" ng-true-value="'CriticalHot'" ng-false-value="'Hot'" ng-model="hotAlert.type" id="criticalHot">&nbsp;
-                                        <img src="../../theme/img/alertCriticalHot.png" />&nbsp;critical
+                                        <img src="theme/img/alertCriticalHot.png" />&nbsp;critical
                                     </label>
                                 </div>
                                 <div class="visible-xs col-md-12">&nbsp;</div>
@@ -273,7 +273,8 @@
                                         <div class="col-md-offset-3 col-md-6 ">
                                             <div class="checkbox-list">
                                                 <label for="enterbrightenv">
-                                                    <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;<img src="../../theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;
+                                                    <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;
+                                                    <img src="theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;
                                                     <i uib-tooltip="Alert For Enter Bright Environment"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
@@ -308,7 +309,8 @@
                                         <div class="col-md-offset-3 col-md-3">
                                             <div class="checkbox-list">
                                                 <label for="btrlow">
-                                                    <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;<img src="../../theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;
+                                                    <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;
+                                                    <img src="theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;
                                                     <i uib-tooltip="Alert For Battery Low"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
