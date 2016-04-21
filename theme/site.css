@@ -163,6 +163,7 @@ p.no-padding {
 
 .page-content-wrapper .page-content {
     padding-top: 1px !important;
+    width: 100%;
 }
 
 .page-content {

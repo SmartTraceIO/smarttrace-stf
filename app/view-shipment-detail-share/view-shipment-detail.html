@@ -970,72 +970,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
-                    <highchart id="chart1" config="chartConfig" style="min-width: 310px; height: 400px; margin: 0 auto"></highchart>
+                <div class="col-md-9 col-sm-12 col-xs-12">
+                    <highchart id="chart1" config="chartConfig"
+                               style="min-width: 200px; height: 400px; margin: 0 auto"></highchart>
+                    <div class="" style="margin-left: 50px; margin-right: 10px; margin-bottom: 10px; margin-top: 10px;;">
+                        <ng-map
+                                disable-default-u-i="true"
+                                map-type-control-options="mapTypeIds: ['ROADMAP']}">
 
-                    <ng-map
-                        style="height:300px; margin-left: 40px"
-                        disable-default-u-i="true"
-                        map-type-control-options="{
-                            mapTypeIds: ['ROADMAP']
-                        }">
+                            <!-- end marker -->
+                            <custom-marker id="end-location"
+                                           position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
+                                           optimized="false" z-index="101">
+                                <div class="end-loc-box">
+                                    <table class="end-marker-content"><tr>
+                                        <td>
+                                            <b>{{mapInfo.endLocation}}</b><br/>
+                                            <!-- {{mapInfo.eta}} -->
+                                        </td>
+                                        <td><img src="theme/img/tinyLocationStop.png" class="rev-horizon"></td>
+                                    </tr></table>
+                                </div>
+                            </custom-marker>
+                            <!--special markers -->
+                            <marker ng-if="specialMarkers.length != 0"
+                                    ng-repeat="p in specialMarkers"
+                                    position="{{p.pos}}"
+                                    icon="{{p.icon}}"
+                                    data="{{p}}"
+                                    zIndex="103"
+                                    on-mouseover="showAlertsUI();"
+                                    on-mouseout="hideAlertsUI();"
+                            ></marker>
 
-                        <!-- end marker -->
-                        <custom-marker id="end-location"
-                                       position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
-                                       optimized="false" z-index="101">
-                            <div class="end-loc-box">
-                                <table class="end-marker-content"><tr>
-                                    <td>
-                                        <b>{{mapInfo.endLocation}}</b><br/>
-                                        <!-- {{mapInfo.eta}} -->
-                                    </td>
-                                    <td><img src="theme/img/tinyLocationStop.png" class="rev-horizon"></td>
-                                </tr></table>
-                            </div>
-                        </custom-marker>
-                        <!--special markers -->
-                        <marker ng-if="specialMarkers.length != 0"
-                            ng-repeat="p in specialMarkers"
-                            position="{{p.pos}}"
-                            icon="{{p.icon}}"
-                            data="{{p}}"
-                            zIndex="103"
-                            on-mouseover="showAlertsUI();"
-                            on-mouseout="hideAlertsUI();"
-                        ></marker>
+                            <!-- start marker -->
+                            <custom-marker id="start-location" position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}">
+                                <div class="start-loc-box">
+                                    <table class="start-marker-content"><tr>
+                                        <td><img src="theme/img/locationStart.png"></td>
+                                        <td>
+                                            <b>{{mapInfo.startLocation}}</b><br/>
+                                            <!-- {{mapInfo.startTime}} -->
+                                        </td>
+                                    </tr></table>
+                                </div>
+                            </custom-marker>
 
-                        <!-- start marker -->
-                        <custom-marker id="start-location" position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}">
-                            <div class="start-loc-box">
-                                <table class="start-marker-content"><tr>
-                                    <td><img src="theme/img/locationStart.png"></td>
-                                    <td>
-                                        <b>{{mapInfo.startLocation}}</b><br/>
-                                        <!-- {{mapInfo.startTime}} -->
-                                    </td>
-                                </tr></table>
-                            </div>
-                        </custom-marker>
+                            <marker position="{{currentPoint.loc.lat}},{{currentPoint.loc.long}}"
+                                    icon='{{currentPoint.icon}}'
+                                    optimized="false" z-index="102">
+                            </marker>
 
-                        <marker position="{{currentPoint.loc.lat}},{{currentPoint.loc.long}}"
-                            icon='{{currentPoint.icon}}'
-                            optimized="false" z-index="102">
-                        </marker>
-
-                        <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.lng}}">
-                            <div>
-                                <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
-                                    <div class="tt_title" style="background-color:{{diagColor}}">
-                                        <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
-                                    </div>
-                                    <div class="tt_body" ng-hide={{markerData.normal}}>
-                                        <div ng-repeat="msg in message.mapMarkerMessage">{{msg}}</div>
+                            <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.lng}}">
+                                <div>
+                                    <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
+                                        <div class="tt_title" style="background-color:{{diagColor}}">
+                                            <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
+                                        </div>
+                                        <div class="tt_body" ng-hide={{markerData.normal}}>
+                                            <div ng-repeat="msg in message.mapMarkerMessage">{{msg}}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </custom-marker>
-                    </ng-map>
+                            </custom-marker>
+                        </ng-map>
+                    </div>
+
                 </div>
             </div>
         </div>
