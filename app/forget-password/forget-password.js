@@ -1,6 +1,8 @@
-appCtrls.controller('ForgetCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $location) {
+appCtrls.controller('ForgetCtrl', function ($scope, $rootScope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $location) {
+	rootSvc.SetPageTitle('Reset password');
 	$scope.toggle = false;
 	$scope.usermail;
+	$rootScope.showHeader = true;
 	
 	$scope.forget = function(){
 		var absUrl = $location.absUrl();

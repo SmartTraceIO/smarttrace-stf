@@ -143,7 +143,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
         var w = window.innerWidth * 0.7; //70% of fullwidth
         var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
-        window.open('/#'+url,"_blank", options);
+        $log.debug('#Url', url);
+        window.open('#'+url,"_blank", options);
     }
 
     function updateMapData(index){

@@ -1,5 +1,6 @@
 appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $log,
 										   $rootScope, $location, $templateCache, $timeout, $window, $q) {
+    rootSvc.SetPageTitle('Login');
     if ($rootScope.isOut == true) {
         $window.location.reload();
         $rootScope.isOut = false;
