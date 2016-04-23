@@ -38,7 +38,8 @@
                                     <div>
                                         <table>
                                             <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>
+                                                <!--<td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>-->
+                                                <td><img class="tiny-icon15" ng-src="theme/img/Tracker{{trackers[MI].index + 1}}.png"></td>
                                                 <td><span class="tracker-id">Tracker {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                             </tr>
@@ -99,7 +100,97 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="portlet box grey">
+                    <div class="portlet-title">
+                        <div>
+                            <span class="caption uppercase">Trackers possibly on same trip</span>
+                            <i uib-tooltip="List of tracker that might be on the same trip"
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"/>
+                        </div>
+                        <!--<div class="tools">-->
+                            <!--<a href="javascript:;" class="collapse"> </a>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="portlet-body">
+                        <!--<div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
+                            <div class="portlet-title">
+                                <a href="" class="tracker-info" ng-click="switchTracker($event, t.index)">
+                                    <div>
+                                        <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
+                                        <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
+                                        <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
+                                        <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="shipment-desc">{{t.shipmentDescription}}</div>
+                            </div>
+                        </div>-->
+                        <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
+                            <div class="portlet-title">
+                                <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
+                                <a ng-href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
+                                    <table class="table">
+                                        <tr>
+                                            <td><img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png"></td>
+                                            <td><span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span></td>
+                                            <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
+                                            <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
+                                        </tr>
+                                    </table>
 
+                                    <!--<div>
+                                        <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
+                                        <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
+                                        <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
+                                        <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
+                                    </div>-->
+                                </a>
+                                <!--<div class="tools">
+                                    <a href="javascript:;" class="expand"> </a>
+                                </div>-->
+                            </div>
+                            <div class="portlet-body" style="padding:0px;">
+                                <table class="table" style="margin-bottom: 0px;">
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Tracker:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.deviceName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Status:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.status}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Description:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.shipmentDescription}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">From:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.startLocation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Start time:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.startTime}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">To:</td>
+                                        <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.endLocation}}</td>
+                                    </tr>
+                                </table>
+                                <!--<div class="shipment-desc">{{t.shipmentDescription}}</div>-->
+                            </div>
+                        </div>
+                        <div class="" ng-if="notListed>0">
+                            <span>{{notListed}} others not listed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="portlet box grey">
                     <div class="portlet-title">
@@ -144,42 +235,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="portlet box grey">
-                <div class="portlet-title">
-                    <div>
-                        <span class="caption uppercase">TRACKERS POSSIBLY ON SAME TRIP</span>
-                        <i uib-tooltip="List of tracker that might be on the same trip"
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"/>
-                    </div>
-                    <div class="tools">
-                        <a href="javascript:;" class="collapse"> </a>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
-                        <div class="portlet-title">
-                            <a href="" class="tracker-info" ng-click="switchTracker($event, t.index)">
-                                <div>
-                                    <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
-                                    <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
-                                    <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                    <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                </div>
-                            </a>
-                            <div class="tools">
-                                <a href="javascript:;" class="expand"> </a>
-                            </div>
-                        </div>
-                        <div class="portlet-body" style="display:none;">
-                            <div class="shipment-desc">{{t.shipmentDescription}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div></div>
+
             <div class="row"><div class="portlet box grey">
                 <div class="portlet-title">
                     <div>
@@ -547,7 +603,82 @@
                             </div>
                         </div>
                     </div>
+                    <!---->
+                    <div class="portlet box grey">
+                        <div class="portlet-title">
+                            <div class="caption uppercase">
+                                <span>Trackers possibly on same trip</span>
+                                <i uib-tooltip="Other trackers that are travelling on a similar path at the same time and
+                                 hence likely to be on same vehicle"
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"/>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse"> </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
+                                <div class="portlet-title">
+                                    <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
+                                    <a ng-href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
+                                        <table>
+                                            <tr>
+                                                <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>
+                                                <td><span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span></td>
+                                                <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
+                                                <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
+                                            </tr>
+                                        </table>
 
+                                        <!--<div>
+                                            <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
+                                            <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
+                                            <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
+                                            <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
+                                        </div>-->
+                                    </a>
+                                    <div class="tools">
+                                        <a href="javascript:;" class="expand"> </a>
+                                    </div>
+                                </div>
+                                <div class="portlet-body" style="display:none; padding:0px;">
+                                    <table class="table table-condensed" style="margin-bottom: 0px;">
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Tracker:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.deviceName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Status:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.status}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Description:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.shipmentDescription}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">From:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.startLocation}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">Start time:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.startTime}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">To:</td>
+                                            <td style="font-size: 11px; padding-top: 0px; padding-bottom: 0px;">{{t.endLocation}}</td>
+                                        </tr>
+                                    </table>
+                                    <!--<div class="shipment-desc">{{t.shipmentDescription}}</div>-->
+                                </div>
+                            </div>
+                            <div class="" ng-if="notListed>0">
+                                <span>{{notListed}} others not listed</span>
+                            </div>
+                        </div>
+                    </div>
                     <!---->
                     <div class="portlet box grey">
                         <div class="portlet-title">
@@ -591,81 +722,7 @@
                         </div>
                     </div>
 
-                    <div class="portlet box grey">
-                        <div class="portlet-title">
-                            <div class="caption uppercase">
-                                <span>TRACKERS POSSIBLY ON SAME TRIP</span>
-                                <i uib-tooltip="Other trackers that are travelling on a similar path at the same time and
-                                 hence likely to be on same vehicle"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
-                            </div>
-                            <div class="tools">
-                                <a href="javascript:;" class="collapse"> </a>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
-                                <div class="portlet-title">
-                                    <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
-                                    <a ng-href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
-                                        <table>
-                                            <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>
-                                                <td><span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span></td>
-                                                <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
-                                                <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
-                                            </tr>
-                                        </table>
 
-                                        <!--<div>
-                                            <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
-                                            <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
-                                            <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                            <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                        </div>-->
-                                        </a>
-                                    <div class="tools">
-                                        <a href="javascript:;" class="expand"> </a>
-                                    </div>
-                                </div>
-                                <div class="portlet-body" style="display:none;">
-                                    <table class="table">
-                                        <tr>
-                                            <td>Tracker:</td>
-                                            <td>{{t.deviceName}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Status:</td>
-                                            <td>{{t.status}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Description:</td>
-                                            <td>{{t.shipmentDescription}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>From:</td>
-                                            <td>{{t.startLocation}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Start time:</td>
-                                            <td>{{t.startTime}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>To:</td>
-                                            <td>{{t.endLocation}}</td>
-                                        </tr>
-                                    </table>
-                                    <!--<div class="shipment-desc">{{t.shipmentDescription}}</div>-->
-                                </div>
-                            </div>
-                            <div class="" ng-if="notListed>0">
-                                <span>{{notListed}} others not listed</span>
-                            </div>
-                        </div>
-                    </div>
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">

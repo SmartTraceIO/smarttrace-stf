@@ -600,7 +600,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'routes',
                     }
                 };
             }
-            console.log('Configurations', route.config);
             $stateProvider.state(route.name, route.config);
         });
         //$urlRouterProvider.otherwise('/new-shipment');
