@@ -144,7 +144,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var w = window.innerWidth * 0.7; //70% of fullwidth
         var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
         $log.debug('#Url', url);
-        window.open('#'+url,"_blank", options);
+        window.open(url,"_blank", options);
     }
 
     function updateMapData(index){
@@ -482,7 +482,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //var point = point;
             //var chart1 = document.getElementById("chart1");
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/view-shipment-detail-share/create-note.html',
+                templateUrl: './app/view-shipment-detail-share/create-note.html',
                 controller: 'CreateNoteCtrl',
                 backdrop: false,
                 //size: 'sm',
@@ -533,7 +533,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         } else {
             var note = point;
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/view-shipment-detail-share/edit-note.html',
+                templateUrl: './app/view-shipment-detail-share/edit-note.html',
                 controller: 'EditNoteCtrl',
                 resolve: {
                     note : function() {
@@ -1340,7 +1340,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         if ($scope.isLatest) {
             if (!$scope.shutdownAlready) {
                 var modalInstance = $uibModal.open({
-                    templateUrl: '/app/view-shipment-detail-share/confirm-shutdown.html',
+                    templateUrl: './app/view-shipment-detail-share/confirm-shutdown.html',
                     controller: 'ConfirmShutdownCtrl',
                     resolve: {
                         shipmentId: function () {
@@ -1388,7 +1388,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             toastr.warning('Warning. This shipment was ended or arrived ' + link);
         } else {
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/view-shipment-detail-share/confirm-suppress.html',
+                templateUrl: './app/view-shipment-detail-share/confirm-suppress.html',
                 controller: 'ConfirmSuppressCtrl',
                 resolve: {
                     shipmentId: function() {
@@ -1405,7 +1405,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.EditDescription = function(Id) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/edit-description.html',
+            templateUrl: './app/view-shipment-detail-share/edit-description.html',
             controller: 'EditShipmentDetailDescription',
             resolve: {
                 editId : function() {
@@ -1421,7 +1421,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
     $scope.EditNote = function(note) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/edit-note.html',
+            templateUrl: './app/view-shipment-detail-share/edit-note.html',
             controller: 'EditNoteCtrl',
             resolve: {
                 note : function() {
@@ -1468,7 +1468,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
     $scope.DeleteNote = function(note) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/delete-note.html',
+            templateUrl: './app/view-shipment-detail-share/delete-note.html',
             controller: 'DeleteNoteCtrl',
             resolve: {
                 note : function() {
@@ -1500,7 +1500,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
     $scope.EditComment = function(Id) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/edit-comment.html',
+            templateUrl: './app/view-shipment-detail-share/edit-comment.html',
             controller: 'EditShipmentDetailComment',
             resolve: {
                 editId : function() {
