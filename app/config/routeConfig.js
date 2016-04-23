@@ -1,4 +1,5 @@
 ﻿//var version = (new Date()).getTime();
+var gKey = "AIzaSyC061Eu8i3E8_CXtZK_-ceh8YnYXs2Nj2s";
 //console.log(version);
 appConstants.constant('routes', [
     {
@@ -121,7 +122,8 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/view-shipment/view-shipment.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/global/filters/filters.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
@@ -137,6 +139,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
     {
@@ -158,11 +161,12 @@ appConstants.constant('routes', [
     {
         name: 'viewshipmentdetailshare',
         config: {
-            url: "/view-shipment-detail?sn&trip"
-            , views: {
+            url: "/view-shipment-detail?sn&trip",
+            reloadOnSearch: false,
+            views: {
                 "content": {
-                    templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html?v="+ version
-                    , controller: 'ViewShipmentDetailShareCtrl as vm'
+                    templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html?v="+ version,
+                    controller: 'ViewShipmentDetailShareCtrl as VM',
                 }
             }
         },
@@ -173,7 +177,8 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/create-note.js?v=' + version,
             'app/view-shipment-detail-share/edit-note.js?v=' + version,
             'app/view-shipment-detail-share/delete-note.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/global/filters/filters.js?v=' + version,
+            'https://maps.googleapis.com/maps/api/js?key='+gKey
         ]
     },
       {
@@ -229,8 +234,8 @@ appConstants.constant('routes', [
             url: "/edit-tracker/:imei"
             , views: {
                 "content": {
-                    templateUrl: "app/manage-tracker/add-edit.html?v="+ version
-                    , controller: 'EditTrackerCtrl'
+                    templateUrl: "app/manage-tracker/add-edit.html?v="+ version,
+                    controller: 'EditTrackerCtrl'
                 }
             }
         },
@@ -407,6 +412,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-location/manage-location.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey+'&libraries=places'
           ]
       },
       {
@@ -422,6 +428,7 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-location/manage-location.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey+'&libraries=places'
           ]
       },
       {
@@ -453,7 +460,8 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/global/filters/filters.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
@@ -469,7 +477,8 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/global/filters/filters.js?v=' + version,
+              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
@@ -591,6 +600,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'routes',
                     }
                 };
             }
+            console.log('Configurations', route.config);
             $stateProvider.state(route.name, route.config);
         });
         //$urlRouterProvider.otherwise('/new-shipment');

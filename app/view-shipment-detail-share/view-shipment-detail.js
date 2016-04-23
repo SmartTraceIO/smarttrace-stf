@@ -221,8 +221,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
     }
 
-    $scope.switchTracker = function(index){
+    $scope.switchTracker = function($event, index){
+        $event.preventDefault();
         $log.debug('SwithTracker...', index)
+        $location.search('sn', $scope.trackers[index].deviceSN);
+        $location.search('trip', $scope.trackers[index].tripCount);
         $scope.chartConfig.redraw= true;
         $scope.changeActiveTracker(index);
     }

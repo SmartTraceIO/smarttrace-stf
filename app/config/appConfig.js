@@ -44,9 +44,9 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     appValues.value = $provide.value;
     appConstants.constant = $provide.constant;
 
-        //--enable debug
-        $logProvider.debugEnabled(true);
-   
+    //--enable debug
+    $logProvider.debugEnabled(true);
+
     //#endregion Register Controllers,Services,Factorys,Values,Constants,Directives & Filters
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['Access-Control-Allow-Methods'];

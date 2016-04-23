@@ -104,7 +104,8 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true
     }
-    $scope.geocode = function(isRev, param, fn) {
+    geocode = function(isRev, param, fn) {
+        console.log('Geocode Param', param);
         var geocoder = new google.maps.Geocoder();
         var params = null;
         if (isRev){
@@ -169,25 +170,25 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
         });
         $scope.marker.setMap($scope.map);
         $scope.marker.addListener('dragend', function(e) {
-            console.log(e.latLng.lat());
-            console.log(e.latLng.lng());
-            $scope.myLatLng.lat = e.latLng.lat();
-            $scope.myLatLng.lng = e.latLng.lng();
+            console.log('DragEnd', e);
+            //console.log(e.latLng.lat());
+            //console.log(e.latLng.lng());
+            $scope.myLatLng = e.latLng;//.lat();
             $scope.cityCircle.setCenter($scope.myLatLng);
-            $scope.geocode(false, $scope.myLatLng, function(res) {
+            geocode(false, $scope.myLatLng, function(res) {
                 $scope.Location.address = res[0].formatted_address;
             });
         })
-        $scope.geocode(false, $scope.myLatLng, function(res) {
+        geocode(false, $scope.myLatLng, function(res) {
             $scope.Location.address = res[0].formatted_address;
         });
         $scope.ChangeRadious($scope.radious)
         google.maps.event.addListener($scope.map, "dblclick", function (e) {
-            $scope.myLatLng.lat = e.latLng.lat();
-            $scope.myLatLng.lng = e.latLng.lng();
+            $scope.myLatLng = e.latLng;
+            //$scope.myLatLng.lng = e.latLng.lng();
             $scope.marker.setPosition($scope.myLatLng);
             $scope.cityCircle.setCenter($scope.myLatLng);
-            $scope.geocode(false, $scope.myLatLng, function(res) {
+            geocode(false, $scope.myLatLng, function(res) {
                 $scope.Location.address = res[0].formatted_address;
             });
         });
@@ -199,10 +200,19 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
         });
 
         var legendDiv = document.createElement("div");
-        legendDiv.setAttribute("style", "background-color:lightblue;padding:5px;font-weight:bold;margin-left:10px;width:130px;font-size:16px");
-        legendDiv.innerHTML = "Drag and drop to point on the map to create a location at that point.";
+        legendDiv.setAttribute("style", "background-color:lightblue;padding:5px;font-weight:bold;margin-left:10px;width:180px;font-size:16px");
+        legendDiv.innerHTML = "Either enter a location above, double click on preferred location on map or drag and drop the marker to preferred location.";
         $scope.map.controls[google.maps.ControlPosition.LEFT_TOP].push(legendDiv);
 
+        setupSearchBox($scope.map, function(llng) {
+            $scope.myLatLng = llng;
+            $scope.marker.setPosition($scope.myLatLng);
+            $scope.cityCircle.setCenter($scope.myLatLng);
+
+            geocode(false, $scope.myLatLng, function(res) {
+                $scope.Location.address = res[0].formatted_address;
+            });
+        });
         //$scope.SetAddress();
     }
     //this function is use to draw circle with given radious
@@ -267,8 +277,8 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, webSvc,
 
             if (isOk) {
                 $scope.Location.location = {};
-                $scope.Location.location.lat = $scope.myLatLng.lat;
-                $scope.Location.location.lon = $scope.myLatLng.lng;
+                $scope.Location.location.lat = $scope.myLatLng.lat();
+                $scope.Location.location.lon = $scope.myLatLng.lng();
 
                 $scope.Location.startFlag = $scope.Location.startFlag == true ? "Y" : "N";
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
@@ -342,9 +352,10 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
             if (data.status.code == 0) {
                 $scope.Location = data.response;
                 console.log(data.response);
-                $scope.myLatLng = {};
-                $scope.myLatLng.lat = data.response.location.lat;
-                $scope.myLatLng.lng = data.response.location.lon;
+                //$scope.myLatLng = {};
+                //$scope.myLatLng.lat = data.response.location.lat;
+                //$scope.myLatLng.lng = data.response.location.lon;
+                $scope.myLatLng = new google.maps.LatLng(data.response.location.lat, data.response.location.lon);
                 $scope.radious = data.response.radiusMeters;
                 console.log($scope.radious);
                 $scope.Location.startFlag = $scope.Location.startFlag == "Y" ? true : false;
@@ -366,8 +377,9 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         })
     }
 
-    $scope.geocode = function(isRev, param, fn) {
+    geocode = function(isRev, param, fn) {
         var geocoder = new google.maps.Geocoder();
+        console.log('Geocode Param', param);
         var params = null;
         if (isRev){
             params = {'address': param};
@@ -408,25 +420,24 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         $scope.marker.setMap($scope.map);
 
         $scope.marker.addListener('dragend', function(e) {
-            console.log(e.latLng.lat());
-            console.log(e.latLng.lng());
-            $scope.myLatLng.lat = e.latLng.lat();
-            $scope.myLatLng.lng = e.latLng.lng();
+            //console.log(e.latLng.lat());
+            //console.log(e.latLng.lng());
+            $scope.myLatLng = e.latLng;
             $scope.cityCircle.setCenter($scope.myLatLng);
-            $scope.geocode(false, $scope.myLatLng, function(res) {
+            geocode(false, $scope.myLatLng, function(res) {
                 $scope.Location.address = res[0].formatted_address;
             });
         })
-        $scope.geocode(false, $scope.myLatLng, function(res) {
+        geocode(false, $scope.myLatLng, function(res) {
             $scope.Location.address = res[0].formatted_address;
         });
         $scope.ChangeRadious($scope.radious)
         google.maps.event.addListener($scope.map, "dblclick", function (e) {
-            $scope.myLatLng.lat = e.latLng.lat();
-            $scope.myLatLng.lng = e.latLng.lng();
+            $scope.myLatLng = e.latLng;
+            //$scope.myLatLng.lng = e.latLng.lng();
             $scope.marker.setPosition($scope.myLatLng);
             $scope.cityCircle.setCenter($scope.myLatLng);
-            $scope.geocode(false, $scope.myLatLng, function(res) {
+            geocode(false, $scope.myLatLng, function(res) {
                 $scope.Location.address = res[0].formatted_address;
             });
         });
@@ -439,9 +450,18 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         });
 
         var legendDiv = document.createElement("div");
-        legendDiv.setAttribute("style", "background-color:lightblue;padding:5px;font-weight:bold;margin-left:10px;width:130px;font-size:16px");
-        legendDiv.innerHTML = "Drag and drop to point on the map to create a location at that point.";
+        legendDiv.setAttribute("style", "background-color:lightblue;padding:5px;font-weight:bold;margin-left:10px;width:180px;font-size:16px");
+        legendDiv.innerHTML = "Either enter a location above, double click on preferred location on map or drag and drop the marker to preferred location.";
         $scope.map.controls[google.maps.ControlPosition.LEFT_TOP].push(legendDiv);
+        setupSearchBox($scope.map, function(llng) {
+            $scope.myLatLng = llng;
+            $scope.marker.setPosition($scope.myLatLng);
+            $scope.cityCircle.setCenter($scope.myLatLng);
+
+            geocode(false, $scope.myLatLng, function(res) {
+                $scope.Location.address = res[0].formatted_address;
+            });
+        });
 
         //$scope.SetAddress();
     }
@@ -477,8 +497,8 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
     $scope.InitMap = function () {
         $scope.SetMap();
         google.maps.event.addListener($scope.map, "click", function (e) {
-            $scope.myLatLng.lat = e.latLng.lat();
-            $scope.myLatLng.lng = e.latLng.lng();
+            $scope.myLatLng = e.latLng;
+            //$scope.myLatLng.lng = e.latLng.lng();
             $scope.SetMap();
         });
     }
@@ -501,17 +521,21 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
 
             if (isOk) {
                 $scope.Location.location = {};
-                $scope.Location.location.lat = $scope.myLatLng.lat;
-                $scope.Location.location.lon = $scope.myLatLng.lng;
+                $scope.Location.location.lat = $scope.myLatLng.lat();
+                $scope.Location.location.lon = $scope.myLatLng.lng();
 
                 $scope.Location.startFlag = $scope.Location.startFlag == true ? "Y" : "N";
                 $scope.Location.interimFlag = $scope.Location.interimFlag == true ? "Y" : "N";
                 $scope.Location.endFlag = $scope.Location.endFlag == true ? "Y" : "N";
 
+
+                console.log('DataLocation', $scope.Location);
+
                 webSvc.saveLocation($scope.Location).success( function (data, textStatus, XmlHttpRequest) {
                     if (data.status.code == 0) {
                         toastr.success("Location updated successfully")
                     } else {
+                        console.log('Error Update Location', data);
                         toastr.warning('Warning. An error has occurred while updating location.');
                     }
                     if (closeModalPopup) {
@@ -527,3 +551,31 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         }
     }
 });
+
+
+function setupSearchBox (map, fn) {
+    // Create the search box and link it to the UI element.
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    var markers = [];
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+        console.log('places_changes', places);
+
+        if (places.length == 0) {
+            return;
+        }
+        map.setCenter(places[0].geometry.location);
+        fn(places[0].geometry.location);
+    });
+
+}
