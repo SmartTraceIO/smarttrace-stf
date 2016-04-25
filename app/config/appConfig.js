@@ -1,7 +1,7 @@
 ﻿app.constant("Api", { url: "https://smarttrace.com.au/web/vf/rest/" });
 // executes only once for an app, calls evertime when page refreshed by user
 app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $templateCache, $uibModalStack) {
-  
+
     $rootScope.go = function(url){
         $state.go(url);
     }
@@ -14,6 +14,7 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
             console.log("Cleared");
         } 
     });
+
     $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
 
@@ -29,6 +30,14 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
             $uibModalStack.dismissAll();
 
         });
+});
+
+app.run(function($rootScope, $window) {
+    $rootScope.$on("$viewContentLoaded", function () {
+        //-- scroll top
+        console.log('Start scroll...');
+        $window.scrollTo(0, 0);
+    });
 });
 
 app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$provide',

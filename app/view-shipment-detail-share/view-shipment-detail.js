@@ -229,6 +229,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
         $scope.mapInfo.endLocationForMap = $scope.trackers[index].endLocationForMap;
         $scope.mapInfo.endLocation = $scope.trackers[index].endLocation;
+        if (!$scope.mapInfo.endLocation) {
+            $scope.mapInfo.endLocation = 'Default';
+        }
+
         $scope.mapInfo.etaISO = $scope.trackers[index].etaISO;
         $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
         $scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
@@ -621,11 +625,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     var p = webSvc.getDevicesOfGroup(val.id).success(function(data) {
                         $log.debug('DevicesOfGroup#'+key, data);
                         angular.forEach(data.response, function(val, key) {
-                            var snIdx = deviceSnList.indexOf(parseInt(val.sn, 10));
-                            var devIdx = deviceSnListSameGroup.indexOf(parseInt(val.sn, 10));
+                            var serialNumber = val.sn;
+                            if (!isNaN(serialNumber)) {
+                                serialNumber = parseInt(val.sn, 10);
+                            }
+                            var snIdx = deviceSnList.indexOf(serialNumber);
+                            var devIdx = deviceSnListSameGroup.indexOf(serialNumber);
                             if ((snIdx >= 0) && (devIdx < 0)) {
                                 deviceListSameGroup.push(deviceList[snIdx]);
-                                deviceSnListSameGroup.push(parseInt(val.sn, 10));
+                                deviceSnListSameGroup.push(serialNumber);
                             }
                         })
                     });
