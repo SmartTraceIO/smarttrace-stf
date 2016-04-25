@@ -269,28 +269,6 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
     $scope.Action = "Edit";
     $scope.AuthToken = localDbSvc.getToken();
 
-    //--
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
-    //--
-
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }

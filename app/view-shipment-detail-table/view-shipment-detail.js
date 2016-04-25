@@ -25,38 +25,6 @@
         $scope.sn = $stateParams.sn;
         $scope.trip = $stateParams.trip;
     }
-    //--update $rootScope roles
-    function reloadIfNeed() {
-            if ($rootScope.User) {
-                return $rootScope.User;
-            } else {
-                webSvc.getUser().success(function (data) {
-                    if(data.status.code == 0){
-                        $rootScope.User = data.response;
-                        console.log('USER', $rootScope.User);
-                    }
-                });
-            }
-
-            if ($rootScope.RunningTime == null) {
-                //reload user-time
-                webSvc.getUserTime().success( function (timeData) {
-                    //console.log('USER-TIME', timeData);
-                    if (timeData.status.code == 0) {
-                        $rootScope.RunningTimeZoneId = timeData.response.timeZoneId // get the current timezone
-                        $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-                        $scope.tickInterval = 1000 //ms
-                        var tick = function () {
-                            $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                            $timeout(tick, $scope.tickInterval); // reset the timer
-                        }
-                        // Start the timer
-                        $timeout(tick, $scope.tickInterval);
-                    }
-                });
-            }
-        }
-        reloadIfNeed()
     //includes all tracker info here
     $scope.trackers = new Array();
     //------MAIN TRACKER INDEX ------

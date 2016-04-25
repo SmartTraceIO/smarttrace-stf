@@ -34,27 +34,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.trip = $stateParams.trip;
     }
 
-    //--update $rootScope roles
-    function reloadIfNeed() {
-        if ($rootScope.User) {
-            return $rootScope.User;
-        } else {
-            $rootScope.User = localDbSvc.getUserProfile();
-        }
-        if ($rootScope.RunningTime == null) {
-            $rootScope.RunningTime = localDbSvc.getUserTimezone();
-            $rootScope.RunningTimeZoneId = localDbSvc.getUserTimezone() // get the current timezone
-            $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
-            $scope.tickInterval = 1000 //ms
-            var tick = function () {
-                $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
-                $timeout(tick, $scope.tickInterval); // reset the timer
-            }
-            $timeout(tick, $scope.tickInterval);
-        }
-    }
-    reloadIfNeed();
-
     var plotLines = new Array();
     $scope.vm = this;
     $scope.specialMarkers = new Array();

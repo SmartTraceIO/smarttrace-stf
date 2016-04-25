@@ -752,7 +752,9 @@
                                         <div class="strong">{{itm.location.locationName}}</div>
                                         <span style="color:#AAA">
                                             <span class="light-bold-font uppercase">Stopped at:</span>
-                                            {{itm.date | convertDate}}</span>
+                                            <span ng-if="itm.stopDate">{{itm.stopDate}}</span>
+                                            <span ng-if="!itm.stopDate">{{itm.date | convertDate}}</span>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1080,7 +1082,7 @@
 
                             <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.lng}}">
                                 <div>
-                                    <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
+                                    <div class="ttbox" style="border-color:{{diagColor}}; z-index: 102;" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
                                         <div class="tt_title" style="background-color:{{diagColor}}">
                                             <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
                                         </div>
