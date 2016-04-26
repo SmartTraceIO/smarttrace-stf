@@ -175,7 +175,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<!--<div class="row">
     <div class="col-sm-12">
         &nbsp;
     </div>
@@ -184,14 +184,9 @@
     <div class="col-sm-12">
         &nbsp;
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-sm-12">
-        <!--<div>
-            <div class="alert alert-success text-center" role="alert">
-                No Record(s) Found
-            </div>
-        </div>-->
         <div class="text-center" style=" background-color: white;
     padding: 20px;">
             <h4 class="uppercase bold pull-left">
@@ -199,8 +194,9 @@
             </h4>
             <span class="text-error" style="vertical-align:middle" ng-if="loading">Retrieving your shipment data...</span>
             <h4 class="pull-right">
-                <button class="btn btn-switch" ng-class="{selected:!viewCard}" ng-click="showTable()"><i class="fa fa-table"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:viewTable}" ng-click="showTable()"><i class="fa fa-table"></i></button>
                 <button class="btn btn-switch" ng-class="{selected:viewCard}" ng-click="showCard()"><i class="fa fa-th-large"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:viewMap}" ng-click="showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>
 
                 <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                     <i class="fa fa-print"></i>
@@ -256,25 +252,12 @@
                     </ng-map>
                 </div>
             </div>
-            <div class="row" ng-if="!viewCard">
+            <div class="row" ng-if="viewTable">
                 <div class="col-sm-12">
                     <br>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <tr>
-                                <!--<th class="text-center" ng-click="Sorting('shipmentId')">
-                                    <span class="pull-left">ID
-                                        <i uib-tooltip="Shipment ID"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
-                                    </span>
-                                    <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='shipmentId'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='shipmentId'}"><i class="fa fa-sort-desc"></i></a>
-                                    </span>
-                                </th>-->
                                 <th ng-click="Sorting('deviceSN')">
                                     <span class="pull-left">Tracker (Trip)
                                         <i uib-tooltip="A meaningful short name you assign to each tracker"
@@ -525,6 +508,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row" ng-if="viewMap">
+                <!--show map-->
+                <ng-map disable-default-u-i="true"
+                        map-type-control-options="{
+                            mapTypeIds: ['ROADMAP']
+                        }">
+
+                </ng-map>
             </div>
             <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
 

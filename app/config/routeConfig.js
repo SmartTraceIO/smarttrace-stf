@@ -116,7 +116,7 @@ appConstants.constant('routes', [
               , views: {
                   "content": {
                       templateUrl: "app/view-shipment/view-shipment.html?v="+ version
-                       , controller: 'ViewShipmentCtrl'
+                       , controller: 'ViewShipmentCtrl as vm'
                   }
               }
           },

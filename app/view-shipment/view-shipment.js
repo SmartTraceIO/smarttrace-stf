@@ -1,8 +1,11 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter,
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, NgMap,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
+
+    var VM = this;
+
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -245,11 +248,22 @@
     })
 
     $scope.viewCard = false;
+    $scope.viewTable = true;
+    $scope.viewMap = false;
     $scope.showTable = function() {
+        $scope.viewTable = true;
         $scope.viewCard = false;
+        $scope.viewMap = false;
     };
     $scope.showCard = function() {
+        $scope.viewTable = false;
         $scope.viewCard = true;
+        $scope.viewMap = false;
+    }
+    $scope.showMap = function() {
+        $scope.viewTable = false;
+        $scope.viewCard = false;
+        $scope.viewMap = true;
     }
 });
 

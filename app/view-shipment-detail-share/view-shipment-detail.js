@@ -766,30 +766,30 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             series: {
                                 point: {
                                     events: {
-                                        //mouseOver: function () {
-                                        //    var idx;
-                                        //    for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                        //        if(subSeries[$scope.MI][index].x == this.x){
-                                        //            idx = index;
-                                        //            break;
-                                        //        }
-                                        //    }
-                                        //    $scope.showAlerts(idx);
-                                        //},
-                                        //mouseOut: function () {
-                                        //    $scope.showAlerts(-1);
-                                        //},
-                                        //click: function(e) {
-                                        //    if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
-                                        //        resetDoubleClick();
-                                        //        ondbclick(e, this);
-                                        //    } else {
-                                        //        doubleClicker.clickedOnce = true;
-                                        //        doubleClicker.timer = setTimeout(function(){
-                                        //            resetDoubleClick();
-                                        //        }, doubleClicker.timeBetweenClicks);
-                                        //    }
-                                        //}
+                                        /*mouseOver: function () {
+                                            var idx;
+                                            for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                                if(subSeries[$scope.MI][index].x == this.x){
+                                                    idx = index;
+                                                    break;
+                                                }
+                                            }
+                                            $scope.showAlerts(idx);
+                                        },
+                                        mouseOut: function () {
+                                            $scope.showAlerts(-1);
+                                        },
+                                        click: function(e) {
+                                            if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
+                                                resetDoubleClick();
+                                                ondbclick(e, this);
+                                            } else {
+                                                doubleClicker.clickedOnce = true;
+                                                doubleClicker.timer = setTimeout(function(){
+                                                    resetDoubleClick();
+                                                }, doubleClicker.timeBetweenClicks);
+                                            }
+                                        }*/
                                     }
                                 }
                             }
@@ -887,7 +887,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             title: {
                                 align: 'middle',
                                 offset: 40,
-                                //text: 'Temperature °C',
                                 text: 'Temperature °'+ tempUnits,
                                 y: -10
                             },
