@@ -5,11 +5,11 @@
                 <span class="uppercase link"><i class="fa fa-search"></i>&nbsp;Search</span>
             </h4>
             <h4 class="pull-right bold">
-                <span class="link" ng-show="!AdvanceSearch" ng-click="AdvanceSearch = true">
+                <span class="link" ng-show="!vm.AdvanceSearch" ng-click="vm.AdvanceSearch = true">
                     <img src="theme/img/searchAdvanced.png" tooltip="Swap to Advance Search" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" />
                     <h5>More options</h5>
                 </span>
-                <span class="link" ng-show="AdvanceSearch" ng-click="AdvanceSearch = false">
+                <span class="link" ng-show="vm.AdvanceSearch" ng-click="vm.AdvanceSearch = false">
                     <img src="theme/img/searchBasic.png" tooltip="Swap to Basic Search" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" />
                     <h5>Less options</h5>
                 </span>
@@ -25,10 +25,10 @@
         <div class="col-md-12 text-center">
             <div class="btn-group" role="group" aria-label="...">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default" ng-model="ViewShipment.alertsOnly" ng-class="{'green': ViewShipment.alertsOnly == true}" ng-click="ViewShipment.alertsOnly = true;">Shipments with alerts</button>
+                    <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button type="button" ng-model="ViewShipment.alertsOnly" ng-class="{'green': ViewShipment.alertsOnly == false}" ng-click="ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
+                    <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
                 </div>
             </div>
             <div class="btn-group" role="group" aria-label="...">
@@ -37,27 +37,59 @@
             <div class="col-sm-12 visible-xs visible-sm">&nbsp;</div>
             <div class="btn-group" role="group" aria-label="...">
                 <div class="btn-group" role="group">
-                    <button ng-model="ViewShipment.lastDay" ng-click="ViewShipment.lastDay = !ViewShipment.lastDay;specificDates = false;ViewShipment.shipmentDateFrom=null;ViewShipment.shipmentDateTo=null;" ng-class="{'green': ViewShipment.lastDay == true}" type="button" class="btn btn-default">Last 24 hours</button>
+                    <button ng-click="vm.ViewShipment.lastDay = !vm.ViewShipment.lastDay;
+                                vm.specificDates = false;
+                                vm.ViewShipment.last2Days = false;
+                                vm.ViewShipment.lastWeek = false;
+                                vm.ViewShipment.lastMonth = false;
+                                vm.ViewShipment.shipmentDateFrom=null;
+                                vm.ViewShipment.shipmentDateTo=null;"
+                            ng-class="{'green': vm.ViewShipment.lastDay == true}"
+                            type="button" class="btn btn-default">Last 24 hours</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button ng-model="ViewShipment.last2Days" ng-click="ViewShipment.last2Days = !ViewShipment.last2Days;specificDates = false;ViewShipment.shipmentDateFrom=null;ViewShipment.shipmentDateTo=null;" ng-class="{'green': ViewShipment.last2Days == true}" type="button" class="btn btn-default">Last 48 hours</button>
+                    <button ng-click="vm.ViewShipment.last2Days = !vm.ViewShipment.last2Days;
+                                vm.specificDates = false;
+                                vm.ViewShipment.lastDay = false;
+                                vm.ViewShipment.lastWeek = false;
+                                vm.ViewShipment.lastMonth = false;
+                                vm.ViewShipment.shipmentDateFrom=null;
+                                vm.ViewShipment.shipmentDateTo=null;"
+                            ng-class="{'green': vm.ViewShipment.last2Days == true}"
+                            type="button" class="btn btn-default">Last 48 hours</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button ng-model="ViewShipment.lastWeek" ng-click="ViewShipment.lastWeek = !ViewShipment.lastWeek;specificDates = false;ViewShipment.shipmentDateFrom=null;ViewShipment.shipmentDateTo=null;" ng-class="{'green': ViewShipment.lastWeek == true}" type="button" class="btn btn-default">Last 7 days</button>
+                    <button ng-click="vm.ViewShipment.lastWeek = !vm.ViewShipment.lastWeek;
+                                vm.specificDates = false;
+                                vm.ViewShipment.lastDay = false;
+                                vm.ViewShipment.last2Days = false;
+                                vm.ViewShipment.lastMonth = false;
+                                vm.ViewShipment.shipmentDateFrom=null;
+                                vm.ViewShipment.shipmentDateTo=null;"
+                            ng-class="{'green': vm.ViewShipment.lastWeek == true}"
+                            type="button" class="btn btn-default">Last 7 days</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button ng-model="ViewShipment.lastMonth" ng-click="ViewShipment.lastMonth = !ViewShipment.lastMonth;specificDates = false;ViewShipment.shipmentDateFrom=null;ViewShipment.shipmentDateTo=null;" ng-class="{'green': ViewShipment.lastMonth == true}" type="button" class="btn btn-default">Last 30 days</button>
+                    <button ng-click="vm.ViewShipment.lastMonth = !vm.ViewShipment.lastMonth;
+                                vm.specificDates = false;
+                                vm.ViewShipment.lastDay = false;
+                                vm.ViewShipment.last2Days = false;
+                                vm.ViewShipment.lastWeek = false;
+                                vm.ViewShipment.shipmentDateFrom=null;
+                                vm.ViewShipment.shipmentDateTo=null;"
+                            ng-class="{'green': vm.ViewShipment.lastMonth == true}"
+                            type="button" class="btn btn-default">Last 30 days</button>
                 </div>
             </div>
             <div class="col-sm-12 visible-xs">&nbsp;</div>
             <div class="btn-group">
-                <button type="button" class="btn default" ng-click="specificDates = !specificDates;ViewShipment.lastDay = false;ViewShipment.last2Days=false;ViewShipment.lastWeek=false;ViewShipment.lastMonth=false">
+                <button type="button" class="btn default" ng-click="vm.specificDates = !vm.specificDates;ViewShipment.lastDay = false;vm.ViewShipment.last2Days=false;vm.ViewShipment.lastWeek=false;vm.ViewShipment.lastMonth=false">
                     <i class="fa fa-calendar"></i>
                 </button>
             </div>
         </div>
     </div>
-    <div ng-if="specificDates">
+    <div ng-if="vm.specificDates">
         <div class="row">
             <div class="col-sm-12">
                 &nbsp;
@@ -72,7 +104,7 @@
                            uib-datepicker-popup="dd-MMM-yyyy"
                            is-open="popupFrom"
                            ng-click="popupFrom = true"
-                           ng-model="ViewShipment.shipmentDateFrom" close-text="Close" />
+                           ng-model="vm.ViewShipment.shipmentDateFrom" close-text="Close" />
                     <label for="DateFrom" class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </label>
@@ -82,11 +114,11 @@
                 <label>Date To</label>
                 <div class="input-group">
                     <input show-button-bar="false" id="txtDateTo" type="text" class="form-control"
-                           min="ViewShipment.shipmentDateFrom" placeholder="Select Date To"
+                           min="vm.ViewShipment.shipmentDateFrom" placeholder="Select Date To"
                            is-open="popupTo"
                            ng-click="popupTo = true"
                            uib-datepicker-popup="dd-MMM-yyyy"
-                           ng-model="ViewShipment.shipmentDateTo" close-text="Close" />
+                           ng-model="vm.ViewShipment.shipmentDateTo" close-text="Close" />
                     <label for="txtDateTo" class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </label>
@@ -99,13 +131,13 @@
             &nbsp;
         </div>
     </div>
-    <div class="row" ng-show="!AdvanceSearch">
+    <div class="row" ng-show="!vm.AdvanceSearch">
         <div class="col-sm-12 text-center">
-            <button class="btn green" type="button" ng-click="SearchBasic()"><i class="fa fa-search"></i>&nbsp;Search</button>
-            <button class="btn default" type="button" ng-click="ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
+            <button class="btn green" type="button" ng-click="vm.SearchBasic()"><i class="fa fa-search"></i>&nbsp;Search</button>
+            <button class="btn default" type="button" ng-click="vm.ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
         </div>
     </div>
-    <div ng-if="AdvanceSearch">
+    <div ng-if="vm.AdvanceSearch">
         <div class="row">
             <div class="col-sm-12">
                 &nbsp;
@@ -115,12 +147,12 @@
             <div class="col-sm-3">
                 <label>Shipped From</label>
                 <ui-select multiple
-                           ng-model="ViewShipment.shippedFromLocation"
+                           ng-model="vm.ViewShipment.shippedFromLocation"
                            theme="select2"
                            ng-disabled="disabled"
                            style="width:100%">
                     <ui-select-match placeholder="Select Shipped From">{{$item.DisplayText}}</ui-select-match>
-                    <ui-select-choices repeat="location in LocationListFrom | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                    <ui-select-choices repeat="location in vm.LocationListFrom | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
                         <div ng-bind-html="location.DisplayText | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
@@ -128,31 +160,31 @@
             <div class="col-sm-3">
                 <label>Shipped To</label>
                 <ui-select multiple
-                           ng-model="ViewShipment.shippedToLocation"
+                           ng-model="vm.ViewShipment.shippedToLocation"
                            theme="select2"
                            ng-disabled="disabled"
                            style="width:100%">
                     <ui-select-match placeholder="Select Shipped To">{{$item.DisplayText}}</ui-select-match>
-                    <ui-select-choices repeat="location in LocationListTo | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
+                    <ui-select-choices repeat="location in vm.LocationListTo | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
                         <div ng-bind-html="location.DisplayText | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>
             <div class="col-sm-2">
                 <label>Goods</label>
-                <input type="text" class="form-control" ng-model="ViewShipment.shipmentDescription" placeholder="Description" />
+                <input type="text" class="form-control" ng-model="vm.ViewShipment.shipmentDescription" placeholder="Description" />
             </div>
             <div class="col-sm-2">
                 <label>Device</label>
                 <select class="form-control "
-                        ng-model="ViewShipment.deviceImei"
-                        ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in TrackerList">
+                        ng-model="vm.ViewShipment.deviceImei"
+                        ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in vm.TrackerList">
                     <option value="">-- Please Select --</option>
                 </select>
             </div>
             <div class="col-sm-2">
                 <label>Status</label>
-                <select class="form-control input-sm" ng-model="ViewShipment.status">
+                <select class="form-control input-sm" ng-model="vm.ViewShipment.status">
                     <option value="">-- Please Select --</option>
                     <!--<option value="AutoStart">AutoStart</option>-->
                     <option value="Default">Default</option>
@@ -169,8 +201,8 @@
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <button class="btn green" type="button" ng-click="SearchAdvance()"><i class="fa fa-search"></i>&nbsp;Search</button>
-                <button class="btn default" type="button" ng-click="ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
+                <button class="btn green" type="button" ng-click="vm.SearchAdvance()"><i class="fa fa-search"></i>&nbsp;Search</button>
+                <button class="btn default" type="button" ng-click="vm.ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
             </div>
         </div>
     </div>
@@ -192,13 +224,13 @@
             <h4 class="uppercase bold pull-left">
                 <i class="fa fa-truck fa-lg"></i> Shipments
             </h4>
-            <span class="text-error" style="vertical-align:middle" ng-if="loading">Retrieving your shipment data...</span>
+            <span class="text-error" style="vertical-align:middle" ng-if="vm.loading">Retrieving your shipment data...</span>
             <h4 class="pull-right">
-                <button class="btn btn-switch" ng-class="{selected:viewTable}" ng-click="showTable()"><i class="fa fa-table"></i></button>
-                <button class="btn btn-switch" ng-class="{selected:viewCard}" ng-click="showCard()"><i class="fa fa-th-large"></i></button>
-                <button class="btn btn-switch" ng-class="{selected:viewMap}" ng-click="showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:vm.viewTable}" ng-click="vm.showTable()"><i class="fa fa-table"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:vm.viewCard}" ng-click="vm.showCard()"><i class="fa fa-th-large"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:vm.viewMap}" ng-click="vm.showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>
 
-                <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
+                <button class="btn default btn-sm uppercase" type="button" ng-click="vm.Print()">
                     <i class="fa fa-print"></i>
                     <span>Print</span>
                 </button>
@@ -209,7 +241,7 @@
                 <div class="col-sm-12">
                     <div class="pull-left">
                         Show:
-                        <select class="form-control" style="width:auto;display:inline-block" ng-change="PageSizeChanged()" ng-model="ViewShipment.pageSize">
+                        <select class="form-control" style="width:auto;display:inline-block" ng-change="vm.PageSizeChanged()" ng-model="vm.ViewShipment.pageSize">
                             <option value="10" selected>10</option>
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -220,7 +252,7 @@
                     <div class="pull-right">
                         <span>Sort By:</span>
                         <select class="form-control" style="width:auto;display:inline-block"
-                                ng-change="SortOptionChanged()" ng-model="sc">
+                                ng-change="vm.SortOptionChanged()" ng-model="sc">
                             <option value="shipmentId1">CreationDate (Newest at top)</option>
                             <option value="shipmentId">CreationDate (Oldest at top)</option>
                             <option value="actualArrivalDate1">Date of Arrival (Newest at top)</option>
@@ -252,13 +284,13 @@
                     </ng-map>
                 </div>
             </div>
-            <div class="row" ng-if="viewTable">
+            <div class="row" ng-if="vm.viewTable">
                 <div class="col-sm-12">
                     <br>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <tr>
-                                <th ng-click="Sorting('deviceSN')">
+                                <th ng-click="vm.Sorting('deviceSN')">
                                     <span class="pull-left">Tracker (Trip)
                                         <i uib-tooltip="A meaningful short name you assign to each tracker"
                                            tooltip-append-to-body="true"
@@ -267,11 +299,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('shipmentDescription')">
+                                <th ng-click="vm.Sorting('shipmentDescription')">
                                     <span class="pull-left">Shipment Description
                                         <i uib-tooltip="A meaningful description you assign to each tracker"
                                            tooltip-append-to-body="true"
@@ -280,11 +312,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('shippedFrom')">
+                                <th ng-click="vm.Sorting('shippedFrom')">
                                     <span class="pull-left">Shipment From
                                         <i uib-tooltip="Shipment From"
                                            tooltip-append-to-body="true"
@@ -293,11 +325,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('shipmentDate')">
+                                <th ng-click="vm.Sorting('shipmentDate')">
                                     <span class="pull-left">Shipment Date
                                         <i uib-tooltip="Shipment Date"
                                            tooltip-append-to-body="true"
@@ -306,11 +338,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('shippedTo')">
+                                <th ng-click="vm.Sorting('shippedTo')">
                                     <span class="pull-left">Shipment To
                                         <i uib-tooltip="Shipment To"
                                            tooltip-append-to-body="true"
@@ -319,11 +351,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('actualArrivalDate')">
+                                <th ng-click="vm.Sorting('actualArrivalDate')">
                                     <span class="pull-left">Arrival Date
                                         <i uib-tooltip="Arrival Date"
                                            tooltip-append-to-body="true"
@@ -332,11 +364,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('status')">
+                                <th ng-click="vm.Sorting('status')">
                                     <span class="pull-left">Status
                                         <i uib-tooltip="Status"
                                            tooltip-append-to-body="true"
@@ -345,11 +377,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='status'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='status'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='status'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='status'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('siblingCount')">
+                                <th ng-click="vm.Sorting('siblingCount')">
                                     <span class="pull-left">Siblings
                                         <i uib-tooltip="Sibling Count"
                                            tooltip-append-to-body="true"
@@ -358,11 +390,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('lastReadingTimeISO')">
+                                <th ng-click="vm.Sorting('lastReadingTimeISO')">
                                     <span class="pull-left">Last Reading
                                         <i uib-tooltip="Last reading time"
                                            tooltip-append-to-body="true"
@@ -371,11 +403,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('lastReadingTemperature')">
+                                <th ng-click="vm.Sorting('lastReadingTemperature')">
                                     <span class="pull-left">Temp.
                                         <i uib-tooltip="Last reading temperature"
                                            tooltip-append-to-body="true"
@@ -384,11 +416,11 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
-                                <th ng-click="Sorting('alertSummary')">
+                                <th ng-click="vm.Sorting('alertSummary')">
                                     <span class="pull-left">Alerts
                                         <i uib-tooltip="Alert summary"
                                            tooltip-append-to-body="true"
@@ -397,12 +429,12 @@
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
-                                        <a ng-class="{'active-sort':ViewShipment.so=='asc' && ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                                        <a ng-class="{'active-sort':ViewShipment.so=='desc' && ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-desc"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-desc"></i></a>
                                     </span>
                                 </th>
                             </tr>
-                            <tr ng-repeat="shipment in ShipmentList">
+                            <tr ng-repeat="shipment in vm.ShipmentList">
                                 <!--<td>
                                     <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
                                         <u>{{shipment.shipmentId}}</u>
@@ -440,8 +472,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-if="viewCard">
-                <div class="col-sm-6" ng-repeat="shipment in ShipmentList">
+            <div class="row" ng-if="vm.viewCard">
+                <div class="col-sm-6" ng-repeat="shipment in vm.ShipmentList">
                     <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
@@ -509,16 +541,35 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-if="viewMap">
-                <!--show map-->
-                <ng-map disable-default-u-i="true"
-                        map-type-control-options="{
-                            mapTypeIds: ['ROADMAP']
-                        }">
+            <div class="row" ng-if="vm.viewMap" style="margin-top: 15px;">
+                <div class="col-xs-12">
+                    <!--<div id="mapId"></div>-->
+                    <!--<ng-map disable-default-u-i="true" map-type-control-options="{mapTypeIds: ['ROADMAP']}">-->
+                    <ng-map zoom="8" center="[40.74, -74.18]" style="height: 500px;">
+                        <!--<custom-marker ng-repeat="shipment in vm.ShipmentList"
+                                       position="{{shipment.position}}">
+                            <div class="cm end-loc-box">
+                                <table class="end-marker-content"><tr>
+                                    <td>
+                                        <b>{{shipment.deviceName}}</b><br/>
+                                    </td>
+                                    <td><img class="rev-horizon" src="theme/img/tinyLocationStop.png"></td>
+                                </tr></table>
+                            </div>
+                        </custom-marker>-->
 
-                </ng-map>
+                        <!--<info-window id="foo" on-mouseover="vm.mouseover()">
+                            <div ng-non-bindable="">
+                                Lat: {{anchor.getPosition().lat()}}<br/>
+                                Lng: {{anchor.getPosition().lng()}}<br/>
+                            </div>
+                        </info-window>-->
+                    </ng-map>
+
+                </div>
+
             </div>
-            <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
+            <uib-pagination ng-hide="vm.viewMap" class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
 
         </div>
     </div>

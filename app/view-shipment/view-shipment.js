@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, NgMap,
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
@@ -22,8 +22,8 @@
         return;
     }
 
-    $scope.specificDates = false;
-    $scope.ViewShipment = {
+    VM.specificDates = false;
+    VM.ViewShipment = {
         alertsOnly: false,
         last2Days: true,
         lastDay: false,
@@ -41,80 +41,94 @@
         sc: 'shipmentId',
         so: 'desc'
     };
-    $scope.sc = 'shipmentId1';
-    var bounds = null;
-    $scope.vm = this;
+    VM.sc = 'shipmentId1';
 
-    $scope.SearchBasic = function () {
-        $scope.ViewShipment.shipmentDescription = null;
-        $scope.ViewShipment.deviceImei = null;
-        $scope.ViewShipment.shippedFrom = [];
-        $scope.ViewShipment.shippedTo = [];
-        $scope.ViewShipment.status = null;
-        $scope.BindCards();
+    //VM.vm = this;
+
+    VM.SearchBasic = function () {
+        VM.ViewShipment.shipmentDescription = null;
+        VM.ViewShipment.deviceImei = null;
+        VM.ViewShipment.shippedFrom = [];
+        VM.ViewShipment.shippedTo = [];
+        VM.ViewShipment.status = null;
+        VM.BindCards();
     }
 
-    $scope.SearchAdvance = function () {
-        if($scope.ViewShipment.status == "")
-            $scope.ViewShipment.status = null;
-        $scope.BindCards();
+    VM.SearchAdvance = function () {
+        if(VM.ViewShipment.status == "")
+            VM.ViewShipment.status = null;
+        VM.BindCards();
     }
 
-    $scope.Print = function(){
+    VM.Print = function(){
         $window.print();
     }
 
-    $scope.AdvanceSearch = true;
-    $scope.LocationOptions = { multiple: true };
+    VM.AdvanceSearch = true;
+    VM.LocationOptions = { multiple: true };
 
     
     var BindShipmentList = function () {
-        $scope.loading = true;
+        VM.loading = true;
 
-        if ($scope.ViewShipment.shippedFromLocation) {
-            $scope.ViewShipment.shippedFrom = $scope.ViewShipment.shippedFromLocation.map(function(val) {
+        if (VM.ViewShipment.shippedFromLocation) {
+            VM.ViewShipment.shippedFrom = VM.ViewShipment.shippedFromLocation.map(function(val) {
                 return val.locationId;
             });
         }
-        if ($scope.ViewShipment.shippedToLocation) {
-            $scope.ViewShipment.shippedTo = $scope.ViewShipment.shippedToLocation.map(function(val) {
+        if (VM.ViewShipment.shippedToLocation) {
+            VM.ViewShipment.shippedTo = VM.ViewShipment.shippedToLocation.map(function(val) {
                 return val.locationId;
             });
         }
 
-        webSvc.getShipments($scope.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
+        webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
-                $scope.ShipmentList = data.response;
-                $log.debug('SHIPMENT', $scope.ShipmentList);
-                $scope.ShipmentList.totalCount = data.totalCount;
+                VM.ShipmentList = data.response;
+                $log.debug('ShipmentList', VM.ShipmentList);
+                VM.ShipmentList.totalCount = data.totalCount;
             } else if(data.status.code == 1){
                 $rootScope.redirectUrl = "/view-shipment";
                 $rootScope.go("login");
             };
             
-            $scope.loading = false;
-            if(!$scope.$$phase) {
-                $scope.$apply();
-            }
+            VM.loading = false;
+
         }).error( function (xmlHttpRequest, textStatus, errorThrown) {
             //alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-            $scope.loading = false;
+            VM.loading = false;
         }).then(function() {
-            angular.forEach($scope.ShipmentList, function(v, k) {
+            angular.forEach(VM.ShipmentList, function(v, k) {
                 if (!isNaN(v.deviceSN)) {
-                    $scope.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
+                    VM.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
                 }
-            })
+                //-- position
+                VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
+                VM.ShipmentList[k].icon = {
+                    url:"theme/img/Tracker1.png",
+                    scaledSize:[16, 16],
+                    anchor:[8, 8]
+                }
+                //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
+            });
+            /*if(!$scope.$$phase) {
+                $scope.$apply();
+            }*/
+            //if(VM.map){
+            //    VM.map.fitBounds(bounds);
+            //    console.log('Custom Markers', VM.map.customMarkers);
+            //}
+            VM.updateMap(null);
         });
     };
-    $scope.Sorting = function (expression) {
-        $scope.ViewShipment.so = $scope.ViewShipment.so == "asc" ? "desc" : "asc";
-        $scope.ViewShipment.sc = expression;
+    VM.Sorting = function (expression) {
+        VM.ViewShipment.so = VM.ViewShipment.so == "asc" ? "desc" : "asc";
+        VM.ViewShipment.sc = expression;
         BindShipmentList();
     }
-    $scope.ResetSearchCriteria = function () {
-        $scope.ViewShipment = {
+    VM.ResetSearchCriteria = function () {
+        VM.ViewShipment = {
             alertsOnly: false,
             last2Days: true,
             lastDay: false,
@@ -131,57 +145,54 @@
             so: 'desc',
             sc: 'shipmentDate'
         };
-        $scope.sc = "shipmentDate1";
+        VM.sc = "shipmentDate1";
 
         BindShipmentList();
     }
 
-    $scope.BindCards = function () {
+    VM.BindCards = function () {
         BindShipmentList();
     }
 
     BindShipmentList();
 
     $scope.$on('mapInitialized', function(event, m) {
-        $scope.vm.map = m;
-        if(bounds != null){
-            $scope.vm.map.fitBounds(bounds); 
-        }
+        VM.updateMap(m);
     });
 
-    $scope.LocationListFrom = [];
-    $scope.LocationListTo = [];
-    $scope.LocationListInterim = [];
+    VM.LocationListFrom = [];
+    VM.LocationListTo = [];
+    VM.LocationListInterim = [];
     webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
         // console.log("Location", data);
-        bounds = new google.maps.LatLngBounds;
+        //bounds = new google.maps.LatLngBounds;
         
         if (data.status.code == 0) {
-            for(i = 0 ; i < data.response.length; i ++){
+            /*for(i = 0 ; i < data.response.length; i ++){
                 bounds.extend(new google.maps.LatLng(data.response[i].location.lat, data.response[i].location.lon));
             }
-            if($scope.vm.map != undefined){
-                $scope.vm.map.fitBounds(bounds);
-            }
-            $scope.LocationList = data.response;
-            angular.forEach($scope.LocationList, function (val, key) {
+            if(VM.map != undefined){
+                VM.map.fitBounds(bounds);
+            }*/
+            VM.LocationList = data.response;
+            angular.forEach(VM.LocationList, function (val, key) {
                 if (val.companyName) {
                     var dots = val.companyName.length > 20 ? '...' : '';
                     var companyName = $filter('limitTo')(val.companyName, 20) + dots;
-                    $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
+                    VM.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
                 }
                 else {
-                    $scope.LocationList[key].DisplayText = val.locationName;
+                    VM.LocationList[key].DisplayText = val.locationName;
                 }
 
                 if (val.startFlag=='Y') {
-                    $scope.LocationListFrom.push(val);
+                    VM.LocationListFrom.push(val);
                 }
                 if (val.endFlag == 'Y') {
-                    $scope.LocationListTo.push(val)
+                    VM.LocationListTo.push(val)
                 }
                 if (val.interimFlag == 'Y') {
-                    $scope.LocationListInterim.push(val);
+                    VM.LocationListInterim.push(val);
                 }
             })
         }
@@ -190,80 +201,92 @@
     webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
         // console.log("Devi", data);
         if (data.status.code == 0) {
-            $scope.TrackerList = data.response;
+            VM.TrackerList = data.response;
             // console.log(data.response);
         }
     });
-    $scope.SortOptionChanged = function(){
-        var order = $scope.sc.substr(-1);
+    VM.SortOptionChanged = function(){
+        var order = VM.sc.substr(-1);
         if(order == '1'){
-            $scope.ViewShipment.sc = $scope.sc.substr(0, $scope.sc.length - 1);
-            $scope.ViewShipment.so = "desc";
+            VM.ViewShipment.sc = VM.sc.substr(0, VM.sc.length - 1);
+            VM.ViewShipment.so = "desc";
         } else{
-            $scope.ViewShipment.sc = $scope.sc;
-            $scope.ViewShipment.so = "asc";
+            VM.ViewShipment.sc = VM.sc;
+            VM.ViewShipment.so = "asc";
         }
         BindShipmentList();
     }
-    $scope.PageSizeChanged = function () {
+    VM.PageSizeChanged = function () {
         BindShipmentList();
     }
-    $scope.PageChanged = function (page) {
-        $scope.ViewShipment.pageIndex = page;
-        console.log("PAGE", page);
+    VM.PageChanged = function (page) {
+        VM.ViewShipment.pageIndex = page;
+        //console.log("PAGE", page);
         BindShipmentList();
     }
 
-    $scope.$watch('ViewShipment.lastDay', function (nVal, oVal) {
-        if ($scope.ViewShipment && nVal) {
-            $scope.ViewShipment.lastDay = nVal;
-            $scope.ViewShipment.last2Days = !nVal;
-            $scope.ViewShipment.lastWeek = !nVal;
-            $scope.ViewShipment.lastMonth = !nVal;
-        }
-    })
-    $scope.$watch('ViewShipment.last2Days', function (nVal, oVal) {
-        if ($scope.ViewShipment && nVal) {
-            $scope.ViewShipment.lastDay = !nVal;
-            $scope.ViewShipment.last2Days = nVal;
-            $scope.ViewShipment.lastWeek = !nVal;
-            $scope.ViewShipment.lastMonth = !nVal;
-        }
-    })
-    $scope.$watch('ViewShipment.lastWeek', function (nVal, oVal) {
-        if ($scope.ViewShipment && nVal) {
-            $scope.ViewShipment.lastDay = !nVal;
-            $scope.ViewShipment.last2Days = !nVal;
-            $scope.ViewShipment.lastWeek = nVal;
-            $scope.ViewShipment.lastMonth = !nVal;
-        }
-    })
-    $scope.$watch('ViewShipment.lastMonth', function (nVal, oVal) {
-        if ($scope.ViewShipment && nVal) {
-            $scope.ViewShipment.lastDay = !nVal;
-            $scope.ViewShipment.last2Days = !nVal;
-            $scope.ViewShipment.lastWeek = !nVal;
-            $scope.ViewShipment.lastMonth = nVal;
-        }
-    })
-
-    $scope.viewCard = false;
-    $scope.viewTable = true;
-    $scope.viewMap = false;
-    $scope.showTable = function() {
-        $scope.viewTable = true;
-        $scope.viewCard = false;
-        $scope.viewMap = false;
+    VM.viewCard = false;
+    VM.viewTable = true;
+    VM.viewMap = false;
+    VM.showTable = function() {
+        VM.viewTable = true;
+        VM.viewCard = false;
+        VM.viewMap = false;
     };
-    $scope.showCard = function() {
-        $scope.viewTable = false;
-        $scope.viewCard = true;
-        $scope.viewMap = false;
+    VM.showCard = function() {
+        VM.viewTable = false;
+        VM.viewCard = true;
+        VM.viewMap = false;
     }
-    $scope.showMap = function() {
-        $scope.viewTable = false;
-        $scope.viewCard = false;
-        $scope.viewMap = true;
+    VM.showMap = function() {
+        VM.viewTable = false;
+        VM.viewCard = false;
+        VM.viewMap = true;
+    }
+
+    VM.updateMap = function(map) {
+        if (map) {
+            VM.map = map;
+        }
+        if (VM.map){
+            $log.debug('update Maps', VM.ShipmentList);
+            if (VM.dynMarkers) {
+                // Unset all markers
+                var i = 0, l = VM.dynMarkers.length;
+                for (i; i<l; i++) {
+                    VM.dynMarkers[i].setMap(null)
+                }
+
+                // Clears all clusters and markers from the clusterer.
+                VM.markerClusterer.clearMarkers();
+            }
+            VM.dynMarkers = [];
+
+            // console.log('Custom Markers', VM.map.customMarkers);
+            var bounds = new google.maps.LatLngBounds;
+            angular.forEach(VM.ShipmentList, function(shipment, key) {
+                var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
+                var marker = new MarkerWithLabel({
+                    position: llng,
+                    map: VM.map,
+                    icon: 'theme/img/tinyLocationStop.png',
+                    labelContent: shipment.deviceName,
+                    labelAnchor: new google.maps.Point(22, 0),
+                    labelClass: "labels", // the CSS class for the label
+                    labelStyle: {opacity: 0.75}
+                });
+                VM.dynMarkers.push(marker);
+                bounds.extend(llng);
+            });
+
+            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});
+            VM.map.setCenter(bounds.getCenter());
+            VM.map.fitBounds(bounds);
+
+            if(bounds != null){
+                VM.map.fitBounds(bounds);
+            }
+        }
     }
 });
 

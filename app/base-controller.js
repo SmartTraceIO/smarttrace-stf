@@ -80,7 +80,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
                     rootScope.moment = moment.tz(rootScope.RunningTimeZoneId);
                     var tick = function () {
                         if (rootScope.moment) {
-                            rootScope.RunningTime = rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                            rootScope.RunningTime = rootScope.moment.add(1, 's').format("DD-MMM-YYYY h:mm a");
                             timeout(tick, 1000); // reset the timer
                         }
                     }

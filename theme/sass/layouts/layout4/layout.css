@@ -1,0 +1,93 @@
+/*
+Error: Undefined variable: "$general-border-radius".
+        on line 17 of layout/_sidebar.scss, in `border-radius'
+        from line 17 of layout/_sidebar.scss
+        from line 12 of layout.scss
+
+12: @import 'layout/_sidebar';  // page sidebar         
+13: @import 'layout/_content'; // page consnde                
+14: @import 'layout/_footer';   // page footer                          
+15: @import 'layout/_theme-panel';  // theme customizer panel
+16: 
+17: @import '../quick-sidebar/_quick-sidebar';  // quick sidebar content                        
+18: 
+19: /***          
+20: Page Loading         
+21: ***\/        
+22:           
+
+Backtrace:
+layout/_sidebar.scss:17:in `border-radius'
+layout/_sidebar.scss:17
+layout.scss:12
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/script/tree/variable.rb:49:in `_perform'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/script/tree/node.rb:50:in `perform'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:344:in `block (2 levels) in visit_mixin'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:344:in `map'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:344:in `block in visit_mixin'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:98:in `block in with_mixin'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:98:in `with_mixin'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:336:in `visit_mixin'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `block in with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:420:in `block (2 levels) in visit_rule'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:420:in `map'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:420:in `block in visit_rule'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:418:in `visit_rule'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `block in with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:315:in `block (2 levels) in visit_import'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:315:in `map'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:315:in `block in visit_import'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:88:in `block in with_import'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:88:in `with_import'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:312:in `visit_import'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `block in with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:115:in `with_frame'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/stack.rb:79:in `with_base'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:52:in `map'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/base.rb:36:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:157:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/root_node.rb:36:in `css_tree'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/engine.rb:368:in `_render_with_sourcemap'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/engine.rb:285:in `render_with_sourcemap'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/plugin/compiler.rb:489:in `update_stylesheet'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/plugin/compiler.rb:209:in `each'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/plugin.rb:82:in `update_stylesheets'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/exec/sass_scss.rb:350:in `watch_or_update'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/exec/sass_scss.rb:50:in `process_result'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/exec/base.rb:52:in `parse'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/lib/sass/exec/base.rb:19:in `parse!'
+/var/lib/gems/1.9.1/gems/sass-3.4.8/bin/scss:13:in `<top (required)>'
+/usr/local/bin/scss:23:in `load'
+/usr/local/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined variable: \"$general-border-radius\".\A         on line 17 of layout/_sidebar.scss, in `border-radius'\A         from line 17 of layout/_sidebar.scss\A         from line 12 of layout.scss\A \A 12: @import 'layout/_sidebar';  // page sidebar         \A 13: @import 'layout/_content'; // page consnde                \A 14: @import 'layout/_footer';   // page footer                          \A 15: @import 'layout/_theme-panel';  // theme customizer panel\A 16: \A 17: @import '../quick-sidebar/_quick-sidebar';  // quick sidebar content                        \A 18: \A 19: /***          \A 20: Page Loading         \A 21: ***/        \A 22:           "; }

@@ -1,5 +1,4 @@
 ﻿//var version = (new Date()).getTime();
-var gKey = "AIzaSyC061Eu8i3E8_CXtZK_-ceh8YnYXs2Nj2s";
 //console.log(version);
 appConstants.constant('routes', [
     {
@@ -121,9 +120,10 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
+              'Scripts/markerclusterer.js',
+              'Scripts/google-map/markerwithlabel.js',
               'app/view-shipment/view-shipment.js?v=' + version,
               'app/global/filters/filters.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
@@ -139,7 +139,6 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
     {
@@ -178,7 +177,6 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/edit-note.js?v=' + version,
             'app/view-shipment-detail-share/delete-note.js?v=' + version,
             'app/global/filters/filters.js?v=' + version,
-            'https://maps.googleapis.com/maps/api/js?key='+gKey
         ]
     },
       {
@@ -412,7 +410,6 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-location/manage-location.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey+'&libraries=places'
           ]
       },
       {
@@ -428,7 +425,6 @@ appConstants.constant('routes', [
           },
           dependencies: [
               'app/manage-location/manage-location.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey+'&libraries=places'
           ]
       },
       {
@@ -461,7 +457,6 @@ appConstants.constant('routes', [
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
               'app/global/filters/filters.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
@@ -478,7 +473,6 @@ appConstants.constant('routes', [
           dependencies: [
               'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
               'app/global/filters/filters.js?v=' + version,
-              'https://maps.googleapis.com/maps/api/js?key='+gKey
           ]
       },
       {
