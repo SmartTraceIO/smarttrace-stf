@@ -60,7 +60,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
                 $rootScope.moment = moment.tz($rootScope.RunningTimeZoneId);
                 $scope.tickInterval = 1000 //ms
                 var tick = function () {
-                    $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("Do-MMM-YYYY h:mm a");
+                    $rootScope.RunningTime = $rootScope.moment.add(1, 's').format("DD-MMM-YYYY h:mm a");
                     $timeout(tick, $scope.tickInterval); // reset the timer
                 }
                 // Start the timer

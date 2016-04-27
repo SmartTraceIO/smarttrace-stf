@@ -106,19 +106,12 @@
                 //-- position
                 VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
                 VM.ShipmentList[k].icon = {
-                    url:"theme/img/Tracker1.png",
+                    url:"theme/img/transparent16.png",
                     scaledSize:[16, 16],
                     anchor:[8, 8]
                 }
                 //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
             });
-            /*if(!$scope.$$phase) {
-                $scope.$apply();
-            }*/
-            //if(VM.map){
-            //    VM.map.fitBounds(bounds);
-            //    console.log('Custom Markers', VM.map.customMarkers);
-            //}
             VM.updateMap(null);
         });
     };
@@ -243,6 +236,15 @@
         VM.viewCard = false;
         VM.viewMap = true;
     }
+    VM.showInfo=false;
+    VM.showInfoWindow = function(event, id) {
+        VM.showId = id;
+        console.log('Show Infowindow Event', VM.showId);
+        //VM.currentShipment = VM.ShipmentList[id];
+        //VM.map.showInfoWindow('foo', this);
+
+
+    }
 
     VM.updateMap = function(map) {
         if (map) {
@@ -270,10 +272,147 @@
                     position: llng,
                     map: VM.map,
                     icon: 'theme/img/tinyLocationStop.png',
-                    labelContent: shipment.deviceName,
-                    labelAnchor: new google.maps.Point(22, 0),
+                    labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
+                    labelAnchor: new google.maps.Point(-15, 15),
                     labelClass: "labels", // the CSS class for the label
-                    labelStyle: {opacity: 0.75}
+                    labelStyle: {opacity: 1}
+                });
+
+                var htmlContent = '';
+                htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';
+                htmlContent += '<div class="portlet-title">';
+                htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';
+                htmlContent += '<div class="pull-right" style="margin-top:6px">';
+                htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'"';
+                htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
+                htmlContent += '</div>';
+                htmlContent += '</div>';
+                htmlContent += '<div class="portlet-body" style="position:relative; padding-top: 0px!important;">';
+                htmlContent += '<div class="row">';
+                htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
+                htmlContent += '<tr>';
+                htmlContent += '<td>';
+                htmlContent += '<h5 class="pull-left">Tracker ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</h5>'
+                htmlContent += '</td>';
+                htmlContent += '<td>';
+
+                if (shipment.siblingCount > 0) {
+                    htmlContent += '<h5 class="text-center">';
+                    htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                    htmlContent += shipment.siblingCount + ' others';
+                    htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    htmlContent += '</h5>';
+                }
+
+                htmlContent += '</td>';
+                htmlContent += '<td>';
+                htmlContent += '<h5 class="pull-right">';
+                if (shipment.alertSummary.LightOn){
+                    htmlContent += '<img src="theme/img/alertLightOn.png"/>';
+                }
+                if (shipment.alertSummary.LightOff) {
+                    htmlContent += '<img src="theme/img/alertLightOff.png"/>';
+                }
+                if (shipment.alertSummary.Cold) {
+                    htmlContent += '<img src="theme/img/alertCold.png"/>';
+                }
+                if (shipment.alertSummary.Hot) {
+                    htmlContent += '<img src="theme/img/alertHot.png"/>';
+                }
+                if (shipment.alertSummary.CriticalCold) {
+                    htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
+                }
+                if (shipment.alertSummary.CriticalHot) {
+                    htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
+                }
+                if (shipment.alertSummary.Battery) {
+                    htmlContent += '<img src="theme/img/alertBattery.png"/>';
+                }
+                if (shipment.alertSummary.MovementStart) {
+                    htmlContent += '<img src="theme/img/alertShock.png"/>';
+                }
+                htmlContent += '</h5>';
+                htmlContent += '</td>';
+                htmlContent += '</tr>';
+                htmlContent += '</table>';
+
+                htmlContent += '</div>'; //-- class row
+                htmlContent += '<div class="row">'; //row2
+                htmlContent += '<div class="col-sm-12">'
+                htmlContent += '<p class="col-xs-1 text-left no-margin no-padding"><i class="fa fa-home"></i></p>';
+                var assetTypeAndNum = '';
+                assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
+                assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
+                assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+                htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + shipment.status +'</p>';
+                htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-map-marker"></i></p>';
+                htmlContent += '</div>'; //-- col-sm-12
+                htmlContent += '</div>'; //-- row2
+
+                htmlContent += '<div class="row">'; //--row3
+                htmlContent += '<div class="col-sm-12">'
+                htmlContent += '<div class="progress" style="max-height:5px">';
+                htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">';
+                htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
+                htmlContent += '</div>';
+                htmlContent += '</div>';
+                htmlContent += '</div>';
+                htmlContent += '</div>';
+
+                htmlContent += '<div class="row">'; // row3
+                htmlContent += '<div class="col-xs-6 text-left">';
+                if (shipment.shippedFrom) {
+                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
+                }
+                htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
+                htmlContent += '</div>';
+
+                htmlContent += '<div class="col-xs-6 text-right">';
+                if (shipment.shippedTo) {
+                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
+                }
+                if (shipment.status == 'Arrived') {
+                    htmlContent += '<p class="text-muted no-margin no-padding">';
+                    htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+                }
+                htmlContent += '</div>'; //col-xs-6 text-right
+                htmlContent += '</div>'; // row3 end
+                htmlContent += '<!--row3-->'
+                htmlContent += '</div>'; //-- portlet-body
+
+                var temperature = shipment.lastReadingTemperature;
+                if (!isNaN(temperature)) {
+                    temperature = temperature.toFixed(1) + '℃';
+                } else {
+                    temperature = '';
+                }
+                var lastReading = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
+
+                if (temperature || lastReading) {
+                    htmlContent += '<div class="text-center shipment-marker">';
+                    htmlContent += temperature + '|' + lastReading + '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    htmlContent += '</div>';
+                }
+
+                htmlContent += '</div>';
+
+
+                var infowindow = new InfoBubble({
+                    content: htmlContent,
+                    shadowStyle: 1,
+                    padding: 0,
+                    borderRadius: 4,
+                    arrowSize: 10,
+                    borderWidth: 1,
+                    borderColor: '#7ed56d',
+                    disableAutoPan: true,
+                    arrowPosition: 10,
+                    //backgroundClassName: 'phoney',
+                    arrowStyle: 2,
+                    maxHeight: 200
+                });
+                marker.addListener('click', function() {
+                    infowindow.open(VM.map, marker);
                 });
                 VM.dynMarkers.push(marker);
                 bounds.extend(llng);
@@ -281,8 +420,6 @@
 
             VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});
             VM.map.setCenter(bounds.getCenter());
-            VM.map.fitBounds(bounds);
-
             if(bounds != null){
                 VM.map.fitBounds(bounds);
             }
