@@ -386,11 +386,15 @@
                 } else {
                     temperature = '';
                 }
-                var lastReading = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
+                var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
+                if (lastMoment) {
+                    $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
+                     lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
+                }
 
                 if (temperature || lastReading) {
                     htmlContent += '<div class="text-center shipment-marker">';
-                    htmlContent += temperature + '|' + lastReading + '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    htmlContent += temperature + '|' + lastReading + '<i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
                     htmlContent += '</div>';
                 }
 
