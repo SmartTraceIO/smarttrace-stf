@@ -611,15 +611,7 @@ h3 span.info {
     width: 40%;
     margin-left: 30%;
 }
-.shipment-last-reading{
-    /*padding:3px;*/
-    overflow:hidden;
-    border-top-left-radius:15px !important;
-    border-top-right-radius:15px !important;
-    border:1px solid #5BCA45;
-    color:white;
-    background-color:#5BCA45;
-}
+
 .bottom-margin{
     margin-bottom: 40px;
 }
@@ -777,4 +769,18 @@ h3 span.info {
     padding-right: 5px;
     border: 1px solid #5e5e5e;
     white-space: nowrap;
+}
+
+.shipment-last-reading{
+    padding:3px;
+    overflow:hidden;
+    position:absolute;
+    bottom:0;
+    border-top-left-radius:15px !important;
+    border-top-right-radius:15px !important;
+    border:1px solid #5BCA45;
+    color:white;
+    background-color:#5BCA45;
+    width: 60%;
+    margin-left: 20%;
 }

@@ -225,21 +225,16 @@
         VM.viewTable = true;
         VM.viewCard = false;
         VM.viewMap = false;
-        VM.AdvanceSearch = true;
     };
     VM.showCard = function() {
         VM.viewTable = false;
         VM.viewCard = true;
         VM.viewMap = false;
-
-        VM.AdvanceSearch = true;
     }
     VM.showMap = function() {
         VM.viewTable = false;
         VM.viewCard = false;
         VM.viewMap = true;
-
-        VM.AdvanceSearch = false;
     }
     VM.showInfo=false;
     VM.showInfoWindow = function(event, id) {
@@ -304,18 +299,28 @@
                     flat: true,
                     anchor: RichMarkerPosition.TOP,
                     content: htmlIcon,
+                    /*icon: 'theme/img/tinyLocationStop.png',
+                    labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
+                    labelAnchor: new google.maps.Point(-15, 15),
+                    labelClass: "labels", // the CSS class for the label
+                    labelStyle: {opacity: 1}*/
                  });
 
                 var htmlContent = '';
-                htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
-                htmlContent += '<div class="portlet-title">';                                                                   //+2
-                htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
-                htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
+                htmlContent += '<div class="container-fluid">';  //+1
+                htmlContent += '<!--header-->'
+                htmlContent += '<div class="row">';                                                                 //+2
+                htmlContent += '<div class="col-sm-12 info-header">';                                                                 //+2
+                htmlContent += '<div class="pull-left">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
+                htmlContent += '<div class="pull-right">';                                               //+4
                 htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'"';
                 htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
                 htmlContent += '</div>';                                                                                        //-4
                 htmlContent += '</div>';                                                                                        //-2
-                htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important; margin-bottom: 20px">'; //+5
+                htmlContent += '</div>';                                                                                        //-2
+                htmlContent += '<!--/header-->'
+                htmlContent += '<!--body-->'
+
                 htmlContent += '<div class="row">';                                                                                               //+6
                 htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
                 htmlContent += '<tr>';
@@ -323,7 +328,6 @@
                 htmlContent += '<h5 class="pull-left">Tracker ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</h5>'
                 htmlContent += '</td>';
                 htmlContent += '<td>';
-
                 if (shipment.siblingCount > 0) {
                     htmlContent += '<h5 class="text-center">';
                     htmlContent += '<img src="theme/img/similarTrips.png"/>'
@@ -331,7 +335,6 @@
                     //htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
                     htmlContent += '</h5>';
                 }
-
                 htmlContent += '</td>';
                 htmlContent += '<td>';
                 htmlContent += '<h5 class="pull-right">';
@@ -390,7 +393,7 @@
                 htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
                 htmlContent += '</div>'; // row3 end                                                                                    //-13
                 htmlContent += '<!--row3-->'
-                htmlContent += '</div>'; //-- portlet-body                                                                       //-5
+                                                                         //-5
 
                 var temperature = shipment.lastReadingTemperature;
                 if (!isNaN(temperature)) {
@@ -405,31 +408,31 @@
                 }
 
                 if (temperature || lastReading) {
-                    htmlContent += '<div class="shipment-last-reading">'
-                    htmlContent += '<div class="text-center">';
+                    htmlContent += '<div class="row">'
+                    htmlContent += '<div class="col-sm-12 text-center">';
+                    htmlContent += '<span class="shipment-last-reading">';
                     htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
+                    htmlContent += '</span>';
                     htmlContent += '</div>';
                     htmlContent += '</div>';
                 }
-
-                htmlContent += '</div>';
+                htmlContent += '</div>';                                                                                                //-1
 
 
                 var infowindow = new InfoBubble({
                     content: htmlContent,
                     shadowStyle: 1,
                     padding: 0,
-                    borderRadius: 4,
+                    borderRadius: 0,
                     arrowSize: 10,
-                    borderWidth: 1,
+                    borderWidth: 0,
                     borderColor: '#7ed56d',
                     disableAutoPan: true,
-                    arrowPosition: 10,
-                    //backgroundClassName: 'phoney',
                     hideCloseButton:true,
+                    arrowPosition: 10,
+                    backgroundClassName: 'phoney',
                     arrowStyle: 2,
-                    maxHeight: 200,
-                    minWidth: 420
+                    //maxHeight: 200,
                 });
                 marker.addListener('click', function() {
                     if (infowindow.isOpen()) {
