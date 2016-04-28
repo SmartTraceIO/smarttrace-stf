@@ -375,8 +375,7 @@ h3 span.info {
     z-index: 9996 !important;
 }
 .ttbox{
-    border: 3px solid;
-    /*margin: -9px;*/
+    border: 1px solid;
     display: block;
     background-color: #fff;
     position: relative;
@@ -384,7 +383,7 @@ h3 span.info {
 }
 .tt_title{
     color: #fff;
-    /*padding: 3px 4px 6px 7px;*/
+    padding: 5px;
 }
 .tt_title img{
     vertical-align: text-bottom;
@@ -402,7 +401,7 @@ h3 span.info {
     word-wrap: break-word;      /* IE */
 }
 .tt_body{
-    /*padding: 3px;*/
+    padding: 5px;
 }
 .tt_body span{
     padding: 3px 10px;

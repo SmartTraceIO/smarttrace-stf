@@ -241,15 +241,7 @@
 
         VM.AdvanceSearch = false;
     }
-    VM.showInfo=false;
-    VM.showInfoWindow = function(event, id) {
-        VM.showId = id;
-        console.log('Show Infowindow Event', VM.showId);
-        //VM.currentShipment = VM.ShipmentList[id];
-        //VM.map.showInfoWindow('foo', this);
 
-
-    }
 
     VM.updateMap = function(map) {
         if (map) {
@@ -288,7 +280,7 @@
                 htmlIcon += "<table style=''>";
                 htmlIcon += "<tr>";
                 htmlIcon += "<td>";
-                htmlIcon += "<div style='width: 16px; height: 16px; background-color: #5BCA45; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);'></div>";
+                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color: #5BCA45; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);'></div>";
                 htmlIcon += "</td>";
                 htmlIcon += "<td>";
                 htmlIcon += "<div style='background-color: white'>";
@@ -357,7 +349,7 @@
                 assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
                 assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
                 htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + shipment.status +'</p>';
-                htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-map-marker fa-2x"></i></p>';
+                htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></p>';
                 htmlContent += '</div>'; //-- col-sm-12                                                                                 //-8
                 htmlContent += '</div>'; //-- row2                                                                                      //-7
 
@@ -426,7 +418,8 @@
                     disableAutoPan: true,
                     arrowPosition: 10,
                     //backgroundClassName: 'phoney',
-                    hideCloseButton:true,
+                    //hideCloseButton:true,
+                    //closeSrc:'theme/img/slimTimes.png',
                     arrowStyle: 2,
                     maxHeight: 200,
                     minWidth: 420
