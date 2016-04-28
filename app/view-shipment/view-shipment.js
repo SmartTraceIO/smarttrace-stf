@@ -266,9 +266,10 @@
 
             // console.log('Custom Markers', VM.map.customMarkers);
             var bounds = new google.maps.LatLngBounds;
+            var openedInfoWindow = [];
             angular.forEach(VM.ShipmentList, function(shipment, key) {
                 var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
-                var marker = new MarkerWithLabel({
+                /*var marker = new MarkerWithLabel({
                     position: llng,
                     map: VM.map,
                     icon: 'theme/img/tinyLocationStop.png',
@@ -276,69 +277,82 @@
                     labelAnchor: new google.maps.Point(-15, 15),
                     labelClass: "labels", // the CSS class for the label
                     labelStyle: {opacity: 1}
-                });
+                });*/
+
+                var htmlIcon = '';
+                htmlIcon += "<table style=''>";
+                htmlIcon += "<tr>";
+                htmlIcon += "<td>";
+                htmlIcon += "<div style='width: 16px; height: 16px; background-color: #5BCA45; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);'></div>";
+                htmlIcon += "</td>";
+                htmlIcon += "<td>";
+                htmlIcon += "<div style='background-color: white'>";
+                htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
+                htmlIcon += "</div>"
+                htmlIcon += "</td>";
+                htmlIcon += "</tr>";
+                htmlIcon += "</table>";
+
+                var marker = new RichMarker({
+                    position: llng,
+                    map: VM.map,
+                    flat: true,
+                    anchor: RichMarkerPosition.TOP,
+                    content: htmlIcon,
+                    /*icon: 'theme/img/tinyLocationStop.png',
+                    labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
+                    labelAnchor: new google.maps.Point(-15, 15),
+                    labelClass: "labels", // the CSS class for the label
+                    labelStyle: {opacity: 1}*/
+                 });
 
                 var htmlContent = '';
-                htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';
-                htmlContent += '<div class="portlet-title">';
-                htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';
-                htmlContent += '<div class="pull-right" style="margin-top:6px">';
+                //htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+                htmlContent += '<div class="container-fluid">';  //+1
+                htmlContent += '<div class="portlet-title">';                                                                   //+2
+                htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
+                htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
                 htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'"';
                 htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
-                htmlContent += '</div>';
-                htmlContent += '</div>';
-                htmlContent += '<div class="portlet-body" style="position:relative; padding-top: 0px!important;">';
-                htmlContent += '<div class="row">';
+                htmlContent += '</div>';                                                                                        //-4
+                htmlContent += '</div>';                                                                                        //-2
+                //htmlContent += '<div class="portlet-body" style="position:relative; padding-top: 0px!important;padding-bottom: 0px!important;">'; //+5
+                htmlContent += '<div class="container-fluid" style="background-color: #fff;">'; //+5
+                htmlContent += '<div class="row">';                                                                                               //+6
                 htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
                 htmlContent += '<tr>';
                 htmlContent += '<td>';
                 htmlContent += '<h5 class="pull-left">Tracker ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</h5>'
                 htmlContent += '</td>';
-                htmlContent += '<td>';
 
                 if (shipment.siblingCount > 0) {
+                    htmlContent += '<td>';
                     htmlContent += '<h5 class="text-center">';
                     htmlContent += '<img src="theme/img/similarTrips.png"/>'
                     htmlContent += shipment.siblingCount + ' others';
                     htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
                     htmlContent += '</h5>';
+                    htmlContent += '</td>';
                 }
 
-                htmlContent += '</td>';
                 htmlContent += '<td>';
                 htmlContent += '<h5 class="pull-right">';
-                if (shipment.alertSummary.LightOn){
-                    htmlContent += '<img src="theme/img/alertLightOn.png"/>';
-                }
-                if (shipment.alertSummary.LightOff) {
-                    htmlContent += '<img src="theme/img/alertLightOff.png"/>';
-                }
-                if (shipment.alertSummary.Cold) {
-                    htmlContent += '<img src="theme/img/alertCold.png"/>';
-                }
-                if (shipment.alertSummary.Hot) {
-                    htmlContent += '<img src="theme/img/alertHot.png"/>';
-                }
-                if (shipment.alertSummary.CriticalCold) {
-                    htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
-                }
-                if (shipment.alertSummary.CriticalHot) {
-                    htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
-                }
-                if (shipment.alertSummary.Battery) {
-                    htmlContent += '<img src="theme/img/alertBattery.png"/>';
-                }
-                if (shipment.alertSummary.MovementStart) {
-                    htmlContent += '<img src="theme/img/alertShock.png"/>';
-                }
+                if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
+                if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
+                if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
+                if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
+                if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
+                if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
+                if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
+                if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
                 htmlContent += '</h5>';
                 htmlContent += '</td>';
                 htmlContent += '</tr>';
                 htmlContent += '</table>';
 
-                htmlContent += '</div>'; //-- class row
-                htmlContent += '<div class="row">'; //row2
-                htmlContent += '<div class="col-sm-12">'
+                htmlContent += '</div>'; //-- class row                                                                                 //-6
+                htmlContent += '<div class="row">'; //row2                                                                              //+7
+                htmlContent += '<div class="col-sm-12">'                                                                                //+8
                 htmlContent += '<p class="col-xs-1 text-left no-margin no-padding"><i class="fa fa-home"></i></p>';
                 var assetTypeAndNum = '';
                 assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
@@ -346,28 +360,28 @@
                 assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
                 htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + shipment.status +'</p>';
                 htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-map-marker"></i></p>';
-                htmlContent += '</div>'; //-- col-sm-12
-                htmlContent += '</div>'; //-- row2
+                htmlContent += '</div>'; //-- col-sm-12                                                                                 //-8
+                htmlContent += '</div>'; //-- row2                                                                                      //-7
 
-                htmlContent += '<div class="row">'; //--row3
-                htmlContent += '<div class="col-sm-12">'
-                htmlContent += '<div class="progress" style="max-height:5px">';
-                htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">';
+                htmlContent += '<div class="row">'; //--row3                                                                            //+9
+                htmlContent += '<div class="col-sm-12">'                                                                                //+10
+                htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
+                htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
                 htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
-                htmlContent += '</div>';
-                htmlContent += '</div>';
-                htmlContent += '</div>';
-                htmlContent += '</div>';
+                htmlContent += '</div>';                                                                                                //-12
+                htmlContent += '</div>';                                                                                                //-11
+                htmlContent += '</div>';                                                                                                //-10
+                htmlContent += '</div>';                                                                                                //-9
 
-                htmlContent += '<div class="row">'; // row3
-                htmlContent += '<div class="col-xs-6 text-left">';
+                htmlContent += '<div class="row">'; // row3                                                                             //+13
+                htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
                 if (shipment.shippedFrom) {
                     htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
                 }
                 htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
-                htmlContent += '</div>';
+                htmlContent += '</div>';                                                                                                //-14
 
-                htmlContent += '<div class="col-xs-6 text-right">';
+                htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
                 if (shipment.shippedTo) {
                     htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
                 }
@@ -375,10 +389,10 @@
                     htmlContent += '<p class="text-muted no-margin no-padding">';
                     htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
                 }
-                htmlContent += '</div>'; //col-xs-6 text-right
-                htmlContent += '</div>'; // row3 end
+                htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
+                htmlContent += '</div>'; // row3 end                                                                                    //-13
                 htmlContent += '<!--row3-->'
-                htmlContent += '</div>'; //-- portlet-body
+                                                                                             //-5
 
                 var temperature = shipment.lastReadingTemperature;
                 if (!isNaN(temperature)) {
@@ -393,12 +407,32 @@
                 }
 
                 if (temperature || lastReading) {
-                    htmlContent += '<div class="text-center shipment-marker">';
-                    htmlContent += temperature + '|' + lastReading + '<i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    htmlContent += '<div class="row">'
+                    htmlContent += '<div class="col-sm-12 center-block">'
+                    /*htmlContent += '<table width="100%">';
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
+
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>';
+                    htmlContent += '</table>';*/
+
+                    htmlContent += '<div class="text-center">';
+                    //htmlContent += temperature + '|' + lastReading + '<i tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    htmlContent += '<span class="shipment-last-reading">';
+                    htmlContent += '"Last Reading ' + temperature + ' at ' + lastReading;
+                    htmlContent += '</span>';
+                    htmlContent += '</div>';
+
+                    htmlContent += '</div>';
                     htmlContent += '</div>';
                 }
-
-                htmlContent += '</div>';
+                htmlContent += '</div>'; //-- portlet-body
+                htmlContent += '</div>';                                                                                                //-1
 
 
                 var infowindow = new InfoBubble({
@@ -416,7 +450,18 @@
                     maxHeight: 200
                 });
                 marker.addListener('click', function() {
-                    infowindow.open(VM.map, marker);
+                    if (infowindow.isOpen()) {
+                        infowindow.close();
+                    } else {
+                        infowindow.open(VM.map, marker);
+                    }
+                    angular.forEach(openedInfoWindow, function(info, k) {
+                        if (info.isOpen()) {
+                            info.close();
+                        }
+                    })
+                    openedInfoWindow.length = 0;
+                    openedInfoWindow.push(infowindow);
                 });
                 VM.dynMarkers.push(marker);
                 bounds.extend(llng);

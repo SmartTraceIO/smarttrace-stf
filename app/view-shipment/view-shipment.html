@@ -546,42 +546,6 @@
                     <!--<div id="mapId"></div>-->
                     <!--<ng-map disable-default-u-i="true" map-type-control-options="{mapTypeIds: ['ROADMAP']}">-->
                     <ng-map zoom="8" center="[40.74, -74.18]" style="height: 500px;">
-                        <!--<marker ng-repeat="(id, shipment) in vm.ShipmentList" id="{{id}}"
-                                position="{{shipment.position}}"
-                                icon="{{shipment.icon}}"
-                                data="{{shipment}}"
-                                on-click="vm.showInfoWindow(event, id)"
-                                z-index="103">
-                        </marker>-->
-                        <!--<custom-marker ng-repeat="(id, shipment) in vm.ShipmentList"
-                                       on-click="vm.showInfoWindow(event, id)"
-                                       position="{{shipment.position}}" z-index="102">
-                            <div class="start-loc-box" style="margin-top: 16px;">
-                                <table class="start-marker-content">
-                                    <tr>
-                                        <td><img src="theme/img/Tracker1.png"></td>
-                                        <td><b>{{shipment.deviceSN}}({{shipment.tripCount}})</b></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </custom-marker>
-                        <custom-marker ng-repeat="shipment in vm.ShipmentList"
-                                       position="{{shipment.position}}" z-index="101">
-                            <div ng-hide="vm.showId==shipment.shipmentId">
-                                <div class="portlet box green">
-                                    <div class="portlet-title">
-                                        <div class="caption">{{shipment.shipmentDescription}}</div>
-                                        <div class="pull-right" style="margin-top:6px">
-                                            <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
-                                               class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </custom-marker>-->
-                        <!--<info-window id="foo">
-
-                        </info-window>-->
                     </ng-map>
 
                 </div>

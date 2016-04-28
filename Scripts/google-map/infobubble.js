@@ -1690,6 +1690,9 @@ InfoBubble.prototype.figureOutSize_ = function() {
     width = Math.min(width, maxWidth);
   }
 
+  console.log('Height', contentSize.height);
+  console.log('Content', content);
+
   if (maxHeight) {
     height = Math.min(height, maxHeight);
   }
