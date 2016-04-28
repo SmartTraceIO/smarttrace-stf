@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter,
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
@@ -157,16 +157,8 @@
     VM.LocationListTo = [];
     VM.LocationListInterim = [];
     webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
-        // console.log("Location", data);
-        //bounds = new google.maps.LatLngBounds;
-        
+        $log.debug("LocationList", data);
         if (data.status.code == 0) {
-            /*for(i = 0 ; i < data.response.length; i ++){
-                bounds.extend(new google.maps.LatLng(data.response[i].location.lat, data.response[i].location.lon));
-            }
-            if(VM.map != undefined){
-                VM.map.fitBounds(bounds);
-            }*/
             VM.LocationList = data.response;
             angular.forEach(VM.LocationList, function (val, key) {
                 if (val.companyName) {
@@ -241,7 +233,62 @@
 
         VM.AdvanceSearch = false;
     }
+    var filter = $filter('filter');
+    VM.updatePolylines = function (shipment, key) {
+        var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
+        var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
+        var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
+        $log.debug('HomeLocation', homeLocation);
+        if (homeLocation && (homeLocation.length > 0)) {
+            homeLocation = homeLocation[0].location;
+        } else {
+            homeLocation = null;
+        }
+        var destLocation = filter(VM.LocationListTo, {locationName: valToLocName}, true);
+        if (destLocation && (destLocation.length > 0)) {
+            destLocation = destLocation[0].location;
+        } else {
+            destLocation = null;
+        }
+        if (homeLocation && destLocation) {
+            $log.debug('Home/Dest', homeLocation, destLocation);
+            //create home-marker & dest-marker
+            var homeHtmlIcon = '<i class="fa fa-home fa-2x" aria-hidden="true"></i>';
+            var homMarker = new RichMarker({
+                position: new google.maps.LatLng(homeLocation.lat, homeLocation.lon),
+                map: VM.map,
+                flat: true,
+                anchor: RichMarkerPosition.TOP,
+                content: homeHtmlIcon,
+            });
 
+            var destHtmlIcon = '<i class="fa fa-flag fa-flip-horizontal fa-2x"></i>';
+            var destMarker = new RichMarker({
+                position: new google.maps.LatLng(destLocation.lat, destLocation.lon),
+                map: VM.map,
+                flat: true,
+                anchor: RichMarkerPosition.TOP,
+                content: destHtmlIcon,
+            });
+
+            var path = [
+                {lat: homeLocation.lat, lng: homeLocation.lon},
+                {lat: shipment.lastReadingLat, lng: shipment.lastReadingLong},
+                {lat: destLocation.lat, lng: destLocation.lon},
+            ];
+
+            $log.debug('Path', path);
+
+            var flightPath = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: Color[key].code,
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            flightPath.setMap(VM.map);
+        }
+    }
 
     VM.updateMap = function(map) {
         if (map) {
@@ -440,6 +487,9 @@
                 });
                 VM.dynMarkers.push(marker);
                 bounds.extend(llng);
+
+                //draw polylines
+                VM.updatePolylines(shipment, key);
             });
 
             VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});
