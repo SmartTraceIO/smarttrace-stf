@@ -25,7 +25,8 @@ var app = angular.module("app",
         'appConstants',
         'appFilters',
         'ngSanitize',
-        'ngAnimate'
+        'ngAnimate',
+        'LocalStorageModule'
     ],
 
     function ($rootScopeProvider) {

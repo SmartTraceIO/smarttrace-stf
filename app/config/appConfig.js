@@ -127,3 +127,8 @@ app.config(function($httpProvider) {
             }
         })
     });
+app.config(function(localStorageServiceProvider) {
+    localStorageServiceProvider
+        .setPrefix('smartTrace')
+        .setStorageType('localStorage');
+});

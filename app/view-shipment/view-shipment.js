@@ -64,7 +64,7 @@
         $window.print();
     }
 
-    VM.AdvanceSearch = true;
+    VM.AdvanceSearch = false;
     VM.LocationOptions = { multiple: true };
 
     
@@ -217,14 +217,14 @@
         VM.viewTable = true;
         VM.viewCard = false;
         VM.viewMap = false;
-        VM.AdvanceSearch = true;
+        VM.AdvanceSearch = false;
     };
     VM.showCard = function() {
         VM.viewTable = false;
         VM.viewCard = true;
         VM.viewMap = false;
 
-        VM.AdvanceSearch = true;
+        VM.AdvanceSearch = false;
     }
     VM.showMap = function() {
         VM.viewTable = false;
@@ -273,8 +273,8 @@
 
             var path = [
                 {lat: homeLocation.lat, lng: homeLocation.lon},
-                {lat: shipment.lastReadingLat, lng: shipment.lastReadingLong},
                 {lat: destLocation.lat, lng: destLocation.lon},
+                {lat: shipment.lastReadingLat, lng: shipment.lastReadingLong},
             ];
 
             $log.debug('Path', path);

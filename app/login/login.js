@@ -1,4 +1,4 @@
-appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $log,
+appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $state, $log, localStorageService,
 										   $rootScope, $location, $templateCache, $timeout, $window, $q) {
     rootSvc.SetPageTitle('Login');
     if ($rootScope.isOut == true) {
@@ -7,8 +7,10 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
     }
 	$rootScope.showHeader = true;
 	$scope.toggle = false;
-	$scope.username = localDbSvc.getUsername();
-	$scope.password = localDbSvc.getPassword();
+    //$scope.password = localDbSvc.getPassword();
+    //$scope.username = localDbSvc.getUsername();
+	$scope.username = localStorageService.get('username');
+	$scope.password = localStorageService.get('password');
 	localDbSvc.setToken("_");
 	$scope.AuthToken = "_";
 	var loginTimer;
@@ -20,8 +22,10 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 	$scope.login = function(){
         $log.debug('Start login...', $scope.username, $scope.password);
 		if($scope.toggle){
-			localDbSvc.setUsername($scope.username);
-			localDbSvc.setPassword($scope.password);
+			//localDbSvc.setUsername($scope.username);
+			//localDbSvc.setPassword($scope.password);
+            localStorageService.set('username', $scope.username);
+            localStorageService.set('password', $scope.password);
 		}
         loginTimer = $timeout(loginTimeOut, 5000);
         var promise0 = webSvc.login($scope.username, $scope.password).success(function(data) {
