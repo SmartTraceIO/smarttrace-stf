@@ -226,9 +226,9 @@
             </h4>
             <span class="text-error" style="vertical-align:middle" ng-if="vm.loading">Retrieving your shipment data...</span>
             <h4 class="pull-right">
-                <button class="btn btn-switch" ng-class="{selected:vm.viewTable}" ng-click="vm.showTable()"><i class="fa fa-table"></i></button>
-                <button class="btn btn-switch" ng-class="{selected:vm.viewCard}" ng-click="vm.showCard()"><i class="fa fa-th-large"></i></button>
-                <button class="btn btn-switch" ng-class="{selected:vm.viewMap}" ng-click="vm.showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:(vm.lastView==1)}" ng-click="vm.showTable()"><i class="fa fa-table"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:(vm.lastView==2)}" ng-click="vm.showCard()"><i class="fa fa-th-large"></i></button>
+                <button class="btn btn-switch" ng-class="{selected:(vm.lastView==3)}" ng-click="vm.showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>
 
                 <button class="btn default btn-sm uppercase" type="button" ng-click="vm.Print()">
                     <i class="fa fa-print"></i>
@@ -284,7 +284,7 @@
                     </ng-map>
                 </div>-->
             </div>
-            <div class="row" ng-if="vm.viewTable">
+            <div class="row" ng-if="vm.lastView==1">
                 <div class="col-sm-12">
                     <br>
                     <div class="table-responsive">
@@ -472,7 +472,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-if="vm.viewCard">
+            <div class="row" ng-if="vm.lastView==2">
                 <div class="col-sm-6" ng-repeat="shipment in vm.ShipmentList">
                     <div class="portlet box green">
                         <div class="portlet-title">
@@ -541,7 +541,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-if="vm.viewMap" style="margin-top: 15px;">
+            <div class="row" ng-if="vm.lastView==3" style="margin-top: 15px;">
                 <div class="col-xs-12">
                     <!--<div id="mapId"></div>-->
                     <!--<ng-map disable-default-u-i="true" map-type-control-options="{mapTypeIds: ['ROADMAP']}">-->

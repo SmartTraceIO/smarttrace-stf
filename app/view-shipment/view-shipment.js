@@ -210,26 +210,36 @@
         BindShipmentList();
     }
 
-    VM.viewCard = false;
-    VM.viewTable = true;
-    VM.viewMap = false;
+
+    //VM.viewCard = false;
+    //VM.viewTable = true;
+    //VM.viewMap = false;
+    VM.lastView = localStorageService.get('LastViewShipment');
+    if (!VM.lastView) {
+        VM.lastView = 1;
+    }
     VM.showTable = function() {
-        VM.viewTable = true;
-        VM.viewCard = false;
-        VM.viewMap = false;
+        //VM.viewTable = true;
+        //VM.viewCard = false;
+        //VM.viewMap = false;
+        VM.lastView = 1;
+        localStorageService.set('LastViewShipment', 1);
         //VM.AdvanceSearch = false;
     };
     VM.showCard = function() {
-        VM.viewTable = false;
-        VM.viewCard = true;
-        VM.viewMap = false;
-
+        //VM.viewTable = false;
+        //VM.viewCard = true;
+        //VM.viewMap = false;
+        VM.lastView = 2;
+        localStorageService.set('LastViewShipment', 2);
         //VM.AdvanceSearch = false;
     }
     VM.showMap = function() {
-        VM.viewTable = false;
-        VM.viewCard = false;
-        VM.viewMap = true;
+        //VM.viewTable = false;
+        //VM.viewCard = false;
+        //VM.viewMap = true;
+        VM.lastView = 3;
+        localStorageService.set('LastViewShipment', 3);
 
         //VM.AdvanceSearch = false;
     }
