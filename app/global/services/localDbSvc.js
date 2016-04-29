@@ -4,36 +4,25 @@
     Normal : 99,
     Basic : 9
 });
-appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $log, $q) {
-
-    //set localstorage item
-    /*this.set = function (key, value) {
-        localStorage.setItem(key, value);
-    }
-    //remove local storage item
-    this.remove = function (key) {
-        localStorage.removeItem(key);
-    }
-    //get local storage item
-    this.get = function(key){
-        return localStorage.getItem(key);
-    };*/
-
+appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', 'localStorageService', function ($cookies, $log, $q, localStorageService) {
     this.set = function(key, value) {
-        $cookies.put(key, value);
+        //$cookies.put(key, value);
+        localStorageService.set(key, value);
     }
     this.remove = function(key) {
-        $cookies.remove(key);
+        //$cookies.remove(key);
+        localStorageService.remove(key);
     }
     this.get = function(key) {
-        return $cookies.get(key);
+        //return $cookies.get(key);
+        return localStorageService.get(key);
     }
 
     //set token to the cookie
     this.setToken = function(token, expireDate){
         var exp = new Date(expireDate);
-        $cookies.put('Token', token);
-        //$cookies.put('Token', token, {'expires': exp});
+        //$cookies.put('Token', token);
+        localStorageService.cookie.set('Token', token);
     }
     // expire now
     this.expireNow = function() {
@@ -43,34 +32,47 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $lo
     }
     //get token from the cookie
     this.getToken = function(){
-        if($cookies.get('Token') == undefined)
+        if(localStorageService.cookie.get('Token') == undefined)
             return "_";
-        return $cookies.get('Token');
+        return localStorageService.cookie.get('Token');
     }
     //set username
-    this.setUsername = function(username){
-        $cookies.put("login_username", username);
+    this.setUsername = function(username, isSave){
+        if (isSave) {
+            localStorageService.set("login_username", username);
+        } else {
+            localStorageService.cookie.set("login_username", username);
+        }
     }
     //get username
     this.getUsername = function(){
-        return $cookies.get("login_username");
+        if (localStorageService.cookie.get("login_username"))
+            return localStorageService.cookie.get("login_username");
+        return localStorageService.get("login_username");
     }
     //set password
-    this.setPassword = function(password){
-        $cookies.put("login_password", password);
+    this.setPassword = function(password, isSave){
+        if (isSave) {
+            localStorageService.set("login_password", password);
+        } else {
+            localStorageService.cookie.set("login_password", password);
+        }
     }
     //get password
     this.getPassword = function(){
-        return $cookies.get("login_password");
+        if (localStorageService.cookie.get("login_password")) {
+            return localStorageService.cookie.get("login_password");
+        }
+        return localStorageService.get("login_password");
     }
 
     this.setUserProfile = function(userProfile) {
-        $cookies.put("profile", JSON.stringify(userProfile));
+        localStorageService.set("profile", JSON.stringify(userProfile));
     }
     this.getUserProfile = function() {
         var user = null;
         try {
-            user = JSON.parse($cookies.get("profile"));
+            user = JSON.parse(localStorageService.get("profile"));
         } catch (err) {
             user = null;
         }
@@ -78,17 +80,17 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', function ($cookies, $lo
     }
 
     this.setDegreeUnits = function(dunit) {
-        $cookies.put('degree_units', dunit); //C, F
+        localStorageService.set('degree_units', dunit); //C, F
     }
     this.getDegreeUnits = function() {
-        return $cookies.get('degree_units');
+        return localStorageService.get('degree_units');
     }
 
     this.setUserTimezone = function(timeZone) {
-        $cookies.put("user_timezone", timeZone);
+        localStorageService.set("user_timezone", timeZone);
     }
     this.getUserTimezone = function() {
-        return $cookies.get("user_timezone");
+        return localStorageService.get("user_timezone");
     }
 
 }]);
