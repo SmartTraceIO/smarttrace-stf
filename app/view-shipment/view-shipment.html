@@ -5,11 +5,11 @@
                 <span class="uppercase link"><i class="fa fa-search"></i>&nbsp;Search</span>
             </h4>
             <h4 class="pull-right bold">
-                <span class="link" ng-show="!vm.AdvanceSearch" ng-click="vm.AdvanceSearch = true">
+                <span class="link" ng-show="!vm.AdvanceSearch" ng-click="vm.toggleSearch()">
                     <img src="theme/img/searchAdvanced.png" tooltip="Swap to Advance Search" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" />
                     <h5 style="background-color: #5BCA45; color: #ffffff">More options</h5>
                 </span>
-                <span class="link" ng-show="vm.AdvanceSearch" ng-click="vm.AdvanceSearch = false">
+                <span class="link" ng-show="vm.AdvanceSearch" ng-click="vm.toggleSearch()">
                     <img src="theme/img/searchBasic.png" tooltip="Swap to Basic Search" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" />
                     <h5>Less options</h5>
                 </span>

@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color,
-                                                  $rootScope, $state, $window, $log, $timeout, $interval, $controller) {
+                                                  $rootScope, $state, $window, $log, $timeout, $interval, $controller, localStorageService) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -64,7 +64,7 @@
         $window.print();
     }
 
-    VM.AdvanceSearch = false;
+    VM.AdvanceSearch = localStorageService.get('advancedSearch');
     VM.LocationOptions = { multiple: true };
 
     
@@ -217,21 +217,25 @@
         VM.viewTable = true;
         VM.viewCard = false;
         VM.viewMap = false;
-        VM.AdvanceSearch = false;
+        //VM.AdvanceSearch = false;
     };
     VM.showCard = function() {
         VM.viewTable = false;
         VM.viewCard = true;
         VM.viewMap = false;
 
-        VM.AdvanceSearch = false;
+        //VM.AdvanceSearch = false;
     }
     VM.showMap = function() {
         VM.viewTable = false;
         VM.viewCard = false;
         VM.viewMap = true;
 
-        VM.AdvanceSearch = false;
+        //VM.AdvanceSearch = false;
+    }
+    VM.toggleSearch = function() {
+        VM.AdvanceSearch = !VM.AdvanceSearch;
+        localStorageService.set('advancedSearch', VM.AdvanceSearch);
     }
     var filter = $filter('filter');
     VM.updatePolylines = function (shipment, key) {
