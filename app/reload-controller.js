@@ -1,45 +1,36 @@
 ﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval, $window, $log, $q,
                                             localDbSvc, webSvc, $timeout, $document, $templateCache, $http, $controller) {
-
-    this.rootScope = $rootScope;
-    this.state = $state;
-    this.log = $log;
-    this.webSvc = webSvc;
-    this.localDbSvc = localDbSvc;
-    this.timeout = $timeout;
-    this.interval = $interval;
-    $controller('BaseCtrl', {VM:this});
-
     $rootScope.closeText = "";
     $rootScope.loading = false;
     $scope.showRead = false;
-    // $rootScope.showRead= false;
-    //$scope.init = function() {
-    //    $rootScope.readNotification = [];
-    //    $rootScope.unreadNotification = [];
-    //    $rootScope.closedNotification = [];
-    //    //$scope.reloadUserIfNeed();
-    //}
     $scope.logout = function() {
-        console.log('Logout...');
         var promise = localDbSvc.expireNow();
         var v = (new Date()).getTime();
-        var promise2 = $http.get('/app/config/version.json?v='+v, {noCancelOnRouteChange:true}).then(
+        var promise2 = $http.get('app/config/version.json?v='+v, {noCancelOnRouteChange:true}).then(
             function(response) {
-                $rootScope = $rootScope.$new(true);
+                $log.debug('Logout...', $rootScope.loadedNotification);
+                if ($rootScope.loadedNotification) {
+                    $rootScope.loadedNotification = false;
+                    $rootScope.readNotification = [];
+                    $rootScope.unreadNotification = [];
+                    //$rootScope = $rootScope.$new(true);
+                    $log.debug('Logout...', $rootScope.loadedNotification);
+                }
                 var nxt = response.data.version;
                 if (nxt != version) {
                     $rootScope.isOut = true;
                 }
             },
             function(response) {
-                $rootScope = $rootScope.$new(true);
-                    $rootScope.isOut = true;
+                //$rootScope = $rootScope.$new(true);
+                $rootScope.isOut = true;
             }
         ).finally(function() {
+
         });
 
         $q.all([promise, promise2]).then(function() {
+            $log.debug('start logout!');
             $state.go('login');
         });
     };

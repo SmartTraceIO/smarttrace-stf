@@ -287,7 +287,9 @@
                 strokeWeight: 2
             });
             flightPath.setMap(VM.map);
+            return flightPath;
         }
+        return null;
     }
 
     VM.updateMap = function(map) {
@@ -327,7 +329,7 @@
                 htmlIcon += "<table style=''>";
                 htmlIcon += "<tr>";
                 htmlIcon += "<td>";
-                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color: #5BCA45; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);'></div>";
+                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+Color[key].code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
                 htmlIcon += "</td>";
                 htmlIcon += "<td>";
                 htmlIcon += "<div style='background-color: white'>";
@@ -471,11 +473,24 @@
                     maxHeight: 200,
                     minWidth: 420
                 });
+                infowindow.addListener('closeclick', function() {
+                    if (VM.showedPath) {
+                        VM.showedPath.setMap(null);
+                    }
+                })
                 marker.addListener('click', function() {
                     if (infowindow.isOpen()) {
                         infowindow.close();
+                        if (VM.showedPath) {
+                            VM.showedPath.setMap(null);
+                        }
                     } else {
                         infowindow.open(VM.map, marker);
+                        //draw polylines
+                        if (VM.showedPath) {
+                            VM.showedPath.setMap(null);
+                        }
+                        VM.showedPath = VM.updatePolylines(shipment, key);
                     }
                     angular.forEach(openedInfoWindow, function(info, k) {
                         if (info.isOpen()) {
@@ -484,12 +499,11 @@
                     })
                     openedInfoWindow.length = 0;
                     openedInfoWindow.push(infowindow);
+
+
                 });
                 VM.dynMarkers.push(marker);
                 bounds.extend(llng);
-
-                //draw polylines
-                VM.updatePolylines(shipment, key);
             });
 
             VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});

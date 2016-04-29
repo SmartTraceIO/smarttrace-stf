@@ -18,6 +18,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
     }
 
     VM.loadNotifications = function() {
+        log.debug('loadNotifications', rootScope.loadedNotification);
         if (!rootScope.loadedNotification) {
             webSvc.getNotifications(true).success(function (data) {
                 log.debug('Notification', data);
@@ -66,7 +67,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
                     localDbSvc.setDegreeUnits(data.response.temperatureUnits);
                     interval(function() {
                         rootScope.loadedNotification = false;
-                        VM.loadNotifications;
+                        VM.loadNotifications();
                     }, 10*60*1000); // 10 minutes
                 }
             });
