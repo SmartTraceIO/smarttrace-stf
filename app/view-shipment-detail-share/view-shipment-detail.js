@@ -626,6 +626,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         });
 
         function calculateAndDraw() {
+            if (!info) return;
             var numberOfSiblings = info.siblings.length;
             //-- modify siblings
             var siblings = [];
