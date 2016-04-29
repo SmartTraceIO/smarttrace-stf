@@ -78,7 +78,6 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
 app.run(function($rootScope, $window) {
     $rootScope.$on("$viewContentLoaded", function () {
         //-- scroll top
-        console.log('Start scroll...');
         $window.scrollTo(0, 0);
     });
 });

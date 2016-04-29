@@ -305,7 +305,7 @@
         }
         return null;
     }
-
+    VM.openedInfoWindow = [];
     VM.updateMap = function(map) {
         if (map) {
             VM.map = map;
@@ -326,7 +326,7 @@
 
             // console.log('Custom Markers', VM.map.customMarkers);
             var bounds = new google.maps.LatLngBounds;
-            var openedInfoWindow = [];
+
             angular.forEach(VM.ShipmentList, function(shipment, key) {
                 var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
                 /*var marker = new MarkerWithLabel({
@@ -506,22 +506,29 @@
                         }
                         VM.showedPath = VM.updatePolylines(shipment, key);
                     }
-                    angular.forEach(openedInfoWindow, function(info, k) {
-                        if (info.isOpen()) {
-                            info.close();
-                        }
-                    })
-                    openedInfoWindow.length = 0;
-                    openedInfoWindow.push(infowindow);
-
-
+                    VM.openedInfoWindow.push(infowindow);
+                    $log.debug('store infoWindow', VM.openedInfoWindow);
                 });
                 VM.dynMarkers.push(marker);
+                VM.map.addListener('click', function() {
+                    if (infowindow.isOpen) {
+                        infowindow.close();
+                    }
+                 })
                 bounds.extend(llng);
             });
 
             VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});
             VM.map.setCenter(bounds.getCenter());
+            /*VM.map.addListener('click', function() {
+                $log.debug('map-click', VM.openedInfoWindow);
+                angular.forEach(VM.openedInfoWindow, function(info, k) {
+                    if (info.isOpen()) {
+                        info.close();
+                    }
+                });
+                VM.openedInfoWindow = [];
+            })*/
             if(bounds != null){
                 VM.map.fitBounds(bounds);
             }

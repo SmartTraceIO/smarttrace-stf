@@ -619,6 +619,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $q.all(promises).then(function() {
                     calculateAndDraw();
                 });
+            } else {
+                //-- groupList == [] only one device!
+                calculateAndDraw();
             }
         });
 
