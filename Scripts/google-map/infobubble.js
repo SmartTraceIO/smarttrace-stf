@@ -505,6 +505,11 @@ InfoBubble.prototype.shadowStyle_changed = function() {
       shadow = '0 0 2px rgba(33,33,33,0.3)';
       backgroundColor = 'rgba(33,33,33,0.35)';
       break;
+    case 3:
+      //half
+      shadow = '20px 15px 10px rgba(33,33,33,0.3)';
+      backgroundColor = 'transparent';
+      break;
   }
   this.bubbleShadow_.style['boxShadow'] =
       this.bubbleShadow_.style['webkitBoxShadow'] =
@@ -927,6 +932,14 @@ InfoBubble.prototype.draw = function() {
 
       this.bubbleShadow_.style['width'] = this.px(width);
       this.bubbleShadow_.style['height'] = this.px(2);
+      break;
+    case 3:
+      // Shadow is behind
+      this.bubbleShadow_.style['top'] = this.px(top + tabHeight - 1);
+      this.bubbleShadow_.style['left'] = this.px(left);
+      this.bubbleShadow_.style['width'] = this.px(width);
+      this.bubbleShadow_.style['height'] =
+          this.px(this.contentContainer_.offsetHeight - arrowSize);
       break;
   }
 };
@@ -1689,9 +1702,6 @@ InfoBubble.prototype.figureOutSize_ = function() {
   if (maxWidth) {
     width = Math.min(width, maxWidth);
   }
-
-  console.log('Height', contentSize.height);
-  console.log('Content', content);
 
   if (maxHeight) {
     height = Math.min(height, maxHeight);

@@ -486,7 +486,7 @@
 
                 var infowindow = new InfoBubble({
                     content: htmlContent,
-                    shadowStyle: 1,
+                    shadowStyle: 3,
                     padding: 0,
                     borderRadius: 4,
                     arrowSize: 10,
