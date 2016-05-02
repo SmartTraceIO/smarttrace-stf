@@ -345,9 +345,23 @@
                 htmlIcon += "<td>";
                 htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+Color[key].code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
                 htmlIcon += "</td>";
-                htmlIcon += "<td>";
-                htmlIcon += "<div style='background-color: white'>";
+                htmlIcon += "<td  style='background-color: white'>";
+                htmlIcon += "<div>";
                 htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
+                htmlIcon += "</div>"
+                htmlIcon += "</td>";
+                htmlIcon += "</tr>";
+                htmlIcon += "<tr>";
+                htmlIcon += "<td colspan=2>"
+                htmlIcon += "<div style='margin-top: 5px;'>"
+
+                //htmlIcon += shipment.percentageComplete + '% completed';
+                htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
+                htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='"+shipment.percentageComplete+"' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:"+shipment.percentageComplete+"%'>";
+                htmlIcon += "</div>";
+                htmlIcon += "</div>";
+
+
                 htmlIcon += "</div>"
                 htmlIcon += "</td>";
                 htmlIcon += "</tr>";
@@ -518,7 +532,10 @@
                 bounds.extend(llng);
             });
 
-            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {});
+            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {zoomOnClick:false});
+            VM.markerClusterer.addListener('click', function() {
+                $log.debug('Marker clustered clicked!');
+            });
             VM.map.setCenter(bounds.getCenter());
             /*VM.map.addListener('click', function() {
                 $log.debug('map-click', VM.openedInfoWindow);
