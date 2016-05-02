@@ -498,7 +498,6 @@
                     //hideCloseButton:true,
                     //closeSrc:'theme/img/slimTimes.png',
                     arrowStyle: 2,
-                    maxHeight: 200,
                     minWidth: 420
                 });
                 infowindow.addListener('closeclick', function() {
@@ -532,7 +531,7 @@
                 bounds.extend(llng);
             });
 
-            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {zoomOnClick:false});
+            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {minimumClusterSize:4});
             VM.markerClusterer.addListener('click', function() {
                 $log.debug('Marker clustered clicked!');
             });

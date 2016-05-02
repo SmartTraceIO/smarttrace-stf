@@ -636,6 +636,7 @@ h3 span.info {
 }
 .btn-switch.selected {
     background-color: #eaeaea;
+    color: #333;
 }
 .btn-switch:hover{
     background-color: #eaeaea;

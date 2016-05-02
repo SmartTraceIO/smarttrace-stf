@@ -207,6 +207,11 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
+            'Scripts/google-map/markerclusterer.js',
+            'Scripts/google-map/markerwithlabel.js',
+            'Scripts/google-map/infobubble.js',
+            'Scripts/google-map/richmarker.js',
+            'Scripts/google-map/maplabel.js',
             'app/manage-tracker/manage-tracker.js?v=' + version,
             'app/manage-tracker/confirm-deactivate.js?v=' + version,
             'app/global/filters/filters.js?v=' + version
