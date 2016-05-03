@@ -1,5 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color, $q,
-                                                  $rootScope, $state, $window, $log, $timeout, $interval, $controller, localStorageService) {
+                                                  $rootScope, $state, $window, $log, $timeout, $interval, $controller,
+                                                  localStorageService, NgMap) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -132,7 +133,10 @@
                 }
                 //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
             });
-            VM.updateMap(null);
+        }).then(function() {
+            NgMap.getMap('shipmentMap').then(function(map) {
+                VM.updateMap(map);
+            });
         });
     };
     VM.Sorting = function (expression) {
@@ -169,9 +173,9 @@
 
     BindShipmentList();
 
-    $scope.$on('mapInitialized', function(event, m) {
+    /*$scope.$on('mapInitialized', function(event, m) {
         VM.updateMap(m);
-    });
+    });*/
 
     VM.LocationListFrom = [];
     VM.LocationListTo = [];
@@ -238,6 +242,10 @@
     VM.showMap = function() {
         VM.lastView = 3;
         localStorageService.set('LastViewShipment', 3);
+        NgMap.getMap('shipmentMap').then(function(map) {
+            console.log('markers', map.markers);
+            VM.updateMap(map);
+        });
     }
     VM.toggleSearch = function() {
         VM.AdvanceSearch = !VM.AdvanceSearch;
@@ -297,7 +305,7 @@
             var flightPath = new google.maps.Polyline({
                 path: path,
                 geodesic: true,
-                strokeColor: Color[key].code,
+                strokeColor: shipment.shipmentColor.code,
                 strokeOpacity: 1.0,
                 strokeWeight: 2
             });
@@ -555,15 +563,6 @@
                 $log.debug('Marker clustered clicked!');
             });
             VM.map.setCenter(bounds.getCenter());
-            /*VM.map.addListener('click', function() {
-                $log.debug('map-click', VM.openedInfoWindow);
-                angular.forEach(VM.openedInfoWindow, function(info, k) {
-                    if (info.isOpen()) {
-                        info.close();
-                    }
-                });
-                VM.openedInfoWindow = [];
-            })*/
             if(bounds != null){
                 VM.map.fitBounds(bounds);
             }

@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
     function ($scope, $rootScope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, localStorageService,
-              $log, $q, $timeout, $interval, $controller, Color) {
+              $log, $q, $timeout, $interval, $controller, Color, NgMap) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -49,6 +49,11 @@
                         }
                     })
                 }
+            }).then(function() {
+                NgMap.getMap('trackerMap').then(function(map) {
+                    console.log('markers', map.markers);
+                    $scope.updateMap(map);
+                });
             })
         }
         $scope.Print = function() {
@@ -108,9 +113,10 @@
                 return Role.Basic;
             }
         }
-        $scope.$on('mapInitialized', function(event, map) {
-            $scope.updateMap(map);
-        });
+        //$scope.$on('mapInitialized', function(event, map) {
+        //    $scope.updateMap(map);
+        //});
+
         //-- coding for map-view
         $scope.lastView = localStorageService.get('LastViewTracker');
         if (!$scope.lastView) {
@@ -123,6 +129,10 @@
         $scope.showMap = function() {
             $scope.lastView = 3;
             localStorageService.set('LastViewTracker', 3);
+            NgMap.getMap('trackerMap').then(function(map) {
+                console.log('markers', map.markers);
+                $scope.updateMap(map);
+            });
         }
         $scope.updateMap = function(map) {
             if (map) {
@@ -130,32 +140,29 @@
             }
             if ($scope.map) {
                 $log.debug('update trackers Maps', $scope.TrackerList);
+                angular.forEach($scope.TrackerList, function(tracker, key) {
+                    var cl = filter(Color, {name: tracker.color}, true);
+                    if (cl && angular.isArray(cl) && cl.length>0) {
+                        $scope.TrackerList[key].trackerColor = cl[0];
+                    } else {
+                        $scope.TrackerList[key].trackerColor = Color[0];
+                    }
+                });
+                var promises = [];
+                angular.forEach($scope.TrackerList, function(tracker, key) {
+                    if (tracker.lastShipmentId) {
+                        var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
+                            if (data.status.code == 0) {
+                                $scope.TrackerList[key].lastShipment = data.response;
+                            }
+                        });
+                        promises.push(p);
+                    }
+                });
+                $q.all(promises).then(function() {
+                    generateContentAndUpdateMap();
+                });
             }
-
-            angular.forEach($scope.TrackerList, function(tracker, key) {
-                var cl = filter(Color, {name: tracker.color}, true);
-                if (cl && angular.isArray(cl) && cl.length>0) {
-                    $scope.TrackerList[key].trackerColor = cl[0];
-                } else {
-                    $scope.TrackerList[key].trackerColor = Color[0];
-                }
-            });
-
-            var promises = [];
-            angular.forEach($scope.TrackerList, function(tracker, key) {
-                if (tracker.lastShipmentId) {
-                    var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
-                        if (data.status.code == 0) {
-                            $scope.TrackerList[key].lastShipment = data.response;
-                        }
-                    });
-                    promises.push(p);
-                }
-            });
-            $q.all(promises).then(function() {
-                generateContentAndUpdateMap();
-            });
-
         }
         var generateContentAndUpdateMap = function() {
             if ($scope.dynMarkers) {
@@ -173,7 +180,7 @@
 
             angular.forEach($scope.TrackerList, function(tracker, key) {
                 if (tracker.lastReadingTime) {
-                    $log.debug('Tracker#' + key, tracker);
+                    //$log.debug('Tracker#' + key, tracker);
                     var shipment = tracker.lastShipment;
                     if (!shipment) {
                         shipment = {
@@ -379,7 +386,7 @@
                         if (infowindow.isOpen) {
                             infowindow.close();
                         }
-                    })
+                    });
                     bounds.extend(llng);
                 }
             });//end angular.forEach();
