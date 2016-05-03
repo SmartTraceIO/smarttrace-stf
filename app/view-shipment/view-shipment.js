@@ -134,39 +134,6 @@
             });
             VM.updateMap(null);
         });
-
-        /*webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
-            
-            if (data.status.code == 0) {
-                VM.ShipmentList = data.response;
-                $log.debug('ShipmentList', VM.ShipmentList);
-                VM.ShipmentList.totalCount = data.totalCount;
-            } else if(data.status.code == 1){
-                $rootScope.redirectUrl = "/view-shipment";
-                $rootScope.go("login");
-            };
-            
-            VM.loading = false;
-
-        }).error( function (xmlHttpRequest, textStatus, errorThrown) {
-            //alert("Status: " + textStatus + "; ErrorThrown: " + errorThrown);
-            VM.loading = false;
-        }).then(function() {
-            angular.forEach(VM.ShipmentList, function(v, k) {
-                if (!isNaN(v.deviceSN)) {
-                    VM.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
-                }
-                //-- position
-                VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
-                VM.ShipmentList[k].icon = {
-                    url:"theme/img/transparent16.png",
-                    scaledSize:[16, 16],
-                    anchor:[8, 8]
-                }
-                //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
-            });
-            VM.updateMap(null);
-        });*/
     };
     VM.Sorting = function (expression) {
         VM.ViewShipment.so = VM.ViewShipment.so == "asc" ? "desc" : "asc";
@@ -284,6 +251,11 @@
         $log.debug('HomeLocation', homeLocation);
         if (homeLocation && (homeLocation.length > 0)) {
             homeLocation = homeLocation[0].location;
+        } else if (shipment.firstReadingLat && shipment.firstReadingLong){
+            homeLocation = {
+                lat: shipment.firstReadingLat,
+                lon: shipment.firstReadingLong
+            };
         } else {
             homeLocation = null;
         }
@@ -330,7 +302,11 @@
                 strokeWeight: 2
             });
             flightPath.setMap(VM.map);
-            return flightPath;
+            return {
+                path: flightPath,
+                home: homMarker,
+                dest: destMarker
+            };
         }
         return null;
     }
@@ -416,31 +392,32 @@
                 htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
                 htmlContent += '<div class="portlet-title">';                                                                   //+2
                 htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
-                htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
-                htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'"';
-                htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
-                htmlContent += '</div>';                                                                                        //-4
+                                                                                                     //-4
                 htmlContent += '</div>';                                                                                        //-2
-                htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important; margin-bottom: 20px">'; //+5
-                htmlContent += '<div class="row">';                                                                                               //+6
-                htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
+                htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important;">'; //+5
+                htmlContent += '<div class="row" style="padding-top: 15px">';                                                                                               //+6
+                htmlContent += '<div class="col-xs-12">';                                                                                               //+6
+                htmlContent += '<table width="100%" style="font-size: 13px;">';
                 htmlContent += '<tr>';
                 htmlContent += '<td>';
-                htmlContent += '<h5 class="pull-left">Tracker ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</h5>'
+                htmlContent += '<span class="pull-left">Tracker ';
+                htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
+                htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+                htmlContent += '</span>';
+
                 htmlContent += '</td>';
                 htmlContent += '<td>';
 
                 if (shipment.siblingCount > 0) {
-                    htmlContent += '<h5 class="text-center">';
+                    htmlContent += '<span class="pull-left">';
                     htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                    htmlContent += shipment.siblingCount + ' similar trips';
-                    //htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
-                    htmlContent += '</h5>';
+                    htmlContent += shipment.siblingCount + ' others';
+                    htmlContent += '</span>';
                 }
 
                 htmlContent += '</td>';
                 htmlContent += '<td>';
-                htmlContent += '<h5 class="pull-right">';
+                htmlContent += '<span class="pull-right">';
                 if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
                 if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
                 if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
@@ -449,22 +426,21 @@
                 if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
                 if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
                 if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
-                htmlContent += '</h5>';
+                htmlContent += '</span>';
                 htmlContent += '</td>';
                 htmlContent += '</tr>';
                 htmlContent += '</table>';
+                htmlContent += '</div>'; //-- class col-sm-12                                                                                 //-6
+                htmlContent += '</div>'; //-- class row// -6
 
-                htmlContent += '</div>'; //-- class row                                                                                 //-6
-                htmlContent += '<div class="row">'; //row2                                                                              //+7
-                htmlContent += '<div class="col-sm-12">'                                                                                //+8
-                htmlContent += '<p class="col-xs-1 text-left no-margin no-padding"><i class="fa fa-home fa-2x"></i></p>';
                 var assetTypeAndNum = '';
                 assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
                 assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
                 assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-                htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + shipment.status +'</p>';
-                htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></p>';
-                htmlContent += '</div>'; //-- col-sm-12                                                                                 //-8
+                htmlContent += '<div class="row" style="margin-top: 15px">'; //row2                                                                              //+7
+                htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
+                htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
+                htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
                 htmlContent += '</div>'; //-- row2                                                                                      //-7
 
                 htmlContent += '<div class="row">'; //--row3                                                                            //+9
@@ -477,12 +453,14 @@
                 htmlContent += '</div>';                                                                                                //-10
                 htmlContent += '</div>';                                                                                                //-9
 
-                htmlContent += '<div class="row">'; // row3                                                                             //+13
+                htmlContent += '<div class="row" style="font-size: 12px">'; // row3                                                                             //+13
                 htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
                 if (shipment.shippedFrom) {
                     htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
                 }
-                htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
+                if (shipment.shipmentDate) {
+                    htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
+                }
                 htmlContent += '</div>';                                                                                                //-14
 
                 htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
@@ -496,8 +474,8 @@
                 htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
                 htmlContent += '</div>'; // row3 end                                                                                    //-13
                 htmlContent += '<!--row3-->'
-                htmlContent += '</div>'; //-- portlet-body                                                                       //-5
 
+                //row4
                 var temperature = shipment.lastReadingTemperature;
                 if (!isNaN(temperature)) {
                     temperature = temperature.toFixed(1) + '℃';
@@ -507,20 +485,18 @@
                 var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
                 if (lastMoment) {
                     $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
-                     lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
+                    lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
                 }
 
                 if (temperature || lastReading) {
-                    htmlContent += '<div class="shipment-last-reading">'
-                    htmlContent += '<div class="text-center">';
+                    htmlContent += '<div class="row" style="margin-top: 15px;">';
+                    htmlContent += '<span class="sh-last">'
                     htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
-                    htmlContent += '</div>';
-                    htmlContent += '</div>';
+                    htmlContent += '</span>'
+                    htmlContent += '</div>'
                 }
-
+                htmlContent += '</div>'; //-- portlet-body                                                                       //-5
                 htmlContent += '</div>';
-
-
                 var infowindow = new InfoBubble({
                     content: htmlContent,
                     shadowStyle: 3,
@@ -538,23 +514,29 @@
                     minWidth: 420
                 });
                 infowindow.addListener('closeclick', function() {
-                    if (VM.showedPath) {
-                        VM.showedPath.setMap(null);
+                    if (VM.polyObject) {
+                        VM.polyObject.path.setMap(null);
+                        VM.polyObject.home.setMap(null);
+                        VM.polyObject.dest.setMap(null);
                     }
                 })
                 marker.addListener('click', function() {
                     if (infowindow.isOpen()) {
                         infowindow.close();
-                        if (VM.showedPath) {
-                            VM.showedPath.setMap(null);
+                        if (VM.polyObject) {
+                            VM.polyObject.path.setMap(null);
+                            VM.polyObject.home.setMap(null);
+                            VM.polyObject.dest.setMap(null);
                         }
                     } else {
                         infowindow.open(VM.map, marker);
                         //draw polylines
-                        if (VM.showedPath) {
-                            VM.showedPath.setMap(null);
+                        if (VM.polyObject) {
+                            VM.polyObject.path.setMap(null);
+                            VM.polyObject.home.setMap(null);
+                            VM.polyObject.dest.setMap(null);
                         }
-                        VM.showedPath = VM.updatePolylines(shipment, key);
+                        VM.polyObject = VM.updatePolylines(shipment, key);
                     }
                     VM.openedInfoWindow.push(infowindow);
                     $log.debug('store infoWindow', VM.openedInfoWindow);
@@ -564,7 +546,7 @@
                     if (infowindow.isOpen) {
                         infowindow.close();
                     }
-                 })
+                });
                 bounds.extend(llng);
             });
 
