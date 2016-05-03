@@ -1,5 +1,6 @@
 ﻿app.constant("Api", { url: "https://smarttrace.com.au/web/vf/rest/" });
 app.constant("Color", [
+    {"name": "Green", "code":"#008000"},
     {"name": "Aqua", "code":"#00FFFF"},
     {"name": "Black", "code":"#000000"},
     {"name": "Blue", "code":"#0000FF"},
@@ -14,7 +15,6 @@ app.constant("Color", [
     {"name": "Gold", "code":"#FFD700"},
     {"name": "GoldenRod", "code":"#DAA520"},
     {"name": "Gray", "code":"#808080"},
-    {"name": "Green", "code":"#008000"},
     {"name": "HotPink", "code":"#FF69B4"},
     {"name": "IndianRed ", "code":"#CD5C5C"},
     {"name": "Indigo ", "code":"#4B0082"},

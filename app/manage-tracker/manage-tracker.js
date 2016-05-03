@@ -4,6 +4,7 @@
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
+        var filter = $filter('filter');
         $scope.Role = Role;
         {
             this.rootScope  = $rootScope;
@@ -37,10 +38,14 @@
                             $scope.TrackerList[k].sn = parseInt(v.sn, 10);
                         }
                         if (!v.color) {
-                            $scope.TrackerList[k].colorValue="#5BCA45";
+                            $scope.TrackerList[k].trackerColor=Color[0];
                         } else {
-                            //TODO: get list of color and value then filter
-                            $scope.TrackerList[k].colorValue="#5BCA45";
+                            var cl = filter(Color, {name: v.color}, true);
+                            if (cl) {
+                                $scope.TrackerList[k].trackerColor=cl[0];;
+                            } else {
+                                $scope.TrackerList[k].trackerColor=Color[0];;
+                            }
                         }
                     })
                 }
@@ -127,6 +132,14 @@
                 $log.debug('update trackers Maps', $scope.TrackerList);
             }
 
+            angular.forEach($scope.TrackerList, function(tracker, key) {
+                var cl = filter(Color, {name: tracker.color}, true);
+                if (cl && angular.isArray(cl) && cl.length>0) {
+                    $scope.TrackerList[key].trackerColor = cl[0];
+                } else {
+                    $scope.TrackerList[key].trackerColor = Color[0];
+                }
+            });
 
             var promises = [];
             angular.forEach($scope.TrackerList, function(tracker, key) {
@@ -159,214 +172,216 @@
             var bounds = new google.maps.LatLngBounds;
 
             angular.forEach($scope.TrackerList, function(tracker, key) {
-                $log.debug('Tracker#'+key, tracker);
-                var shipment = tracker.lastShipment;
-                if (!shipment) {
-                    shipment = {
-                        percentageComplete:0,
-                        alertSummary:{
-                            LightOn: null,
-                            LightOff:null,
-                            Cold:null,
-                            Hot:null,
-                            CriticalCold:null,
-                            CriticalHot: null,
-                            Battery: null,
-                            MovementStart: null
-                        },
-                        assetType:null,
-                        assetNum: null,
-                        shippedFrom:null,
-                        shipmentDate:null,
-                        shippedTo:null,
-                        status: null,
-                        actualArrivalDate:null,
-                        lastReadingTimeISO:null,
+                if (tracker.lastReadingTime) {
+                    $log.debug('Tracker#' + key, tracker);
+                    var shipment = tracker.lastShipment;
+                    if (!shipment) {
+                        shipment = {
+                            percentageComplete: 0,
+                            alertSummary: {
+                                LightOn: null,
+                                LightOff: null,
+                                Cold: null,
+                                Hot: null,
+                                CriticalCold: null,
+                                CriticalHot: null,
+                                Battery: null,
+                                MovementStart: null
+                            },
+                            assetType: null,
+                            assetNum: null,
+                            shippedFrom: null,
+                            shipmentDate: null,
+                            shippedTo: null,
+                            status: null,
+                            actualArrivalDate: null,
+                            lastReadingTimeISO: null,
 
+                        }
                     }
-                }
-                var llng = new google.maps.LatLng(tracker.lastReadingLat, tracker.lastReadingLong);
+                    var llng = new google.maps.LatLng(tracker.lastReadingLat, tracker.lastReadingLong);
 
-                var htmlIcon = '';
-                htmlIcon += "<table style=''>";
-                htmlIcon += "<tr>";
-                htmlIcon += "<td>";
-                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+Color[key].code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-                htmlIcon += "</td>";
-                htmlIcon += "<td  style='background-color: white'>";
-                htmlIcon += "<div>";
-                htmlIcon += tracker.sn + "(" + tracker.tripCount + ")";
-                htmlIcon += "</div>"
-                htmlIcon += "</td>";
-                htmlIcon += "</tr>";
-                htmlIcon += "<tr>";
-                 htmlIcon += "<td colspan=2>"
-                 htmlIcon += "<div style='margin-top: 5px;'>"
+                    var htmlIcon = '';
+                    htmlIcon += "<table style=''>";
+                    htmlIcon += "<tr>";
+                    htmlIcon += "<td>";
+                    htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:" + tracker.trackerColor.code/*Color[key].code*/ + "; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+                    htmlIcon += "</td>";
+                    htmlIcon += "<td  style='background-color: white'>";
+                    htmlIcon += "<div>";
+                    htmlIcon += tracker.sn + "(" + tracker.tripCount + ")";
+                    htmlIcon += "</div>"
+                    htmlIcon += "</td>";
+                    htmlIcon += "</tr>";
+                    htmlIcon += "<tr>";
+                    htmlIcon += "<td colspan=2>"
+                    htmlIcon += "<div style='margin-top: 5px;'>"
 
-                 htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
-                 htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='"+shipment.percentageComplete+"' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:"+shipment.percentageComplete+"%'>";
-                 htmlIcon += "</div>";
-                 htmlIcon += "</div>";
+                    htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
+                    htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='" + shipment.percentageComplete + "' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:" + shipment.percentageComplete + "%'>";
+                    htmlIcon += "</div>";
+                    htmlIcon += "</div>";
 
 
-                 htmlIcon += "</div>"
-                 htmlIcon += "</td>";
-                 htmlIcon += "</tr>";
-                htmlIcon += "</table>";
+                    htmlIcon += "</div>"
+                    htmlIcon += "</td>";
+                    htmlIcon += "</tr>";
+                    htmlIcon += "</table>";
 
-                var marker = new RichMarker({
-                    position: llng,
-                    map: $scope.map,
-                    flat: true,
-                    anchor: RichMarkerPosition.TOP,
-                    content: htmlIcon,
-                });
+                    var marker = new RichMarker({
+                        position: llng,
+                        map: $scope.map,
+                        flat: true,
+                        anchor: RichMarkerPosition.TOP,
+                        content: htmlIcon,
+                    });
 
-                var htmlContent = '';
-                htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
-                htmlContent += '<div class="portlet-title">';                                                                   //+2
-                htmlContent += '<div class="caption">'+tracker.description+'</div>';                                   //+3 -3
-                htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
-                htmlContent += '<a href="#/view-shipment-detail?sn='+tracker.sn+'&trip='+tracker.tripCount+'"';
-                htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
-                htmlContent += '</div>';                                                                                        //-4
-                htmlContent += '</div>';                                                                                        //-2
+                    var htmlContent = '';
+                    htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+                    htmlContent += '<div class="portlet-title">';                                                                   //+2
+                    htmlContent += '<div class="caption">' + tracker.description + '</div>';                                   //+3 -3
+                    htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
+                    htmlContent += '<a href="#/view-shipment-detail?sn=' + tracker.sn + '&trip=' + tracker.tripCount + '"';
+                    htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
+                    htmlContent += '</div>';                                                                                        //-4
+                    htmlContent += '</div>';                                                                                        //-2
 
-                htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;">';                                //+5
-                htmlContent += '<div class="row">';                                                                                               //+6
+                    htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;">';                                //+5
+                    htmlContent += '<div class="row">';                                                                                               //+6
 
-                htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
-                htmlContent += '<tr>';
-                htmlContent += '<td>';
-                htmlContent += '<h5 class="pull-left">Tracker ' + tracker.sn + ' (' + tracker.tripCount + ')</h5>'
-                htmlContent += '</td>';
-                //htmlContent += '<td>';
+                    htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '<h5 class="pull-left">Tracker ' + tracker.sn + ' (' + tracker.tripCount + ')</h5>'
+                    htmlContent += '</td>';
+                    //htmlContent += '<td>';
 
-                //if (shipment.siblingCount > 0) {
-                //    htmlContent += '<h5 class="text-center">';
-                //    htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                //    htmlContent += shipment.siblingCount + ' similar trips';
-                //    //htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
-                //    htmlContent += '</h5>';
-                //}
+                    //if (shipment.siblingCount > 0) {
+                    //    htmlContent += '<h5 class="text-center">';
+                    //    htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                    //    htmlContent += shipment.siblingCount + ' similar trips';
+                    //    //htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
+                    //    htmlContent += '</h5>';
+                    //}
 
-                //htmlContent += '</td>';
-                //htmlContent += '<td>';
-                //htmlContent += '<h5 class="pull-right">';
-                //if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
-                //if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
-                //if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
-                //if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
-                //if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
-                //if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
-                //if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
-                //if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
-                //htmlContent += '</h5>';
-                //htmlContent += '</td>';
-                htmlContent += '</tr>';
-                htmlContent += '</table>';
+                    //htmlContent += '</td>';
+                    //htmlContent += '<td>';
+                    //htmlContent += '<h5 class="pull-right">';
+                    //if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
+                    //if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
+                    //if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
+                    //if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
+                    //if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
+                    //if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
+                    //if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
+                    //if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
+                    //htmlContent += '</h5>';
+                    //htmlContent += '</td>';
+                    htmlContent += '</tr>';
+                    htmlContent += '</table>';
 
-                htmlContent += '</div>'; //-- class row                                                                                 //-6
+                    htmlContent += '</div>'; //-- class row                                                                                 //-6
 
-                htmlContent += '<div class="row">'; //row2                                                                              //+7
-                htmlContent += '<div class="col-sm-12">'                                                                                //+8
-                htmlContent += '<p class="col-xs-1 text-left no-margin no-padding"><i class="fa fa-home fa-2x"></i></p>';
-                var assetTypeAndNum = '';
-                assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
-                assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
-                assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-                if (tracker.shipmentStatus) {
-                    htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + tracker.shipmentStatus +'</p>';
-                }
-                htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></p>';
-                htmlContent += '</div>'; //-- col-sm-12                                                                                 //-8
-                htmlContent += '</div>'; //-- row2                                                                                      //-7
+                    htmlContent += '<div class="row">'; //row2                                                                              //+7
+                    htmlContent += '<div class="col-sm-12">'                                                                                //+8
+                    htmlContent += '<p class="col-xs-1 text-left no-margin no-padding"><i class="fa fa-home fa-2x"></i></p>';
+                    var assetTypeAndNum = '';
+                    assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
+                    assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
+                    assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+                    if (tracker.shipmentStatus) {
+                        htmlContent += '<p class="col-xs-10 no-margin no-padding text-center">' + assetTypeAndNum + tracker.shipmentStatus + '</p>';
+                    }
+                    htmlContent += '<p class="col-xs-1 text-right no-margin no-padding"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></p>';
+                    htmlContent += '</div>'; //-- col-sm-12                                                                                 //-8
+                    htmlContent += '</div>'; //-- row2                                                                                      //-7
 
-                htmlContent += '<div class="row">'; //--row3                                                                            //+9
-                htmlContent += '<div class="col-sm-12">'                                                                                //+10
-                htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
-                htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
-                htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
-                htmlContent += '</div>';                                                                                                //-12
-                htmlContent += '</div>';                                                                                                //-11
-                htmlContent += '</div>';                                                                                                //-10
-                htmlContent += '</div>';                                                                                                //-9
+                    htmlContent += '<div class="row">'; //--row3                                                                            //+9
+                    htmlContent += '<div class="col-sm-12">'                                                                                //+10
+                    htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
+                    htmlContent += '<div style="width:' + (shipment.percentageComplete + 1) * 100 / 101 + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + shipment.percentageComplete + '" role="progressbar" class="progress-bar progress-bar-info">'; //+12
+                    htmlContent += '<span class="sr-only">' + shipment.percentageComplete + '% Complete </span>';
+                    htmlContent += '</div>';                                                                                                //-12
+                    htmlContent += '</div>';                                                                                                //-11
+                    htmlContent += '</div>';                                                                                                //-10
+                    htmlContent += '</div>';                                                                                                //-9
 
-                htmlContent += '<!--row 3+-->'
+                    htmlContent += '<!--row 3+-->'
 
-                htmlContent += '<div class="row">'; // row4                                                                             //+13
-                htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
-                if (shipment.shippedFrom) {
-                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
-                }
-                if (shipment.shipmentDate) {
-                    htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
-                }
-                htmlContent += '</div>';                                                                                                //-14
+                    htmlContent += '<div class="row">'; // row4                                                                             //+13
+                    htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
+                    if (shipment.shippedFrom) {
+                        htmlContent += '<p class="bold no-margin no-padding">' + shipment.shippedFrom + '</p>';
+                    }
+                    if (shipment.shipmentDate) {
+                        htmlContent += '<p class="text-muted no-margin no-padding">' + shipment.shipmentDate + '</p>';
+                    }
+                    htmlContent += '</div>';                                                                                                //-14
 
-                htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
-                if (shipment.shippedTo) {
-                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
-                }
-                if (shipment.status == 'Arrived') {
-                    htmlContent += '<p class="text-muted no-margin no-padding">';
-                    htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
-                }
-                htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
-                htmlContent += '</div>'; // row4 end                                                                                    //-13
-                htmlContent += '<!--row3-->'
-                htmlContent += '</div>'; //-- portlet-body                                                                       //-5
+                    htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
+                    if (shipment.shippedTo) {
+                        htmlContent += '<p class="bold no-margin no-padding">' + shipment.shippedTo + '</p>';
+                    }
+                    if (shipment.status == 'Arrived') {
+                        htmlContent += '<p class="text-muted no-margin no-padding">';
+                        htmlContent += '<span>ARRIVED AT</span>: ' + shipment.actualArrivalDate + '</p>';
+                    }
+                    htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
+                    htmlContent += '</div>'; // row4 end                                                                                    //-13
+                    htmlContent += '<!--row3-->'
+                    htmlContent += '</div>'; //-- portlet-body                                                                       //-5
 
-                var temperature = tracker.lastReadingTemperature;
-                if (temperature && !isNaN(temperature)) {
-                    temperature = temperature.toFixed(1) + '℃';
-                } else {
-                    temperature = '';
-                }
-                var lastMoment = tracker.lastReadingTimeISO ? tracker.lastReadingTimeISO : '';
-                if (lastMoment) {
-                    $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
-                    lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
-                }
-
-                if (temperature || lastReading) {
-                    htmlContent += '<div class="shipment-last-reading">'
-                    htmlContent += '<div class="text-center">';
-                    htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
-                    htmlContent += '</div>';
-                    htmlContent += '</div>';
-                }
-                htmlContent += '</div>';
-
-                var infowindow = new InfoBubble({
-                    content: htmlContent,
-                    shadowStyle: 3,
-                    padding: 0,
-                    borderRadius: 4,
-                    arrowSize: 10,
-                    borderWidth: 1,
-                    borderColor: '#7ed56d',
-                    disableAutoPan: true,
-                    arrowPosition: 10,
-                    arrowStyle: 2,
-                    minWidth: 420
-                });
-                marker.addListener('click', function() {
-                    if (infowindow.isOpen()) {
-                        infowindow.close();
+                    var temperature = tracker.lastReadingTemperature;
+                    if (temperature && !isNaN(temperature)) {
+                        temperature = temperature.toFixed(1) + '℃';
                     } else {
-                        infowindow.open($scope.map, marker);
+                        temperature = '';
                     }
-                    //$scope.openedInfoWindow.push(infowindow);
-                    //$log.debug('store infoWindow', $scope.openedInfoWindow);
-                });
-                $scope.dynMarkers.push(marker);
-                $scope.map.addListener('click', function() {
-                    if (infowindow.isOpen) {
-                        infowindow.close();
+                    var lastMoment = tracker.lastReadingTimeISO ? tracker.lastReadingTimeISO : '';
+                    if (lastMoment) {
+                        $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
+                        lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
                     }
-                })
-                bounds.extend(llng);
+
+                    if (temperature || lastReading) {
+                        htmlContent += '<div class="shipment-last-reading">'
+                        htmlContent += '<div class="text-center">';
+                        htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
+                        htmlContent += '</div>';
+                        htmlContent += '</div>';
+                    }
+                    htmlContent += '</div>';
+
+                    var infowindow = new InfoBubble({
+                        content: htmlContent,
+                        shadowStyle: 3,
+                        padding: 0,
+                        borderRadius: 4,
+                        arrowSize: 10,
+                        borderWidth: 1,
+                        borderColor: '#7ed56d',
+                        disableAutoPan: true,
+                        arrowPosition: 10,
+                        arrowStyle: 2,
+                        minWidth: 420
+                    });
+                    marker.addListener('click', function () {
+                        if (infowindow.isOpen()) {
+                            infowindow.close();
+                        } else {
+                            infowindow.open($scope.map, marker);
+                        }
+                        //$scope.openedInfoWindow.push(infowindow);
+                        //$log.debug('store infoWindow', $scope.openedInfoWindow);
+                    });
+                    $scope.dynMarkers.push(marker);
+                    $scope.map.addListener('click', function () {
+                        if (infowindow.isOpen) {
+                            infowindow.close();
+                        }
+                    })
+                    bounds.extend(llng);
+                }
             });//end angular.forEach();
 
             $scope.markerClusterer = new MarkerClusterer($scope.map, $scope.dynMarkers, {minimumClusterSize:4});
@@ -377,11 +392,13 @@
         }
 });
 appCtrls.controller('AddTrackerCtrl',
-    function($rootScope, $scope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, $timeout, $interval, $log, $controller) {
+    function($rootScope, $scope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, $timeout, $interval,
+             $log, $controller, Color) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
         $scope.Action = "Add";
+        $scope.colors = Color;
         $scope.Role = Role;
         {
             this.rootScope  = $rootScope;
@@ -414,6 +431,11 @@ appCtrls.controller('AddTrackerCtrl',
             if ($scope.tracker.autoStartShipment) {
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
             }
+            if ($scope.tracker.trackerColor) {
+                $scope.tracker.color = $scope.tracker.trackerColor.name;
+            } else {
+                $scope.tracker.color = Color[0].name;
+            }
             webSvc.saveDevice($scope.tracker).success(function(resp) {
                 $log.debug('UPDATED', resp);
                 if (resp.status.code == 0) {
@@ -427,11 +449,13 @@ appCtrls.controller('AddTrackerCtrl',
             });
         };
 });
-appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc,
+appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, Color,
                                                 webSvc, $window, $uibModal, Role, $log, $timeout, $interval, $controller) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
+    $scope.colors = Color;
+    var filter = $filter('filter');
         $scope.Action = "Edit";
         $scope.Role = Role;
         {
@@ -466,7 +490,6 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
 
         $scope.tracker = {};
         //$scope.tracker.imei = $stateParams.imei;
-        var filter = $filter('filter');
         var param = {
             pageSize: 1000,
             pageIndex: 1,
@@ -477,6 +500,16 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
             $log.debug("TRACKER", data);
             if (data.status.code == 0) {
                 $scope.tracker = data.response;
+                if (!$scope.tracker.color) {
+                    $scope.tracker.trackerColor  = Color[0];
+                } else {
+                    var fcolor = filter(Color, {name: $scope.tracker.color}, true);
+                    if (fcolor) {
+                        $scope.tracker.trackerColor = fcolor[0];
+                    } else {
+                        $scope.tracker.trackerColor  = Color[0];
+                    }
+                }
             } else {
                 //error
             }
@@ -504,6 +537,11 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
         $scope.saveTracker = function() {
             if ($scope.tracker.autoStartShipment) {
                 $scope.tracker.autostartTemplateId = $scope.tracker.autoStartShipment.id;
+            }
+            if ($scope.tracker.trackerColor) {
+                $scope.tracker.color = $scope.tracker.trackerColor.name;
+            } else {
+                $scope.tracker.color = Color[0].name;
             }
             webSvc.saveDevice($scope.tracker).success(function(resp) {
                 $log.debug('UPDATED', resp);

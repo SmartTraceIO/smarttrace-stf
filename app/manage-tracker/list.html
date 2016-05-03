@@ -152,7 +152,8 @@
                     <!--<th ng-if="getRole() >= Role.SmartTraceAdmin"></th>-->
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
-                    <td width="5px" bgcolor="tracker.color" style="padding: 0px">
+                    <td>
+                        <div ng-style="{width:'15px', height:'15px', padding: '0px', 'background-color': tracker.trackerColor.code}"></div>
                     </td>
                     <td>
                         <!--add color-->

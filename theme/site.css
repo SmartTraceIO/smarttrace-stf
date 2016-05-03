@@ -784,3 +784,6 @@ h3 span.info {
     width: 60%;
     margin-left: 20%;
 }
+.table > tbody > tr > td {
+    vertical-align: middle;
+}

@@ -1,10 +1,11 @@
-﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color,
+﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color, $q,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller, localStorageService) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
 
     var VM = this;
+    var filter = $filter('filter');
 
     {
         this.rootScope  = $rootScope;
@@ -82,7 +83,59 @@
             });
         }
 
-        webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
+        var devicesPromise = webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
+            if (data.status.code == 0) {
+                VM.TrackerList = data.response;
+                angular.forEach(VM.TrackerList, function(tracker, key) {
+                    if (!isNaN(tracker.sn)) {
+                        VM.TrackerList[key].sn=parseInt(tracker.sn, 10);
+                    }
+                });
+                $log.debug('view-shipment', VM.TrackerList);
+            }
+        });
+
+        var shipmentsPromise = webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
+
+            if (data.status.code == 0) {
+                VM.ShipmentList = data.response;
+                $log.debug('ShipmentList', VM.ShipmentList);
+                VM.ShipmentList.totalCount = data.totalCount;
+            } else if(data.status.code == 1){
+                $rootScope.redirectUrl = "/view-shipment";
+                $rootScope.go("login");
+            };
+            VM.loading = false;
+
+        });
+
+        $q.all([devicesPromise, shipmentsPromise]).then(function() {
+            angular.forEach(VM.ShipmentList, function(v, k) {
+                if (!isNaN(v.deviceSN)) {
+                    VM.ShipmentList[k].deviceSN = parseInt(v.deviceSN, 10);
+                }
+
+                //-- bind color to shipment here by get color of device.
+                var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
+                if (d && (d.length > 0)) {
+                    //found a device
+                    VM.ShipmentList[k].color = d[0].color;
+                } else {
+                    VM.ShipmentList[k].color = Color[0].name;
+                }
+                //-- position
+                VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
+                VM.ShipmentList[k].icon = {
+                    url:"theme/img/transparent16.png",
+                    scaledSize:[16, 16],
+                    anchor:[8, 8]
+                }
+                //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
+            });
+            VM.updateMap(null);
+        });
+
+        /*webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
             
             if (data.status.code == 0) {
                 VM.ShipmentList = data.response;
@@ -113,7 +166,7 @@
                 //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
             });
             VM.updateMap(null);
-        });
+        });*/
     };
     VM.Sorting = function (expression) {
         VM.ViewShipment.so = VM.ViewShipment.so == "asc" ? "desc" : "asc";
@@ -183,13 +236,6 @@
         }
     });
 
-    webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
-        // console.log("Devi", data);
-        if (data.status.code == 0) {
-            VM.TrackerList = data.response;
-            // console.log(data.response);
-        }
-    });
     VM.SortOptionChanged = function(){
         var order = VM.sc.substr(-1);
         if(order == '1'){
@@ -210,38 +256,21 @@
         BindShipmentList();
     }
 
-
-    //VM.viewCard = false;
-    //VM.viewTable = true;
-    //VM.viewMap = false;
     VM.lastView = localStorageService.get('LastViewShipment');
     if (!VM.lastView) {
         VM.lastView = 1;
     }
     VM.showTable = function() {
-        //VM.viewTable = true;
-        //VM.viewCard = false;
-        //VM.viewMap = false;
         VM.lastView = 1;
         localStorageService.set('LastViewShipment', 1);
-        //VM.AdvanceSearch = false;
     };
     VM.showCard = function() {
-        //VM.viewTable = false;
-        //VM.viewCard = true;
-        //VM.viewMap = false;
         VM.lastView = 2;
         localStorageService.set('LastViewShipment', 2);
-        //VM.AdvanceSearch = false;
     }
     VM.showMap = function() {
-        //VM.viewTable = false;
-        //VM.viewCard = false;
-        //VM.viewMap = true;
         VM.lastView = 3;
         localStorageService.set('LastViewShipment', 3);
-
-        //VM.AdvanceSearch = false;
     }
     VM.toggleSearch = function() {
         VM.AdvanceSearch = !VM.AdvanceSearch;
@@ -338,12 +367,20 @@
                     labelClass: "labels", // the CSS class for the label
                     labelStyle: {opacity: 1}
                 });*/
+                var cl = filter(Color, {name: shipment.color}, true);
+                if (cl && (cl.length > 0)) {
+                    VM.ShipmentList[key].shipmentColor = cl[0];
+                    shipment.shipmentColor = cl[0];
+                } else {
+                    VM.ShipmentList[key].shipmentColor = Color[0];
+                    shipment.shipmentColor = Color[0];
+                }
 
                 var htmlIcon = '';
                 htmlIcon += "<table style=''>";
                 htmlIcon += "<tr>";
                 htmlIcon += "<td>";
-                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+Color[key].code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.shipmentColor.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
                 htmlIcon += "</td>";
                 htmlIcon += "<td  style='background-color: white'>";
                 htmlIcon += "<div>";
