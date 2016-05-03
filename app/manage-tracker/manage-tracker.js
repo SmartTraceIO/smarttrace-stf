@@ -51,7 +51,6 @@
                 }
             }).then(function() {
                 NgMap.getMap('trackerMap').then(function(map) {
-                    console.log('markers', map.markers);
                     $scope.updateMap(map);
                 });
             })
@@ -139,6 +138,7 @@
                 $scope.map = map;
             }
             if ($scope.map) {
+                var promises = [];
                 $log.debug('update trackers Maps', $scope.TrackerList);
                 angular.forEach($scope.TrackerList, function(tracker, key) {
                     var cl = filter(Color, {name: tracker.color}, true);
@@ -147,9 +147,6 @@
                     } else {
                         $scope.TrackerList[key].trackerColor = Color[0];
                     }
-                });
-                var promises = [];
-                angular.forEach($scope.TrackerList, function(tracker, key) {
                     if (tracker.lastShipmentId) {
                         var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
                             if (data.status.code == 0) {
@@ -247,10 +244,10 @@
                     htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
                     htmlContent += '<div class="portlet-title">';                                                                   //+2
                     htmlContent += '<div class="caption">' + tracker.description + '</div>';                                   //+3 -3
-                    htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
-                    htmlContent += '<a href="#/view-shipment-detail?sn=' + tracker.sn + '&trip=' + tracker.tripCount + '"';
-                    htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
-                    htmlContent += '</div>';                                                                                        //-4
+                    //htmlContent += '<div class="pull-right" style="margin-top:6px">';                                               //+4
+                    //htmlContent += '<a href="#/view-shipment-detail?sn=' + tracker.sn + '&trip=' + tracker.tripCount + '"';
+                    //htmlContent += 'class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>'
+                    //htmlContent += '</div>';                                                                                        //-4
                     htmlContent += '</div>';                                                                                        //-2
 
                     htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;">';                                //+5
@@ -259,8 +256,11 @@
                     htmlContent += '<table class="table" style="margin-bottom: 0px!important;">';
                     htmlContent += '<tr>';
                     htmlContent += '<td>';
-                    htmlContent += '<h5 class="pull-left">Tracker ' + tracker.sn + ' (' + tracker.tripCount + ')</h5>'
-                    htmlContent += '</td>';
+                    htmlContent += '<span class="pull-left">Tracker ';
+                    htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
+                    htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+                    htmlContent += '</span>';
+                    htmlContent += '</td>';;
                     //htmlContent += '<td>';
 
                     //if (shipment.siblingCount > 0) {
@@ -346,7 +346,6 @@
                     }
                     var lastMoment = tracker.lastReadingTimeISO ? tracker.lastReadingTimeISO : '';
                     if (lastMoment) {
-                        $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
                         lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
                     }
 
@@ -378,8 +377,6 @@
                         } else {
                             infowindow.open($scope.map, marker);
                         }
-                        //$scope.openedInfoWindow.push(infowindow);
-                        //$log.debug('store infoWindow', $scope.openedInfoWindow);
                     });
                     $scope.dynMarkers.push(marker);
                     $scope.map.addListener('click', function () {

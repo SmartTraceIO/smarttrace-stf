@@ -243,7 +243,6 @@
         VM.lastView = 3;
         localStorageService.set('LastViewShipment', 3);
         NgMap.getMap('shipmentMap').then(function(map) {
-            console.log('markers', map.markers);
             VM.updateMap(map);
         });
     }
@@ -256,7 +255,6 @@
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
-        $log.debug('HomeLocation', homeLocation);
         if (homeLocation && (homeLocation.length > 0)) {
             homeLocation = homeLocation[0].location;
         } else if (shipment.firstReadingLat && shipment.firstReadingLong){
@@ -318,7 +316,6 @@
         }
         return null;
     }
-    VM.openedInfoWindow = [];
     VM.updateMap = function(map) {
         if (map) {
             VM.map = map;
@@ -412,7 +409,6 @@
                 htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
                 htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
                 htmlContent += '</span>';
-
                 htmlContent += '</td>';
                 htmlContent += '<td>';
 
@@ -492,7 +488,7 @@
                 }
                 var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
                 if (lastMoment) {
-                    $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
+                    //$log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
                     lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
                 }
 
@@ -546,8 +542,6 @@
                         }
                         VM.polyObject = VM.updatePolylines(shipment, key);
                     }
-                    VM.openedInfoWindow.push(infowindow);
-                    $log.debug('store infoWindow', VM.openedInfoWindow);
                 });
                 VM.dynMarkers.push(marker);
                 VM.map.addListener('click', function() {
