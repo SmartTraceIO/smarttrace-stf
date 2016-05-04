@@ -414,20 +414,32 @@
 
             var htmlContent = '';
             htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+
             htmlContent += '<div class="portlet-title">';                                                                   //+2
             htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
-                                                                                                 //-4
             htmlContent += '</div>';                                                                                        //-2
-            htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important;">'; //+5
-            htmlContent += '<div class="row" style="padding-top: 15px">';                                                                                               //+6
+
+            htmlContent += '<div class="portlet-body" style="padding-top: 15px!important;padding-bottom: 0px!important;">'; //+5
+            htmlContent += '<div class="row">';                                                                                               //+6
             htmlContent += '<div class="col-xs-12">';                                                                                               //+6
             htmlContent += '<table width="100%" style="font-size: 13px;">';
             htmlContent += '<tr>';
             htmlContent += '<td>';
+
+            htmlContent += '<table>';
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<div style="width: 15px; height: 15px; background-color: '+shipment.shipmentColor.code+'; margin-right: 5px;"></div>';
+            htmlContent += '</td>';
+            htmlContent += '<td>'
             htmlContent += '<span class="pull-left">Tracker ';
             htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
             htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
-            htmlContent += '</span>';
+            htmlContent += '</span>';;
+            htmlContent += '</td>'
+            htmlContent += '</tr>';
+            htmlContent += '</table>';
+
             htmlContent += '</td>';
             htmlContent += '<td>';
 
@@ -512,7 +524,7 @@
             }
 
             if (temperature || lastReading) {
-                htmlContent += '<div class="row" style="margin-top: 15px;">';
+                htmlContent += '<div class="row text-center" style="margin-top: 15px;">';
                 htmlContent += '<span class="sh-last">'
                 htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
                 htmlContent += '</span>'
