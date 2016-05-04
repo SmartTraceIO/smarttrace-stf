@@ -272,17 +272,6 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-
-                <!--<div class="map-container" style="display: none;">
-                    <ng-map 
-                        style="height:600px"
-                        disable-default-u-i="true"
-                        map-type-control-options="{
-                            mapTypeIds: ['ROADMAP']
-                        }"
-                    >
-                    </ng-map>
-                </div>-->
             </div>
             <div class="row" ng-if="vm.lastView==1">
                 <div class="col-sm-12">
@@ -543,11 +532,7 @@
             </div>
             <div class="row" ng-if="vm.lastView==3" style="margin-top: 15px;">
                 <div class="col-xs-12">
-                    <!--<div id="mapId"></div>-->
-                    <!--<ng-map disable-default-u-i="true" map-type-control-options="{mapTypeIds: ['ROADMAP']}">-->
-                    <ng-map id="shipmentMap" zoom="8" center="[40.74, -74.18]" style="height: 500px;">
-                    </ng-map>
-
+                    <div id="shipmentMap" style="height: 500px" ng-init="vm.initMap()"></div>
                 </div>
 
             </div>

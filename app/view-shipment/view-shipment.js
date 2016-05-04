@@ -134,9 +134,14 @@
                 //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
             });
         }).then(function() {
-            NgMap.getMap('shipmentMap').then(function(map) {
-                VM.updateMap(map);
-            });
+            if (VM.map) {
+                VM.updateMap();
+            }
+            /*else {
+            //    NgMap.getMap('shipmentMap').then(function(map) {
+            //        VM.updateMap(map);
+            //    });
+            //}*/
         });
     };
     VM.Sorting = function (expression) {
@@ -172,10 +177,6 @@
     }
 
     BindShipmentList();
-
-    /*$scope.$on('mapInitialized', function(event, m) {
-        VM.updateMap(m);
-    });*/
 
     VM.LocationListFrom = [];
     VM.LocationListTo = [];
@@ -242,9 +243,13 @@
     VM.showMap = function() {
         VM.lastView = 3;
         localStorageService.set('LastViewShipment', 3);
-        NgMap.getMap('shipmentMap').then(function(map) {
-            VM.updateMap(map);
-        });
+        /*if (VM.map) {
+            VM.updateMap(null);
+        } else {
+            NgMap.getMap('shipmentMap').then(function(map) {
+                VM.updateMap(map);
+            });
+        }*/
     }
     VM.toggleSearch = function() {
         VM.AdvanceSearch = !VM.AdvanceSearch;
@@ -316,7 +321,19 @@
         }
         return null;
     }
-    VM.updateMap = function(map) {
+
+    VM.initMap = function() {
+        VM.map = new google.maps.Map(document.getElementById('shipmentMap'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+        if (VM.ShipmentList) {
+            //--update map
+            VM.updateMap();
+        }
+    }
+
+    VM.updateMap = function() {
         if (VM.markerClusterer) {
             // Unset all markers
             var ms = VM.markerClusterer.getMarkers();
@@ -324,246 +341,243 @@
             for (var i = 0; i<l; i++) {
                 ms[i].setMap(null)
             }
+            // Clears all clusters and markers from the clusterer.
+            VM.markerClusterer.clearMarkers();
+        }
+        if (VM.dynMarkers) {
             var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
             for (var i = 0; i < lx; i++) {
                 VM.dynMarkers[i].setMap(null);
             }
-            // Clears all clusters and markers from the clusterer.
-            VM.markerClusterer.clearMarkers();
         }
         VM.dynMarkers = [];
 
-        if (map) {
-            VM.map = map;
-        }
-        if (VM.map){
-            $log.debug('update Maps', VM.ShipmentList);
-            // console.log('Custom Markers', VM.map.customMarkers);
-            var bounds = new google.maps.LatLngBounds;
+        $log.debug('update Maps', VM.ShipmentList);
+        // console.log('Custom Markers', VM.map.customMarkers);
+        var bounds = new google.maps.LatLngBounds;
 
-            angular.forEach(VM.ShipmentList, function(shipment, key) {
-                var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
-                /*var marker = new MarkerWithLabel({
-                    position: llng,
-                    map: VM.map,
-                    icon: 'theme/img/tinyLocationStop.png',
-                    labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
-                    labelAnchor: new google.maps.Point(-15, 15),
-                    labelClass: "labels", // the CSS class for the label
-                    labelStyle: {opacity: 1}
-                });*/
-                var cl = filter(Color, {name: shipment.color}, true);
-                if (cl && (cl.length > 0)) {
-                    VM.ShipmentList[key].shipmentColor = cl[0];
-                    shipment.shipmentColor = cl[0];
-                } else {
-                    VM.ShipmentList[key].shipmentColor = Color[0];
-                    shipment.shipmentColor = Color[0];
-                }
+        angular.forEach(VM.ShipmentList, function(shipment, key) {
+            var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
+            /*var marker = new MarkerWithLabel({
+                position: llng,
+                map: VM.map,
+                icon: 'theme/img/tinyLocationStop.png',
+                labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
+                labelAnchor: new google.maps.Point(-15, 15),
+                labelClass: "labels", // the CSS class for the label
+                labelStyle: {opacity: 1}
+            });*/
+            var cl = filter(Color, {name: shipment.color}, true);
+            if (cl && (cl.length > 0)) {
+                VM.ShipmentList[key].shipmentColor = cl[0];
+                shipment.shipmentColor = cl[0];
+            } else {
+                VM.ShipmentList[key].shipmentColor = Color[0];
+                shipment.shipmentColor = Color[0];
+            }
 
-                var htmlIcon = '';
-                htmlIcon += "<table style=''>";
-                htmlIcon += "<tr>";
-                htmlIcon += "<td>";
-                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.shipmentColor.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-                htmlIcon += "</td>";
-                htmlIcon += "<td  style='background-color: white'>";
-                htmlIcon += "<div>";
-                htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
-                htmlIcon += "</div>"
-                htmlIcon += "</td>";
-                htmlIcon += "</tr>";
-                htmlIcon += "<tr>";
-                htmlIcon += "<td colspan=2>"
-                htmlIcon += "<div style='margin-top: 5px;'>"
+            var htmlIcon = '';
+            htmlIcon += "<table style=''>";
+            htmlIcon += "<tr>";
+            htmlIcon += "<td>";
+            htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.shipmentColor.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+            htmlIcon += "</td>";
+            htmlIcon += "<td  style='background-color: white'>";
+            htmlIcon += "<div>";
+            htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
+            htmlIcon += "</div>"
+            htmlIcon += "</td>";
+            htmlIcon += "</tr>";
+            htmlIcon += "<tr>";
+            htmlIcon += "<td colspan=2>"
+            htmlIcon += "<div style='margin-top: 5px;'>"
 
-                //htmlIcon += shipment.percentageComplete + '% completed';
-                htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
-                htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='"+shipment.percentageComplete+"' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:"+shipment.percentageComplete+"%'>";
-                htmlIcon += "</div>";
-                htmlIcon += "</div>";
+            //htmlIcon += shipment.percentageComplete + '% completed';
+            htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
+            htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='"+shipment.percentageComplete+"' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:"+shipment.percentageComplete+"%'>";
+            htmlIcon += "</div>";
+            htmlIcon += "</div>";
 
 
-                htmlIcon += "</div>"
-                htmlIcon += "</td>";
-                htmlIcon += "</tr>";
-                htmlIcon += "</table>";
+            htmlIcon += "</div>"
+            htmlIcon += "</td>";
+            htmlIcon += "</tr>";
+            htmlIcon += "</table>";
 
-                var marker = new RichMarker({
-                    position: llng,
-                    map: VM.map,
-                    flat: true,
-                    anchor: RichMarkerPosition.TOP,
-                    content: htmlIcon,
-                 });
+            var marker = new RichMarker({
+                position: llng,
+                map: VM.map,
+                flat: true,
+                anchor: RichMarkerPosition.TOP,
+                content: htmlIcon,
+             });
 
-                var htmlContent = '';
-                htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
-                htmlContent += '<div class="portlet-title">';                                                                   //+2
-                htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
-                                                                                                     //-4
-                htmlContent += '</div>';                                                                                        //-2
-                htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important;">'; //+5
-                htmlContent += '<div class="row" style="padding-top: 15px">';                                                                                               //+6
-                htmlContent += '<div class="col-xs-12">';                                                                                               //+6
-                htmlContent += '<table width="100%" style="font-size: 13px;">';
-                htmlContent += '<tr>';
-                htmlContent += '<td>';
-                htmlContent += '<span class="pull-left">Tracker ';
-                htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
-                htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+            var htmlContent = '';
+            htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+            htmlContent += '<div class="portlet-title">';                                                                   //+2
+            htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
+                                                                                                 //-4
+            htmlContent += '</div>';                                                                                        //-2
+            htmlContent += '<div class="portlet-body" style="padding-top: 0px!important;padding-bottom: 0px!important;">'; //+5
+            htmlContent += '<div class="row" style="padding-top: 15px">';                                                                                               //+6
+            htmlContent += '<div class="col-xs-12">';                                                                                               //+6
+            htmlContent += '<table width="100%" style="font-size: 13px;">';
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<span class="pull-left">Tracker ';
+            htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
+            htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+            htmlContent += '</span>';
+            htmlContent += '</td>';
+            htmlContent += '<td>';
+
+            if (shipment.siblingCount > 0) {
+                htmlContent += '<span class="pull-left">';
+                htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                htmlContent += shipment.siblingCount + ' others';
                 htmlContent += '</span>';
-                htmlContent += '</td>';
-                htmlContent += '<td>';
+            }
 
-                if (shipment.siblingCount > 0) {
-                    htmlContent += '<span class="pull-left">';
-                    htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                    htmlContent += shipment.siblingCount + ' others';
-                    htmlContent += '</span>';
-                }
+            htmlContent += '</td>';
+            htmlContent += '<td>';
+            htmlContent += '<span class="pull-right">';
+            if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
+            if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
+            if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
+            if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
+            if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
+            if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
+            if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
+            if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
+            htmlContent += '</span>';
+            htmlContent += '</td>';
+            htmlContent += '</tr>';
+            htmlContent += '</table>';
+            htmlContent += '</div>'; //-- class col-sm-12                                                                                 //-6
+            htmlContent += '</div>'; //-- class row// -6
 
-                htmlContent += '</td>';
-                htmlContent += '<td>';
-                htmlContent += '<span class="pull-right">';
-                if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
-                if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
-                if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
-                if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
-                if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
-                if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
-                if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
-                if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
-                htmlContent += '</span>';
-                htmlContent += '</td>';
-                htmlContent += '</tr>';
-                htmlContent += '</table>';
-                htmlContent += '</div>'; //-- class col-sm-12                                                                                 //-6
-                htmlContent += '</div>'; //-- class row// -6
+            var assetTypeAndNum = '';
+            assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
+            assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
+            assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+            htmlContent += '<div class="row" style="margin-top: 15px">'; //row2                                                                              //+7
+            htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
+            htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
+            htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
+            htmlContent += '</div>'; //-- row2                                                                                      //-7
 
-                var assetTypeAndNum = '';
-                assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
-                assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
-                assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-                htmlContent += '<div class="row" style="margin-top: 15px">'; //row2                                                                              //+7
-                htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
-                htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
-                htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
-                htmlContent += '</div>'; //-- row2                                                                                      //-7
+            htmlContent += '<div class="row">'; //--row3                                                                            //+9
+            htmlContent += '<div class="col-sm-12">'                                                                                //+10
+            htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
+            htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
+            htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
+            htmlContent += '</div>';                                                                                                //-12
+            htmlContent += '</div>';                                                                                                //-11
+            htmlContent += '</div>';                                                                                                //-10
+            htmlContent += '</div>';                                                                                                //-9
 
-                htmlContent += '<div class="row">'; //--row3                                                                            //+9
-                htmlContent += '<div class="col-sm-12">'                                                                                //+10
-                htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
-                htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
-                htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
-                htmlContent += '</div>';                                                                                                //-12
-                htmlContent += '</div>';                                                                                                //-11
-                htmlContent += '</div>';                                                                                                //-10
-                htmlContent += '</div>';                                                                                                //-9
+            htmlContent += '<div class="row" style="font-size: 12px">'; // row3                                                                             //+13
+            htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
+            if (shipment.shippedFrom) {
+                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
+            }
+            if (shipment.shipmentDate) {
+                htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
+            }
+            htmlContent += '</div>';                                                                                                //-14
 
-                htmlContent += '<div class="row" style="font-size: 12px">'; // row3                                                                             //+13
-                htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
-                if (shipment.shippedFrom) {
-                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
-                }
-                if (shipment.shipmentDate) {
-                    htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
-                }
-                htmlContent += '</div>';                                                                                                //-14
+            htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
+            if (shipment.shippedTo) {
+                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
+            }
+            if (shipment.status == 'Arrived') {
+                htmlContent += '<p class="text-muted no-margin no-padding">';
+                htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+            }
+            htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
+            htmlContent += '</div>'; // row3 end                                                                                    //-13
+            htmlContent += '<!--row3-->'
 
-                htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
-                if (shipment.shippedTo) {
-                    htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
-                }
-                if (shipment.status == 'Arrived') {
-                    htmlContent += '<p class="text-muted no-margin no-padding">';
-                    htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
-                }
-                htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
-                htmlContent += '</div>'; // row3 end                                                                                    //-13
-                htmlContent += '<!--row3-->'
+            //row4
+            var temperature = shipment.lastReadingTemperature;
+            if (!isNaN(temperature)) {
+                temperature = temperature.toFixed(1) + '℃';
+            } else {
+                temperature = '';
+            }
+            var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
+            if (lastMoment) {
+                //$log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
+                lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
+            }
 
-                //row4
-                var temperature = shipment.lastReadingTemperature;
-                if (!isNaN(temperature)) {
-                    temperature = temperature.toFixed(1) + '℃';
-                } else {
-                    temperature = '';
+            if (temperature || lastReading) {
+                htmlContent += '<div class="row" style="margin-top: 15px;">';
+                htmlContent += '<span class="sh-last">'
+                htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
+                htmlContent += '</span>'
+                htmlContent += '</div>'
+            }
+            htmlContent += '</div>'; //-- portlet-body                                                                       //-5
+            htmlContent += '</div>';
+            var infowindow = new InfoBubble({
+                content: htmlContent,
+                shadowStyle: 3,
+                padding: 0,
+                borderRadius: 4,
+                arrowSize: 10,
+                borderWidth: 1,
+                borderColor: '#7ed56d',
+                disableAutoPan: true,
+                arrowPosition: 10,
+                //backgroundClassName: 'phoney',
+                //hideCloseButton:true,
+                //closeSrc:'theme/img/slimTimes.png',
+                arrowStyle: 2,
+                minWidth: 420
+            });
+            infowindow.addListener('closeclick', function() {
+                if (VM.polyObject) {
+                    VM.polyObject.path.setMap(null);
+                    VM.polyObject.home.setMap(null);
+                    VM.polyObject.dest.setMap(null);
                 }
-                var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
-                if (lastMoment) {
-                    //$log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
-                    lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
-                }
-
-                if (temperature || lastReading) {
-                    htmlContent += '<div class="row" style="margin-top: 15px;">';
-                    htmlContent += '<span class="sh-last">'
-                    htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
-                    htmlContent += '</span>'
-                    htmlContent += '</div>'
-                }
-                htmlContent += '</div>'; //-- portlet-body                                                                       //-5
-                htmlContent += '</div>';
-                var infowindow = new InfoBubble({
-                    content: htmlContent,
-                    shadowStyle: 3,
-                    padding: 0,
-                    borderRadius: 4,
-                    arrowSize: 10,
-                    borderWidth: 1,
-                    borderColor: '#7ed56d',
-                    disableAutoPan: true,
-                    arrowPosition: 10,
-                    //backgroundClassName: 'phoney',
-                    //hideCloseButton:true,
-                    //closeSrc:'theme/img/slimTimes.png',
-                    arrowStyle: 2,
-                    minWidth: 420
-                });
-                infowindow.addListener('closeclick', function() {
+            })
+            marker.addListener('click', function() {
+                if (infowindow.isOpen()) {
+                    infowindow.close();
                     if (VM.polyObject) {
                         VM.polyObject.path.setMap(null);
                         VM.polyObject.home.setMap(null);
                         VM.polyObject.dest.setMap(null);
                     }
-                })
-                marker.addListener('click', function() {
-                    if (infowindow.isOpen()) {
-                        infowindow.close();
-                        if (VM.polyObject) {
-                            VM.polyObject.path.setMap(null);
-                            VM.polyObject.home.setMap(null);
-                            VM.polyObject.dest.setMap(null);
-                        }
-                    } else {
-                        infowindow.open(VM.map, marker);
-                        //draw polylines
-                        if (VM.polyObject) {
-                            VM.polyObject.path.setMap(null);
-                            VM.polyObject.home.setMap(null);
-                            VM.polyObject.dest.setMap(null);
-                        }
-                        VM.polyObject = VM.updatePolylines(shipment, key);
+                } else {
+                    infowindow.open(VM.map, marker);
+                    //draw polylines
+                    if (VM.polyObject) {
+                        VM.polyObject.path.setMap(null);
+                        VM.polyObject.home.setMap(null);
+                        VM.polyObject.dest.setMap(null);
                     }
-                });
-                VM.dynMarkers.push(marker);
-                VM.map.addListener('click', function() {
-                    if (infowindow.isOpen) {
-                        infowindow.close();
-                    }
-                });
-                bounds.extend(llng);
+                    VM.polyObject = VM.updatePolylines(shipment, key);
+                }
             });
+            VM.dynMarkers.push(marker);
+            VM.map.addListener('click', function() {
+                if (infowindow.isOpen) {
+                    infowindow.close();
+                }
+            });
+            bounds.extend(llng);
+        });
 
-            VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {minimumClusterSize:4});
-            VM.markerClusterer.addListener('click', function() {
-                $log.debug('Marker clustered clicked!');
-            });
-            VM.map.setCenter(bounds.getCenter());
-            if(bounds != null){
-                VM.map.fitBounds(bounds);
-            }
+        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {minimumClusterSize:4});
+        VM.markerClusterer.addListener('click', function() {
+            $log.debug('Marker clustered clicked!');
+        });
+        VM.map.setCenter(bounds.getCenter());
+        if(bounds != null){
+            VM.map.fitBounds(bounds);
         }
     }
 });

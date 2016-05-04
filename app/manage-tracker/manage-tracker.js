@@ -50,9 +50,9 @@
                     })
                 }
             }).then(function() {
-                NgMap.getMap('trackerMap').then(function(map) {
-                    $scope.updateMap(map);
-                });
+                if ($scope.map) {
+                    $scope.updateMap();
+                }
             })
         }
         $scope.Print = function() {
@@ -124,11 +124,26 @@
         $scope.showMap = function() {
             $scope.lastView = 3;
             localStorageService.set('LastViewTracker', 3);
-            NgMap.getMap('trackerMap').then(function(map) {
-                $scope.updateMap(map);
-            });
+            if ($scope.map) {
+                $scope.updateMap(null);
+            } else {
+                NgMap.getMap('trackerMap').then(function(map) {
+                    $scope.updateMap(map);
+                });
+            }
         }
-        $scope.updateMap = function(map) {
+        $scope.initMap = function() {
+            console.log('init-map...');
+            $scope.map = new google.maps.Map(document.getElementById('trackerMap'), {
+                center: {lat: -34.397, lng: 150.644},
+                zoom: 8
+            });
+            if ($scope.TrackerList) {
+                //--update map
+                $scope.updateMap();
+            }
+        }
+        $scope.updateMap = function() {
             if ($scope.markerClusterer) {
                 var ms = $scope.markerClusterer.getMarkers();
                 // Unset all markers
@@ -137,39 +152,36 @@
                 for (var i = 0; i<l; i++) {
                     ms[i].setMap(null)
                 }
-                var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
-                for (var i = 0; i < lx; i++) {
-                    VM.dynMarkers[i].setMap(null);
-                }
                 // Clears all clusters and markers from the clusterer.
                 $scope.markerClusterer.clearMarkers();
             }
-            if (map) {
-                $scope.map = map;
+            if ($scope.dynMarkers) {
+                var lx = $scope.dynMarkers ? $scope.dynMarkers.length : 0;
+                for (var i = 0; i < lx; i++) {
+                    $scope.dynMarkers[i].setMap(null);
+                }
             }
-            if ($scope.map) {
-                var promises = [];
-                $log.debug('update trackers Maps', $scope.TrackerList);
-                angular.forEach($scope.TrackerList, function(tracker, key) {
-                    var cl = filter(Color, {name: tracker.color}, true);
-                    if (cl && angular.isArray(cl) && cl.length>0) {
-                        $scope.TrackerList[key].trackerColor = cl[0];
-                    } else {
-                        $scope.TrackerList[key].trackerColor = Color[0];
-                    }
-                    if (tracker.lastShipmentId) {
-                        var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
-                            if (data.status.code == 0) {
-                                $scope.TrackerList[key].lastShipment = data.response;
-                            }
-                        });
-                        promises.push(p);
-                    }
-                });
-                $q.all(promises).then(function() {
-                    generateContentAndUpdateMap();
-                });
-            }
+            var promises = [];
+            $log.debug('update trackers Maps', $scope.TrackerList);
+            angular.forEach($scope.TrackerList, function(tracker, key) {
+                var cl = filter(Color, {name: tracker.color}, true);
+                if (cl && angular.isArray(cl) && cl.length>0) {
+                    $scope.TrackerList[key].trackerColor = cl[0];
+                } else {
+                    $scope.TrackerList[key].trackerColor = Color[0];
+                }
+                if (tracker.lastShipmentId) {
+                    var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
+                        if (data.status.code == 0) {
+                            $scope.TrackerList[key].lastShipment = data.response;
+                        }
+                    });
+                    promises.push(p);
+                }
+            });
+            $q.all(promises).then(function() {
+                generateContentAndUpdateMap();
+            });
         }
         var generateContentAndUpdateMap = function() {
 

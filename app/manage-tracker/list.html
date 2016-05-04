@@ -228,9 +228,7 @@
             </table>
         </div>
         <div ng-if="lastView==3">
-            <!--MapView-->
-            <ng-map id="trackerMap" zoom="8" center="[40.74, -74.18]" style="height: 600px;">
-            </ng-map>
+            <div id="trackerMap" style="height: 600px" ng-init="initMap()"></div>
         </div>
         <uib-pagination class="pagination-sm"
                     ng-if="lastView==1"
