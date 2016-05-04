@@ -112,10 +112,6 @@
                 return Role.Basic;
             }
         }
-        //$scope.$on('mapInitialized', function(event, map) {
-        //    $scope.updateMap(map);
-        //});
-
         //-- coding for map-view
         $scope.lastView = localStorageService.get('LastViewTracker');
         if (!$scope.lastView) {
@@ -129,11 +125,25 @@
             $scope.lastView = 3;
             localStorageService.set('LastViewTracker', 3);
             NgMap.getMap('trackerMap').then(function(map) {
-                console.log('markers', map.markers);
                 $scope.updateMap(map);
             });
         }
         $scope.updateMap = function(map) {
+            if ($scope.markerClusterer) {
+                var ms = $scope.markerClusterer.getMarkers();
+                // Unset all markers
+                var l = ms ? ms.length : 0;
+                console.log('Markers-tracker', ms);
+                for (var i = 0; i<l; i++) {
+                    ms[i].setMap(null)
+                }
+                var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
+                for (var i = 0; i < lx; i++) {
+                    VM.dynMarkers[i].setMap(null);
+                }
+                // Clears all clusters and markers from the clusterer.
+                $scope.markerClusterer.clearMarkers();
+            }
             if (map) {
                 $scope.map = map;
             }
@@ -162,16 +172,7 @@
             }
         }
         var generateContentAndUpdateMap = function() {
-            if ($scope.dynMarkers) {
-                // Unset all markers
-                var i = 0, l = $scope.dynMarkers.length;
-                for (i; i<l; i++) {
-                    $scope.dynMarkers[i].setMap(null)
-                }
 
-                // Clears all clusters and markers from the clusterer.
-                $scope.markerClusterer.clearMarkers();
-            }
             $scope.dynMarkers = [];
             var bounds = new google.maps.LatLngBounds;
 

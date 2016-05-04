@@ -317,23 +317,27 @@
         return null;
     }
     VM.updateMap = function(map) {
+        if (VM.markerClusterer) {
+            // Unset all markers
+            var ms = VM.markerClusterer.getMarkers();
+            var l = ms ? ms.length : 0;
+            for (var i = 0; i<l; i++) {
+                ms[i].setMap(null)
+            }
+            var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
+            for (var i = 0; i < lx; i++) {
+                VM.dynMarkers[i].setMap(null);
+            }
+            // Clears all clusters and markers from the clusterer.
+            VM.markerClusterer.clearMarkers();
+        }
+        VM.dynMarkers = [];
+
         if (map) {
             VM.map = map;
         }
         if (VM.map){
             $log.debug('update Maps', VM.ShipmentList);
-            if (VM.dynMarkers) {
-                // Unset all markers
-                var i = 0, l = VM.dynMarkers.length;
-                for (i; i<l; i++) {
-                    VM.dynMarkers[i].setMap(null)
-                }
-
-                // Clears all clusters and markers from the clusterer.
-                VM.markerClusterer.clearMarkers();
-            }
-            VM.dynMarkers = [];
-
             // console.log('Custom Markers', VM.map.customMarkers);
             var bounds = new google.maps.LatLngBounds;
 
