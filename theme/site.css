@@ -772,7 +772,11 @@ h3 span.info {
 }
 .sh-last {
     background-color: #5BCA45;
-    padding: 5px;
+    /*padding-bottom: 3px;*/
+    /*padding-top: 5px;*/
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 13px;
     color: #fff;
     border-top-left-radius:15px !important;
     border-top-right-radius:15px !important;
@@ -792,4 +796,6 @@ h3 span.info {
 }
 .table > tbody > tr > td {
     vertical-align: middle;
+}
+.phoney {
 }

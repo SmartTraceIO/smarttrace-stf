@@ -479,7 +479,7 @@
             htmlContent += '</div>'; //-- row2                                                                                      //-7
 
             htmlContent += '<div class="row">'; //--row3                                                                            //+9
-            htmlContent += '<div class="col-sm-12">'                                                                                //+10
+            htmlContent += '<div class="col-xs-12">'                                                                                //+10
             htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
             htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
             htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
@@ -524,10 +524,12 @@
             }
 
             if (temperature || lastReading) {
-                htmlContent += '<div class="row text-center" style="margin-top: 15px;">';
-                htmlContent += '<span class="sh-last">'
+                htmlContent += '<div class="row">';
+                htmlContent += '<div class="col-xs-12 text-center">';
+                htmlContent += '<span class="sh-last" style="padding-bottom: 3px!important; padding-top: 5px;">'
                 htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
                 htmlContent += '</span>'
+                htmlContent += '</div>'
                 htmlContent += '</div>'
             }
             htmlContent += '</div>'; //-- portlet-body                                                                       //-5
@@ -546,7 +548,7 @@
                 //hideCloseButton:true,
                 //closeSrc:'theme/img/slimTimes.png',
                 arrowStyle: 2,
-                minWidth: 420
+                minWidth: 300
             });
             infowindow.addListener('closeclick', function() {
                 if (VM.polyObject) {

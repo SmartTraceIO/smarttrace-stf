@@ -298,11 +298,9 @@
                     htmlContent += '</div>';                                                                                        //-2
 
                     htmlContent += '<div class="portlet-body" style="padding-top: 15px!important;padding-bottom: 0px!important;">';                                //+5
+                    //htmlContent += '<div class="container-fluid">';                                                                                               //+6
                     htmlContent += '<div class="row">';                                                                                               //+6
                     htmlContent += '<div class="col-xs-12">';
-                    htmlContent += '<table width="100%" style="font-size: 13px;">';
-                    htmlContent += '<tr>';
-                    htmlContent += '<td>';
                     htmlContent += '<table>';
                     htmlContent += '<tr>';
                     htmlContent += '<td>';
@@ -316,32 +314,6 @@
                     htmlContent += '</td>'
                     htmlContent += '</tr>';
                     htmlContent += '</table>';
-                    htmlContent += '</td>';;
-                    //htmlContent += '<td>';
-
-                    //if (shipment.siblingCount > 0) {
-                    //    htmlContent += '<h5 class="text-center">';
-                    //    htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                    //    htmlContent += shipment.siblingCount + ' similar trips';
-                    //    //htmlContent += '<i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>';
-                    //    htmlContent += '</h5>';
-                    //}
-
-                    //htmlContent += '</td>';
-                    //htmlContent += '<td>';
-                    //htmlContent += '<h5 class="pull-right">';
-                    //if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
-                    //if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
-                    //if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
-                    //if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
-                    //if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
-                    //if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
-                    //if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
-                    //if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
-                    //htmlContent += '</h5>';
-                    //htmlContent += '</td>';
-                    htmlContent += '</tr>';
-                    htmlContent += '</table>';
                     htmlContent += '</div>';
                     htmlContent += '</div>'; //-- class row
 
@@ -349,16 +321,19 @@
                     assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
                     assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
                     assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+
                     htmlContent += '<div class="row"  style="margin-top: 15px">'; //row2                                                                              //+7
-                    htmlContent += '<div class="col-xs-2 text-left "><i class="fa fa-home fa-2x"></i></div>';
+                    htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
+                    htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">';
                     if (tracker.shipmentStatus) {
-                        htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + tracker.shipmentStatus + '</div>';
+                        htmlContent += assetTypeAndNum + tracker.shipmentStatus;
                     }
+                    htmlContent += '</div>';
                     htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
                     htmlContent += '</div>'; //-- row2                                                                                      //-7
 
                     htmlContent += '<div class="row">'; //--row3                                                                            //+9
-                    htmlContent += '<div class="col-sm-12">'                                                                                //+10
+                    htmlContent += '<div class="col-xs-12">'                                                                                //+10
                     htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
                     htmlContent += '<div style="width:' + (shipment.percentageComplete + 1) * 100 / 101 + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + shipment.percentageComplete + '" role="progressbar" class="progress-bar progress-bar-info">'; //+12
                     htmlContent += '<span class="sr-only">' + shipment.percentageComplete + '% Complete </span>';
@@ -368,27 +343,27 @@
                     htmlContent += '</div>';                                                                                                //-9
                     htmlContent += '<!--row 3+-->'
 
-                    htmlContent += '<div class="row row-eq-height" style="font-size: 12px; min-height: 51px">'; // row4                                                                             //+13
-                    htmlContent += '<div class="col-xs-6 text-left col-height">';                                                                      //+14
+                    htmlContent += '<div class="row" style="font-size: 12px; min-height: 34px;">'; // row4                                                                             //+13
+                    htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
                     if (shipment.shippedFromLocation && shipment.shippedFromLocation.locationName) {
-                        htmlContent += '<div class="bold no-margin no-padding">' + shipment.shippedFromLocation.locationName + '</div>';
+                        htmlContent += '<span class="bold">' + shipment.shippedFromLocation.locationName + '</span>';
                     } else {
-                        htmlContent += '<div class="bold no-margin no-padding">Default</div>';
+                        htmlContent += '<span class="bold no-margin no-padding">Default</span>';
                     }
                     if (shipment.shipmentDate) {
-                        htmlContent += '<div class="text-muted no-margin no-padding">' + shipment.shipmentDate + '</div>';
+                        htmlContent += '<p class="text-muted no-margin no-padding">' + shipment.shipmentDate + '</p>';
                     }
                     htmlContent += '</div>';                                                                                                //-14
 
-                    htmlContent += '<div class="col-xs-6 text-right col-height">';                                                                     //+15
+                    htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
                     if (shipment.shippedToLocation && shipment.shippedToLocation.locationName) {
-                        htmlContent += '<div class="bold no-margin no-padding">' + shipment.shippedToLocation.locationName + '</div>';
+                        htmlContent += '<p class="bold no-margin no-padding">' + shipment.shippedToLocation.locationName + '</p>';
                     } else {
-                        htmlContent += '<div class="bold no-margin no-padding">Default</div>';
+                        htmlContent += '<p class="bold no-margin no-padding">Default</p>';
                     }
                     if (shipment.status == 'Arrived') {
-                        htmlContent += '<div class="text-muted no-margin no-padding">';
-                        htmlContent += '<div>ARRIVED AT</div>: ' + shipment.actualArrivalDate + '</div>';
+                        htmlContent += '<p class="text-muted no-margin no-padding">';
+                        htmlContent += '<span>ARRIVED AT</span>: ' + shipment.actualArrivalDate + '</p>';
                     }
                     htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
                     htmlContent += '</div>'; // row4 end                                                                                    //-13
@@ -408,12 +383,15 @@
                     }
 
                     if (temperature || lastReading) {
-                        htmlContent += '<div class="row text-center" style="margin-top: 15px;">'
-                        htmlContent += '<span class="sh-last">';
+                        htmlContent += '<div class="row">'
+                        htmlContent += '<div class="col-sm-12 text-center">'
+                        htmlContent += '<span class="sh-last" style="padding-bottom: 7px!important; padding-top: 1px">';
                         htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
                         htmlContent += '</span>';
                         htmlContent += '</div>';
+                        htmlContent += '</div>';
                     }
+                    htmlContent += '</div>'; //-- portlet-body                                                                       //-5
                     htmlContent += '</div>'; //-- portlet-body                                                                       //-5
                     htmlContent += '</div>';
 
@@ -428,12 +406,14 @@
                         disableAutoPan: true,
                         arrowPosition: 10,
                         arrowStyle: 2,
-                        minWidth: 400,
+                        minWidth: 300,
+                        backgroundClassName: 'phoney'
                     });
                     marker.addListener('click', function () {
                         if (infowindow.isOpen()) {
                             infowindow.close();
                         } else {
+
                             infowindow.open($scope.map, marker);
                         }
                     });
