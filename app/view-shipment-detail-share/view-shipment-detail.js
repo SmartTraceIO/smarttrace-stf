@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
 function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
-              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, Color) {
+              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, Color, NgMap) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -36,7 +36,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     var plotLines = new Array();
-    $scope.vm = this;
     $scope.specialMarkers = new Array();
     $scope.normalMarkers = new Array();
     $scope.previousActiveMarker = -1;
@@ -82,7 +81,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     //google map first point
     $scope.firstPoint = {};
     $scope.currentPoint = {};
-    $scope.trackerPath = [];
+    //$scope.trackerPath = [];
     $scope.trackerColor = rootSvc.getTrackerColor(0);
     $scope.trackerMsg = new Array();
 
@@ -101,15 +100,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     });
     //------Reload data every 10 min END-------
 
-    $scope.$on('mapInitialized', function(event, m) {
-        $scope.vm.map = m;
-        if(bounds != null){
-            $scope.vm.map.fitBounds(bounds); 
-        }
-        if(trackerRoute != null){
-            trackerRoute.setMap($scope.vm.map);
-        }
-    });
+    //$scope.$on('mapInitialized', function(event, m) {
+    //    $scope.map = m;
+    //    if(bounds != null){
+    //        $scope.map.fitBounds(bounds);
+    //    }
+    //    /*if(trackerRoute != null){
+    //        trackerRoute.setMap($scope.map);
+    //    }*/
+    //});
 
     $scope.Print = function(){
         setTimeout(print, 100);
@@ -128,18 +127,23 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     function updateMapData(index){
+        NgMap.getMap('shipment-detail-map').then(function(map) {
+            drawMap(map, index);
+        });
+    }
+    function  drawMap(map, index) {
         var locations = subSeries[index];
-        $scope.trackerPath.length = 0;
+        var trackerPath = [];
         $scope.specialMarkers.length = 0;
         $scope.normalMarkers.length = 0;
 
-        // console.log($scope.vm.map);
+        // console.log($scope.map);
         bounds = new google.maps.LatLngBounds;
 
         for(i = 0 ; i < locations.length; i ++){
             var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
             bounds.extend(ll);
-            $scope.trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
+            trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
             //markers
             var pos = [locations[i].lat, locations[i].lng];
             if(locations[i].alerts.length > 0){
@@ -183,21 +187,21 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         if(trackerRoute != null){
             trackerRoute.setMap(null);
+            trackerRoute = null;
         }
 
         trackerRoute = new google.maps.Polyline({
-            path: $scope.trackerPath,
+            path: trackerPath,
             strokeColor: $scope.trackers[index].siblingColor,
             strokeOpacity: 1,
-            strokeWeight: 5
+            strokeWeight: 5,
+            map: map
         });
-        if($scope.vm.map != undefined){
-            $scope.vm.map.fitBounds(bounds);
-            trackerRoute.setMap($scope.vm.map);
-            //Apply Shape route first
-            if(!$scope.$$phase) {
-                $scope.$apply();
-            }
+        map.fitBounds(bounds);
+        //trackerRoute.setMap(map);
+        //Apply Shape route first
+        if(!$scope.$$phase) {
+            $scope.$apply();
         }
     }
 
