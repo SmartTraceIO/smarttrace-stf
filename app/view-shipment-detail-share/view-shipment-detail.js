@@ -1,10 +1,11 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
 function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
-              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller) {
+              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, Color) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
+    var filter = $filter('filter')
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -106,7 +107,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.vm.map.fitBounds(bounds); 
         }
         if(trackerRoute != null){
-            trackerRoute.setMap($scope.vm.map);
+            trackerRoute.setMap(null);
         }
     });
 
@@ -596,6 +597,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $state.go('viewshipment'); //move to shipment-list
                 return;
             }
+
+            //--update color of tracker by calling getDevice
+
             groupList = info.deviceGroups ? info.deviceGroups : [];
             $log.debug('Info', info);
             $log.debug('groupList', groupList);
@@ -699,19 +703,46 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                                 $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
                             $scope.trackers[j].loaded = true;
                             $scope.trackers[j].loadedForIcon = true;
-                            prepareMainHighchartSeries();
-                            refreshHighchartSeries();
+                            //prepareMainHighchartSeries();
+                            //refreshHighchartSeries();
                             break;
                         }
                     }
                 });
                 promiseSibling.push(p);
             });
-            $q.all(promiseSibling);
-            for(i = 0; i < $scope.trackers.length; i++){
-                $scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
-                $scope.trackers[i].index = i;
-            }
+            $q.all(promiseSibling).then(function() {
+                var deviceList = [];
+                webSvc.getDevices(1000, 1, 'description', 'asc').success(function(data) {
+                    console.log('DeviceList', data.response);
+                    deviceList = data.response;
+                }).then(function() {
+                    //update color of tracker here
+                    //var promiseTrackers = [];
+                    angular.forEach($scope.trackers, function(tracker, k) {
+                        var colorName = filter(deviceList, {sn: tracker.deviceSN}, true);
+                        if (colorName && (colorName.length > 0)) {
+                            colorName = colorName[0].color;
+                        }
+                        var color = filter(Color, {name: colorName}, true);
+                        if (color && (color.length > 0)) {
+                            color = color[0];
+                        } else {
+                            color = Color[0];
+                        }
+                        $scope.trackers[k].siblingColor = color.code;
+                        $scope.trackers[k].index = k;
+                    })
+                }).then(function() {
+                    prepareMainHighchartSeries();
+                    refreshHighchartSeries();
+                    updateMapData(0);
+                });
+            });
+            //for(i = 0; i < $scope.trackers.length; i++){
+            //    //$scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
+            //    //$scope.trackers[i].index = i;
+            //}
             //------------PREPARE TRACKERS INFO    END-------------
 
             //set tracker information
