@@ -11,14 +11,14 @@ appCtrls.controller('BaseCtrl', function(VM) {
     var timeout     = VM.timeout;
     var interval    = VM.interval;
 
-    log.debug('Starting base controller ...');
+    //log.debug('Starting base controller ...');
     if (localDbSvc.getToken() == '_') {
         toastr.warning('Your session was expired!')
         return state.go('login');
     }
 
     VM.loadNotifications = function() {
-        log.debug('loadNotifications', rootScope.loadedNotification);
+        //log.debug('loadNotifications', rootScope.loadedNotification);
         if (!rootScope.loadedNotification) {
             webSvc.getNotifications(true).success(function (data) {
                 log.debug('Notification', data);
@@ -55,7 +55,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
         }
     }
     VM.reloadUserIfNeed = function() {
-        log.debug('reload user if needed!');
+        //log.debug('reload user if needed!');
         var token = localDbSvc.getToken();
         if (rootScope.AuthToken != token) {
             rootScope.AuthToken = token;

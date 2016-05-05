@@ -198,7 +198,7 @@
     }
     $scope.EditDescription = function(Id) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/edit-description.html',
+            templateUrl: 'app/view-shipment-detail-share/edit-description.html',
             controller: 'EditShipmentDetailDescription',
             resolve: {
                 editId : function() {
@@ -214,7 +214,7 @@
     }
     $scope.EditComment = function(Id) {
         var modalInstance = $uibModal.open({
-            templateUrl: '/app/view-shipment-detail-share/edit-comment.html',
+            templateUrl: 'app/view-shipment-detail-share/edit-comment.html',
             controller: 'EditShipmentDetailComment',
             resolve: {
                 editId : function() {

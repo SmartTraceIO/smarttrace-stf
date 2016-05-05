@@ -281,12 +281,12 @@
                                class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control " ng-model="ShipmentTemplate.arrivalNotificationWithinKm">
-                            <option value="">No notification needed</option>
+                            <option value="0">At Destination</option>
                             <option value="50">Less than 50 kms away</option>
                             <option value="25">Less than 25 kms away</option>
                             <option value="10">Less than 10 kms away</option>
                             <option value="5">Less than 5 kms away</option>
-                            <option value="0">At Destination</option>
+                            <option value="">No notification needed</option>
                         </select>
                         <label class="checkbox-inline" for="exc-noti">
                             <input ng-model="ShipmentTemplate.excludeNotificationsIfNoAlerts" type="checkbox" id="exc-noti"> Only notify if alerts fired&nbsp;
@@ -373,7 +373,3 @@
         </form>
     </div>
 </div>
-<script src="../app/manage-location/manage-location.js"></script>
-<script src="../app/manage-alert/manage-alert.js"></script>
-<script src="../app/manage-notification/manage-notification.js"></script>
-<script src="../app/global/directives/weekdays.js"></script>

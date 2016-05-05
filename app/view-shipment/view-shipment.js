@@ -488,7 +488,7 @@
             htmlContent += '</div>';                                                                                                //-10
             htmlContent += '</div>';                                                                                                //-9
 
-            htmlContent += '<div class="row" style="font-size: 12px">'; // row3                                                                             //+13
+            htmlContent += '<div class="row" style="font-size: 12px; min-height: 34px">'; // row3                                                                             //+13
             htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
             if (shipment.shippedFrom) {
                 htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';

@@ -171,7 +171,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             $scope.HomeMarker = new google.maps.Marker({
                 position: new google.maps.LatLng(fromLocation.lat, fromLocation.lon),
                 map: $scope.map,
-                icon: '/theme/img/mapStart.png'
+                icon: 'theme/img/mapStart.png'
             });
             $scope.map.setCenter(new google.maps.LatLng(fromLocation.lat, fromLocation.lon));
             $scope.HomeMarker.setMap($scope.map);
@@ -201,7 +201,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             $scope.EndMarker = new google.maps.Marker({
                 position: new google.maps.LatLng(toLocation.lat, toLocation.lon),
                 map: $scope.map,
-                icon: '/theme/img/mapStop.png'
+                icon: 'theme/img/mapStop.png'
             });
             $scope.map.setCenter(new google.maps.LatLng(toLocation.lat, toLocation.lon));
             $scope.EndMarker.setMap($scope.map);
@@ -239,8 +239,8 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             if (!$scope.ShipmentTemplate.shutdownDeviceAfterMinutes)
                 $scope.ShipmentTemplate.shutdownDeviceAfterMinutes = null;
 
-            if (!$scope.ShipmentTemplate.arrivalNotificationWithinKm)
-                $scope.ShipmentTemplate.arrivalNotificationWithinKm = null;
+            if ($scope.ShipmentTemplate.arrivalNotificationWithinKm || ($scope.ShipmentTemplate.arrivalNotificationWithinKm == '0'))
+                $scope.ShipmentTemplate.arrivalNotificationWithinKm = parseInt($scope.ShipmentTemplate.arrivalNotificationWithinKm, 10);
 
             $scope.ShipmentTemplate.maxTimesAlertFires = null;
             $scope.ShipmentTemplate.useCurrentTimeForDateShipped = true;
@@ -277,7 +277,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.openAddLocation = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-location/add-edit.html',
+            templateUrl: 'app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
 
@@ -300,7 +300,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-location/add-edit.html',
+                templateUrl: 'app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
 
@@ -322,7 +322,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
     $scope.openAddAlert = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-alert/add-edit.html',
+            templateUrl: 'app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
 
@@ -340,7 +340,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-alert/add-edit.html',
+                templateUrl: 'app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
 
@@ -357,7 +357,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
     $scope.openAddNoti = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-notification/add-edit.html',
+            templateUrl: 'app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
 
@@ -379,7 +379,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
             }
             $rootScope.notiIdForModalPopup = notiId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-notification/add-edit.html',
+                templateUrl: 'app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
 
@@ -592,7 +592,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
             $scope.HomeMarker = new google.maps.Marker({
                 position: new google.maps.LatLng(fromLocation.lat, fromLocation.lon),
                 map: $scope.map,
-                icon: '/theme/img/mapStart.png'
+                icon: 'theme/img/mapStart.png'
             });
             $scope.map.setCenter(new google.maps.LatLng(fromLocation.lat, fromLocation.lon));
             $scope.HomeMarker.setMap($scope.map);
@@ -622,7 +622,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
             $scope.EndMarker = new google.maps.Marker({
                 position: new google.maps.LatLng(toLocation.lat, toLocation.lon),
                 map: $scope.map,
-                icon: '/theme/img/mapStop.png'
+                icon: 'theme/img/mapStop.png'
             });
             $scope.map.setCenter(new google.maps.LatLng(toLocation.lat, toLocation.lon));
             $scope.EndMarker.setMap($scope.map);
@@ -702,7 +702,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     }
     $scope.openAddLocation = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-location/add-edit.html',
+            templateUrl: 'app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
 
@@ -728,7 +728,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-location/add-edit.html',
+                templateUrl: 'app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
 
@@ -755,7 +755,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     };
     $scope.openAddAlert = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-alert/add-edit.html',
+            templateUrl: 'app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
 
@@ -773,7 +773,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-alert/add-edit.html',
+                templateUrl: 'app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
 
@@ -790,7 +790,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
     };
     $scope.openAddNoti = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-notification/add-edit.html',
+            templateUrl: 'app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
 
@@ -812,7 +812,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
             }
             $rootScope.notiIdForModalPopup = notiId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-notification/add-edit.html',
+                templateUrl: 'app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
 

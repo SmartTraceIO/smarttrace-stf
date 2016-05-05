@@ -676,7 +676,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 if ($scope.arrivalTimeISO != null){
                     if ($scope.tracker.active) {
                         var modalInstance = $uibModal.open({
-                            templateUrl: '/app/manage-tracker/confirm-deactivate.html',
+                            templateUrl: 'app/manage-tracker/confirm-deactivate.html',
                             controller: 'ConfirmDeactivateCtrl',
                             resolve: {
                                 tracker: function () {

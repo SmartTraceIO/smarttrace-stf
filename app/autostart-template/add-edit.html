@@ -102,14 +102,6 @@
                                         <div ng-bind-html="loc.DisplayText | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-
-                                <!--<select style="width:100%"
-                                    multiple ui-select2="OptionsShipmentFrom"
-                                    ng-model="AutoStartShipment.startLocations"
-                                    data-placeholder="Select location for auto detection of shipmentFrom">
-                                    <option ng-repeat="location in FromLocationList"
-                                            value="{{location.locationId}}">{{location.DisplayText}}</option>
-                                </select>-->
                                 <br />
                             </div>
                         </div>
@@ -137,13 +129,6 @@
                                         <div ng-bind-html="loc.DisplayText | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-                                <!--<select style="width:100%"
-                                        multiple ui-select2="OptionsShipmentFrom"
-                                        ng-model="AutoStartShipment.interimStops"
-                                        data-placeholder="Select location for auto detection of shipmentFrom">
-                                    <option ng-repeat="location in InterimLocationList"
-                                            value="{{location.locationId}}">{{location.DisplayText}}</option>
-                                </select>-->
                                 <br />
                             </div>
                         </div>
@@ -262,15 +247,6 @@
                                 <div ng-bind-html="noti.notificationScheduleName | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
-
-                        <!--<select style="width:100%"
-                                ng-change="ChangeNotiScheduleForAlert()"
-                                multiple ui-select2="NotificationScheduleOption"
-                                ng-model="AutoStartShipment.alertsNotificationSchedules"
-                                data-placeholder="Select Notification Schedule For Alert Profile">
-                            <option ng-repeat="noti in NotificationList"
-                                    value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select>-->
                         <small class="text-muted control-label">
                             {{AlertNotiRule}}
                         </small>
@@ -294,12 +270,12 @@
                                class="fa fa-info-circle"/>
                         </label>
                         <select class="form-control" ng-model="AutoStartShipment.noAlertsAfterArrivalMinutes">
-                            <option value="">Don't suppress on arrival</option>
                             <option value="0">Suppress On Arrival</option>
                             <option value="60">Suppress After 1 hr at destination</option>
                             <option value="120">Suppress After 2 hr at destination</option>
                             <option value="240">Suppress After 4 hr at destination</option>
                             <option value="480">Suppress After 8 hr at destination</option>
+                            <option value="">Don't suppress on arrival</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -391,15 +367,6 @@
                                 <div ng-bind-html="noti.notificationScheduleName | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
-
-                        <!--<select style="width:100%"
-                                ng-change="ChangeNotiScheduleForArrival()"
-                                multiple ui-select2="NotificationScheduleOption"
-                                ng-model="AutoStartShipment.arrivalNotificationSchedules"
-                                data-placeholder="Select Notification Schedule For Arrival">
-                            <option ng-repeat="noti in NotificationList"
-                                    value="{{noti.notificationScheduleId}}">{{noti.notificationScheduleName}}</option>
-                        </select>-->
                         <br />
                         <small class="text-muted control-label">
                             {{ArrivalNotiRule}}

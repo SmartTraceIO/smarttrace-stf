@@ -119,7 +119,7 @@
     //$interval(loadNotifications, 10*60*1000); // 10 minutes
     $scope.reload = function() {
         //-- check authenticate
-        $log.debug('reload...')
+        //$log.debug('reload...');
         if (localDbSvc.getToken() == '_') {
             toastr.warning('Your session was expired!')
             return $scope.logout();

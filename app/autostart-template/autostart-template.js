@@ -171,6 +171,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         $scope.AutoStartShipment.detectLocationForShippedFrom = false;
         $scope.AutoStartShipment.shutdownDeviceAfterMinutes = "120";
         $scope.AutoStartShipment.alertSuppressionMinutes = 120;
+        $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = "0";
         $scope.AutoStartShipment.addDateShipped = true;
         $scope.AutoStartShipment.excludeNotificationsIfNoAlerts = false;
 
@@ -259,7 +260,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             if (!isNaN($scope.AutoStartShipment.noAlertsAfterStartMinutes)) {
                 $scope.AutoStartShipment.noAlertsAfterStartMinutes = parseInt($scope.AutoStartShipment.noAlertsAfterStartMinutes, 10);
             }
-
+            console.log('arrival_notification_schedules', $scope.AutoStartShipment.arrival_notification_schedules);
             if ($scope.AutoStartShipment.arrival_notification_schedules) {
                 $scope.AutoStartShipment.arrivalNotificationSchedules = $scope.AutoStartShipment.arrival_notification_schedules.map(function(val) {
                     return val.notificationScheduleId;
@@ -274,6 +275,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             } else {
                 $scope.AutoStartShipment.alertsNotificationSchedules = [];
             }
+            console.log('Before Adding AutoStart', $scope.AutoStartShipment);
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -291,7 +293,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     }
     $scope.openAddLocation = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-location/add-edit.html',
+            templateUrl: 'app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
 
@@ -314,7 +316,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-location/add-edit.html',
+                templateUrl: 'app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
 
@@ -336,7 +338,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
     $scope.openAddAlert = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-alert/add-edit.html',
+            templateUrl: 'app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
 
@@ -354,7 +356,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-alert/add-edit.html',
+                templateUrl: 'app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
 
@@ -371,7 +373,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     };
     $scope.openAddNoti = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-notification/add-edit.html',
+            templateUrl: 'app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
 
@@ -393,7 +395,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             }
             $rootScope.notiIdForModalPopup = notiId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-notification/add-edit.html',
+                templateUrl: 'app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
 
@@ -543,18 +545,18 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                 var response = data.response;
                  $scope.AutoStartShipment = data.response;
                  //-- correcting
-                 if (response.shutdownDeviceAfterMinutes)
+                 if (response.shutdownDeviceAfterMinutes || (response.shutdownDeviceAfterMinutes == 0))
                  $scope.AutoStartShipment.shutdownDeviceAfterMinutes = response.shutdownDeviceAfterMinutes.toString();
 
                  if (response.shutDownAfterStartMinutes) {
                  $scope.AutoStartShipment.shutDownAfterStartMinutes = response.shutDownAfterStartMinutes.toString();
                  }
 
-                 if ($scope.AutoStartShipment.arrivalNotificationWithinKm)
-                 $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
+                 if ($scope.AutoStartShipment.arrivalNotificationWithinKm || ($scope.AutoStartShipment.arrivalNotificationWithinKm == 0))
+                    $scope.AutoStartShipment.arrivalNotificationWithinKm = response.arrivalNotificationWithinKm.toString();
 
                  //-- noAlertsAfterArrivalMinutes
-                 if (!isNaN(response.noAlertsAfterArrivalMinutes)) {
+                 if (response.noAlertsAfterArrivalMinutes || (response.noAlertsAfterArrivalMinutes == 0)) {
                     $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = response.noAlertsAfterArrivalMinutes.toString();
                  } else {
                      $scope.AutoStartShipment.noAlertsAfterArrivalMinutes = "";
@@ -586,6 +588,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                     });
                 }
                 if ($scope.AutoStartShipment.arrivalNotificationSchedules) {
+                    console.log('Arrival Notification Schedules#', $scope.AutoStartShipment.arrivalNotificationSchedules)
                     $scope.AutoStartShipment.arrival_notification_schedules = $scope.AutoStartShipment.arrivalNotificationSchedules.map(function (val) {
                         var noti = filter($scope.NotificationList, {notificationScheduleId: val}, true)
                         if (noti && noti.length > 0) return noti[0];
@@ -727,7 +730,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     }
     $scope.openAddLocation = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-location/add-edit.html',
+            templateUrl: 'app/manage-location/add-edit.html',
             controller: 'AddLocCtrl',
         })
 
@@ -753,7 +756,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         if (locationId) {
             $rootScope.locationIdForModalPopup = locationId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-location/add-edit.html',
+                templateUrl: 'app/manage-location/add-edit.html',
                 controller: 'EditLocCtrl',
             });
 
@@ -778,7 +781,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     };
     $scope.openAddAlert = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-alert/add-edit.html',
+            templateUrl: 'app/manage-alert/add-edit.html',
             controller: 'AddAlertCtrl',
         });
 
@@ -796,7 +799,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         if (alertId) {
             $rootScope.alertIdForModalPopup = alertId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-alert/add-edit.html',
+                templateUrl: 'app/manage-alert/add-edit.html',
                 controller: 'EditAlertCtrl',
             });
 
@@ -813,7 +816,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     };
     $scope.openAddNoti = function () {
         $rootScope.modalInstance = $uibModal.open({
-            templateUrl: '/app/manage-notification/add-edit.html',
+            templateUrl: 'app/manage-notification/add-edit.html',
             controller: 'AddNotiCtrl',
         });
 
@@ -835,7 +838,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             }
             $rootScope.notiIdForModalPopup = notiId;
             $rootScope.modalInstance = $uibModal.open({
-                templateUrl: '/app/manage-notification/add-edit.html',
+                templateUrl: 'app/manage-notification/add-edit.html',
                 controller: 'EditNotiCtrl',
             });
 
