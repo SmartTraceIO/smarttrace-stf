@@ -107,7 +107,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.vm.map.fitBounds(bounds); 
         }
         if(trackerRoute != null){
-            trackerRoute.setMap(null);
+            trackerRoute.setMap($scope.vm.map);
         }
     });
 
