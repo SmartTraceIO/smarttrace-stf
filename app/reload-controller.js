@@ -25,11 +25,9 @@
                 //$rootScope = $rootScope.$new(true);
                 $rootScope.isOut = true;
             }
-        ).finally(function() {
+        );
 
-        });
-
-        $q.all([promise, promise2]).then(function() {
+        $q.all([promise2]).then(function() {
             $log.debug('start logout!');
             $state.go('login');
         });

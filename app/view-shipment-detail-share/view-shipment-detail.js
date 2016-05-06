@@ -715,33 +715,32 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 });
                 promiseSibling.push(p);
             });
+            var deviceList = [];
+            var promiseDevice = webSvc.getDevices(1000, 1, 'description', 'asc').success(function(data) {
+                console.log('DeviceList', data.response);
+                deviceList = data.response;
+            });
+            promiseSibling.push(promiseDevice);
             $q.all(promiseSibling).then(function() {
-                var deviceList = [];
-                webSvc.getDevices(1000, 1, 'description', 'asc').success(function(data) {
-                    console.log('DeviceList', data.response);
-                    deviceList = data.response;
-                }).then(function() {
-                    //update color of tracker here
-                    //var promiseTrackers = [];
-                    angular.forEach($scope.trackers, function(tracker, k) {
-                        var colorName = filter(deviceList, {sn: tracker.deviceSN}, true);
-                        if (colorName && (colorName.length > 0)) {
-                            colorName = colorName[0].color;
-                        }
-                        var color = filter(Color, {name: colorName}, true);
-                        if (color && (color.length > 0)) {
-                            color = color[0];
-                        } else {
-                            color = Color[0];
-                        }
-                        $scope.trackers[k].siblingColor = color.code;
-                        $scope.trackers[k].index = k;
-                    })
-                }).then(function() {
-                    prepareMainHighchartSeries();
-                    refreshHighchartSeries();
-                    updateMapData(0);
-                });
+                //update color of tracker here
+                //var promiseTrackers = [];
+                angular.forEach($scope.trackers, function(tracker, k) {
+                    var colorName = filter(deviceList, {sn: tracker.deviceSN}, true);
+                    if (colorName && (colorName.length > 0)) {
+                        colorName = colorName[0].color;
+                    }
+                    var color = filter(Color, {name: colorName}, true);
+                    if (color && (color.length > 0)) {
+                        color = color[0];
+                    } else {
+                        color = Color[0];
+                    }
+                    $scope.trackers[k].siblingColor = color.code;
+                    $scope.trackers[k].index = k;
+                })
+                prepareMainHighchartSeries();
+                refreshHighchartSeries();
+                updateMapData($scope.MI);
             });
             //for(i = 0; i < $scope.trackers.length; i++){
             //    //$scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);

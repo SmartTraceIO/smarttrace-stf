@@ -26,9 +26,7 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', 'localStorageService', 
     }
     // expire now
     this.expireNow = function() {
-        var deferred = $q.defer();
         this.setToken('_', -1);
-        return deferred.promise;
     }
     //get token from the cookie
     this.getToken = function(){
