@@ -280,7 +280,8 @@
         if (homeLocation && destLocation) {
             $log.debug('Home/Dest', homeLocation, destLocation);
             //create home-marker & dest-marker
-            var homeHtmlIcon = '<i class="fa fa-home fa-2x" aria-hidden="true"></i>';
+            //var homeHtmlIcon = '<i class="fa fa-home fa-2x" aria-hidden="true"></i>';
+            var homeHtmlIcon = '<img src="theme/img/locationStart.png">';
             var homMarker = new RichMarker({
                 position: new google.maps.LatLng(homeLocation.lat, homeLocation.lon),
                 map: VM.map,
@@ -289,7 +290,8 @@
                 content: homeHtmlIcon,
             });
 
-            var destHtmlIcon = '<i class="fa fa-flag fa-flip-horizontal fa-2x"></i>';
+            //var destHtmlIcon = '<i class="fa fa-flag fa-flip-horizontal fa-2x"></i>';
+            var destHtmlIcon = '<img class="rev-horizon" src="theme/img/locationStop.png">';
             var destMarker = new RichMarker({
                 position: new google.maps.LatLng(destLocation.lat, destLocation.lon),
                 map: VM.map,
@@ -414,14 +416,24 @@
              });
 
             var htmlContent = '';
+            //htmlContent += '<div class="panel panel-default">';
+            //htmlContent += '<div class="panel-heading">';
+            //htmlContent += '<div class="caption" style="padding: 0px!important;">'+shipment.shipmentDescription+'</div>';
+            //htmlContent += '</div>';
+            //htmlContent += '<div class="panel-body">';
+            //htmlContent += 'Basic panel example';
+            //htmlContent += '</div>';
+            //htmlContent += '<div class="panel-footer">Panel footer</div>';
+            //htmlContent += '</div>';
+
             htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
 
             htmlContent += '<div class="portlet-title">';                                                                   //+2
             htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
             htmlContent += '</div>';                                                                                        //-2
 
-            htmlContent += '<div class="portlet-body" style="padding-top: 15px!important;padding-bottom: 0px!important;">'; //+5
-            htmlContent += '<div class="row">';                                                                                               //+6
+            htmlContent += '<div class="portlet-body" style="padding-bottom: 0px!important;">'; //+5
+            htmlContent += '<div class="row" style="height: 25px;">';                                                                                               //+6
             htmlContent += '<div class="col-xs-12">';                                                                                               //+6
             htmlContent += '<table width="100%" style="font-size: 13px;">';
             htmlContent += '<tr>';
@@ -473,13 +485,13 @@
             assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
             assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
             assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-            htmlContent += '<div class="row" style="margin-top: 15px">'; //row2                                                                              //+7
-            htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
+            htmlContent += '<div class="row" style="margin-top: 15px; height: 24px;">'; //row2                                                                              //+7
+            htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
             htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
-            htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
+            htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
             htmlContent += '</div>'; //-- row2                                                                                      //-7
 
-            htmlContent += '<div class="row">'; //--row3                                                                            //+9
+            htmlContent += '<div class="row" style="height: 5px;">'; //--row3                                                                            //+9
             htmlContent += '<div class="col-xs-12">'                                                                                //+10
             htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
             htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
@@ -489,29 +501,31 @@
             htmlContent += '</div>';                                                                                                //-10
             htmlContent += '</div>';                                                                                                //-9
 
-            htmlContent += '<div class="row" style="font-size: 12px; min-height: 34px">'; // row3                                                                             //+13
+            htmlContent += '<div class="row" style="font-size: 12px; height: 34px">'; // row4
             htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
             if (shipment.shippedFrom) {
-                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
+                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedFrom+'</p>';
+            } else {
+                htmlContent += '<p class="bold no-margin no-padding">Default</p>';
             }
             if (shipment.shipmentDate) {
-                htmlContent += '<p class="text-muted no-margin no-padding">'+ shipment.shipmentDate+'</p>';
+                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
             }
             htmlContent += '</div>';                                                                                                //-14
 
-            htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
+            htmlContent += '<div class="col-xs-6 text-right" style="height: 34px;">';                                                                     //+15
             if (shipment.shippedTo) {
-                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedTo+'</p>';
+                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
             }
             if (shipment.status == 'Arrived') {
-                htmlContent += '<p class="text-muted no-margin no-padding">';
+                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">';
                 htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
             }
             htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
             htmlContent += '</div>'; // row3 end                                                                                    //-13
-            htmlContent += '<!--row3-->'
+            htmlContent += '<!--row4-->';
 
-            //row4
+            /*//row5*/
             var temperature = shipment.lastReadingTemperature;
             if (!isNaN(temperature)) {
                 temperature = temperature.toFixed(1) + '℃';
@@ -520,7 +534,7 @@
             }
             var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
             if (lastMoment) {
-                //$log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
+                $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
                 lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
             }
 
@@ -528,28 +542,29 @@
                 htmlContent += '<div class="row">';
                 htmlContent += '<div class="col-xs-12 text-center">';
                 htmlContent += '<span class="sh-last" style="padding-bottom: 3px!important; padding-top: 5px;">'
-                htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
+                htmlContent += ('Last Reading ' + temperature + ' at ' + lastReading);
                 htmlContent += '</span>'
                 htmlContent += '</div>'
                 htmlContent += '</div>'
             }
             htmlContent += '</div>'; //-- portlet-body                                                                       //-5
             htmlContent += '</div>';
+
             var infowindow = new InfoBubble({
                 content: htmlContent,
                 shadowStyle: 3,
                 padding: 0,
-                borderRadius: 4,
+                borderRadius: 2,
                 arrowSize: 10,
-                borderWidth: 1,
+                borderWidth: 0,
                 borderColor: '#7ed56d',
                 disableAutoPan: true,
                 arrowPosition: 10,
-                //backgroundClassName: 'phoney',
+                backgroundClassName: 'phoney',
                 //hideCloseButton:true,
                 //closeSrc:'theme/img/slimTimes.png',
                 arrowStyle: 2,
-                minWidth: 300
+                minWidth: 350
             });
             infowindow.addListener('closeclick', function() {
                 if (VM.polyObject) {
