@@ -322,14 +322,14 @@
                     assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
                     assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
 
-                    htmlContent += '<div class="row"  style="margin-top: 15px">'; //row2                                                                              //+7
-                    htmlContent += '<div class="col-xs-2 text-left"><i class="fa fa-home fa-2x"></i></div>';
+                    htmlContent += '<div class="row"  style="margin-top: 15px; height: 24px;;">'; //row2                                                                              //+7
+                    htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
                     htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">';
                     if (tracker.shipmentStatus) {
                         htmlContent += assetTypeAndNum + tracker.shipmentStatus;
                     }
                     htmlContent += '</div>';
-                    htmlContent += '<div class="col-xs-2 text-right"><i class="fa fa-flag fa-flip-horizontal fa-2x"></i></div>';
+                    htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
                     htmlContent += '</div>'; //-- row2                                                                                      //-7
 
                     htmlContent += '<div class="row">'; //--row3                                                                            //+9
@@ -401,7 +401,7 @@
                         padding: 0,
                         borderRadius: 4,
                         arrowSize: 10,
-                        borderWidth: 1,
+                        borderWidth: 0,
                         borderColor: '#7ed56d',
                         disableAutoPan: true,
                         arrowPosition: 10,

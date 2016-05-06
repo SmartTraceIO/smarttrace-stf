@@ -262,9 +262,10 @@
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
         if (homeLocation && (homeLocation.length > 0)) {
-            homeLocation = homeLocation[0].location;
+            homeLocation = homeLocation[0];
         } else if (shipment.firstReadingLat && shipment.firstReadingLong){
-            homeLocation = {
+            homeLocation = {};
+            homeLocation.location = {
                 lat: shipment.firstReadingLat,
                 lon: shipment.firstReadingLong
             };
@@ -273,36 +274,67 @@
         }
         var destLocation = filter(VM.LocationListTo, {locationName: valToLocName}, true);
         if (destLocation && (destLocation.length > 0)) {
-            destLocation = destLocation[0].location;
+            destLocation = destLocation[0];
         } else {
             destLocation = null;
         }
         if (homeLocation && destLocation) {
             $log.debug('Home/Dest', homeLocation, destLocation);
             //create home-marker & dest-marker
-            //var homeHtmlIcon = '<i class="fa fa-home fa-2x" aria-hidden="true"></i>';
-            var homeHtmlIcon = '<img src="theme/img/locationStart.png">';
+            var homeHtmlIcon = '';
+            homeHtmlIcon += '<table>';
+            homeHtmlIcon += '<tr>';
+            homeHtmlIcon += '<td>';
+            homeHtmlIcon += '<img src="theme/img/locationStart.png">';
+            homeHtmlIcon += '</td>';
+            homeHtmlIcon += '<td>';
+            homeHtmlIcon += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+            if (homeLocation.locationName) {
+                homeHtmlIcon += homeLocation.locationName
+            } else {
+                homeHtmlIcon += 'Default'
+            }
+            homeHtmlIcon += '</div>';
+            homeHtmlIcon += '</td>';
+            homeHtmlIcon += '</tr>';
+            homeHtmlIcon += '</table>';
             var homMarker = new RichMarker({
-                position: new google.maps.LatLng(homeLocation.lat, homeLocation.lon),
+                position: new google.maps.LatLng(homeLocation.location.lat, homeLocation.location.lon),
                 map: VM.map,
                 flat: true,
-                anchor: RichMarkerPosition.TOP,
+                anchor: RichMarkerPosition.BOTTOM_LEFT,
                 content: homeHtmlIcon,
             });
 
             //var destHtmlIcon = '<i class="fa fa-flag fa-flip-horizontal fa-2x"></i>';
-            var destHtmlIcon = '<img class="rev-horizon" src="theme/img/locationStop.png">';
+            var destHtmlIcon = '';
+            destHtmlIcon += '<table>';
+            destHtmlIcon += '<tr>';
+            destHtmlIcon += '<td>';
+            destHtmlIcon += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+            destHtmlIcon += '</td>';
+            destHtmlIcon += '<td>';
+            destHtmlIcon += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+            if (destLocation.locationName) {
+                destHtmlIcon += destLocation.locationName
+            } else {
+                destHtmlIcon += 'Default'
+            }
+            destHtmlIcon += '</div>';
+            destHtmlIcon += '</td>';
+            destHtmlIcon += '</tr>';
+            destHtmlIcon += '</table>';
             var destMarker = new RichMarker({
-                position: new google.maps.LatLng(destLocation.lat, destLocation.lon),
+                position: new google.maps.LatLng(destLocation.location.lat, destLocation.location.lon),
                 map: VM.map,
                 flat: true,
-                anchor: RichMarkerPosition.TOP,
+                anchor: RichMarkerPosition.BOTTOM_LEFT,
                 content: destHtmlIcon,
             });
 
             var path = [
-                {lat: homeLocation.lat, lng: homeLocation.lon},
-                {lat: destLocation.lat, lng: destLocation.lon},
+                {lat: homeLocation.location.lat, lng: homeLocation.location.lon},
+                {lat: destLocation.location.lat, lng: destLocation.location.lon},
                 {lat: shipment.lastReadingLat, lng: shipment.lastReadingLong},
             ];
 
@@ -416,16 +448,6 @@
              });
 
             var htmlContent = '';
-            //htmlContent += '<div class="panel panel-default">';
-            //htmlContent += '<div class="panel-heading">';
-            //htmlContent += '<div class="caption" style="padding: 0px!important;">'+shipment.shipmentDescription+'</div>';
-            //htmlContent += '</div>';
-            //htmlContent += '<div class="panel-body">';
-            //htmlContent += 'Basic panel example';
-            //htmlContent += '</div>';
-            //htmlContent += '<div class="panel-footer">Panel footer</div>';
-            //htmlContent += '</div>';
-
             htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
 
             htmlContent += '<div class="portlet-title">';                                                                   //+2
