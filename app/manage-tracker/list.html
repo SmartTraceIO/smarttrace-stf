@@ -29,7 +29,7 @@
         <div class="table-responsive" ng-if="lastView==1">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th class="text-center" ng-click="Sorting('sn')" colspan="2">
+                    <th class="text-center" ng-click="Sorting('sn')">
                         <span class="pull-left">Tracker Num
                             <i uib-tooltip="The unique 6 digit number of this tracker."
                                tooltip-append-to-body="true"
@@ -153,11 +153,16 @@
                 </tr>
                 <tr ng-repeat="tracker in TrackerList">
                     <td>
-                        <div ng-style="{width:'15px', height:'15px', padding: '0px', 'background-color': tracker.trackerColor.code}"></div>
-                    </td>
-                    <td>
+                        <table>
+                            <tr>
+                                <td style="margin-right: 5px;">
+                                    <div ng-style="{width:'15px', height:'15px', padding: '0px', 'margin-right':'5px', 'background-color': tracker.trackerColor.code}"></div>
+                                </td>
+                                <td>{{tracker.sn}}</td>
+                            </tr>
+                        </table>
                         <!--add color-->
-                        {{tracker.sn}}</td>
+                    </td>
                     <td>{{tracker.name}}</td>
                     <td>
                         <a ng-href="#/manage/edit-autostart-template/{{tracker.autostartTemplateId}}">
