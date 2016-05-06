@@ -1,13 +1,12 @@
 ﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color, $q,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller,
-                                                  localStorageService, NgMap) {
+                                                  localStorageService) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
 
     var VM = this;
     var filter = $filter('filter');
-
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -118,11 +117,18 @@
 
                 //-- bind color to shipment here by get color of device.
                 var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
+                var colorName = null;
                 if (d && (d.length > 0)) {
                     //found a device
-                    VM.ShipmentList[k].color = d[0].color;
+                    colorName = d[0].color;
                 } else {
-                    VM.ShipmentList[k].color = Color[0].name;
+                    colorName = Color[0].name;
+                }
+                var color = filter(Color, {name: colorName}, true);
+                if (color && (color.length > 0)) {
+                    VM.ShipmentList[k].color = color[0];
+                } else {
+                    VM.ShipmentList[k].color = Color[0];
                 }
                 //-- position
                 VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
@@ -137,11 +143,6 @@
             if (VM.map) {
                 VM.updateMap();
             }
-            /*else {
-            //    NgMap.getMap('shipmentMap').then(function(map) {
-            //        VM.updateMap(map);
-            //    });
-            //}*/
         });
     };
     VM.Sorting = function (expression) {
@@ -255,7 +256,7 @@
         VM.AdvanceSearch = !VM.AdvanceSearch;
         localStorageService.set('advancedSearch', VM.AdvanceSearch);
     }
-    var filter = $filter('filter');
+
     VM.updatePolylines = function (shipment, key) {
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
@@ -308,7 +309,7 @@
             var flightPath = new google.maps.Polyline({
                 path: path,
                 geodesic: true,
-                strokeColor: shipment.shipmentColor.code,
+                strokeColor: shipment.color.code,
                 strokeOpacity: 1.0,
                 strokeWeight: 2
             });
@@ -367,20 +368,20 @@
                 labelClass: "labels", // the CSS class for the label
                 labelStyle: {opacity: 1}
             });*/
-            var cl = filter(Color, {name: shipment.color}, true);
-            if (cl && (cl.length > 0)) {
-                VM.ShipmentList[key].shipmentColor = cl[0];
-                shipment.shipmentColor = cl[0];
-            } else {
-                VM.ShipmentList[key].shipmentColor = Color[0];
-                shipment.shipmentColor = Color[0];
-            }
+            //var cl = filter(Color, {name: shipment.color}, true);
+            //if (cl && (cl.length > 0)) {
+            //    VM.ShipmentList[key].shipmentColor = cl[0];
+            //    shipment.shipmentColor = cl[0];
+            //} else {
+            //    VM.ShipmentList[key].shipmentColor = Color[0];
+            //    shipment.shipmentColor = Color[0];
+            //}
 
             var htmlIcon = '';
             htmlIcon += "<table style=''>";
             htmlIcon += "<tr>";
             htmlIcon += "<td>";
-            htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.shipmentColor.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+            htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
             htmlIcon += "</td>";
             htmlIcon += "<td  style='background-color: white'>";
             htmlIcon += "<div>";
@@ -429,7 +430,7 @@
             htmlContent += '<table>';
             htmlContent += '<tr>';
             htmlContent += '<td>';
-            htmlContent += '<div style="width: 15px; height: 15px; background-color: '+shipment.shipmentColor.code+'; margin-right: 5px;"></div>';
+            htmlContent += '<div style="width: 15px; height: 15px; background-color: '+shipment.color.code+'; margin-right: 5px;"></div>';
             htmlContent += '</td>';
             htmlContent += '<td>'
             htmlContent += '<span class="pull-left">Tracker ';

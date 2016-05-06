@@ -275,7 +275,6 @@
             </div>
             <div class="row" ng-if="vm.lastView==1">
                 <div class="col-sm-12">
-                    <br>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <tr>
@@ -430,9 +429,18 @@
                                     </a>
                                 </td>-->
                                 <td class="text-left">
-                                    <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
-                                        <u>{{shipment.deviceSN}} ({{shipment.tripCount}})</u>
-                                    </a>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div ng-style="{width:'15px', height:'15px', padding: '0px', 'margin-right':'5px', 'background-color': shipment.color.code}"></div>
+                                            </td>
+                                            <td>
+                                                <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                                                    <u>{{shipment.deviceSN}} ({{shipment.tripCount}})</u>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td class="text-left">{{shipment.shipmentDescription}}</td>
                                 <td class="text-left">{{shipment.shippedFrom}}</td>
