@@ -197,7 +197,16 @@
             console.log('init-map...');
             $scope.map = new google.maps.Map(document.getElementById('trackerMap'), {
                 center: {lat: -34.397, lng: 150.644},
-                zoom: 8
+                zoom: 8,
+                styles: [
+                    {
+                        featureType:"poi",
+                        elementType: "all",
+                        stylers: [
+                            { visibility: "off" }
+                        ]
+                    }
+                ]
             });
             if ($scope.TrackerList) {
                 //--update map

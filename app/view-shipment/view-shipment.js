@@ -360,7 +360,16 @@
     VM.initMap = function() {
         VM.map = new google.maps.Map(document.getElementById('shipmentMap'), {
             center: {lat: -34.397, lng: 150.644},
-            zoom: 8
+            zoom: 8,
+            styles: [
+                {
+                    featureType:"poi",
+                    elementType: "all",
+                    stylers: [
+                        { visibility: "off" }
+                    ]
+                }
+            ]
         });
         if (VM.ShipmentList) {
             //--update map

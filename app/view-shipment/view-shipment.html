@@ -476,16 +476,29 @@
                             <div class="caption">
                                 {{shipment.shipmentDescription}}
                             </div>
-                            <div class="pull-right" style="margin-top:6px">
+                            <!--<div class="pull-right" style="margin-top:6px">
                                 <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
                                    class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
-                                <!--<a ng-href="#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>-->
-                            </div>
+                                &lt;!&ndash;<a ng-href="#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>&ndash;&gt;
+                            </div>-->
                         </div>
                         <div class="portlet-body" style="position:relative">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h4 class="pull-left">Tracker {{shipment.deviceSN}} ({{shipment.tripCount}})</h4>
+                                    <h4 class="pull-left">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <div ng-style="{width:'15px', height:'15px', padding: '0px', 'margin-right':'5px', 'background-color': shipment.color.code}"></div>
+                                                </td>
+                                                <td>
+                                                    <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                                                    <u>{{shipment.deviceSN}} ({{shipment.tripCount}})</u>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h4>
                                     <h4 class="pull-right">
                                         <img src="theme/img/alertLightOn.png" ng-if="shipment.alertSummary.LightOn" />
                                         <img src="theme/img/alertLightOff.png" ng-if="shipment.alertSummary.LightOff" />
@@ -497,14 +510,16 @@
                                         <img src="theme/img/alertShock.png" ng-if="shipment.alertSummary.MovementStart" />
                                     </h4>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        &nbsp;
-                                    </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    &nbsp;
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-12">
                                     <p class="col-xs-1 text-left no-margin no-padding">
-                                        <!--<i class="fa fa-home fa-2x"></i>-->
                                         <img ng-src="theme/img/locationStart.png">
                                     </p>
                                     <p class="col-xs-10 no-margin no-padding text-center">{{shipment.assetType}} {{shipment.assetNum}} <span ng-if="shipment.assetType != null || shipment.assetNum != null">-</span> {{shipment.status}}</p>
@@ -512,6 +527,8 @@
                                         <img class="rev-horizon" ng-src="theme/img/locationStop.png">
                                     </p>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="clearfix"></div>
                                 <div class="col-sm-12">
                                     <div class="progress" style="max-height:5px">
@@ -520,6 +537,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-xs-6 text-left">
                                     <p class="bold no-margin no-padding">{{shipment.shippedFrom}}</p>
                                     <p class="text-muted no-margin no-padding">{{shipment.shipmentDate| date:'dd MMM yyyy hh:mm a'}}</p>
@@ -530,11 +549,13 @@
                                     <!--<span ng-if="shipment.status != 'Arrived'">ETA</span>-->
                                     <span ng-if="shipment.status == 'Arrived'">ARRIVED AT</span>: {{shipment.actualArrivalDate | date:'dd MMM yyyy hh:mm a'}}</p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        &nbsp;
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    &nbsp;
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="text-center shipment-marker" ng-show="shipment.siblingCount > 0">
                                     {{shipment.siblingCount}} others <i uib-tooltip="Waiting your tooltip text" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                                 </div>
