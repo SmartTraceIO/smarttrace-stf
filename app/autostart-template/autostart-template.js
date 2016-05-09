@@ -46,8 +46,8 @@
     $scope.PageSizeChanged = function () {
         BindAutoShipmentList();
     }
-    $scope.PageChanged = function (page) {
-        $scope.PageIndex = page;
+    $scope.PageChanged = function () {
+        //$scope.PageIndex = page;
         BindAutoShipmentList();
     }
     $scope.Sorting = function (expression) {

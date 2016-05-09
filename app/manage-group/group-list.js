@@ -16,7 +16,12 @@ function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, 
     }
 
     var self = this;
-
+    self.params = {
+        pageSize:"20",
+        pageIndex: 1,
+        so: 'desc',
+        sc: 'name'
+    }
     rootSvc.SetPageTitle('List Tracker Groups');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Tracker Groups");
@@ -29,9 +34,9 @@ function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, 
     self.debug = $log.debug;
 
     self.GetDeviceGroups(
-        function(data){
+        function(data, total){
             self.groupList = data;
-            self.debug('GroupList', self.groupList);
+            self.totalCount = total;
         },
         function(data){}).then(function() {
         var promises = [];
@@ -51,9 +56,7 @@ function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, 
             });
             promises.push(p);
         });
-        self.all(promises).then(function() {
-            self.debug('Get done!')
-        });
+        self.all(promises);
     });
 };
 ListGroupCtrl.prototype.Print = function() {
@@ -62,6 +65,63 @@ ListGroupCtrl.prototype.Print = function() {
 ListGroupCtrl.prototype.PageSizeChanged = function() {
     var self = this;
     //change size of page
+    self.GetDeviceGroups(
+        function(data, total){
+            self.groupList = data;
+            self.totalCount = total;
+        },
+        function(data){}).then(function() {
+        var promises = [];
+        angular.forEach(self.groupList, function(val, key) {
+            //self.groupList[key].deviceList = [];
+            //get device for each group
+            var p = self.WebSvc.getDevicesOfGroup(val.id).success(function(response) {
+                var dl = response.response;
+                if (dl) {
+                    self.groupList[key].deviceList = dl.map(function(val) {
+                        var sn = parseInt(val.sn, 10);
+                        var name = val.name ? val.name.substr(0, 15) : '';
+                        return val.sn+"<"+name+">";
+                    })
+                }
+                //self.groupList[key].deviceList = response.response;
+            });
+            promises.push(p);
+        });
+        self.all(promises);
+    });
+
+}
+ListGroupCtrl.prototype.PageChanged = function() {
+    var self = this;
+    console.log('PageIndex', self.params.pageIndex);
+    //change size of page
+    self.GetDeviceGroups(
+        function(data, total){
+            self.groupList = data;
+            self.totalCount = total;
+        },
+        function(data){}).then(function() {
+        var promises = [];
+        angular.forEach(self.groupList, function(val, key) {
+            //self.groupList[key].deviceList = [];
+            //get device for each group
+            var p = self.WebSvc.getDevicesOfGroup(val.id).success(function(response) {
+                var dl = response.response;
+                if (dl) {
+                    self.groupList[key].deviceList = dl.map(function(val) {
+                        var sn = parseInt(val.sn, 10);
+                        var name = val.name ? val.name.substr(0, 15) : '';
+                        return val.sn+"<"+name+">";
+                    })
+                }
+                //self.groupList[key].deviceList = response.response;
+            });
+            promises.push(p);
+        });
+        self.all(promises);
+    });
+
 }
 ListGroupCtrl.prototype.Sorting = function() {
     var self = this;
@@ -87,11 +147,12 @@ ListGroupCtrl.prototype.confirm = function(group) {
 }
 ListGroupCtrl.prototype.GetDeviceGroups = function (resolve, reject){
     var self = this;
-    return self.WebSvc.getDeviceGroups().then(
+    console.log('Params', self.params);
+    return self.WebSvc.getDeviceGroups(self.params).then(
         function(response){
             var data = response.data;
             if (data.status.code == 0) {
-                resolve(data.response);
+                resolve(data.response, data.totalCount);
             } else {
                 reject(data);
             }

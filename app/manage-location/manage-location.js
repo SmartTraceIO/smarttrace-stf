@@ -34,8 +34,8 @@
         $scope.Sc = "locationName";
         BindLocationList();
     }
-    $scope.PageChanged = function (page) {
-        $scope.PageIndex = page;
+    $scope.PageChanged = function () {
+        //$scope.PageIndex = page;
         BindLocationList();
     }
     $scope.PageSizeChanged = function () {

@@ -215,8 +215,8 @@
                             <ui-select-match placeholder="Select Roles For User">
                                 {{$item}}
                             </ui-select-match>
-                            <ui-select-choices repeat="role in (RoleList | filter: $select.search)">
-                                <div ng-bind="role | highlight: $select.search"></div>
+                            <ui-select-choices repeat="role in RoleList | filter: $select.search">
+                                <div ng-bind-html="role | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
 

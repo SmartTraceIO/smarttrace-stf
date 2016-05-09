@@ -130,9 +130,12 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
             var url = Api.url + 'getDevicesOfGroup/' + localDbSvc.getToken();
             return $http.get(url, config);
         },
-		getDeviceGroups: function(){
+		getDeviceGroups: function(params){
 			var url = Api.url + 'getDeviceGroups/' + localDbSvc.getToken();
-			return $http.get(url);
+			var config = {
+				params: params
+			}
+			return $http.get(url, config);
 		},
 		getGroupsOfDevice: function(deviceImei) {
 			var url = Api.url + 'getGroupsOfDevice/'+ localDbSvc.getToken();

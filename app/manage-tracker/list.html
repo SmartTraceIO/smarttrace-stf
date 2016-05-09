@@ -235,16 +235,22 @@
         <div ng-if="lastView==3">
             <div id="trackerMap" style="height: 600px" ng-init="initMap()"></div>
         </div>
-        <uib-pagination class="pagination-sm"
-                    ng-if="lastView==1"
-                    max-size="5"
-                    on-select-page="PageChanged(page)"
-                    total-items="TrackerList.totalCount"
-                    page="PageIndex"
-                    items-per-page="PageSize"
-                    boundary-links="true"
-                    rotate="false"
-                    first-text="<<" last-text=">>" next-text=">" previous-text="<"/>
+        <!--<uib-pagination class="pagination-sm"-->
+                    <!--ng-if="lastView==1"-->
+                    <!--max-size="5"-->
+                    <!--on-select-page="PageChanged(page)"-->
+                    <!--total-items="TrackerList.totalCount"-->
+                    <!--page="PageIndex"-->
+                    <!--items-per-page="PageSize"-->
+                    <!--boundary-links="true"-->
+                    <!--rotate="false"-->
+                    <!--first-text="<<" last-text=">>" next-text=">" previous-text="<"/>-->
+        <uib-pagination total-items="TrackerList.totalCount"
+                        ng-if="lastView==1"
+                        items-per-page="PageSize"
+                        boundary-links="true"
+                        ng-model="PageIndex" ng-change="PageChanged()"
+                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
