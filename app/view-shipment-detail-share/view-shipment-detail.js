@@ -395,7 +395,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.msgForMap.push(tmp);
         }
         //console.log('msgForMap', $scope.msgForMap);
-        $scope.diagColor = $scope.trackerColor;
+        $scope.diagColor = $scope.trackers[$scope.MI].siblingColor;
         
         if(!$scope.$$phase) {
             $scope.$apply();
