@@ -571,8 +571,12 @@
                 </div>
 
             </div>
-            <uib-pagination ng-hide="vm.viewMap" class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="ShipmentList.totalCount" page="ViewShipment.pageIndex" items-per-page="ViewShipment.pageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
-
+            <uib-pagination ng-hide="vm.viewMap" class="pagination-sm" max-size="5" ng-model="vm.currentPage"
+                            ng-change="PageChanged()" total-items="vm.ShipmentList.totalCount"
+                            items-per-page="ViewShipment.pageSize"
+                            boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<">
+            </uib-pagination>
+            <!--<uib-pagination total-items="VM.ShipmentList.totalCount" items-per-page="ViewShipment.pageSize" ng-model="currentPage" ng-change="PageChanged()"></uib-pagination>-->
         </div>
     </div>
 </div>

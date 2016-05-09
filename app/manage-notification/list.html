@@ -19,15 +19,10 @@
             Show
             <select class="form-control" style="width:auto;display:inline-block"
                     ng-change="PageSizeChanged()" ng-model="PageSize">
-                <option value="20" selected>
-                    20
-                </option>
-                <option value="50">
-                    50
-                </option>
-                <option value="100">
-                    100
-                </option>
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
         </div>
         <div class="pull-right hidden-print">
@@ -98,7 +93,11 @@
                 </tr>
             </table>
         </div>
-        <uib-pagination class="pagination-sm" max-size="5" on-select-page="PageChanged(page)" total-items="NotificationList.totalCount" page="PageIndex" items-per-page="PageSize" boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
+        <uib-pagination total-items="NotificationList.totalCount"
+                        boundary-links="true"
+                        items-per-page="PageSize"
+                        ng-model="PageIndex" ng-change="PageChanged()"
+                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

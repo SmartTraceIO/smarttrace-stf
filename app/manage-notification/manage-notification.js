@@ -15,19 +15,18 @@
     }
 
     var BindNotificationList = function () {
-        webSvc.getNotificationSchedules($scope.pageSize, $scope.pageIndex, $scope.Sc, $scope.So).success(function(data){
-            
+        webSvc.getNotificationSchedules($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.NotificationList = data.response;
                 $scope.NotificationList.totalCount = data.totalCount;
+                console.log($scope.NotificationList.totalCount);
             }
         });
     }
     $scope.Print = function() {
         $window.print();
     }
-    $scope.PageChanged = function (page) {
-        $scope.PageIndex = page;
+    $scope.PageChanged = function () {
         BindNotificationList();
     }
     $scope.PageSizeChanged = function () {

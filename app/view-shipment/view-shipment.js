@@ -223,10 +223,9 @@
     VM.PageSizeChanged = function () {
         BindShipmentList();
     }
-    VM.PageChanged = function (page) {
-        VM.ViewShipment.pageIndex = page;
-        //console.log("PAGE", page);
-        BindShipmentList();
+    VM.PageChanged = function () {
+        //VM.ViewShipment.pageIndex = page;
+        //BindShipmentList();
     }
 
     VM.lastView = localStorageService.get('LastViewShipment');
