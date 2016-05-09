@@ -725,6 +725,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 //update color of tracker here
                 //var promiseTrackers = [];
                 angular.forEach($scope.trackers, function(tracker, k) {
+                    //update color
                     var colorName = filter(deviceList, {sn: tracker.deviceSN}, true);
                     if (colorName && (colorName.length > 0)) {
                         colorName = colorName[0].color;
@@ -737,6 +738,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     }
                     $scope.trackers[k].siblingColor = color.code;
                     $scope.trackers[k].index = k;
+
+                    //-- update deviceSN
+                    if (!isNaN(tracker.deviceSN)) {
+                        $scope.trackers[k].deviceSN = parseInt(tracker.deviceSN, 10);
+                    }
                 })
                 prepareMainHighchartSeries();
                 refreshHighchartSeries();

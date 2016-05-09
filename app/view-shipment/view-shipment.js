@@ -476,7 +476,7 @@
             htmlContent += '<div style="width: 15px; height: 15px; background-color: '+shipment.color.code+'; margin-right: 5px;"></div>';
             htmlContent += '</td>';
             htmlContent += '<td>'
-            htmlContent += '<span class="pull-left">Tracker ';
+            htmlContent += '<span class="pull-left">Shipment ';
             htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
             htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
             htmlContent += '</span>';;

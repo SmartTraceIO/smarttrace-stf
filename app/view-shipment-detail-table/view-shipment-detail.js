@@ -121,21 +121,13 @@
                 toastr.warning("No data recorded yet!", "Empty Track");
                 return;
             }
-            //-------PREPARE HIGHCHART DATA-------
-            // prepareHighchartSeries();
-            //Map start and end location info
-            //$scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
-            //$scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
-            //$scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
-            //$scope.mapInfo.endLocationForMap = $scope.trackers[index].endLocationForMap;
-            //$scope.mapInfo.endLocation = $scope.trackers[index].endLocation;
-            //$scope.mapInfo.etaISO = $scope.trackers[index].etaISO;
-            //$scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
-            //$scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
 
             $scope.trackerInfo = $scope.trackers[index];
-
             console.log('TrackerInfo', $scope.trackerInfo);
+
+            if (!isNaN($scope.trackerInfo.deviceSN)) {
+                $scope.trackerInfo.deviceSN = parseInt($scope.trackerInfo.deviceSN, 10);
+            }
 
             //-- update trackerInfo here
             $scope.trackerInfo.shutdownDeviceAfterMinutesText = parseInt($scope.trackerInfo.shutdownDeviceAfterMinutes/60) + " hr(s) after arrival";

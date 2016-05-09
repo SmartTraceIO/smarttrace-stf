@@ -53,12 +53,12 @@
                 var promises = [];
                 $log.debug('update trackers Maps', $scope.TrackerList);
                 angular.forEach($scope.TrackerList, function(tracker, key) {
-                    var cl = filter(Color, {name: tracker.color}, true);
-                    if (cl && angular.isArray(cl) && cl.length>0) {
-                        $scope.TrackerList[key].trackerColor = cl[0];
-                    } else {
-                        $scope.TrackerList[key].trackerColor = Color[0];
-                    }
+                    //var cl = filter(Color, {name: tracker.color}, true);
+                    //if (cl && angular.isArray(cl) && cl.length>0) {
+                    //    $scope.TrackerList[key].trackerColor = cl[0];
+                    //} else {
+                    //    $scope.TrackerList[key].trackerColor = Color[0];
+                    //}
                     if (tracker.lastShipmentId) {
                         var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
                             if (data.status.code == 0) {
@@ -100,9 +100,14 @@
                 });
                 promises.push(promiseLocation);
                 $q.all(promises).then(function() {
-                    //process to combine location & lastshipment
-                    $log.debug('Location List', $scope.LocationList);
                     angular.forEach($scope.TrackerList, function(t, k) {
+                        var cl = filter(Color, {name: t.color}, true);
+                            if (cl && angular.isArray(cl) && cl.length>0) {
+                                $scope.TrackerList[k].trackerColor = cl[0];
+                            } else {
+                                $scope.TrackerList[k].trackerColor = Color[0];
+                            }
+
                         if (t.lastShipment) {
                             var shippedFromId = t.lastShipment.shippedFrom;
                             var shippedToId = t.lastShipment.shippedTo;
@@ -316,7 +321,7 @@
                     htmlContent += '<div style="width: 15px; height: 15px; background-color: '+tracker.trackerColor.code+'; margin-right: 5px;"></div>';
                     htmlContent += '</td>';
                     htmlContent += '<td>'
-                    htmlContent += '<span class="pull-left">Tracker ';
+                    htmlContent += '<span class="pull-left">Shipment ';
                     htmlContent += '<a href="#/view-shipment-detail?sn='+tracker.sn+'&trip='+tracker.tripCount+'">';
                     htmlContent +=  '<u>' + tracker.sn + ' (' + tracker.tripCount + ')</u></a>';
                     htmlContent += '</span>';
