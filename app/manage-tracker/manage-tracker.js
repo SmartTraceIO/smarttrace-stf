@@ -483,6 +483,7 @@ appCtrls.controller('AddTrackerCtrl',
         });
         $scope.Print = function() {
             $window.print();
+            google.maps.event.trigger($scope.map, 'resize');
         }
         $scope.saveTracker = function() {
             if ($scope.tracker.autoStartShipment) {

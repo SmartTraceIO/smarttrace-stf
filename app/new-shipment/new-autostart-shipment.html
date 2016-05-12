@@ -27,7 +27,8 @@
                         <table width="100%">
                             <tr>
                                 <td width="33%" class="text-center">
-                                    <p>1. Switch on a tracker. This creates a Shipment using the Autostart Template.</p>
+                                    <p>
+                                        <span class="word">1.</span> Switch on a tracker. This creates a Shipment using the Autostart Template.</p>
                                 </td>
                                 <td width="4%">
                                     <div class="wrapper">
@@ -36,16 +37,18 @@
                                     </div>
                                     ​</td>
                                 <td width="63%" style="padding-left: 50px;">
-                                    <p>2. If the tracker is already switched on, choose it below and hit "Create Autostart Shipment".</p>
+                                    <p>
+                                        <span class="word"> 2.</span> If the tracker is already switched on, choose it below and hit "Create Autostart Shipment".
+                                    </p>
                                     <p>This will stop the current shipment and create a new shipment.</p>
-                                    <div>Note. The tracker must already be switched on.</div>
+                                    <p>This creates a Shipment using the Autostart Template.</p>
                                     <form role="form" name="frmAddNewShipment" id="frmAddNewShipment" novalidate class="form-horizontal">
                                         <div class="form-body">
                                             <div class="form-group">
                                                 <div class="col-md-10">
                                                     <label class="control-label">
                                                         <span>Tracker</span>
-                                                        <i uib-tooltip="Choose a device from the list below to create an autostart shipment"
+                                                        <i uib-tooltip="Choose a tracker from the list below to create an autostart shipment"
                                                            tooltip-append-to-body="true"
                                                            tooltip-trigger="mouseenter"
                                                            tooltip-placement="top"
@@ -55,23 +58,41 @@
                                                                theme="bootstrap"
                                                                style="width: 100%"
                                                                title="Choose a tracker">
-                                                        <ui-select-match placeholder="-- Please Select --">{{$select.selected.sn}}</ui-select-match>
+                                                        <ui-select-match placeholder="-- Please Select --">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': $select.selected.color}"></div>
+                                                                    </td>
+                                                                    <td>{{$select.selected.sn}}</td>
+                                                                </tr>
+                                                            </table>
+                                                        </ui-select-match>
                                                         <ui-select-choices repeat="tker in VM.trackers track by $index"
                                                                            refresh="refreshAddresses($select.search)"
                                                                            refresh-delay="0">
-                                                            <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <span ng-bind-html="tker.sn | highlight: $select.search" style="font-weight: 700"></span>
-                                                                    <span>-</span>
-                                                                    <span ng-bind-html="tker.name | highlight: $select.search"></span>
-                                                                    <span ng-if="tker.autostartTemplateName">(AutoStart Template:{{tker.autostartTemplateName}})</span>
-                                                                    <span ng-if="!tker.autostartTemplateName" class="text-danger">(No assigned AutoStart Template)</span>
-                                                                </div>
-                                                            </div>
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': tker.color}"></div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span ng-bind-html="tker.sn | highlight: $select.search" style="font-weight: 600; margin-right: 10px;"></span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span style="margin-right: 10px">-</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span ng-bind-html="tker.name | highlight: $select.search"></span>
+                                                                        <span ng-if="tker.autostartTemplateName">(AutoStart Template:{{tker.autostartTemplateName}})</span>
+                                                                        <span ng-if="!tker.autostartTemplateName" class="text-danger">(No assigned AutoStart Template)</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                     <small ng-if="VM.tracker">
-                                                        <span ng-if="VM.tracker.autostartTemplateId">Using this AutoStart Template: {{VM.tracker.autostartTemplateName}}</span>
+                                                        <span ng-if="VM.tracker.autostartTemplateId">AutoStart Template: {{VM.tracker.autostartTemplateName}}</span>
                                                         <span ng-if="!VM.tracker.autostartTemplateId" class="text-danger">This tracker has no assigned AutoStart Template</span>
                                                     </small>
                                                 </div>

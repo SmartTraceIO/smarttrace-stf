@@ -61,8 +61,7 @@
         BindAlertList();
     }
 
-    $scope.PageChanged = function (page) {
-        $scope.PageIndex = page;
+    $scope.PageChanged = function () {
         BindAlertList();
     }
 

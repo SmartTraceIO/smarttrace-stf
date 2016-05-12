@@ -29,6 +29,11 @@
             $log.debug(data);
             if (data.status.code == 0) {
                 VM.trackers = data.response;
+                angular.forEach(VM.trackers, function(v, k) {
+                   if (!isNaN(v.sn)) {
+                       VM.trackers[k].sn = parseInt(v.sn, 10);
+                   }
+                });
             } else {
                 toastr.warning('Warngin. An error has occurred while trying to get list of trackers');
             }
@@ -50,6 +55,9 @@
         } else {
             toastr.warning('Warning. An error has occurred while create a new autostart shipment.');
         }
+    }
+    VM.ResetForm = function() {
+        VM.tracker = null;
     }
 });
 

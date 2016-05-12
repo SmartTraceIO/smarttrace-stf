@@ -693,7 +693,7 @@ h3 span.info {
     top: 0;
     bottom: 0;
     width: 1px;
-    background: #ccc;
+    background: #5BCA45;
     z-index: 1;
 }
 
@@ -709,11 +709,11 @@ h3 span.info {
 }
 
 .word {
-    color: #ccc;
+    color: #5BCA45;
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 3px;
-    font: bold 12px arial,sans-serif;
+    font: bold 16px arial,sans-serif;
     background: #fff;
 }
 
