@@ -97,6 +97,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     refreshTimer = $timeout(refreshData, 300000);
     $scope.$on("$destroy", function(event){
         $timeout.cancel(refreshTimer);
+        if(trackerRoute != null){
+            trackerRoute.setMap(null);
+            trackerRoute = null;
+        }
     });
     //------Reload data every 10 min END-------
 
