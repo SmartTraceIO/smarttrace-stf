@@ -161,12 +161,6 @@ p.no-padding {
     }
 }
 
-@media print {
-    img {
-        max-width: none!important;
-    }
-}
-
 .page-content-wrapper .page-content {
     padding-top: 1px !important;
     width: 100%;

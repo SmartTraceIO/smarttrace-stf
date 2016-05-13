@@ -164,7 +164,7 @@ appConstants.constant('routes', [
         name: 'viewshipmentdetailshare',
         config: {
             url: "/view-shipment-detail?sn&trip",
-            reloadOnSearch: false,
+            reloadOnSearch: true,
             views: {
                 "content": {
                     templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html?v="+ version,

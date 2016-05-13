@@ -26,7 +26,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     var orderBy = $filter('orderBy');
 
-    $scope.AuthToken = localDbSvc.getToken();
+    //$scope.AuthToken = localDbSvc.getToken();
     //$scope.ShipmentId = $stateParams.vsId;
     if ($stateParams.vsId) {
         $scope.ShipmentId = $stateParams.vsId;
@@ -102,17 +102,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             trackerRoute = null;
         }
     });
-    //------Reload data every 10 min END-------
-
-    //$scope.$on('mapInitialized', function(event, m) {
-    //    $scope.map = m;
-    //    if(bounds != null){
-    //        $scope.map.fitBounds(bounds);
-    //    }
-    //    /*if(trackerRoute != null){
-    //        trackerRoute.setMap($scope.map);
-    //    }*/
-    //});
 
     $scope.Print = function(){
         setTimeout(print, 100);
@@ -382,9 +371,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         // console.log($scope.trackerMsg.length);
     }
 
-    $scope.showPathInfo = function(){
-        // console.log(this);
-    }
     $scope.showAlertsUI = function(){
         //console.log("UI", this.data);
         $scope.markerData = this.data;
@@ -574,6 +560,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     loadTrackerData();
     function loadTrackerData() {
+        console.log('start load tracker data');
         var params = null;
         if ($scope.ShipmentId) {
             params = {

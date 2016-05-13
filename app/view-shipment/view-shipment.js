@@ -39,8 +39,8 @@
         shipmentDescription:null,
         pageIndex: 1,
         pageSize: "20",
-        sc: 'shipmentId',
-        so: 'desc'
+        sortColumn: 'shipmentId',
+        sortOrder: 'desc'
     };
     VM.sc = 'shipmentId1';
 
@@ -225,7 +225,7 @@
     }
     VM.PageChanged = function () {
         //VM.ViewShipment.pageIndex = page;
-        //BindShipmentList();
+        BindShipmentList();
     }
 
     VM.lastView = localStorageService.get('LastViewShipment');
@@ -423,7 +423,14 @@
             htmlIcon += "<table style=''>";
             htmlIcon += "<tr>";
             htmlIcon += "<td>";
-            htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+            var status = shipment.status ? shipment.status.toLowerCase() : '';
+            if (status == 'default' || status == 'in progress') {
+                htmlIcon += "<div style='color: "+shipment.color.code+"'>";
+                htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
+                htmlIcon += "</div>"
+            } else {
+                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+            }
             htmlIcon += "</td>";
             htmlIcon += "<td  style='background-color: white'>";
             htmlIcon += "<div>";

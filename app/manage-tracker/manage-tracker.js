@@ -273,7 +273,15 @@
                     htmlIcon += "<table style=''>";
                     htmlIcon += "<tr>";
                     htmlIcon += "<td>";
-                    htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:" + tracker.trackerColor.code/*Color[key].code*/ + "; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+                    var status = tracker.shipmentStatus ? tracker.shipmentStatus.toLowerCase() : '';
+                    if (status == 'default' || status == 'in progress') {
+                        //htmlIcon += "<img src='theme/img/tinyInterimLocation.png'>"
+                        htmlIcon += "<div style='color: "+tracker.color+"'>";
+                        htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
+                        htmlIcon += "</div>"
+                    } else {
+                        htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:" + tracker.trackerColor.code/*Color[key].code*/ + "; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+                    }
                     htmlIcon += "</td>";
                     htmlIcon += "<td  style='background-color: white'>";
                     htmlIcon += "<div>";
@@ -295,6 +303,7 @@
                     htmlIcon += "</td>";
                     htmlIcon += "</tr>";
                     htmlIcon += "</table>";
+
 
                     var marker = new RichMarker({
                         position: llng,
