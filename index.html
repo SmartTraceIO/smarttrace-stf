@@ -41,13 +41,11 @@
     <link href="theme/assets/layouts/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color" />
     <link href="theme/site.css?version=3.2" rel="stylesheet" />
     <link rel="shortcut icon" href="favicon.png" />
-    <!--<link href="theme/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" />-->
-    <!--<link href="theme/assets/global/plugins/angularjs/plugins/ui-select/select.min.css" rel="stylesheet" />-->
     <link href="Scripts/select2/select2.css" rel="stylesheet" />
-    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.css" rel="stylesheet" />-->
     <link href="theme/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" />
     <link href="Scripts/tipsy/tipsy.css" rel="stylesheet" />
 </head>
+
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width" ng-controller="reloadCtrl">
     <div class="page-container">
         <div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green">
@@ -59,8 +57,8 @@
                 </div>
                 <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
                     <ul class="nav navbar-nav">
-                        <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'New Shipment'}">
-                            <a href="javascript:void(0)" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <li class="classic-menu-dropdown"  ng-class="{'active':ActiveMenu == 'New Shipment'}">
+                            <a href="#" ng-click="$event.preventDefault();" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 New Shipment<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -74,12 +72,6 @@
                                 <span class="selected"> </span>
                             </a>
                         </li>
-                        <!-- <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Report'}">
-                            <a href="javascript:void(0)">
-                                Report
-                                <span class="selected"> </span>
-                            </a>
-                        </li> -->
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'Trackers'}">
                             <a href="#/tracker">
                                 Trackers
@@ -181,16 +173,16 @@
             </div>
         </div>
         <div class="page-content-wrapper">
-            <div class="page-sidebar navbar-collapse collapse"> <!-- ng-controller="reloadCtrl">-->
+            <div class="page-sidebar navbar-collapse collapse">
                 <div class="page-sidebar-wrapper">
                     <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed">
                         <li class="nav-item">
-                            <a href="#" id="new-shipment" class="nav-link nav-toggle">
+                            <a href="#" id="new-shipment" ng-click="$event.preventDefault();" class="nav-link nav-toggle">
                                 <i class="icon-home"></i>
                                 <span class="title nav-toggler">New Shipment</span>
                                 <span class="arrow"></span>
                             </a>
-                            <ul class="sub-menu">
+                            <ul class="sub-menu" id="sub-new-shipment">
                                 <li class="nav-item"><a href="#/new-shipment" class="nav-link"><span class="title">Manual Shipment</span></a></li>
                                 <li class="nav-item"><a href="#/new-autostart-shipment" class="nav-link"><span class="title">AutoStart Shipment</span></a></li>
                             </ul>
@@ -202,12 +194,6 @@
                                 <span class="title">View Shipments</span>
                             </a>
                         </li>
-                        <!-- <li class="nav-item ">
-                            <a href="javascript:void(0)" class="nav-link">
-                                <i class="icon-home"></i>
-                                <span class="title">Report</span>
-                            </a>
-                        </li> -->
                         <li class="nav-item ">
                             <a href="#/tracker" class="nav-link">
                                 <i class="icon-home"></i>
@@ -215,12 +201,12 @@
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a href="#" id="setup" class="nav-link nav-toggle">
+                            <a href="#" id="setup" class="nav-link nav-toggle" ng-click="$event.preventDefault();">
                                 <i class="icon-home"></i>
                                 <span class="title nav-toggle">Setup</span>
                                 <span class="arrow"></span>
                             </a>
-                            <ul class="sub-menu">
+                            <ul class="sub-menu" id="sub-setup">
                                 <li class="nav-item  ">
                                     <a href="#/manage/alert" class="nav-link">
                                         <span class="title">Alert Profiles</span>
@@ -334,18 +320,29 @@
     <script src="app/reload-controller.js?v=22"></script>
     <script>
         $("#setup").on("click", function () {
-
-            if ($("#setup").hasClass("open") || $("#setup span.arrow").hasClass("opne")) {
+            if ($("#setup").hasClass("open") || $("#setup span.arrow").hasClass("open")) {
                 $("#setup").removeClass("open");
-                $("#setup span.arrow").removeClass("opne");
-                $("ul.sub-menu").attr("style", "display:none;");
+                $("#setup span.arrow").removeClass("open");
+                $("#sub-setup").attr("style", "display:none;");
                 return;
             }
 
             $("#setup").addClass("open");
-            $("#setup span.arrow").addClass("opne");
-            $("ul.sub-menu").attr("style", "display:block;");
-        })
+            $("#setup span.arrow").addClass("open");
+            $("#sub-setup").attr("style", "display:block;");
+        });
+        $("#new-shipment").on("click", function() {
+            if ($("#new-shipment").hasClass("open") || $("#new-shipment span.arrow").hasClass("open")) {
+                $("#new-shipment").removeClass("open");
+                $("#new-shipment span.arrow").removeClass("open");
+                $("#sub-new-shipment").attr("style", "display:none;");
+                return;
+            }
+
+            $("#new-shipment").addClass("open");
+            $("#new-shipment span.arrow").addClass("open");
+            $("#sub-new-shipment").attr("style", "display:block;");
+        });
     </script>
 </body>
 </html>

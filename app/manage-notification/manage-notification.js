@@ -211,6 +211,7 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
         }
     }
     $scope.AddPerson = function () {
+        var idx = $scope.Noti.schedules.length;
         $scope.Noti.schedules.push({
             userId: "",
             sendEmail: true,
@@ -222,7 +223,8 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
             afterHours: false,
             bizHours: true,
             allHours: false,
-            selection: "all"
+            selection: "all",
+            index: idx
         })
     }
     $scope.AddPerson();
@@ -302,6 +304,12 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
         }
     }
     $scope.SelectHour = function (filter, $event, person, index) {
+
+        console.log("filter", filter);
+        console.log("$event", $event);
+        console.log("person", person);
+        console.log("index", index);
+
         var name = "valToTime" + index;
         if ($scope.frmGenAddEditNoti)
             $scope.frmGenAddEditNoti[name].$setValidity("toTime", true);
@@ -332,6 +340,7 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
     }
 
     $scope.AddPerson = function () {
+        var idx = $scope.Noti.schedules.length;
         $scope.Noti.schedules.push({
             userId: "",
             sendEmail: true,
@@ -342,7 +351,8 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
             weekDays: [true, true, true, true, true, true, true],
             afterHours: false,
             bizHours: true,
-            allHours: false
+            allHours: false,
+            index: idx
         })
     }
     $scope.SaveNoti = function (isValid, closeModalPopup) {
@@ -426,7 +436,8 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
                         weekDays: [true, true, true, true, true, true, true],
                         afterHours: false,
                         bizHours: true,
-                        allHours: false
+                        allHours: false,
+                        index: 1
                     })
                 }
                 else {
@@ -456,6 +467,9 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
                         else if (val.weekDays[0] && val.weekDays[1] && val.weekDays[2] && val.weekDays[3] && val.weekDays[4] && !val.weekDays[5] && !val.weekDays[6]) {
                             val["selection"] = "wd"
                         }
+
+                        //-- update index
+                        val.index = key;
                     })
                 }
 
