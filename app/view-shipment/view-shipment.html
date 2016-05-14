@@ -249,7 +249,7 @@
                         </select>
                     </div>
 
-                    <div class="pull-right">
+                    <div class="pull-right" ng-show="vm.lastView==2">
                         <span>Sort By:</span>
                         <select class="form-control" style="width:auto;display:inline-block"
                                 ng-change="vm.SortOptionChanged()" ng-model="sc">
@@ -571,11 +571,12 @@
                 </div>
 
             </div>
-            <uib-pagination ng-hide="vm.viewMap" class="pagination-sm" max-size="5" ng-model="vm.currentPage"
-                            ng-change="PageChanged()" total-items="vm.ShipmentList.totalCount"
+            <uib-pagination ng-hide="vm.viewMap" ng-model="vm.ViewShipment.pageIndex"
+                            ng-change="vm.PageChanged()" total-items="vm.ShipmentList.totalCount"
                             items-per-page="vm.ViewShipment.pageSize"
                             boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<">
             </uib-pagination>
+
             <!--<uib-pagination total-items="VM.ShipmentList.totalCount" items-per-page="ViewShipment.pageSize" ng-model="currentPage" ng-change="PageChanged()"></uib-pagination>-->
         </div>
     </div>

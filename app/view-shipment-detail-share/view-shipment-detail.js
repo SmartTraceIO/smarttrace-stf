@@ -35,12 +35,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.trip = $stateParams.trip;
     }
 
-    var plotLines = new Array();
-    $scope.specialMarkers = new Array();
-    $scope.normalMarkers = new Array();
+    var plotLines = [];
+    $scope.specialMarkers = [];
+    $scope.normalMarkers = [];
     $scope.previousActiveMarker = -1;
     //includes all tracker info here
-    $scope.trackers = new Array();
+    $scope.trackers = [];
     var trackerRoute = null;
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
@@ -290,7 +290,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     function updatePlotLines(){
-        plotLines.length = 0;
+        //--reset plotline
+        //plotLines.length = 0;
+        //plotLines.splice(0, plotLines.length);// = 0;
+        plotLines = [];
         $log.debug('SubSeries', subSeries);
         $log.debug('Tracker.MI', $scope.trackers[$scope.MI]);
         $log.debug('MI', $scope.MI);

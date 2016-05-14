@@ -39,10 +39,10 @@
         shipmentDescription:null,
         pageIndex: 1,
         pageSize: "20",
-        sortColumn: 'shipmentId',
-        sortOrder: 'desc'
+        sc: 'lastReadingTimeISO',
+        so: 'desc'
     };
-    VM.sc = 'shipmentId1';
+    VM.sc = 'lastReadingTimeISO';
 
     //VM.vm = this;
 
@@ -164,11 +164,11 @@
             shippedTo: [],
             status: null,
             pageIndex: 1,
-            PageSize: "20",
+            pageSize: "20",
             so: 'desc',
-            sc: 'shipmentDate'
+            sc: 'lastReadingTimeISO'
         };
-        VM.sc = "shipmentDate1";
+        VM.sc = "lastReadingTimeISO";
 
         BindShipmentList();
     }
@@ -224,7 +224,7 @@
         BindShipmentList();
     }
     VM.PageChanged = function () {
-        //VM.ViewShipment.pageIndex = page;
+        console.log('Page-changed');
         BindShipmentList();
     }
 
@@ -423,14 +423,14 @@
             htmlIcon += "<table style=''>";
             htmlIcon += "<tr>";
             htmlIcon += "<td>";
-            var status = shipment.status ? shipment.status.toLowerCase() : '';
-            if (status == 'default' || status == 'in progress') {
-                htmlIcon += "<div style='color: "+shipment.color.code+"'>";
-                htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
-                htmlIcon += "</div>"
-            } else {
-                htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-            }
+            //var status = shipment.status ? shipment.status.toLowerCase() : '';
+            //if (status == 'default' || status == 'in progress') {
+            //    htmlIcon += "<div style='color: "+shipment.color.code+"'>";
+            //    htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
+            //    htmlIcon += "</div>"
+            //} else {
+            htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+            //}
             htmlIcon += "</td>";
             htmlIcon += "<td  style='background-color: white'>";
             htmlIcon += "<div>";
