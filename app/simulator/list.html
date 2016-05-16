@@ -1,4 +1,4 @@
-<div class="portlet box green">
+<div class="portlet box green" ng-hide="!isSmartTraceAdmin">
     <div class="portlet-title">
         <div class="caption">
             <img src="theme/img/headerTrackerGroup.png" />
@@ -14,20 +14,6 @@
     <div class="portlet-body">
         <div class="row">
             <div class="col-sm-7">
-                <!--<div class="pull-left">
-                    <span>Show</span>
-                    <select class="form-control" style="width:auto;display:inline-block"
-                            ng-change="VM.PageSizeChanged()" ng-model="VM.pageSize">
-                        <option value="10">10</option>
-                        <option value="20" selected>20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>-->
-                <!--<div class="clearfix"></div>
-                <br />
-                <hr />
-                <div class="clearfix"></div>-->
                 <div class="table-responsive">
 
                     <table class="table">

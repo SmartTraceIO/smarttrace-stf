@@ -9,22 +9,20 @@ function ListSimulatorCtrl ($rootScope, $state, $log, webSvc, localDbSvc, $timeo
     self.simulatorList = [];
     self.userList = [];
     {
-        this.rootScope  = $rootScope;
-        this.state      = $state;
-        this.log        = $log;
-        this.webSvc     = webSvc;
-        this.localDbSvc = localDbSvc;
-        this.timeout    = $timeout;
-        this.interval   = $interval;
-        $controller('BaseCtrl', {VM:this});
+        self.rootScope  = $rootScope;
+        self.state      = $state;
+        self.log        = $log;
+        self.webSvc     = webSvc;
+        self.localDbSvc = localDbSvc;
+        self.timeout    = $timeout;
+        self.interval   = $interval;
+        $controller('BaseCtrl', {VM:self});
     }
 
 
     var ps = [];
     function pall() {
-        if (!self.rootScope.isSmartTraceAdmin) return;
         self.simulatorList.length = 0;
-
         self.webSvc.getUsers(10000, 1, '', '').success(function(data) {
             if (data.status.code == 0) {
                 self.userList = data.response;
