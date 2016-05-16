@@ -65,7 +65,7 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', 'localStorageService', 
     }
 
     this.setUserProfile = function(userProfile) {
-        localStorageService.set("profile", JSON.stringify(userProfile));
+        return localStorageService.set("profile", JSON.stringify(userProfile));
     }
     this.getUserProfile = function() {
         var user = null;

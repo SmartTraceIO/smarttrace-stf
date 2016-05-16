@@ -10,6 +10,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
     var log         = VM.log;
     var timeout     = VM.timeout;
     var interval    = VM.interval;
+    rootScope.isSmartTraceAdmin = false;
 
     //log.debug('Starting base controller ...');
     if (localDbSvc.getToken() == '_') {
@@ -57,12 +58,19 @@ appCtrls.controller('BaseCtrl', function(VM) {
     VM.reloadUserIfNeed = function() {
         //log.debug('reload user if needed!');
         var token = localDbSvc.getToken();
-        if (rootScope.AuthToken != token) {
+        if ((rootScope.AuthToken != token) || (!rootScope.isSmartTraceAdmin)) {
             rootScope.AuthToken = token;
             //--update user data
             webSvc.getUser({}, true).success(function (data) {
                 if(data.status.code == 0){
                     rootScope.User = data.response;
+
+                    if (rootScope.User.roles.indexOf('SmartTraceAdmin') >= 0) {
+                        rootScope.isSmartTraceAdmin = true;
+                    } else {
+                        rootScope.isSmartTraceAdmin = false;
+                    }
+
                     localDbSvc.set('InternalCompany', data.response.internalCompany);
                     localDbSvc.setDegreeUnits(data.response.temperatureUnits);
                     interval(function() {

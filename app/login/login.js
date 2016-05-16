@@ -54,6 +54,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
                 localDbSvc.setUserTimezone(data.response.timeZone);
                 localDbSvc.set('InternalCompany', data.response.internalCompany);
                 localDbSvc.setUserProfile(data.response);
+
             }
         });
         var promise2 = webSvc.getUserTime({}, {noCancelOnRouteChange:true}).success( function (timeData) {
@@ -74,5 +75,4 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
             $location.url(url);
         });
     }
-
 });

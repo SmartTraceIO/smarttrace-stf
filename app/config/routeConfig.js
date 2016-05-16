@@ -588,7 +588,22 @@ appConstants.constant('routes', [
               'app/autostart-template/autostart-template.js?v=' + version,
               'app/global/filters/filters.js?v=' + version
           ]
-      }
+      },
+    {
+        name: 'manage.simulator',
+        config: {
+            url: '/simulator',
+            'views': {
+                'sub-content': {
+                    templateUrl: 'app/simulator/list.html?v='+version,
+                    controller: 'ListSimulatorCtrl as VM'
+                }
+            }
+        },
+        dependencies: [
+            'app/simulator/manage-simulator.js?v=' + version
+        ]
+    }
 ]);
 
 //#endregion Register Routes Here

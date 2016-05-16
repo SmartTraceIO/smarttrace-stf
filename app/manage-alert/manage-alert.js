@@ -217,11 +217,20 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
             angular.forEach($scope.coldAlerts, function (val, key) {
+                //convert F to C and save
+                if ($scope.TempType == 'F') {
+                    val.temperature = F2C(val.temperature);
+                }
                 $scope.Alert.temperatureIssues.push(val);
             });
             angular.forEach($scope.hotAlerts, function (val, key) {
+                if ($scope.TempType == 'F') {
+                    val.temperature = F2C(val.temperature);
+                }
                 $scope.Alert.temperatureIssues.push(val);
             });
+
+            console.log('Alert', $scope.Alert);
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code==0) {
@@ -371,9 +380,15 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
             angular.forEach($scope.coldAlerts, function (val, key) {
+                if ($scope.TempType == 'F') {
+                    val.temperature = F2C(val.temperature);
+                }
                 $scope.Alert.temperatureIssues.push(val);
             });
             angular.forEach($scope.hotAlerts, function (val, key) {
+                if ($scope.TempType == 'F') {
+                    val.temperature = F2C(val.temperature);
+                }
                 $scope.Alert.temperatureIssues.push(val);
             });
 
@@ -396,3 +411,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
         }
     }
 });
+
+function F2C(fah) {
+    return (fah - 32) * (5/9);
+}
