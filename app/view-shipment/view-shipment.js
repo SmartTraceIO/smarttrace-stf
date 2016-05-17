@@ -96,7 +96,6 @@
         });
 
         var shipmentsPromise = webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
-
             if (data.status.code == 0) {
                 VM.ShipmentList = data.response;
                 $log.debug('ShipmentList', VM.ShipmentList);
@@ -360,6 +359,7 @@
         VM.map = new google.maps.Map(document.getElementById('shipmentMap'), {
             center: {lat: -34.397, lng: 150.644},
             zoom: 8,
+            mapTypeControl: false,
             styles: [
                 {
                     featureType:"poi",
@@ -463,23 +463,16 @@
              });
 
             var htmlContent = '';
-            htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+            htmlContent += '<div class="portlet box" style="border: 1px solid; border-color: '+shipment.color.code+'">';  //+1
 
-            htmlContent += '<div class="portlet-title">';                                                                   //+2
-            htmlContent += '<div class="caption">'+shipment.shipmentDescription+'</div>';                                   //+3 -3
-            htmlContent += '</div>';                                                                                        //-2
-
-            htmlContent += '<div class="portlet-body" style="padding-bottom: 0px!important;">'; //+5
-            htmlContent += '<div class="row" style="height: 25px;">';                                                                                               //+6
-            htmlContent += '<div class="col-xs-12">';                                                                                               //+6
-            htmlContent += '<table width="100%" style="font-size: 13px;">';
+            htmlContent += '<div style="padding-left: 15px; padding-right: 15px; padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: '+ shipment.color.code +'">';                                                                   //+2
+            htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
             htmlContent += '<tr>';
             htmlContent += '<td>';
-
             htmlContent += '<table>';
             htmlContent += '<tr>';
             htmlContent += '<td>';
-            htmlContent += '<div style="width: 15px; height: 15px; background-color: '+shipment.color.code+'; margin-right: 5px;"></div>';
+            htmlContent += '<div style="width: 15px; height: 15px; background-color: #ffffff; margin-right: 5px;"></div>';
             htmlContent += '</td>';
             htmlContent += '<td>'
             htmlContent += '<span class="pull-left">Shipment ';
@@ -491,16 +484,7 @@
             htmlContent += '</table>';
 
             htmlContent += '</td>';
-            htmlContent += '<td>';
 
-            if (shipment.siblingCount > 0) {
-                htmlContent += '<span class="pull-left">';
-                htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += shipment.siblingCount + ' others';
-                htmlContent += '</span>';
-            }
-
-            htmlContent += '</td>';
             htmlContent += '<td>';
             htmlContent += '<span class="pull-right">';
             if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
@@ -515,52 +499,84 @@
             htmlContent += '</td>';
             htmlContent += '</tr>';
             htmlContent += '</table>';
-            htmlContent += '</div>'; //-- class col-sm-12                                                                                 //-6
-            htmlContent += '</div>'; //-- class row// -6
+            htmlContent += '</div>';                                                                                        //-2
 
-            var assetTypeAndNum = '';
-            assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
-            assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
-            assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-            htmlContent += '<div class="row" style="margin-top: 15px; height: 24px;">'; //row2                                                                              //+7
-            htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
-            htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
-            htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
-            htmlContent += '</div>'; //-- row2                                                                                      //-7
-
-            htmlContent += '<div class="row" style="height: 5px;">'; //--row3                                                                            //+9
-            htmlContent += '<div class="col-xs-12">'                                                                                //+10
-            htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
-            htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
-            htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
-            htmlContent += '</div>';                                                                                                //-12
-            htmlContent += '</div>';                                                                                                //-11
-            htmlContent += '</div>';                                                                                                //-10
-            htmlContent += '</div>';                                                                                                //-9
-
-            htmlContent += '<div class="row" style="font-size: 12px; height: 34px">'; // row4
-            htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
+            htmlContent += '<div class="portlet-body" style="padding-bottom: 0px!important;">'; //+5
+            htmlContent += '<table>';
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<img src="theme/img/locationStart.png">';
+            htmlContent += '</td>';
+            htmlContent += '<td>';
             if (shipment.shippedFrom) {
-                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedFrom+'</p>';
+                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
             } else {
                 htmlContent += '<p class="bold no-margin no-padding">Default</p>';
             }
             if (shipment.shipmentDate) {
                 htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
+            } else {
+                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.firstReadingTime+'</p>';
             }
-            htmlContent += '</div>';                                                                                                //-14
+            htmlContent += '</td>';
+            htmlContent += '<td>';
 
-            htmlContent += '<div class="col-xs-6 text-right" style="height: 34px;">';                                                                     //+15
-            if (shipment.shippedTo) {
-                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
+            if (shipment.siblingCount > 0) {
+                htmlContent += '<span class="pull-left">';
+                htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                htmlContent += shipment.siblingCount + ' others';
+                htmlContent += '</span>';
             }
-            if (shipment.status == 'Arrived') {
-                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">';
-                htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
-            }
-            htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
-            htmlContent += '</div>'; // row3 end                                                                                    //-13
-            htmlContent += '<!--row4-->';
+
+            htmlContent += '</td>';
+            htmlContent += '</tr>';
+            htmlContent += '<tr>';
+
+            htmlContent += '</tr>';
+            htmlContent += '</table>';
+            var assetTypeAndNum = '';
+            assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
+            assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
+            assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+            //htmlContent += '<div class="row" style="margin-top: 15px; height: 24px;">'; //row2                                                                              //+7
+            //htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
+            //htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
+            //htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
+            //htmlContent += '</div>'; //-- row2                                                                                      //-7
+
+            //htmlContent += '<div class="row" style="height: 5px;">'; //--row3                                                                            //+9
+            //htmlContent += '<div class="col-xs-12">'                                                                                //+10
+            //htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
+            //htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
+            //htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
+            //htmlContent += '</div>';                                                                                                //-12
+            //htmlContent += '</div>';                                                                                                //-11
+            //htmlContent += '</div>';                                                                                                //-10
+            //htmlContent += '</div>';                                                                                                //-9
+
+            //htmlContent += '<div class="row" style="font-size: 12px; height: 34px">'; // row4
+            //htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
+            //if (shipment.shippedFrom) {
+            //    htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedFrom+'</p>';
+            //} else {
+            //    htmlContent += '<p class="bold no-margin no-padding">Default</p>';
+            //}
+            //if (shipment.shipmentDate) {
+            //    htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
+            //}
+            //htmlContent += '</div>';                                                                                                //-14
+            //
+            //htmlContent += '<div class="col-xs-6 text-right" style="height: 34px;">';                                                                     //+15
+            //if (shipment.shippedTo) {
+            //    htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
+            //}
+            //if (shipment.status == 'Arrived') {
+            //    htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">';
+            //    htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+            //}
+            //htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
+            //htmlContent += '</div>'; // row3 end                                                                                    //-13
+            //htmlContent += '<!--row4-->';
 
             /*//row5*/
             var temperature = shipment.lastReadingTemperature;
@@ -575,19 +591,23 @@
                 lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
             }
 
-            if (temperature || lastReading) {
-                htmlContent += '<div class="row">';
-                htmlContent += '<div class="col-xs-12 text-center">';
-                htmlContent += '<span class="sh-last" style="padding-bottom: 3px!important; padding-top: 5px;">'
-                htmlContent += ('Last Reading ' + temperature + ' at ' + lastReading);
-                htmlContent += '</span>'
-                htmlContent += '</div>'
-                htmlContent += '</div>'
-            }
+            //if (temperature || lastReading) {
+            //    htmlContent += '<div class="row">';
+            //    htmlContent += '<div class="col-xs-12 text-center">';
+            //    htmlContent += '<span class="sh-last" style="padding-bottom: 3px!important; padding-top: 5px;">'
+            //    htmlContent += ('Last Reading ' + temperature + ' at ' + lastReading);
+            //    htmlContent += '</span>'
+            //    htmlContent += '</div>'
+            //    htmlContent += '</div>'
+            //}
             htmlContent += '</div>'; //-- portlet-body                                                                       //-5
             htmlContent += '</div>';
 
-            var infowindow = new InfoBubble({
+            //-- control
+            var controlInfo = document.createElement('div');
+            controlInfo.innerHTML = htmlContent;
+
+            /*var infowindow = new InfoBubble({
                 content: htmlContent,
                 shadowStyle: 3,
                 padding: 0,
@@ -609,8 +629,8 @@
                     VM.polyObject.home.setMap(null);
                     VM.polyObject.dest.setMap(null);
                 }
-            })
-            marker.addListener('click', function() {
+            })*/
+            /*marker.addListener('click', function() {
                 if (infowindow.isOpen()) {
                     infowindow.close();
                     if (VM.polyObject) {
@@ -628,13 +648,29 @@
                     }
                     VM.polyObject = VM.updatePolylines(shipment, key);
                 }
+            });*/
+            marker.addListener('click', function() {
+                console.log('Length', VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length);
+                if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+                    var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+                    if (!pContent.childNodes[0].isEqualNode(controlInfo.childNodes[0])) {
+                        VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
+                    }
+                } else {
+                    VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
+                }
             });
             VM.dynMarkers.push(marker);
-            VM.map.addListener('click', function() {
+            //VM.map.addListener('click', function() {
+            //    if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+            //        VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+            //    }
+            //});
+            /*VM.map.addListener('click', function() {
                 if (infowindow.isOpen) {
                     infowindow.close();
                 }
-            });
+            });*/
             bounds.extend(llng);
         });
 
