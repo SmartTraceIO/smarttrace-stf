@@ -501,8 +501,8 @@
             htmlContent += '</table>';
             htmlContent += '</div>';                                                                                        //-2
 
-            htmlContent += '<div class="portlet-body" style="padding-bottom: 0px!important;">'; //+5
-            htmlContent += '<table>';
+            htmlContent += '<div class="portlet-body" style="padding: 5px!important;">'; //+5
+            htmlContent += '<table style="text-align: left;">';
             htmlContent += '<tr>';
             htmlContent += '<td>';
             htmlContent += '<img src="theme/img/locationStart.png">';
@@ -530,55 +530,49 @@
 
             htmlContent += '</td>';
             htmlContent += '</tr>';
-            htmlContent += '<tr>';
 
+            //--end
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+            htmlContent += '</td>';
+            htmlContent += '<td>';
+            if (shipment.shippedTo) {
+                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
+            } else {
+                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">To be determined</p>';
+            }
+            if (shipment.status == 'Arrived') {
+                htmlContent += '<p class="text-muted no-margin no-padding">';
+                htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+            } else if (shipment.status == 'Ended'){
+                htmlContent += '<p class="text-muted no-margin no-padding">';
+                htmlContent += '<span>ENDED AT</span>: '+shipment.lastReadingTime+'</p>';
+            }
+            htmlContent += '</td>';
             htmlContent += '</tr>';
             htmlContent += '</table>';
-            var assetTypeAndNum = '';
-            assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
-            assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
-            assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
-            //htmlContent += '<div class="row" style="margin-top: 15px; height: 24px;">'; //row2                                                                              //+7
-            //htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
-            //htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">' + assetTypeAndNum + shipment.status +'</div>';
-            //htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
-            //htmlContent += '</div>'; //-- row2                                                                                      //-7
+            htmlContent += '</div>';
+            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+shipment.color.code+'">'; //+5
+            htmlContent += '<table style="text-align: left;">';
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Desc:</span>';
+            htmlContent += '</td>';
+            htmlContent += '<td>';
+            htmlContent += '<span>'+shipment.shipmentDescription+'</span>'
+            htmlContent += '</td>';
+            htmlContent += '</tr>';
 
-            //htmlContent += '<div class="row" style="height: 5px;">'; //--row3                                                                            //+9
-            //htmlContent += '<div class="col-xs-12">'                                                                                //+10
-            //htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
-            //htmlContent += '<div style="width:' +(shipment.percentageComplete + 1) * 100 / 101 +'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+ shipment.percentageComplete +'" role="progressbar" class="progress-bar progress-bar-info">'; //+12
-            //htmlContent += '<span class="sr-only">' + shipment.percentageComplete+ '% Complete </span>';
-            //htmlContent += '</div>';                                                                                                //-12
-            //htmlContent += '</div>';                                                                                                //-11
-            //htmlContent += '</div>';                                                                                                //-10
-            //htmlContent += '</div>';                                                                                                //-9
+            htmlContent += '<tr>';
+            htmlContent += '<td>';
+            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Status:</span>';
+            htmlContent += '</td>';
+            htmlContent += '<td>';
+            htmlContent += '<span>'+shipment.status+'</span>'
+            htmlContent += '</td>';
+            htmlContent += '</tr>'
 
-            //htmlContent += '<div class="row" style="font-size: 12px; height: 34px">'; // row4
-            //htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
-            //if (shipment.shippedFrom) {
-            //    htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedFrom+'</p>';
-            //} else {
-            //    htmlContent += '<p class="bold no-margin no-padding">Default</p>';
-            //}
-            //if (shipment.shipmentDate) {
-            //    htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
-            //}
-            //htmlContent += '</div>';                                                                                                //-14
-            //
-            //htmlContent += '<div class="col-xs-6 text-right" style="height: 34px;">';                                                                     //+15
-            //if (shipment.shippedTo) {
-            //    htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
-            //}
-            //if (shipment.status == 'Arrived') {
-            //    htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">';
-            //    htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
-            //}
-            //htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
-            //htmlContent += '</div>'; // row3 end                                                                                    //-13
-            //htmlContent += '<!--row4-->';
-
-            /*//row5*/
             var temperature = shipment.lastReadingTemperature;
             if (!isNaN(temperature)) {
                 temperature = temperature.toFixed(1) + '℃';
@@ -591,16 +585,20 @@
                 lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
             }
 
-            //if (temperature || lastReading) {
-            //    htmlContent += '<div class="row">';
-            //    htmlContent += '<div class="col-xs-12 text-center">';
-            //    htmlContent += '<span class="sh-last" style="padding-bottom: 3px!important; padding-top: 5px;">'
-            //    htmlContent += ('Last Reading ' + temperature + ' at ' + lastReading);
-            //    htmlContent += '</span>'
-            //    htmlContent += '</div>'
-            //    htmlContent += '</div>'
-            //}
-            htmlContent += '</div>'; //-- portlet-body                                                                       //-5
+            lastReading = shipment.lastReadingTime ? shipment.lastReadingTime : lastReading;
+
+            if (temperature || lastReading) {
+                htmlContent += '<tr>';
+                htmlContent += '<td>';
+                htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
+                htmlContent += '</td>';
+                htmlContent += '<td>';
+                htmlContent += temperature + ' at ' + lastReading;
+                htmlContent += '</td>';
+                htmlContent += '</tr>'
+            }
+            htmlContent += '</table>'
+            htmlContent += '</div>';
             htmlContent += '</div>';
 
             //-- control
