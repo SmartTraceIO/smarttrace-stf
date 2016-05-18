@@ -136,6 +136,22 @@
                     scaledSize:[16, 16],
                     anchor:[8, 8]
                 }
+                //-- update interimL;
+                var interimL = [];
+                for (iterimKey in v) {
+                    if (/interimStop[0-9]{1,2}$/.test(iterimKey)) {
+                        var time = iterimKey + 'Time';
+                        console.log('Key', iterimKey);
+                        console.log('v[iterimKey]', v[iterimKey]);
+                        console.log('v[time]', v[time]);
+                        var itl = {
+                            name: v[iterimKey],
+                            time: v[time]
+                        }
+                        interimL.push(itl);
+                    }
+                }
+                v.interimLocations = interimL;
                 //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
             });
         }).then(function() {
@@ -370,6 +386,61 @@
                 }
             ]
         });
+
+        //-- setup bottom-left control
+        var bottomLeftInfo = document.createElement('div');
+        var bliHtml = '';
+        bliHtml += '<div style="margin-bottom: 15px; margin-left: 15px; border: 1px solid;">';
+        bliHtml += '<div style="background-color: #5e5e5e; color: #ffffff; padding: 5px; font-weight: 600;">';
+        bliHtml += '<span>Index</span>';
+        bliHtml += '</div>';
+        bliHtml += '<div style="background-color: #ffffff; padding: 5px;">';
+        bliHtml += '<table style="text-align: left;">';
+        //--
+        bliHtml += '<tr>';
+        bliHtml += '<td  style="padding-bottom: 5px;">';
+        bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px;">';
+        bliHtml += '</div>';
+        bliHtml += '</td>';
+        bliHtml += '<td>';
+        bliHtml += '<span>Shipment is active</span>';
+        bliHtml += '</td>';
+        bliHtml += '</tr>';
+        //--
+        bliHtml += '<tr>';
+        bliHtml += '<td  style="padding-bottom: 5px;">';
+        bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
+        bliHtml += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+        bliHtml += '</div>';
+        bliHtml += '</td>';
+        bliHtml += '<td>';
+        bliHtml += '<span>Shipment has arrived</span>';
+        bliHtml += '</td>';
+        bliHtml += '<td>';
+        bliHtml += '</td>';
+        bliHtml += '</tr>';
+        //--
+        bliHtml += '<tr>';
+        bliHtml += '<td  style="padding-bottom: 5px;">';
+        bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position: relative">';
+        bliHtml += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>';
+        bliHtml += '</div>';
+        bliHtml += '</td>';
+        bliHtml += '<td>';
+        bliHtml += '<span>Shipment has ended</span>';
+        bliHtml += '</td>';
+        bliHtml += '<td>';
+        bliHtml += '</td>';
+        bliHtml += '</tr>';
+        //--
+        bliHtml += '</table>';
+        bliHtml += '</div>';
+        bliHtml += '</div>';
+
+        bottomLeftInfo.innerHTML = bliHtml;
+        VM.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].pop();
+        VM.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(bottomLeftInfo);
+
         if (VM.ShipmentList) {
             //--update map
             VM.updateMap();
@@ -401,36 +472,11 @@
 
         angular.forEach(VM.ShipmentList, function(shipment, key) {
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
-            /*var marker = new MarkerWithLabel({
-                position: llng,
-                map: VM.map,
-                icon: 'theme/img/tinyLocationStop.png',
-                labelContent: shipment.deviceSN + "(" + shipment.tripCount + ")",
-                labelAnchor: new google.maps.Point(-15, 15),
-                labelClass: "labels", // the CSS class for the label
-                labelStyle: {opacity: 1}
-            });*/
-            //var cl = filter(Color, {name: shipment.color}, true);
-            //if (cl && (cl.length > 0)) {
-            //    VM.ShipmentList[key].shipmentColor = cl[0];
-            //    shipment.shipmentColor = cl[0];
-            //} else {
-            //    VM.ShipmentList[key].shipmentColor = Color[0];
-            //    shipment.shipmentColor = Color[0];
-            //}
-
             var htmlIcon = '';
             htmlIcon += "<table style=''>";
             htmlIcon += "<tr>";
             htmlIcon += "<td>";
-            //var status = shipment.status ? shipment.status.toLowerCase() : '';
-            //if (status == 'default' || status == 'in progress') {
-            //    htmlIcon += "<div style='color: "+shipment.color.code+"'>";
-            //    htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
-            //    htmlIcon += "</div>"
-            //} else {
             htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-            //}
             htmlIcon += "</td>";
             htmlIcon += "<td  style='background-color: white'>";
             htmlIcon += "<div>";
@@ -442,7 +488,6 @@
             htmlIcon += "<td colspan=2>"
             htmlIcon += "<div style='margin-top: 5px;'>"
 
-            //htmlIcon += shipment.percentageComplete + '% completed';
             htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
             htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='"+shipment.percentageComplete+"' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:"+shipment.percentageComplete+"%'>";
             htmlIcon += "</div>";
@@ -465,20 +510,33 @@
             var htmlContent = '';
             htmlContent += '<div class="portlet box" style="border: 1px solid; border-color: '+shipment.color.code+'">';  //+1
 
-            htmlContent += '<div style="padding-left: 15px; padding-right: 15px; padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: '+ shipment.color.code +'">';                                                                   //+2
+            htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: '+ shipment.color.code +'">';                                                                   //+2
             htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
             htmlContent += '<tr>';
             htmlContent += '<td>';
             htmlContent += '<table>';
             htmlContent += '<tr>';
             htmlContent += '<td>';
-            htmlContent += '<div style="width: 15px; height: 15px; background-color: #ffffff; margin-right: 5px;"></div>';
+
+            if (shipment.status == 'Ended') {
+                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
+                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+                htmlContent += '</div>';
+            } else if (shipment.status == 'Arrived') {
+                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
+                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+                htmlContent += '</div>';
+            } else {
+                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px;">';
+                htmlContent += '</div>';
+            }
+
             htmlContent += '</td>';
             htmlContent += '<td>'
-            htmlContent += '<span class="pull-left">Shipment ';
+            htmlContent += '<span class="pull-left bold">Shipment ';
             htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
-            htmlContent +=  '<u>' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
-            htmlContent += '</span>';;
+            htmlContent +=  '<u style="color: #ffffff" ">' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+            htmlContent += '</span>';
             htmlContent += '</td>'
             htmlContent += '</tr>';
             htmlContent += '</table>';
@@ -530,6 +588,21 @@
 
             htmlContent += '</td>';
             htmlContent += '</tr>';
+            //-- interim stop here
+
+            if (shipment.interimLocations) {
+                angular.forEach(shipment.interimLocations, function(v, k) {
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
+                    htmlContent += '<div class="bold">' + v.name + '</div>';
+                    htmlContent += '<div>' + v.time + '</div>';
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>';
+                });
+            }
 
             //--end
             htmlContent += '<tr>';
@@ -605,50 +678,7 @@
             var controlInfo = document.createElement('div');
             controlInfo.innerHTML = htmlContent;
 
-            /*var infowindow = new InfoBubble({
-                content: htmlContent,
-                shadowStyle: 3,
-                padding: 0,
-                borderRadius: 2,
-                arrowSize: 10,
-                borderWidth: 0,
-                borderColor: '#7ed56d',
-                disableAutoPan: true,
-                arrowPosition: 10,
-                backgroundClassName: 'phoney',
-                //hideCloseButton:true,
-                //closeSrc:'theme/img/slimTimes.png',
-                arrowStyle: 2,
-                minWidth: 350
-            });
-            infowindow.addListener('closeclick', function() {
-                if (VM.polyObject) {
-                    VM.polyObject.path.setMap(null);
-                    VM.polyObject.home.setMap(null);
-                    VM.polyObject.dest.setMap(null);
-                }
-            })*/
-            /*marker.addListener('click', function() {
-                if (infowindow.isOpen()) {
-                    infowindow.close();
-                    if (VM.polyObject) {
-                        VM.polyObject.path.setMap(null);
-                        VM.polyObject.home.setMap(null);
-                        VM.polyObject.dest.setMap(null);
-                    }
-                } else {
-                    infowindow.open(VM.map, marker);
-                    //draw polylines
-                    if (VM.polyObject) {
-                        VM.polyObject.path.setMap(null);
-                        VM.polyObject.home.setMap(null);
-                        VM.polyObject.dest.setMap(null);
-                    }
-                    VM.polyObject = VM.updatePolylines(shipment, key);
-                }
-            });*/
             marker.addListener('click', function() {
-                console.log('Length', VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length);
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                     if (!pContent.childNodes[0].isEqualNode(controlInfo.childNodes[0])) {
@@ -659,16 +689,6 @@
                 }
             });
             VM.dynMarkers.push(marker);
-            //VM.map.addListener('click', function() {
-            //    if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
-            //        VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
-            //    }
-            //});
-            /*VM.map.addListener('click', function() {
-                if (infowindow.isOpen) {
-                    infowindow.close();
-                }
-            });*/
             bounds.extend(llng);
         });
 
