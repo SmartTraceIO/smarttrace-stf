@@ -271,7 +271,7 @@
         localStorageService.set('advancedSearch', VM.AdvanceSearch);
     }
 
-    VM.updatePolylines = function (shipment, key) {
+    VM.updatePolylines = function (shipment) {
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
@@ -292,10 +292,10 @@
         } else {
             destLocation = null;
         }
-        if (homeLocation && destLocation) {
-            $log.debug('Home/Dest', homeLocation, destLocation);
-            //create home-marker & dest-marker
-            var homeHtmlIcon = '';
+        //create home-marker & dest-marker
+        var homeHtmlIcon = '';
+        var homMarker = null;
+        if (homeLocation) {
             homeHtmlIcon += '<table>';
             homeHtmlIcon += '<tr>';
             homeHtmlIcon += '<td>';
@@ -312,16 +312,17 @@
             homeHtmlIcon += '</td>';
             homeHtmlIcon += '</tr>';
             homeHtmlIcon += '</table>';
-            var homMarker = new RichMarker({
+            homMarker = new RichMarker({
                 position: new google.maps.LatLng(homeLocation.location.lat, homeLocation.location.lon),
                 map: VM.map,
                 flat: true,
                 anchor: RichMarkerPosition.BOTTOM_LEFT,
                 content: homeHtmlIcon,
             });
-
-            //var destHtmlIcon = '<i class="fa fa-flag fa-flip-horizontal fa-2x"></i>';
-            var destHtmlIcon = '';
+        }
+        var destHtmlIcon = '';
+        var destMarker = null;
+        if (destLocation) {
             destHtmlIcon += '<table>';
             destHtmlIcon += '<tr>';
             destHtmlIcon += '<td>';
@@ -338,36 +339,70 @@
             destHtmlIcon += '</td>';
             destHtmlIcon += '</tr>';
             destHtmlIcon += '</table>';
-            var destMarker = new RichMarker({
+            destMarker = new RichMarker({
                 position: new google.maps.LatLng(destLocation.location.lat, destLocation.location.lon),
-                map: VM.map,
+                //map: VM.map,
                 flat: true,
                 anchor: RichMarkerPosition.BOTTOM_LEFT,
                 content: destHtmlIcon,
             });
-
-            var path = [
-                {lat: homeLocation.location.lat, lng: homeLocation.location.lon},
-                {lat: destLocation.location.lat, lng: destLocation.location.lon},
-                {lat: shipment.lastReadingLat, lng: shipment.lastReadingLong},
-            ];
-
-            $log.debug('Path', path);
-
-            var flightPath = new google.maps.Polyline({
-                path: path,
-                geodesic: true,
-                strokeColor: shipment.color.code,
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-            flightPath.setMap(VM.map);
-            return {
-                path: flightPath,
-                home: homMarker,
-                dest: destMarker
-            };
         }
+        var path1 = [];
+        if (homeLocation) {
+            path1.push({lat: homeLocation.location.lat, lng: homeLocation.location.lon});
+        }
+        angular.forEach(shipment.keyLocations, function(v, k) {
+            path1.push({lat: v.lat, lng: v.lon});
+        });
+
+        var path2 = [];
+        if (destLocation) {
+            path2.push({lat: destLocation.location.lat, lng: destLocation.location.lon});
+            path2.push({lat: shipment.lastReadingLat, lng: shipment.lastReadingLong});
+        }
+        console.log('RealPath', path1);
+        console.log('path2', path2);
+        //$log.debug('Path', path);
+        var realPath = new google.maps.Polyline({
+            path: path1,
+            geodesic: true,
+            strokeColor: shipment.color.code,
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+            map: VM.map
+        });
+
+        var lineSymbol = {
+            path: 'M 0,-1 0,1',
+            strokeOpacity: 1,
+            strokeColor: shipment.color.code,
+            scale: 4
+        };
+        var flightPath = new google.maps.Polyline({
+            path: path2,
+            geodesic: true,
+            strokeOpacity: 0,
+            strokeWeight: 2,
+            icons: [{
+                icon: lineSymbol,
+                offset: '0',
+                repeat: '20px'
+            }],
+        });
+        //realPath.setMap(VM.map);
+        if (shipment.status != 'Ended' && shipment.status != 'Arrived') {
+            flightPath.setMap(VM.map);
+            if (destMarker) {
+                destMarker.setMap(VM.map);
+            }
+        }
+        return {
+            path1: realPath,
+            path2: flightPath,
+            home: homMarker,
+            dest: destMarker
+        };
+        //}
         return null;
     }
 
@@ -677,16 +712,27 @@
             //-- control
             var controlInfo = document.createElement('div');
             controlInfo.innerHTML = htmlContent;
-
+            var updatedObject = null;
             marker.addListener('click', function() {
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                     if (!pContent.childNodes[0].isEqualNode(controlInfo.childNodes[0])) {
                         VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
+                        updatedObject = VM.updatePolylines(shipment);
+                    }
+                    if(updatedObject) {
+                        updatedObject.path1.setMap(null);
+                        updatedObject.path2.setMap(null);
+                        if(updatedObject.dest) {
+                            updatedObject.dest.setMap(null);
+                        }
+                        updatedObject.home.setMap(null);
                     }
                 } else {
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
+                    updatedObject = VM.updatePolylines(shipment);
                 }
+
             });
             VM.dynMarkers.push(marker);
             bounds.extend(llng);
