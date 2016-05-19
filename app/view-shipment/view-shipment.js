@@ -285,7 +285,7 @@
     VM.updatePolylines = function (shipment) {
         var path1 = [];
         var path2 = [];
-
+        console.log('shipment1', shipment);
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
@@ -308,9 +308,6 @@
                 VM.interimMarkers[i].setMap(null);
             }
         }
-
-        console.log('shipment.shippedToLat', shipment.shippedToLat);
-        console.log('shipment.shippedToLong', shipment.shippedToLong);
         if (shipment.shippedToLat && shipment.shippedToLong) {
             var destContent = '';
             destContent += '<table>';
@@ -483,20 +480,32 @@
         if (VM.expectPath) {
             VM.expectPath.setMap(null);
         }
-        VM.expectPath = new google.maps.Polyline({
-            path: path2,
-            geodesic: true,
-            strokeOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: shipment.color.code,
-            /*icons: [{
-                icon: lineSymbol,
-                offset: '0',
-                repeat: '20px'
-            }],*/
-        });
+        if (shipment.status == "Default") {
+            VM.expectPath = new google.maps.Polyline({
+                path: path2,
+                geodesic: true,
+                strokeOpacity: 0,
+                strokeWeight: 2,
+                strokeColor: shipment.color.code,
+                icons: [{
+                 icon: lineSymbol,
+                 offset: '0',
+                 repeat: '20px'
+                 }],
+            });
+        } else if (shipment.status == "Arrived") {
+            VM.expectPath = new google.maps.Polyline({
+                path: path2,
+                geodesic: true,
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: shipment.color.code,
+            });
+        }
         //realPath.setMap(VM.map);
-        if (shipment.status == 'Arrived') {
+        console.log("shipement", shipment);
+        console.log("shipement.status", shipment.status);
+        if ((shipment.status == 'Arrived') || (shipment.status == "Default")) {
             VM.expectPath.setMap(VM.map);
         }
     }
@@ -607,8 +616,6 @@
             htmlIcon += "<table style=''>";
             htmlIcon += "<tr>";
             htmlIcon += "<td>";
-
-            //
             if (shipment.status == 'Ended') {
                 htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
                 htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
@@ -857,6 +864,7 @@
                     }
                 } else {
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
+                    console.log('shipment', shipment);
                     VM.updatePolylines(shipment);
                 }
 
@@ -866,9 +874,6 @@
         });
 
         VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {minimumClusterSize:4});
-        VM.markerClusterer.addListener('click', function() {
-            $log.debug('Marker clustered clicked!');
-        });
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);
