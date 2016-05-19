@@ -144,21 +144,33 @@
                 }
                 //-- update interimL;
                 var interimL = [];
-                for (iterimKey in v) {
-                    if (/interimStop[0-9]{1,2}$/.test(iterimKey)) {
-                        var time = iterimKey + 'Time';
-                        console.log('Key', iterimKey);
-                        console.log('v[iterimKey]', v[iterimKey]);
-                        console.log('v[time]', v[time]);
+                for (ik in v) {
+                    if (/interimStop[0-9]{1,2}$/.test(ik)) {
+                        var time = ik + 'Time';
                         var itl = {
-                            name: v[iterimKey],
+                            name: v[ik],
                             time: v[time]
                         }
                         interimL.push(itl);
                     }
                 }
-                v.interimLocations = interimL;
-                //bounds.extend(new google.maps.LatLng(v.lastReadingLat, v.lastReadingLong));
+                v.interimStops = interimL;
+                //--
+                var indexShippedFrom = 0;
+                var indexFirstReading = 0;
+                for(var i = 0; i < v.keyLocations.length; i++) {
+                    if (v.keyLocations[i].key == "shippedFrom") {
+                        indexShippedFrom = i;
+                    }
+                    if (v.keyLocations[i].key == "firstReading") {
+                        indexFirstReading = i;
+                    }
+                }
+                if (indexShippedFrom > 0) {
+                    v.keyLocations.splice(0, indexShippedFrom);
+                } else {
+                    v.keyLocations.splice(0, indexFirstReading);
+                }
             });
         }).then(function() {
             if (VM.map) {
@@ -264,13 +276,6 @@
     VM.showMap = function() {
         VM.lastView = 3;
         localStorageService.set('LastViewShipment', 3);
-        /*if (VM.map) {
-            VM.updateMap(null);
-        } else {
-            NgMap.getMap('shipmentMap').then(function(map) {
-                VM.updateMap(map);
-            });
-        }*/
     }
     VM.toggleSearch = function() {
         VM.AdvanceSearch = !VM.AdvanceSearch;
@@ -278,84 +283,22 @@
     }
 
     VM.updatePolylines = function (shipment) {
+        var path1 = [];
+        var path2 = [];
+
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
         if (homeLocation && (homeLocation.length > 0)) {
             homeLocation = homeLocation[0];
-        } else if (shipment.firstReadingLat && shipment.firstReadingLong){
-            homeLocation = {};
-            homeLocation.location = {
-                lat: shipment.firstReadingLat,
-                lon: shipment.firstReadingLong
-            };
         } else {
-            homeLocation = null;
+                homeLocation = null;
         }
         var destLocation = filter(VM.LocationListTo, {locationName: valToLocName}, true);
         if (destLocation && (destLocation.length > 0)) {
             destLocation = destLocation[0];
         } else {
             destLocation = null;
-        }
-        //create home-marker & dest-marker
-        var homeHtmlIcon = '';
-        if (homeLocation) {
-            homeHtmlIcon += '<table>';
-            homeHtmlIcon += '<tr>';
-            homeHtmlIcon += '<td>';
-            homeHtmlIcon += '<img src="theme/img/locationStart.png">';
-            homeHtmlIcon += '</td>';
-            homeHtmlIcon += '<td>';
-            homeHtmlIcon += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-            if (homeLocation.locationName) {
-                homeHtmlIcon += homeLocation.locationName
-            } else {
-                homeHtmlIcon += 'Default'
-            }
-            homeHtmlIcon += '</div>';
-            homeHtmlIcon += '</td>';
-            homeHtmlIcon += '</tr>';
-            homeHtmlIcon += '</table>';
-            if (VM.homeMarker) {
-                VM.homeMarker.setMap(null);
-            }
-            VM.homeMarker = new RichMarker({
-                position: new google.maps.LatLng(homeLocation.location.lat, homeLocation.location.lon),
-                map: VM.map,
-                flat: true,
-                anchor: RichMarkerPosition.BOTTOM_LEFT,
-                content: homeHtmlIcon,
-            });
-        }
-        var destHtmlIcon = '';
-        //var destMarker = null;
-        if (destLocation) {
-            destHtmlIcon += '<table>';
-            destHtmlIcon += '<tr>';
-            destHtmlIcon += '<td>';
-            destHtmlIcon += '<img class="rev-horizon" src="theme/img/locationStop.png">';
-            destHtmlIcon += '</td>';
-            destHtmlIcon += '<td>';
-            destHtmlIcon += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-            if (destLocation.locationName) {
-                destHtmlIcon += destLocation.locationName
-            } else {
-                destHtmlIcon += 'Default'
-            }
-            destHtmlIcon += '</div>';
-            destHtmlIcon += '</td>';
-            destHtmlIcon += '</tr>';
-            destHtmlIcon += '</table>';
-            if (VM.destMarker) {
-                VM.destMarker.setMap(null);
-            }
-            VM.destMarker = new RichMarker({
-                position: new google.maps.LatLng(destLocation.location.lat, destLocation.location.lon),
-                flat: true,
-                anchor: RichMarkerPosition.BOTTOM_LEFT,
-                content: destHtmlIcon,
-            });
         }
 
         //-- create array of interimMarker
@@ -365,13 +308,141 @@
                 VM.interimMarkers[i].setMap(null);
             }
         }
+
+        console.log('shipment.shippedToLat', shipment.shippedToLat);
+        console.log('shipment.shippedToLong', shipment.shippedToLong);
+        if (shipment.shippedToLat && shipment.shippedToLong) {
+            var destContent = '';
+            destContent += '<table>';
+            destContent += '<tr>';
+            destContent += '<td>';
+            if (shipment.status == 'Arrived') {
+                destContent += '<img src="theme/img/locationStop.png">'
+            } else {
+                destContent += '<img src="theme/img/locationStopToBeDetermined.png">'
+            }
+
+            destContent += '</td>';
+            destContent += '<td>';
+            destContent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+            if (destLocation && destLocation.locationName) {
+                destContent += destLocation.locationName
+            } else {
+                destContent += 'To be determined'
+            }
+            destContent += '</div>';
+            destContent += '</td>';
+            destContent += '</tr>';
+            destContent += '</table>';
+
+            var destLlng = new google.maps.LatLng(shipment.shippedToLat, shipment.shippedToLong);
+            path2.push({lat:shipment.shippedToLat, lng:shipment.shippedToLong});
+            VM.destMarker = new RichMarker({
+                position: destLlng,
+                flat: true,
+                anchor: RichMarkerPosition.BOTTOM_LEFT,
+                content: destContent,
+                map: VM.map
+            });
+            VM.interimMarkers.push(VM.destMarker);
+        }
         angular.forEach(shipment.keyLocations, function(v, k) {
-            if (v.key != "firstReading" && v.key != "lastReading") {
+            if (v.key == "shippedFrom" || v.key == "firstReading") {
                 var icontent = '';
                 icontent += '<table>';
                 icontent += '<tr>';
                 icontent += '<td>';
-                icontent += '<img class="rev-horizon" src="theme/img/tinyInterimLocation.png">'
+                icontent += '<img src="theme/img/locationStart.png">';
+                icontent += '</td>';
+                icontent += '<td>';
+                icontent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+                    if (homeLocation && homeLocation.locationName) {
+                        icontent += homeLocation.locationName
+                    } else {
+                        icontent += 'Default'
+                    }
+                icontent += '</div>';
+                icontent += '</td>';
+                icontent += '</tr>';
+                icontent += '</table>';
+                var imarker = new RichMarker({
+                    position: new google.maps.LatLng(v.lat, v.lon),
+                    flat: true,
+                    anchor: RichMarkerPosition.BOTTOM_LEFT,
+                    content: icontent,
+                    map: VM.map
+                })
+                VM.interimMarkers.push(imarker);
+            } else
+            if (v.key == "reading") {
+                //var icontent = '';
+                //icontent += '<table>';
+                //icontent += '<tr>';
+                //icontent += '<td>';
+                //icontent += '<img src="theme/img/locationReading.png">'
+                //icontent += '</td>';
+                //icontent += '</tr>';
+                //icontent += '</table>';
+                //var imarker = new RichMarker({
+                //    position: new google.maps.LatLng(v.lat, v.lon),
+                //    flat: true,
+                //    anchor: RichMarkerPosition.BOTTOM_LEFT,
+                //    content: icontent,
+                //    map: VM.map
+                //})
+                //VM.interimMarkers.push(imarker);
+            } else if (v.key == "lastReading") {
+                path2.push({lat:v.lat, lng:v.lon});
+                //if (shipment.status == "Ended") {
+                //    var icontent = '';
+                //    icontent += '<table>';
+                //    icontent += '<tr>';
+                //    icontent += '<td>';
+                //    icontent += '<img src="theme/img/locationStopToBeDetermined.png">'
+                //    icontent += '</td>';
+                //    icontent += '<td>';
+                //    icontent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+                    //if (destLocation && destLocation.locationName) {
+                    //    icontent += destLocation.locationName
+                    //} else {
+                    //    icontent += 'Default'
+                    //}
+                //    icontent += '</div>';
+                //    icontent += '</td>';
+                //    icontent += '</tr>';
+                //    icontent += '</table>';
+                //    var imarker = new RichMarker({
+                //        position: new google.maps.LatLng(v.lat, v.lon),
+                //        flat: true,
+                //        anchor: RichMarkerPosition.BOTTOM_LEFT,
+                //        content: icontent,
+                //        map: VM.map
+                //    })
+                //    VM.interimMarkers.push(imarker);
+                //} else if (shipment.status == 'Arrived') {
+                //    var icontent = '';
+                //    icontent += '<table>';
+                //    icontent += '<tr>';
+                //    icontent += '<td>';
+                //    icontent += '<img src="theme/img/locationStop.png">'
+                //    icontent += '</td>';
+                //    icontent += '</tr>';
+                //    icontent += '</table>';
+                //    var imarker = new RichMarker({
+                //        position: new google.maps.LatLng(v.lat, v.lon),
+                //        flat: true,
+                //        anchor: RichMarkerPosition.BOTTOM_LEFT,
+                //        content: icontent,
+                //        map: VM.map
+                //    })
+                //    VM.interimMarkers.push(imarker);
+                //}
+            } else if (v.key == "interimStop") {
+                var icontent = '';
+                icontent += '<table>';
+                icontent += '<tr>';
+                icontent += '<td>';
+                icontent += '<img src="theme/img/tinyInterimLocation.png">'
                 icontent += '</td>';
                 icontent += '</tr>';
                 icontent += '</table>';
@@ -379,40 +450,6 @@
                     position: new google.maps.LatLng(v.lat, v.lon),
                     flat: true,
                     anchor: RichMarkerPosition.BOTTOM,
-                    content: icontent,
-                    map: VM.map
-                })
-                VM.interimMarkers.push(imarker);
-            } else if (v.key == "lastReading" && (shipment.status == "Ended" || shipment.status == "Arrived")) {
-                var icontent = '';
-                icontent += '<table>';
-                icontent += '<tr>';
-                icontent += '<td>';
-                icontent += '<img src="theme/img/locationStopToBeDetermined.png">'
-                icontent += '</td>';
-                icontent += '</tr>';
-                icontent += '</table>';
-                var imarker = new RichMarker({
-                    position: new google.maps.LatLng(v.lat, v.lon),
-                    flat: true,
-                    anchor: RichMarkerPosition.BOTTOM,
-                    content: icontent,
-                    map: VM.map
-                })
-                VM.interimMarkers.push(imarker);
-            } else if (v.key == "firstReading") {
-                var icontent = '';
-                icontent += '<table>';
-                icontent += '<tr>';
-                icontent += '<td>';
-                icontent += '<i style="color: #5BCA45" class="fa fa-circle" aria-hidden="true"></i>'
-                icontent += '</td>';
-                icontent += '</tr>';
-                icontent += '</table>';
-                var imarker = new RichMarker({
-                    position: new google.maps.LatLng(v.lat, v.lon),
-                    flat: true,
-                    anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
                     map: VM.map
                 })
@@ -420,21 +457,11 @@
             }
         });
 
-        var path1 = [];
-        if (homeLocation) {
-            path1.push({lat: homeLocation.location.lat, lng: homeLocation.location.lon});
-        }
+
         angular.forEach(shipment.keyLocations, function(v, k) {
             path1.push({lat: v.lat, lng: v.lon});
         });
 
-        var path2 = [];
-        if (destLocation) {
-            path2.push({lat: destLocation.location.lat, lng: destLocation.location.lon});
-            path2.push({lat: shipment.lastReadingLat, lng: shipment.lastReadingLong});
-        }
-        //console.log('RealPath', path1);
-        //console.log('path2', path2);
         if (VM.realPath) {
             VM.realPath.setMap(null);
         }
@@ -459,20 +486,18 @@
         VM.expectPath = new google.maps.Polyline({
             path: path2,
             geodesic: true,
-            strokeOpacity: 0,
+            strokeOpacity: 1,
             strokeWeight: 2,
-            icons: [{
+            strokeColor: shipment.color.code,
+            /*icons: [{
                 icon: lineSymbol,
                 offset: '0',
                 repeat: '20px'
-            }],
+            }],*/
         });
         //realPath.setMap(VM.map);
-        if (shipment.status != 'Ended' && shipment.status != 'Arrived') {
+        if (shipment.status == 'Arrived') {
             VM.expectPath.setMap(VM.map);
-            if (VM.destMarker) {
-                VM.destMarker.setMap(VM.map);
-            }
         }
     }
 
@@ -495,8 +520,8 @@
         //-- setup bottom-left control
         var bottomLeftInfo = document.createElement('div');
         var bliHtml = '';
-        bliHtml += '<div style="margin-bottom: 15px; margin-left: 15px; border: 1px solid;">';
-        bliHtml += '<div style="background-color: #5e5e5e; color: #ffffff; padding: 5px; font-weight: 600;">';
+        bliHtml += '<div style="margin-bottom: 15px; margin-left: 15px; border: 1px solid #aaaaaa;">';
+        bliHtml += '<div style="background-color: #aaaaaa; color: #ffffff; padding: 5px; font-weight: 600;">';
         bliHtml += '<span>Index</span>';
         bliHtml += '</div>';
         bliHtml += '<div style="background-color: #ffffff; padding: 5px;">';
@@ -586,7 +611,7 @@
             //
             if (shipment.status == 'Ended') {
                 htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
-                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 0px;;">&check;</span>'
+                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
                 htmlIcon += '</div>';
             } else if (shipment.status == 'Arrived') {
                 htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
@@ -614,9 +639,9 @@
              });
 
             var htmlContent = '';
-            htmlContent += '<div class="portlet box" style="border: 1px solid; border-color: '+shipment.color.code+'">';  //+1
+            htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color.code+'">';  //+1
 
-            htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: '+ shipment.color.code +'">';                                                                   //+2
+            htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';                                                                   //+2
             htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
             htmlContent += '<tr>';
             htmlContent += '<td>';
@@ -625,15 +650,15 @@
             htmlContent += '<td>';
 
             if (shipment.status == 'Ended') {
-                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
-                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +'; margin-right: 5px; position:relative;">';
+                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
                 htmlContent += '</div>';
             } else if (shipment.status == 'Arrived') {
-                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +';margin-right: 5px; position:relative;">';
                 htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
                 htmlContent += '</div>';
             } else {
-                htmlContent += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px;">';
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +';margin-right: 5px;">';
                 htmlContent += '</div>';
             }
 
@@ -697,8 +722,8 @@
             htmlContent += '</tr>';
             //-- interim stop here
 
-            if (shipment.interimLocations) {
-                angular.forEach(shipment.interimLocations, function(v, k) {
+            if (shipment.interimStops) {
+                angular.forEach(shipment.interimStops, function(v, k) {
                     htmlContent += '<tr>';
                     htmlContent += '<td>';
                     htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
@@ -714,7 +739,11 @@
             //--end
             htmlContent += '<tr>';
             htmlContent += '<td>';
-            htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+            if (shipment.status == "Ended" || shipment.status == "Default") {
+                htmlContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">';
+            } else {
+                htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+            }
             htmlContent += '</td>';
             htmlContent += '<td>';
             if (shipment.shippedTo) {
@@ -785,7 +814,7 @@
             //-- htmlContent += '<span style="font-size: 20px;">&times;</span>';
             var closeBtn = document.createElement('div');
             closeBtn.style.position='absolute';
-            closeBtn.style.top='10px';
+            closeBtn.style.top='5px';
             closeBtn.style.right='10px';
             closeBtn.style.color='#ffffff';
             closeBtn.style.cursor = 'pointer';
