@@ -671,9 +671,9 @@
 
             htmlContent += '</td>';
             htmlContent += '<td>'
-            htmlContent += '<span class="pull-left bold">Shipment ';
+            htmlContent += '<span class="pull-left bold">';
             htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
-            htmlContent +=  '<u style="color: #ffffff" ">' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+            htmlContent +=  '<u style="color: #ffffff">Shipment ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
             htmlContent += '</span>';
             htmlContent += '</td>'
             htmlContent += '</tr>';
@@ -843,7 +843,6 @@
 
             var controlInfo = document.createElement('div');
             controlInfo.innerHTML = htmlContent;
-
             controlInfo.appendChild(closeBtn);
 
             marker.addListener('click', function() {

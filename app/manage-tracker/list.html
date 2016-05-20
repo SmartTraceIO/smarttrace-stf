@@ -225,26 +225,12 @@
                     <td class="text-center" ng-if="getRole() >= Role.Admin">
                         <a class="btn green" ng-href="#/edit-tracker/{{tracker.imei}}"><i class="fa fa-pencil"></i>Edit</a>
                     </td>
-                    <!--<td class="text-center" ng-if="getRole() >= Role.SmartTraceAdmin">
-                        <a class="btn green" ng-click="confirm(tracker.imei);"><i class=" fa fa-remove"></i>&nbsp;Delete</a>
-                    </td>-->
-
                 </tr>
             </table>
         </div>
         <div ng-if="lastView==3">
             <div id="trackerMap" style="height: 600px" ng-init="initMap()"></div>
         </div>
-        <!--<uib-pagination class="pagination-sm"-->
-                    <!--ng-if="lastView==1"-->
-                    <!--max-size="5"-->
-                    <!--on-select-page="PageChanged(page)"-->
-                    <!--total-items="TrackerList.totalCount"-->
-                    <!--page="PageIndex"-->
-                    <!--items-per-page="PageSize"-->
-                    <!--boundary-links="true"-->
-                    <!--rotate="false"-->
-                    <!--first-text="<<" last-text=">>" next-text=">" previous-text="<"/>-->
         <uib-pagination total-items="TrackerList.totalCount"
                         ng-if="lastView==1"
                         items-per-page="PageSize"

@@ -53,12 +53,6 @@
                 var promises = [];
                 $log.debug('update trackers Maps', $scope.TrackerList);
                 angular.forEach($scope.TrackerList, function(tracker, key) {
-                    //var cl = filter(Color, {name: tracker.color}, true);
-                    //if (cl && angular.isArray(cl) && cl.length>0) {
-                    //    $scope.TrackerList[key].trackerColor = cl[0];
-                    //} else {
-                    //    $scope.TrackerList[key].trackerColor = Color[0];
-                    //}
                     if (tracker.lastShipmentId) {
                         var p = webSvc.getShipment(tracker.lastShipmentId).success(function(data) {
                             if (data.status.code == 0) {
@@ -199,10 +193,10 @@
             localStorageService.set('LastViewTracker', 3);
         }
         $scope.initMap = function() {
-            console.log('init-map...');
             $scope.map = new google.maps.Map(document.getElementById('trackerMap'), {
                 center: {lat: -34.397, lng: 150.644},
                 zoom: 8,
+                mapTypeControl: false,
                 styles: [
                     {
                         featureType:"poi",
@@ -213,8 +207,62 @@
                     }
                 ]
             });
+
+            //-- setup bottom-left control
+            var bottomLeftInfo = document.createElement('div');
+            var bliHtml = '';
+            bliHtml += '<div style="margin-bottom: 15px; margin-left: 15px; border: 1px solid #aaaaaa;">';
+            bliHtml += '<div style="background-color: #aaaaaa; color: #ffffff; padding: 5px; font-weight: 600;">';
+            bliHtml += '<span>Index</span>';
+            bliHtml += '</div>';
+            bliHtml += '<div style="background-color: #ffffff; padding: 5px;">';
+            bliHtml += '<table style="text-align: left;">';
+            //--
+            bliHtml += '<tr>';
+            bliHtml += '<td  style="padding-bottom: 5px;">';
+            bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px;">';
+            bliHtml += '</div>';
+            bliHtml += '</td>';
+            bliHtml += '<td>';
+            bliHtml += '<span>Shipment is active</span>';
+            bliHtml += '</td>';
+            bliHtml += '</tr>';
+            //--
+            bliHtml += '<tr>';
+            bliHtml += '<td  style="padding-bottom: 5px;">';
+            bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position:relative;">';
+            bliHtml += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+            bliHtml += '</div>';
+            bliHtml += '</td>';
+            bliHtml += '<td>';
+            bliHtml += '<span>Shipment has arrived</span>';
+            bliHtml += '</td>';
+            bliHtml += '<td>';
+            bliHtml += '</td>';
+            bliHtml += '</tr>';
+            //--
+            bliHtml += '<tr>';
+            bliHtml += '<td  style="padding-bottom: 5px;">';
+            bliHtml += '<div style="width: 15px; height: 15px; background-color: #5BCA45; margin-right: 5px; position: relative">';
+            bliHtml += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>';
+            bliHtml += '</div>';
+            bliHtml += '</td>';
+            bliHtml += '<td>';
+            bliHtml += '<span>Shipment has ended</span>';
+            bliHtml += '</td>';
+            bliHtml += '<td>';
+            bliHtml += '</td>';
+            bliHtml += '</tr>';
+            //--
+            bliHtml += '</table>';
+            bliHtml += '</div>';
+            bliHtml += '</div>';
+
+            bottomLeftInfo.innerHTML = bliHtml;
+            $scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].pop();
+            $scope.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(bottomLeftInfo);
+
             if ($scope.TrackerList) {
-                //--update map
                 $scope.updateMap();
             }
         }
@@ -273,15 +321,18 @@
                     htmlIcon += "<table style=''>";
                     htmlIcon += "<tr>";
                     htmlIcon += "<td>";
-                    //var status = tracker.shipmentStatus ? tracker.shipmentStatus.toLowerCase() : '';
-                    //if (status == 'default' || status == 'in progress') {
-                    //    //htmlIcon += "<img src='theme/img/tinyInterimLocation.png'>"
-                    //    htmlIcon += "<div style='color: "+tracker.color+"'>";
-                    //    htmlIcon += "<i class='fa fa-map-pin fa-2x' aria-hidden='true'></i>";
-                    //    htmlIcon += "</div>"
-                    //} else {
-                    htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:" + tracker.trackerColor.code/*Color[key].code*/ + "; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-                    //}
+
+                    if (tracker.shipmentStatus == 'Ended') {
+                        htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+tracker.color+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
+                        htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
+                        htmlIcon += '</div>';
+                    } else if (tracker.shipmentStatus == 'Arrived') {
+                        htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+tracker.color+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
+                        htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 0px;;">&check;</span>'
+                        htmlIcon += '</div>';
+                    } else {
+                        htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+tracker.color+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
+                    }
                     htmlIcon += "</td>";
                     htmlIcon += "<td  style='background-color: white'>";
                     htmlIcon += "<div>";
@@ -289,22 +340,7 @@
                     htmlIcon += "</div>"
                     htmlIcon += "</td>";
                     htmlIcon += "</tr>";
-                    htmlIcon += "<tr>";
-                    htmlIcon += "<td colspan=2>"
-                    htmlIcon += "<div style='margin-top: 5px;'>"
-
-                    htmlIcon += "<div class='progress' style='height: 5px; border: #5BCA45 solid 1px;'>";
-                    htmlIcon += "<div class='progress-bar' role='progressbar' aria-valuenow='" + shipment.percentageComplete + "' aria-valuemin='0' aria-valuemax='100' style='background-color:#5BCA45;width:" + shipment.percentageComplete + "%'>";
-                    htmlIcon += "</div>";
-                    htmlIcon += "</div>";
-
-
-                    htmlIcon += "</div>"
-                    htmlIcon += "</td>";
-                    htmlIcon += "</tr>";
                     htmlIcon += "</table>";
-
-
                     var marker = new RichMarker({
                         position: llng,
                         map: $scope.map,
@@ -313,72 +349,97 @@
                         content: htmlIcon,
                     });
 
+                    //-- infor window
                     var htmlContent = '';
-                    htmlContent += '<div class="portlet box green" style="margin-bottom: 0px!important; border: 0px!important;">';  //+1
+                    htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+tracker.color+'">';
 
-                    htmlContent += '<div class="portlet-title">';                                                                   //+2
-                    htmlContent += '<div class="caption">' + tracker.description + '</div>';                                   //+3 -3
-                    htmlContent += '</div>';                                                                                        //-2
-
-                    htmlContent += '<div class="portlet-body" style="padding-top: 15px!important;padding-bottom: 0px!important;">';                                //+5
-                    //htmlContent += '<div class="container-fluid">';                                                                                               //+6
-                    htmlContent += '<div class="row">';                                                                                               //+6
-                    htmlContent += '<div class="col-xs-12">';
-                    htmlContent += '<table>';
+                    htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';
+                    htmlContent += '<table width="100%" style="font-size: 13px;">';
                     htmlContent += '<tr>';
                     htmlContent += '<td>';
-                    htmlContent += '<div style="width: 15px; height: 15px; background-color: '+tracker.trackerColor.code+'; margin-right: 5px;"></div>';
+
+                    if (shipment.status == 'Ended') {
+                        htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ tracker.color +'; margin-right: 5px; position:relative;">';
+                        htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
+                        htmlContent += '</div>';
+                    } else if (shipment.status == 'Arrived') {
+                        htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ tracker.color +';margin-right: 5px; position:relative;">';
+                        htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+                        htmlContent += '</div>';
+                    } else {
+                        htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ tracker.color +';margin-right: 5px;">';
+                        htmlContent += '</div>';
+                    }
+
                     htmlContent += '</td>';
                     htmlContent += '<td>'
-                    htmlContent += '<span class="pull-left">Shipment ';
+                    htmlContent += '<span class="pull-left bold">';
                     htmlContent += '<a href="#/view-shipment-detail?sn='+tracker.sn+'&trip='+tracker.tripCount+'">';
-                    htmlContent +=  '<u>' + tracker.sn + ' (' + tracker.tripCount + ')</u></a>';
+                    htmlContent +=  '<u style="color: #ffffff">Shipment ' + tracker.sn + ' (' + tracker.tripCount + ')</u></a>';
                     htmlContent += '</span>';
                     htmlContent += '</td>'
+                    htmlContent += '<td width="50px">&nbsp;</td>'
                     htmlContent += '</tr>';
-                    htmlContent += '</table>';
-                    htmlContent += '</div>';
-                    htmlContent += '</div>'; //-- class row
+                    htmlContent += '</table>';                                  //+3 -3
+                    htmlContent += '</div>';                                                                                        //-2
 
-                    var assetTypeAndNum = '';
-                    assetTypeAndNum += (shipment.assetType ? shipment.assetType : '');
-                    assetTypeAndNum += (shipment.assetNum ? shipment.assetNum : '');
-                    assetTypeAndNum = (assetTypeAndNum ? assetTypeAndNum + '-' : '');
+                    //-- infor window body
+                    htmlContent += '<div class="portlet-body">';                                //+5
 
-                    htmlContent += '<div class="row"  style="margin-top: 15px; height: 24px;;">'; //row2                                                                              //+7
-                    htmlContent += '<div class="col-xs-2 text-left"><img src="theme/img/locationStart.png"></div>';
-                    htmlContent += '<div class="col-xs-8 text-center" style="font-size: 13px;">';
-                    if (tracker.shipmentStatus) {
-                        htmlContent += assetTypeAndNum + tracker.shipmentStatus;
-                    }
-                    htmlContent += '</div>';
-                    htmlContent += '<div class="col-xs-2 text-right"><img class="rev-horizon" src="theme/img/locationStop.png"></div>';
-                    htmlContent += '</div>'; //-- row2                                                                                      //-7
-
-                    htmlContent += '<div class="row">'; //--row3                                                                            //+9
-                    htmlContent += '<div class="col-xs-12">'                                                                                //+10
-                    htmlContent += '<div class="progress" style="max-height:5px">';                                                         //+11
-                    htmlContent += '<div style="width:' + (shipment.percentageComplete + 1) * 100 / 101 + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + shipment.percentageComplete + '" role="progressbar" class="progress-bar progress-bar-info">'; //+12
-                    htmlContent += '<span class="sr-only">' + shipment.percentageComplete + '% Complete </span>';
-                    htmlContent += '</div>';                                                                                                //-12
-                    htmlContent += '</div>';                                                                                                //-11
-                    htmlContent += '</div>';                                                                                                //-10
-                    htmlContent += '</div>';                                                                                                //-9
-                    htmlContent += '<!--row 3+-->'
-
-                    htmlContent += '<div class="row" style="font-size: 12px; min-height: 34px;">'; // row4                                                                             //+13
-                    htmlContent += '<div class="col-xs-6 text-left">';                                                                      //+14
+                    htmlContent += '<table style="text-align: left;">';
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '<img src="theme/img/locationStart.png">';
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
                     if (shipment.shippedFromLocation && shipment.shippedFromLocation.locationName) {
                         htmlContent += '<span class="bold">' + shipment.shippedFromLocation.locationName + '</span>';
                     } else {
                         htmlContent += '<span class="bold no-margin no-padding">Default</span>';
                     }
                     if (shipment.shipmentDate) {
-                        htmlContent += '<p class="text-muted no-margin no-padding">' + shipment.shipmentDate + '</p>';
+                        htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
+                    } else {
+                        htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.firstReadingTime+'</p>';
                     }
-                    htmlContent += '</div>';                                                                                                //-14
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
 
-                    htmlContent += '<div class="col-xs-6 text-right">';                                                                     //+15
+                    if (shipment.siblingCount > 0) {
+                        htmlContent += '<span class="pull-left">';
+                        htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                        htmlContent += shipment.siblingCount + ' others';
+                        htmlContent += '</span>';
+                    }
+
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>';
+                    //-- interim stop here
+
+                    if (shipment.interimStops) {
+                        angular.forEach(shipment.interimStops, function(v, k) {
+                            htmlContent += '<tr>';
+                            htmlContent += '<td>';
+                            htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
+                            htmlContent += '</td>';
+                            htmlContent += '<td>';
+                            htmlContent += '<div class="bold">' + v.name + '</div>';
+                            htmlContent += '<div>' + v.time + '</div>';
+                            htmlContent += '</td>';
+                            htmlContent += '</tr>';
+                        });
+                    }
+
+                    //--end
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    if (shipment.status == "Ended" || shipment.status == "Default") {
+                        htmlContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">';
+                    } else {
+                        htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+                    }
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
                     if (shipment.shippedToLocation && shipment.shippedToLocation.locationName) {
                         htmlContent += '<p class="bold no-margin no-padding">' + shipment.shippedToLocation.locationName + '</p>';
                     } else {
@@ -386,66 +447,104 @@
                     }
                     if (shipment.status == 'Arrived') {
                         htmlContent += '<p class="text-muted no-margin no-padding">';
-                        htmlContent += '<span>ARRIVED AT</span>: ' + shipment.actualArrivalDate + '</p>';
+                        htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+                    } else if (shipment.status == 'Ended'){
+                        htmlContent += '<p class="text-muted no-margin no-padding">';
+                        htmlContent += '<span>ENDED AT</span>: '+tracker.lastReadingTime+'</p>';
                     }
-                    htmlContent += '</div>'; //col-xs-6 text-right                                                                          //-15
-                    htmlContent += '</div>'; // row4 end                                                                                    //-13
-                    htmlContent += '<!--row4-->'
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>';
+                    htmlContent += '</table>';
+                    htmlContent += '</div>';
+                    //-------------
+                    htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+tracker.color+'">'; //+5
+                    htmlContent += '<table style="text-align: left;">';
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '<span style="font-weight: 600; padding-right: 5px">Desc:</span>';
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
+                    htmlContent += '<span>'+shipment.shipmentDescription+'</span>'
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>';
 
-
+                    htmlContent += '<tr>';
+                    htmlContent += '<td>';
+                    htmlContent += '<span style="font-weight: 600; padding-right: 5px">Status:</span>';
+                    htmlContent += '</td>';
+                    htmlContent += '<td>';
+                    htmlContent += '<span>'+shipment.status+'</span>'
+                    htmlContent += '</td>';
+                    htmlContent += '</tr>'
 
                     var temperature = tracker.lastReadingTemperature;
-                    if (temperature && !isNaN(temperature)) {
+                    if (!isNaN(temperature)) {
                         temperature = temperature.toFixed(1) + '℃';
-                    } else {
-                        temperature = '';
                     }
                     var lastMoment = tracker.lastReadingTimeISO ? tracker.lastReadingTimeISO : '';
                     if (lastMoment) {
+                        $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
                         lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
                     }
 
+                    lastReading = tracker.lastReadingTime ? tracker.lastReadingTime : lastReading;
+
                     if (temperature || lastReading) {
-                        htmlContent += '<div class="row">'
-                        htmlContent += '<div class="col-sm-12 text-center">'
-                        htmlContent += '<span class="sh-last" style="padding-bottom: 7px!important; padding-top: 1px">';
-                        htmlContent += 'Last Reading ' + temperature + ' at ' + lastReading;
-                        htmlContent += '</span>';
-                        htmlContent += '</div>';
-                        htmlContent += '</div>';
+                        htmlContent += '<tr>';
+                        htmlContent += '<td>';
+                        htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
+                        htmlContent += '</td>';
+                        htmlContent += '<td>';
+                        htmlContent += temperature + ' at ' + lastReading;
+                        htmlContent += '</td>';
+                        htmlContent += '</tr>'
                     }
-                    htmlContent += '</div>'; //-- portlet-body                                                                       //-5
-                    htmlContent += '</div>'; //-- portlet-body                                                                       //-5
+                    htmlContent += '</table>'
+                    htmlContent += '</div>';                                                                  //-5
                     htmlContent += '</div>';
 
-                    var infowindow = new InfoBubble({
-                        content: htmlContent,
-                        shadowStyle: 3,
-                        padding: 0,
-                        borderRadius: 4,
-                        arrowSize: 10,
-                        borderWidth: 0,
-                        borderColor: '#7ed56d',
-                        disableAutoPan: true,
-                        arrowPosition: 10,
-                        arrowStyle: 2,
-                        minWidth: 300,
-                        backgroundClassName: 'phoney'
+                    //var infowindow = new InfoBubble({
+                    //    content: htmlContent,
+                    //    shadowStyle: 3,
+                    //    padding: 0,
+                    //    borderRadius: 4,
+                    //    arrowSize: 10,
+                    //    borderWidth: 0,
+                    //    borderColor: '#7ed56d',
+                    //    disableAutoPan: true,
+                    //    arrowPosition: 10,
+                    //    arrowStyle: 2,
+                    //    minWidth: 300,
+                    //    backgroundClassName: 'phoney'
+                    //});
+                    var infoWindow = document.createElement('div');
+                    infoWindow.innerHTML = htmlContent;
+                    var closeBtn = document.createElement('div');
+                    closeBtn.style.position='absolute';
+                    closeBtn.style.top='5px';
+                    closeBtn.style.right='10px';
+                    closeBtn.style.color='#ffffff';
+                    closeBtn.style.cursor = 'pointer';
+                    closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
+                    closeBtn.addEventListener('click', function() {
+                        if ($scope.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+                            var pContent = $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+                        }
                     });
-                    marker.addListener('click', function () {
-                        if (infowindow.isOpen()) {
-                            infowindow.close();
-                        } else {
+                    infoWindow.appendChild(closeBtn);
 
-                            infowindow.open($scope.map, marker);
+                    marker.addListener('click', function () {
+                        if ($scope.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+                            var pContent = $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+                            if (!pContent.childNodes[0].isEqualNode(infoWindow.childNodes[0])) {
+                                $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoWindow);
+                                //VM.updatePolylines(shipment);
+                            }
+                        } else {
+                            $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoWindow);
                         }
                     });
                     $scope.dynMarkers.push(marker);
-                    $scope.map.addListener('click', function () {
-                        if (infowindow.isOpen) {
-                            infowindow.close();
-                        }
-                    });
                     bounds.extend(llng);
                 }
             });//end angular.forEach();
