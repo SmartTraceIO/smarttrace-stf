@@ -196,7 +196,14 @@
             $scope.map = new google.maps.Map(document.getElementById('trackerMap'), {
                 center: {lat: -34.397, lng: 150.644},
                 zoom: 8,
-                mapTypeControl: false,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.RIGHT_BOTTOM
+                },
+                zoomControl: false,
+                streetViewControl: false,
+                scaleControl: true,
                 styles: [
                     {
                         featureType:"poi",
@@ -356,7 +363,7 @@
                     htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';
                     htmlContent += '<table width="100%" style="font-size: 13px;">';
                     htmlContent += '<tr>';
-                    htmlContent += '<td>';
+                    htmlContent += '<td style="width: 20px;">';
 
                     if (shipment.status == 'Ended') {
                         htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ tracker.color +'; margin-right: 5px; position:relative;">';

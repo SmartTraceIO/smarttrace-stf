@@ -514,7 +514,14 @@
         VM.map = new google.maps.Map(document.getElementById('shipmentMap'), {
             center: {lat: -34.397, lng: 150.644},
             zoom: 8,
-            mapTypeControl: false,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
+            },
+            zoomControl: false,
+            streetViewControl: false,
+            scaleControl: true,
             styles: [
                 {
                     featureType:"poi",
@@ -654,7 +661,7 @@
             htmlContent += '<td>';
             htmlContent += '<table>';
             htmlContent += '<tr>';
-            htmlContent += '<td>';
+            htmlContent += '<td style="widows: 20px;">';
 
             if (shipment.status == 'Ended') {
                 htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +'; margin-right: 5px; position:relative;">';
