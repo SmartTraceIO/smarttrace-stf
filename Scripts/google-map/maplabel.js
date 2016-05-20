@@ -97,7 +97,7 @@ MapLabel.prototype.drawCanvas_ = function() {
     style.marginLeft = this.getMarginLeft_(textWidth) + 'px';
     // Bring actual text top in line with desired latitude.
     // Cheaper than calculating height of text.
-    style.marginTop = '-0.4em';
+    style.marginTop = '-0.6em';
   }
 };
 
@@ -131,7 +131,7 @@ MapLabel.prototype['onAdd'] = MapLabel.prototype.onAdd;
 MapLabel.prototype.getMarginLeft_ = function(textWidth) {
   switch (this.get('align')) {
     case 'left':
-      return 0;
+      return 10;
     case 'right':
       return -textWidth;
   }

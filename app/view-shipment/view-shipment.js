@@ -310,66 +310,91 @@
         }
         if (shipment.shippedToLat && shipment.shippedToLong) {
             var destContent = '';
-            destContent += '<table>';
-            destContent += '<tr>';
-            destContent += '<td>';
+            destContent += '<div style="width: 25px; height: 25px; border: 1px solid #5BCA45; border-radius: 12px!important; background-color: #5BCA45">';
             if (shipment.status == 'Arrived') {
-                destContent += '<img src="theme/img/locationStop.png">'
+                destContent += '<img class="rev-horizon" src="theme/img/locationStop.png">'
             } else {
-                destContent += '<img src="theme/img/locationStopToBeDetermined.png">'
-            }
-
-            destContent += '</td>';
-            destContent += '<td>';
-            destContent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-            if (destLocation && destLocation.locationName) {
-                destContent += destLocation.locationName
-            } else {
-                destContent += 'To be determined'
+                destContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">'
             }
             destContent += '</div>';
-            destContent += '</td>';
-            destContent += '</tr>';
-            destContent += '</table>';
+            //destContent += '<table>';
+            //destContent += '<tr>';
+            //destContent += '<td>';
+            //if (shipment.status == 'Arrived') {
+            //    destContent += '<img src="theme/img/locationStop.png">'
+            //} else {
+            //    destContent += '<img src="theme/img/locationStopToBeDetermined.png">'
+            //}
+            //
+            //destContent += '</td>';
+            //destContent += '<td>';
+            //destContent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
+            //if (destLocation && destLocation.locationName) {
+            //    destContent += destLocation.locationName
+            //} else {
+            //    destContent += 'To be determined'
+            //}
+            //destContent += '</div>';
+            //destContent += '</td>';
+            //destContent += '</tr>';
+            //destContent += '</table>';
 
             var destLlng = new google.maps.LatLng(shipment.shippedToLat, shipment.shippedToLong);
+            var destText = '';
+            if (destLocation && destLocation.locationName) {
+                destText = destLocation.locationName
+            } else {
+                destText = 'To be determined'
+            }
             path2.push({lat:shipment.shippedToLat, lng:shipment.shippedToLong});
             VM.destMarker = new RichMarker({
                 position: destLlng,
                 flat: true,
-                anchor: RichMarkerPosition.BOTTOM_LEFT,
+                anchor: RichMarkerPosition.MIDDLE,
                 content: destContent,
                 map: VM.map
             });
+            var destLabel = new MapLabel({
+                position: destLlng,
+                align: "left",
+                map: VM.map,
+                fontSize: 15,
+                text: destText,
+            });
+            VM.destMarker.bindTo('position', destLabel);
+            VM.interimMarkers.push(destLabel);
             VM.interimMarkers.push(VM.destMarker);
         }
         angular.forEach(shipment.keyLocations, function(v, k) {
             if (v.key == "shippedFrom" || v.key == "firstReading") {
                 var icontent = '';
-                icontent += '<table>';
-                icontent += '<tr>';
-                icontent += '<td>';
+                icontent += '<div style="width: 25px; height: 25px; border: 1px solid #5BCA45; border-radius: 12px!important; background-color: #5BCA45">';
                 icontent += '<img src="theme/img/locationStart.png">';
-                icontent += '</td>';
-                icontent += '<td>';
-                icontent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-                    if (homeLocation && homeLocation.locationName) {
-                        icontent += homeLocation.locationName
-                    } else {
-                        icontent += 'Default'
-                    }
                 icontent += '</div>';
-                icontent += '</td>';
-                icontent += '</tr>';
-                icontent += '</table>';
                 var imarker = new RichMarker({
                     position: new google.maps.LatLng(v.lat, v.lon),
                     flat: true,
-                    anchor: RichMarkerPosition.BOTTOM_LEFT,
+                    anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
                     map: VM.map
-                })
+                });
+                //--maplabel
+                var label = "Default";
+                if (homeLocation && homeLocation.locationName) {
+                    label = homeLocation.locationName
+                } else {
+                    label = 'Default'
+                }
+                var ilabel = new MapLabel({
+                    position: new google.maps.LatLng(v.lat, v.lon),
+                    map: VM.map,
+                    align: 'left',
+                    fontSize: 15,
+                    text: label
+                });
+                imarker.bindTo('position', ilabel);
                 VM.interimMarkers.push(imarker);
+                VM.interimMarkers.push(ilabel);
             } else
             if (v.key == "reading") {
                 //var icontent = '';
@@ -449,7 +474,7 @@
                     anchor: RichMarkerPosition.BOTTOM,
                     content: icontent,
                     map: VM.map
-                })
+                });
                 VM.interimMarkers.push(imarker);
             }
         });
@@ -503,8 +528,8 @@
             });
         }
         //realPath.setMap(VM.map);
-        console.log("shipement", shipment);
-        console.log("shipement.status", shipment.status);
+        //console.log("shipement", shipment);
+        //console.log("shipement.status", shipment.status);
         if ((shipment.status == 'Arrived') || (shipment.status == "Default")) {
             VM.expectPath.setMap(VM.map);
         }
@@ -636,21 +661,27 @@
             }
 
             htmlIcon += "</td>";
-            htmlIcon += "<td  style='background-color: white'>";
+            /*htmlIcon += "<td  style='background-color: white'>";
             htmlIcon += "<div>";
             htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
             htmlIcon += "</div>"
             htmlIcon += "</td>";
-            htmlIcon += "</tr>";
+            htmlIcon += "</tr>";*/
             htmlIcon += "</table>";
-
+            var ilabel = new MapLabel({
+                position: llng,
+                map: VM.map,
+                align: 'left',
+                text: shipment.deviceSN + "(" + shipment.tripCount + ")"
+            });
             var marker = new RichMarker({
                 position: llng,
                 map: VM.map,
                 flat: true,
-                anchor: RichMarkerPosition.TOP_LEFT,
+                anchor: RichMarkerPosition.MIDDLE,
                 content: htmlIcon,
              });
+            marker.bindTo('position', ilabel);
 
             var htmlContent = '';
             htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color.code+'">';  //+1
@@ -661,7 +692,7 @@
             htmlContent += '<td>';
             htmlContent += '<table>';
             htmlContent += '<tr>';
-            htmlContent += '<td style="widows: 20px;">';
+            htmlContent += '<td style="width: 20px;">';
 
             if (shipment.status == 'Ended') {
                 htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +'; margin-right: 5px; position:relative;">';
