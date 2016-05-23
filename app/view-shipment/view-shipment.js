@@ -23,11 +23,10 @@
         return;
     }
 
-    VM.realPath = null;
     VM.expectPath = null;
     VM.homeMarker = null;
     VM.destMarker = null;
-    VM.interimMarkers = []
+    VM.objectToRemove = []
 
     VM.specificDates = false;
     VM.ViewShipment = {
@@ -283,9 +282,13 @@
     }
 
     VM.updatePolylines = function (shipment) {
-        var path1 = [];
         var path2 = [];
-        console.log('shipment1', shipment);
+        if (VM.objectToRemove.length > 0) {
+            angular.forEach(VM.objectToRemove, function(v, k) {
+                VM.objectToRemove[k].setMap(null);
+            });
+        }
+
         var valFrLocName = shipment.shippedFrom ? shipment.shippedFrom : '';
         var valToLocName = shipment.shippedTo ? shipment.shippedTo : '';
         var homeLocation = filter(VM.LocationListFrom, {locationName: valFrLocName}, true);
@@ -302,43 +305,21 @@
         }
 
         //-- create array of interimMarker
-        //VM.interimMarkers
-        if (VM.interimMarkers && (VM.interimMarkers.length > 0)) {
-            for (var i = 0; i< VM.interimMarkers.length; i++) {
-                VM.interimMarkers[i].setMap(null);
+        //VM.objectToRemove
+        if (VM.objectToRemove && (VM.objectToRemove.length > 0)) {
+            for (var i = 0; i< VM.objectToRemove.length; i++) {
+                VM.objectToRemove[i].setMap(null);
             }
         }
         if (shipment.shippedToLat && shipment.shippedToLong) {
             var destContent = '';
-            destContent += '<div style="width: 25px; height: 26px; border: 2px solid '+shipment.color+'; border-radius: 12px!important; background-color: #ffffff; box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow: 0 0 15px '+shipment.color+';">';
+            destContent += '<div style="width: 25px; height: 26px; border: 2px solid '+shipment.color+'; border-radius: 12px!important; background-color: #ffffff;">';
             if (shipment.status == 'Arrived') {
                 destContent += '<img class="rev-horizon" src="theme/img/locationStop.png">'
             } else {
                 destContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">'
             }
             destContent += '</div>';
-            //destContent += '<table>';
-            //destContent += '<tr>';
-            //destContent += '<td>';
-            //if (shipment.status == 'Arrived') {
-            //    destContent += '<img src="theme/img/locationStop.png">'
-            //} else {
-            //    destContent += '<img src="theme/img/locationStopToBeDetermined.png">'
-            //}
-            //
-            //destContent += '</td>';
-            //destContent += '<td>';
-            //destContent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-            //if (destLocation && destLocation.locationName) {
-            //    destContent += destLocation.locationName
-            //} else {
-            //    destContent += 'To be determined'
-            //}
-            //destContent += '</div>';
-            //destContent += '</td>';
-            //destContent += '</tr>';
-            //destContent += '</table>';
-
             var destLlng = new google.maps.LatLng(shipment.shippedToLat, shipment.shippedToLong);
             var destText = '';
             if (destLocation && destLocation.locationName) {
@@ -347,6 +328,7 @@
                 destText = 'To be determined'
             }
             path2.push({lat:shipment.shippedToLat, lng:shipment.shippedToLong});
+
             VM.destMarker = new RichMarker({
                 position: destLlng,
                 flat: true,
@@ -362,15 +344,45 @@
                 text: destText,
             });
             VM.destMarker.bindTo('position', destLabel);
-            VM.interimMarkers.push(destLabel);
-            VM.interimMarkers.push(VM.destMarker);
+            VM.objectToRemove.push(destLabel);
+            VM.objectToRemove.push(VM.destMarker);
         }
+
+        //-- starting path1
+        var lineSymbol = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+        };
+        //-- init markers
+        var infoWindow = new InfoBubble({
+            //content: htmlAlert,
+            shadowStyle: 3,
+            padding: 0,
+            borderRadius: 2,
+            arrowSize: 10,
+            borderWidth: 0,
+            borderColor: '#7ed56d',
+            disableAutoPan: true,
+            arrowPosition: 10,
+            //hideCloseButton:true,
+            arrowStyle: 2,
+        });
+        VM.objectToRemove.push(infoWindow);
+        var icontent = null;
+        var label = null;
+        var ilabel = null;
         angular.forEach(shipment.keyLocations, function(v, k) {
             if (v.key == "shippedFrom" || v.key == "firstReading") {
-                var icontent = '';
-                icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important; box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';  border-color:'+shipment.color+'; background-color: #ffffff;">';
+                icontent = '';
+                icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
                 icontent += '<img src="theme/img/locationStart.png">';
                 icontent += '</div>';
+                //--maplabel
+                label = "Default";
+                if (homeLocation && homeLocation.locationName) {
+                    label = homeLocation.locationName
+                } else {
+                    label = 'Default'
+                }
                 var imarker = new RichMarker({
                     position: new google.maps.LatLng(v.lat, v.lon),
                     flat: true,
@@ -378,89 +390,23 @@
                     content: icontent,
                     map: VM.map
                 });
-                //--maplabel
-                var label = "Default";
-                if (homeLocation && homeLocation.locationName) {
-                    label = homeLocation.locationName
-                } else {
-                    label = 'Default'
+                if (label) {
+                    ilabel = new MapLabel({
+                        position: new google.maps.LatLng(v.lat, v.lon),
+                        map: VM.map,
+                        align: 'left',
+                        fontSize: 15,
+                        text: label
+                    });
+                    imarker.bindTo('position', ilabel);
+                    VM.objectToRemove.push(ilabel);
                 }
-                var ilabel = new MapLabel({
-                    position: new google.maps.LatLng(v.lat, v.lon),
-                    map: VM.map,
-                    align: 'left',
-                    fontSize: 15,
-                    text: label
-                });
-                imarker.bindTo('position', ilabel);
-                VM.interimMarkers.push(imarker);
-                VM.interimMarkers.push(ilabel);
-            } else
-            if (v.key == "reading") {
-                //var icontent = '';
-                //icontent += '<table>';
-                //icontent += '<tr>';
-                //icontent += '<td>';
-                //icontent += '<img src="theme/img/locationReading.png">'
-                //icontent += '</td>';
-                //icontent += '</tr>';
-                //icontent += '</table>';
-                //var imarker = new RichMarker({
-                //    position: new google.maps.LatLng(v.lat, v.lon),
-                //    flat: true,
-                //    anchor: RichMarkerPosition.BOTTOM_LEFT,
-                //    content: icontent,
-                //    map: VM.map
-                //})
-                //VM.interimMarkers.push(imarker);
+                VM.objectToRemove.push(imarker);
+            } else if (v.key == "reading") {
             } else if (v.key == "lastReading") {
                 path2.push({lat:v.lat, lng:v.lon});
-                //if (shipment.status == "Ended") {
-                //    var icontent = '';
-                //    icontent += '<table>';
-                //    icontent += '<tr>';
-                //    icontent += '<td>';
-                //    icontent += '<img src="theme/img/locationStopToBeDetermined.png">'
-                //    icontent += '</td>';
-                //    icontent += '<td>';
-                //    icontent += '<div style="padding-left: 5px; padding-right: 5px; background-color: #fff">';
-                    //if (destLocation && destLocation.locationName) {
-                    //    icontent += destLocation.locationName
-                    //} else {
-                    //    icontent += 'Default'
-                    //}
-                //    icontent += '</div>';
-                //    icontent += '</td>';
-                //    icontent += '</tr>';
-                //    icontent += '</table>';
-                //    var imarker = new RichMarker({
-                //        position: new google.maps.LatLng(v.lat, v.lon),
-                //        flat: true,
-                //        anchor: RichMarkerPosition.BOTTOM_LEFT,
-                //        content: icontent,
-                //        map: VM.map
-                //    })
-                //    VM.interimMarkers.push(imarker);
-                //} else if (shipment.status == 'Arrived') {
-                //    var icontent = '';
-                //    icontent += '<table>';
-                //    icontent += '<tr>';
-                //    icontent += '<td>';
-                //    icontent += '<img src="theme/img/locationStop.png">'
-                //    icontent += '</td>';
-                //    icontent += '</tr>';
-                //    icontent += '</table>';
-                //    var imarker = new RichMarker({
-                //        position: new google.maps.LatLng(v.lat, v.lon),
-                //        flat: true,
-                //        anchor: RichMarkerPosition.BOTTOM_LEFT,
-                //        content: icontent,
-                //        map: VM.map
-                //    })
-                //    VM.interimMarkers.push(imarker);
-                //}
             } else if (v.key == "interimStop") {
-                var icontent = '';
+                icontent = '';
                 icontent += '<table>';
                 icontent += '<tr>';
                 icontent += '<td>';
@@ -471,30 +417,137 @@
                 var imarker = new RichMarker({
                     position: new google.maps.LatLng(v.lat, v.lon),
                     flat: true,
-                    anchor: RichMarkerPosition.BOTTOM,
+                    anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
                     map: VM.map
                 });
-                VM.interimMarkers.push(imarker);
+                VM.objectToRemove.push(imarker);
+            } else {
+                if (v.key == "LightOnAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertLightOn.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "LightOffAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertLightOff.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "ColdAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertCold.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "HotAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertHot.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "CriticalColdAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertCriticalCold.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "CriticalHotAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertCriticalHot.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "BatteryAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertBattery.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                } else if (v.key == "MovementStartAlert") {
+                    icontent = '';
+                    icontent += '<table>';
+                    icontent += '<tr>';
+                    icontent += '<td>';
+                    icontent += '<img src="theme/img/alertMovementStart.png">'
+                    icontent += '</td>';
+                    icontent += '</tr>';
+                    icontent += '</table>';
+                }
+                var imarker = new RichMarker({
+                    position: new google.maps.LatLng(v.lat, v.lon),
+                    flat: true,
+                    anchor: RichMarkerPosition.MIDDLE,
+                    content: icontent,
+                    map: VM.map
+                });
+                google.maps.event.addListener(imarker, 'mouseover', function () {
+                    //show info window
+                    //-- get alert content here;
+                    var alertContent = getAlertContent(v, shipment.deviceSN, shipment.tripCount, shipment.color);
+                    infoWindow.setContent(alertContent);
+                    infoWindow.open(VM.map, imarker);
+                })
+                VM.objectToRemove.push(imarker);
             }
-        });
+            //----------------------------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------------------------
+
+            //----------------------------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------------------------
+            if (k+1 < shipment.keyLocations.length) {
+                var v1 = shipment.keyLocations[k+1];
+                var spart = [{lat: v.lat, lng: v.lon}, {lat: v1.lat, lng: v1.lon}];
+                var rpath = new google.maps.Polyline({
+                    path: spart,
+                    strokeColor: shipment.color,
+                    strokeOpacity: 1.0,
+                    strokeWeight: 4,
+                    map: VM.map,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '50%'
+                    }],
+                });
+                VM.objectToRemove.push(rpath);
+            }
+        }); // end of travel
 
 
-        angular.forEach(shipment.keyLocations, function(v, k) {
-            path1.push({lat: v.lat, lng: v.lon});
-        });
+        //angular.forEach(shipment.keyLocations, function(v, k) {
+        //    path1.push({lat: v.lat, lng: v.lon});
+        //});
 
-        if (VM.realPath) {
-            VM.realPath.setMap(null);
-        }
-        VM.realPath = new google.maps.Polyline({
-            path: path1,
-            geodesic: true,
-            strokeColor: shipment.color,
-            strokeOpacity: 1.0,
-            strokeWeight: 4,
-            map: VM.map
-        });
+        //VM.objectToRemove = new google.maps.Polyline({
+        //    path: path1,
+        //    geodesic: true,
+        //    strokeColor: shipment.color,
+        //    strokeOpacity: 1.0,
+        //    strokeWeight: 4,
+        //    map: VM.map
+        //});
 
         var lineSymbol = {
             path: 'M 0,-1 0,1',
@@ -527,7 +580,7 @@
                 strokeColor: shipment.color,
             });
         }
-        //realPath.setMap(VM.map);
+        //objectToRemove.setMap(VM.map);
         //console.log("shipement", shipment);
         //console.log("shipement.status", shipment.status);
         if ((shipment.status == 'Arrived') || (shipment.status == "Default")) {
@@ -650,14 +703,14 @@
         angular.forEach(VM.ShipmentList, function(shipment, key) {
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
             var htmlIcon = '';
-            htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color+'; box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow:: 0 0 15px '+shipment.color+'; cursor: pointer; ">';
+            htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color+'; cursor: pointer; ">';
             if (shipment.status == 'Ended') {
                 htmlIcon += "<div style='position:relative;'>";
-                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
+                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
                 htmlIcon += '</div>';
             } else if (shipment.status == 'Arrived') {
                 htmlIcon += "<div style='position:relative;'>";
-                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 0px;;">&check;</span>'
+                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 2px;;">&check;</span>'
                 htmlIcon += '</div>';
             } else {
                 htmlIcon += "<div style='cursor: pointer;'></div>";
@@ -711,10 +764,15 @@
 
             htmlContent += '<td>';
 
-            if (shipment.siblingCount > 0) {
+            if (shipment.siblingCount > 1) {
                 htmlContent += '<span class="pull-left">';
                 htmlContent += '<img src="theme/img/similarTrips.png"/>'
                 htmlContent += shipment.siblingCount + ' others';
+                htmlContent += '</span>';
+            } else if (shipment.siblingCount = 1) {
+                htmlContent += '<span class="pull-left">';
+                htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                htmlContent += shipment.siblingCount + ' other';
                 htmlContent += '</span>';
             }
 
@@ -833,10 +891,9 @@
             var voltage = shipment.lastReadingBattery;
             if (!isNaN(voltage)) {
                 voltage = voltToImg(voltage);
-                console.log('Voltage', voltage);
             }
 
-            var lastReading = moment(shipment.lastReadingTime).toNow();
+            var lastReading = moment(shipment.lastReadingTime).fromNow();
             htmlContent += '<td>';
             htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
             htmlContent += '</td>';
@@ -877,12 +934,11 @@
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                     if (VM.expectPath) VM.expectPath.setMap(null);
-                    if (VM.realPath) VM.realPath.setMap(null);
                     if (VM.destMarker) VM.destMarker.setMap(null);
                     if (VM.homeMarker) VM.homeMarker.setMap(null);
-                    if (VM.interimMarkers && VM.interimMarkers.length > 0) {
-                        for (var i = 0; i< VM.interimMarkers.length; i++) {
-                            VM.interimMarkers[i].setMap(null);
+                    if (VM.objectToRemove && VM.objectToRemove.length > 0) {
+                        for (var i = 0; i< VM.objectToRemove.length; i++) {
+                            VM.objectToRemove[i].setMap(null);
                         }
                     }
                 }
@@ -896,12 +952,11 @@
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                     if (VM.expectPath) VM.expectPath.setMap(null);
-                    if (VM.realPath) VM.realPath.setMap(null);
                     if (VM.destMarker) VM.destMarker.setMap(null);
                     if (VM.homeMarker) VM.homeMarker.setMap(null);
-                    if (VM.interimMarkers && VM.interimMarkers.length > 0) {
-                        for (var i = 0; i< VM.interimMarkers.length; i++) {
-                            VM.interimMarkers[i].setMap(null);
+                    if (VM.objectToRemove && VM.objectToRemove.length > 0) {
+                        for (var i = 0; i< VM.objectToRemove.length; i++) {
+                            VM.objectToRemove[i].setMap(null);
                         }
                     }
                     if (!pContent.childNodes[0].isEqualNode(controlInfo.childNodes[0])) {
@@ -910,7 +965,7 @@
                     }
                 } else {
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
-                    console.log('shipment', shipment);
+                    //console.log('shipment', shipment);
                     VM.updatePolylines(shipment);
                 }
 
@@ -986,7 +1041,7 @@ function voltToImg (input) {
         } else if (input <=3770) {
             return '<img style="height: 16px;" src="theme/img/bat10.png"> 20%';
         } else if (input <= 3845) {
-            return '<img style="height: 16px;" src="theme/img/bat20.png"> 30% (' + v + ")";
+            return '<img style="height: 16px;" src="theme/img/bat20.png"> 30%';
         } else if (input <= 3920) {
             return '<img style="height: 16px;" src="theme/img/bat20.png">  40%';
         } else if (input <= 3995) {
@@ -1006,3 +1061,55 @@ function voltToImg (input) {
         }
     }
 };
+
+function getAlertContent(v, deviceSN, tripCount, color) {
+    var alertImg = '';
+    var alertText = '';
+    if (v.key == "LightOnAlert") {
+        alertImg="theme/img/alertLightOn.png";
+        alertText = 'Light On Alert for shipment ';
+    } else if (v.key == "LightOffAlert") {
+        alertImg="theme/img/alertLightOff.png";
+        alertText = 'Light Off Alert for shipment ';
+    } else if (v.key == "ColdAlert") {
+        alertImg="theme/img/alertCold.png";
+        alertText = 'Cold Alert for shipment ';
+    } else if (v.key == "HotAlert") {
+        alertImg="theme/img/alertHot.png";
+        alertText = 'Hot Alert for shipment ';
+    } else if (v.key == "CriticalColdAlert") {
+        alertImg="theme/img/alertCriticalCold.png";
+        alertText = 'Critical Cold Alert for shipment ';
+    } else if (v.key == "CriticalHotAlert") {
+        alertImg="theme/img/alertCriticalHot.png";
+        alertText = 'Critical Hot Alert for shipment ';
+
+    } else if (v.key == "BatteryAlert") {
+        alertImg="theme/img/alertBattery.png";
+        alertText = 'Battery Alert for shipment ';
+    } else if (v.key == "MovementStartAlert") {
+        alertImg="theme/img/alertMovementStart.png";
+        alertText = 'Movement Start Alert for shipment ';
+    }
+
+    var htmlAlert = '';
+    htmlAlert += '<div style="width: 270px; height: 75px;">';
+    htmlAlert += '<table>';
+    htmlAlert += '<tr style="background-color: '+color+';">';
+    htmlAlert += '<td style="width: 24px; margin-right: 5px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px">';
+    htmlAlert += '<img src="'+alertImg+'">'
+    htmlAlert += '</td>';
+    htmlAlert += '<td style="padding-top: 5px; padding-bottom: 5px; color: #ffffff">';
+    htmlAlert += (alertText + deviceSN + ' (' + tripCount + ')');
+    htmlAlert += '</td>';
+    htmlAlert += '</tr>';
+    htmlAlert += '<tr>';
+    htmlAlert += '<td colspan="2" style="padding: 5px">';
+    htmlAlert += v.desc;
+    htmlAlert += '</td>';
+    htmlAlert += '</tr>';
+    htmlAlert += '</table>';
+    htmlAlert += '</div>';
+
+    return htmlAlert;
+}
