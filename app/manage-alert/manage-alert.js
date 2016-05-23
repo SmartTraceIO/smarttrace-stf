@@ -22,6 +22,7 @@
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
+                console.log('AlertList', data.response);
                 $scope.AlertList.totalCount = data.totalCount;
                 angular.forEach($scope.AlertList, function (val, key) {
                     var rule;
@@ -328,10 +329,15 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
 
             webSvc.getAlertProfile(alertId).success(function (data) {
                 if (data.status.code == 0) {
+                    console.log('Alert', data.response);
                     $scope.Alert = data.response;
                     $scope.coldAlerts = [];
                     $scope.hotAlerts = [];
                     angular.forEach($scope.Alert.temperatureIssues, function (val, key) {
+                        if ($scope.TempType == 'F') {
+                            val.temperature = C2F(val.temperature);
+                        }
+                        val.temperature = Math.round(val.temperature*10)/10;
                         if (val.type == "Hot" || val.type == "CriticalHot")
                             $scope.hotAlerts.push(val);
                         else if (val.type == "Cold" || val.type == "CriticalCold")
@@ -413,5 +419,8 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
 });
 
 function F2C(fah) {
-    return (fah - 32) * (5/9);
+    return (fah - 32) * 5 / 9;
+}
+function C2F(cel) {
+    return Math.round((cel * 9 / 5 + 32) * 10) / 10;
 }

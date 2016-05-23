@@ -122,19 +122,19 @@
 
                 //-- bind color to shipment here by get color of device.
                 var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
-                var colorName = null;
+                var color = null;
                 if (d && (d.length > 0)) {
                     //found a device
-                    colorName = d[0].color;
+                    color = d[0].color;
                 } else {
-                    colorName = Color[0].name;
+                    color = Color[0].name;
                 }
-                var color = filter(Color, {name: colorName}, true);
-                if (color && (color.length > 0)) {
-                    VM.ShipmentList[k].color = color[0];
-                } else {
-                    VM.ShipmentList[k].color = Color[0];
-                }
+                //var color = filter(Color, {name: colorName}, true);
+                VM.ShipmentList[k].color = color;
+                //if (color && (color.length > 0)) {
+                //} else {
+                //    VM.ShipmentList[k].color = Color[0];
+                //}
                 //-- position
                 VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
                 VM.ShipmentList[k].icon = {
@@ -310,7 +310,7 @@
         }
         if (shipment.shippedToLat && shipment.shippedToLong) {
             var destContent = '';
-            destContent += '<div style="width: 25px; height: 26px; border: 2px solid '+shipment.color.code+'; border-radius: 12px!important; background-color: #ffffff; box-shadow: 0 0 15px '+shipment.color.code+';-webkit-box-shadow: 0 0 15px '+shipment.color.code+';-moz-box-shadow: 0 0 15px '+shipment.color.code+';">';
+            destContent += '<div style="width: 25px; height: 26px; border: 2px solid '+shipment.color+'; border-radius: 12px!important; background-color: #ffffff; box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow: 0 0 15px '+shipment.color+';">';
             if (shipment.status == 'Arrived') {
                 destContent += '<img class="rev-horizon" src="theme/img/locationStop.png">'
             } else {
@@ -368,7 +368,7 @@
         angular.forEach(shipment.keyLocations, function(v, k) {
             if (v.key == "shippedFrom" || v.key == "firstReading") {
                 var icontent = '';
-                icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important; box-shadow: 0 0 15px '+shipment.color.code+';-moz-box-shadow: 0 0 15px '+shipment.color.code+';-webkit-box-shadow: 0 0 15px '+shipment.color.code+';  border-color:'+shipment.color.code+'; background-color: #ffffff;">';
+                icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important; box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';  border-color:'+shipment.color+'; background-color: #ffffff;">';
                 icontent += '<img src="theme/img/locationStart.png">';
                 icontent += '</div>';
                 var imarker = new RichMarker({
@@ -490,7 +490,7 @@
         VM.realPath = new google.maps.Polyline({
             path: path1,
             geodesic: true,
-            strokeColor: shipment.color.code,
+            strokeColor: shipment.color,
             strokeOpacity: 1.0,
             strokeWeight: 4,
             map: VM.map
@@ -499,7 +499,7 @@
         var lineSymbol = {
             path: 'M 0,-1 0,1',
             strokeOpacity: 1,
-            strokeColor: shipment.color.code,
+            strokeColor: shipment.color,
             scale: 4
         };
         if (VM.expectPath) {
@@ -511,7 +511,7 @@
                 geodesic: true,
                 strokeOpacity: 0,
                 strokeWeight: 2,
-                strokeColor: shipment.color.code,
+                strokeColor: shipment.color,
                 icons: [{
                  icon: lineSymbol,
                  offset: '0',
@@ -524,7 +524,7 @@
                 geodesic: true,
                 strokeOpacity: 1,
                 strokeWeight: 2,
-                strokeColor: shipment.color.code,
+                strokeColor: shipment.color,
             });
         }
         //realPath.setMap(VM.map);
@@ -618,7 +618,6 @@
         }
     }
 
-
     VM.updateMap = function() {
         if (VM.markerClusterer) {
             // Unset all markers
@@ -651,7 +650,7 @@
         angular.forEach(VM.ShipmentList, function(shipment, key) {
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
             var htmlIcon = '';
-            htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color.code+'; box-shadow: 0 0 15px '+shipment.color.code+';-webkit-box-shadow: 0 0 15px '+shipment.color.code+';-moz-box-shadow:: 0 0 15px '+shipment.color.code+'; cursor: pointer; ">';
+            htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color+'; box-shadow: 0 0 15px '+shipment.color+';-webkit-box-shadow: 0 0 15px '+shipment.color+';-moz-box-shadow:: 0 0 15px '+shipment.color+'; cursor: pointer; ">';
             if (shipment.status == 'Ended') {
                 htmlIcon += "<div style='position:relative;'>";
                 htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
@@ -664,29 +663,6 @@
                 htmlIcon += "<div style='cursor: pointer;'></div>";
             }
             htmlIcon += '</div>';
-            //htmlIcon += "<table style=''>";
-            //htmlIcon += "<tr>";
-            //htmlIcon += "<td>";
-            //if (shipment.status == 'Ended') {
-            //    htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
-            //    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&times;</span>'
-            //    htmlIcon += '</div>';
-            //} else if (shipment.status == 'Arrived') {
-            //    htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";
-            //    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 0px;;">&check;</span>'
-            //    htmlIcon += '</div>';
-            //} else {
-            //    htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color.code+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";
-            //}
-            //
-            //htmlIcon += "</td>";
-            ///*htmlIcon += "<td  style='background-color: white'>";
-            //htmlIcon += "<div>";
-            //htmlIcon += shipment.deviceSN + "(" + shipment.tripCount + ")";
-            //htmlIcon += "</div>"
-            //htmlIcon += "</td>";
-            //htmlIcon += "</tr>";*/
-            //htmlIcon += "</table>";
             var ilabel = new MapLabel({
                 position: llng,
                 map: VM.map,
@@ -703,7 +679,7 @@
             marker.bindTo('position', ilabel);
 
             var htmlContent = '';
-            htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color.code+'">';  //+1
+            htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color+'">';  //+1
 
             htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';                                                                   //+2
             htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
@@ -711,22 +687,6 @@
             htmlContent += '<td>';
             htmlContent += '<table>';
             htmlContent += '<tr>';
-            htmlContent += '<td style="width: 20px;">';
-
-            if (shipment.status == 'Ended') {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +'; margin-right: 5px; position:relative;">';
-                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
-                htmlContent += '</div>';
-            } else if (shipment.status == 'Arrived') {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +';margin-right: 5px; position:relative;">';
-                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
-                htmlContent += '</div>';
-            } else {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color.code +';margin-right: 5px;">';
-                htmlContent += '</div>';
-            }
-
-            htmlContent += '</td>';
             htmlContent += '<td>'
             htmlContent += '<span class="pull-left bold">';
             htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
@@ -748,12 +708,29 @@
             if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
             htmlContent += '</span>';
             htmlContent += '</td>';
+
+            htmlContent += '<td>';
+
+            if (shipment.siblingCount > 0) {
+                htmlContent += '<span class="pull-left">';
+                htmlContent += '<img src="theme/img/similarTrips.png"/>'
+                htmlContent += shipment.siblingCount + ' others';
+                htmlContent += '</span>';
+            }
+
+            htmlContent += '</td>';
+
             htmlContent += '<td style="text-align: right; width: 10px;">';
             htmlContent += '&nbsp;';
             htmlContent += '</td>';
             htmlContent += '</tr>';
             htmlContent += '</table>';
             htmlContent += '</div>';                                                                                        //-2
+
+            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-bottom: 1px solid; border-color: '+shipment.color+'">'; //+5
+            htmlContent += '<div style="font-weight: 700;">Description:</div>';
+            htmlContent += '<div>'+shipment.shipmentDescription+'</div>'
+            htmlContent += '</div>';
 
             htmlContent += '<div class="portlet-body" style="padding: 5px!important;">'; //+5
             htmlContent += '<table style="text-align: left;">';
@@ -772,16 +749,6 @@
             } else {
                 htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.firstReadingTime+'</p>';
             }
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-
-            if (shipment.siblingCount > 0) {
-                htmlContent += '<span class="pull-left">';
-                htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += shipment.siblingCount + ' others';
-                htmlContent += '</span>';
-            }
-
             htmlContent += '</td>';
             htmlContent += '</tr>';
             //-- interim stop here
@@ -825,18 +792,7 @@
             htmlContent += '</td>';
             htmlContent += '</tr>';
             htmlContent += '</table>';
-            htmlContent += '</div>';
-            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+shipment.color.code+'">'; //+5
-            htmlContent += '<table style="text-align: left;">';
-            htmlContent += '<tr>';
-            htmlContent += '<td>';
-            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Desc:</span>';
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-            htmlContent += '<span>'+shipment.shipmentDescription+'</span>'
-            htmlContent += '</td>';
-            htmlContent += '</tr>';
-
+            htmlContent += '<table>';
             htmlContent += '<tr>';
             htmlContent += '<td>';
             htmlContent += '<span style="font-weight: 600; padding-right: 5px">Status:</span>';
@@ -845,6 +801,28 @@
             htmlContent += '<span>'+shipment.status+'</span>'
             htmlContent += '</td>';
             htmlContent += '</tr>'
+            htmlContent += '</table>';
+            htmlContent += '</div>';
+
+            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+shipment.color+'">'; //+5
+            htmlContent += '<table style="text-align: left;">';
+            htmlContent += '<tr>';
+
+            htmlContent += '<td style="width: 20px;">';
+            if (shipment.status == 'Ended') {
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +'; margin-right: 5px; position:relative;">';
+                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
+                htmlContent += '</div>';
+            } else if (shipment.status == 'Arrived') {
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px; position:relative;">';
+                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+                htmlContent += '</div>';
+            } else {
+                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px;">';
+                htmlContent += '</div>';
+            }
+            htmlContent += '</td>';
+
 
             var temperature = shipment.lastReadingTemperature;
             if (!isNaN(temperature)) {
@@ -852,24 +830,36 @@
             } else {
                 temperature = '';
             }
-            var lastMoment = shipment.lastReadingTimeISO ? shipment.lastReadingTimeISO : '';
-            if (lastMoment) {
-                $log.debug('RunningTimezone', $rootScope.RunningTimeZoneId);
-                lastReading = moment(lastMoment).tz($rootScope.RunningTimeZoneId).format('h:ma DD-MMM-YYYY');
+            var voltage = shipment.lastReadingBattery;
+            if (!isNaN(voltage)) {
+                voltage = voltToImg(voltage);
+                console.log('Voltage', voltage);
             }
 
-            lastReading = shipment.lastReadingTime ? shipment.lastReadingTime : lastReading;
-
-            if (temperature || lastReading) {
-                htmlContent += '<tr>';
+            var lastReading = moment(shipment.lastReadingTime).toNow();
+            htmlContent += '<td>';
+            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
+            htmlContent += '</td>';
+            if (lastReading) {
                 htmlContent += '<td>';
-                htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
+                htmlContent += lastReading;
                 htmlContent += '</td>';
-                htmlContent += '<td>';
-                htmlContent += temperature + ' at ' + lastReading;
-                htmlContent += '</td>';
-                htmlContent += '</tr>'
             }
+            if (temperature) {
+                htmlContent += '<td>';
+                htmlContent += '<span style="font-weight: 700; padding-left: 5px; color: '+shipment.color+'">';
+                htmlContent += temperature;
+                htmlContent += '</span>';
+                htmlContent += '</td>';
+            }
+            if (voltage) {
+                htmlContent += '<td>';
+                htmlContent += '<span style="padding-left: 5px;">';
+                htmlContent += voltage;
+                htmlContent += '</span>';
+                htmlContent += '</td>';
+            }
+            htmlContent += '</tr>'
             htmlContent += '</table>'
             htmlContent += '</div>';
             htmlContent += '</div>';
@@ -968,3 +958,51 @@ appFilters.filter('propsFilter', function() {
         return out;
     };
 });
+function voltToImg (input) {
+    if (input) {
+        var v = Number(parseInt(input, 10)/1000).toFixed(1) + "V";
+        if (input <= 3194.3) {
+            return '<img style="height: 16px;" src="theme/img/bat0.png"> 0%';
+        } else if (input <= 3241.6) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 1%';
+        } else if (input <= 3288.9) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 2%';
+        } else if (input <= 3336.2) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 3%';
+        } else if (input <= 3383.5) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 4%';
+        } else if (input <= 3430.8) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 5%';
+        } else if (input <= 3478.1) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 6%';
+        } else if (input <= 3525.4) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 7%';
+        } else if (input <= 3572.7) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 8%';
+        } else if (input <= 3620) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 9%'; // start rolling out
+        } else if (input <= 3695) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 10%';
+        } else if (input <=3770) {
+            return '<img style="height: 16px;" src="theme/img/bat10.png"> 20%';
+        } else if (input <= 3845) {
+            return '<img style="height: 16px;" src="theme/img/bat20.png"> 30% (' + v + ")";
+        } else if (input <= 3920) {
+            return '<img style="height: 16px;" src="theme/img/bat20.png">  40%';
+        } else if (input <= 3995) {
+            return '<img style="height: 16px;" src="theme/img/bat20.png">  50%';
+        } else if (input <= 4070) {
+            return '<img style="height: 16px;" src="theme/img/bat30.png"> 60%';
+        } else if (input <= 4109) {
+            return '<img style="height: 16px;" src="theme/img/bat30.png"> 70%';
+        } else if (input <= 4148) {
+            return '<img style="height: 16px;" src="theme/img/bat40.png"> 80%';
+        } else if (input <= 4187) {
+            return '<img style="height: 16px;" src="theme/img/bat40.png"> 90%';
+        } else if (input < 4220) {
+            return '<img style="height: 16px;" src="theme/img/bat50.png"> 95%';
+        } else {
+            return '<img style="height: 16px;" src="theme/img/bat50.png"> 100%';
+        }
+    }
+};
