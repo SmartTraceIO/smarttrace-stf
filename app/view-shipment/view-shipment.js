@@ -26,7 +26,9 @@
     VM.expectPath = null;
     VM.homeMarker = null;
     VM.destMarker = null;
-    VM.objectToRemove = []
+    VM.objectToRemove = [];
+    VM.oldMarker = null;
+    VM.currentMarker = null;
 
     VM.specificDates = false;
     VM.ViewShipment = {
@@ -121,19 +123,12 @@
 
                 //-- bind color to shipment here by get color of device.
                 var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
-                var color = null;
                 if (d && (d.length > 0)) {
                     //found a device
-                    color = d[0].color;
+                    VM.ShipmentList[k].color = d[0].color;
                 } else {
-                    color = Color[0].name;
+                    VM.ShipmentList[k].color = Color[0].name;
                 }
-                //var color = filter(Color, {name: colorName}, true);
-                VM.ShipmentList[k].color = color;
-                //if (color && (color.length > 0)) {
-                //} else {
-                //    VM.ShipmentList[k].color = Color[0];
-                //}
                 //-- position
                 VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
                 VM.ShipmentList[k].icon = {
@@ -154,7 +149,8 @@
                     }
                 }
                 v.interimStops = interimL;
-                //--
+
+                //-- trim shippedFrom
                 var indexShippedFrom = 0;
                 var indexFirstReading = 0;
                 for(var i = 0; i < v.keyLocations.length; i++) {
@@ -169,6 +165,28 @@
                     v.keyLocations.splice(0, indexShippedFrom);
                 } else {
                     v.keyLocations.splice(0, indexFirstReading);
+                }
+                //-- trim shippedTo
+                var indexShippedTo = 0;
+                var indexLastReading = 0;
+                for(var i = 0; i < v.keyLocations.length; i++) {
+                    if (v.keyLocations[i].key == 'shippedTo') {
+                        indexShippedTo = i;
+                    }
+                    if (v.keyLocations[i].key == 'lastReading') {
+                        indexLastReading = i;
+                    }
+                }
+                if (v.status == 'Arrived') {
+                    if (indexShippedTo > 0) {
+                        v.keyLocations.splice(indexShippedTo+1);
+                    } else {
+                        v.keyLocations.splice(indexLastReading+1);
+                    }
+                } else if (v.status == 'Ended') {
+                    if (indexShippedTo > 0) {
+                        v.keyLocations.splice(indexShippedTo, 1);
+                    }
                 }
             });
         }).then(function() {
@@ -349,8 +367,24 @@
         }
 
         //-- starting path1
-        var lineSymbol = {
-            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+        //must find color of shipment here
+        var c = filter(Color, {name: shipment.color}, true);
+        if (c && c.length>0) {
+            c = c[0];
+        } else {
+            c = Color[0];
+        }
+
+        console.log('Color', shadeColor2(c.code, 0.3));
+        console.log('Color', c.code);
+
+        var arrowSymbol = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            scale: 2,
+            strokeWeight:2,
+            strokeColor: shadeColor2(c.code, -0.3),
+            fillColor: shadeColor2(c.code, -0.3),
+            fillOpacity: 1
         };
         //-- init markers
         var infoWindow = new InfoBubble({
@@ -363,7 +397,7 @@
             borderColor: '#7ed56d',
             disableAutoPan: true,
             arrowPosition: 10,
-            //hideCloseButton:true,
+            hideCloseButton:true,
             arrowStyle: 2,
         });
         VM.objectToRemove.push(infoWindow);
@@ -371,7 +405,8 @@
         var label = null;
         var ilabel = null;
         angular.forEach(shipment.keyLocations, function(v, k) {
-            if (v.key == "shippedFrom" || v.key == "firstReading") {
+            //if (v.key == "shippedFrom") {
+            if (k==0) {
                 icontent = '';
                 icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
                 icontent += '<img src="theme/img/locationStart.png">';
@@ -402,6 +437,7 @@
                     VM.objectToRemove.push(ilabel);
                 }
                 VM.objectToRemove.push(imarker);
+            } else if (v.key == "shippedTo") {
             } else if (v.key == "reading") {
             } else if (v.key == "lastReading") {
                 path2.push({lat:v.lat, lng:v.lon});
@@ -422,7 +458,7 @@
                     map: VM.map
                 });
                 VM.objectToRemove.push(imarker);
-            } else {
+            } else { //-- alert
                 if (v.key == "LightOnAlert") {
                     icontent = '';
                     icontent += '<table>';
@@ -511,7 +547,10 @@
                         infoWindow.setContent(alertContent);
                         infoWindow.open(VM.map, imarker);
                     }
-                })
+                });
+                google.maps.event.addListener(imarker, 'mouseout', function() {
+                    infoWindow.close();
+                });
                 VM.objectToRemove.push(imarker);
             }
             //----------------------------------------------------------------------------------------------------------
@@ -522,34 +561,40 @@
             if (k+1 < shipment.keyLocations.length) {
                 var v1 = shipment.keyLocations[k+1];
                 var spart = [{lat: v.lat, lng: v.lon}, {lat: v1.lat, lng: v1.lon}];
-                var rpath = new google.maps.Polyline({
-                    path: spart,
-                    strokeColor: shipment.color,
-                    strokeOpacity: 1.0,
-                    strokeWeight: 4,
-                    map: VM.map,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '50%'
-                    }],
-                });
+                var fromLlng = new google.maps.LatLng(v.lat, v.lon);
+                var toLlng = new google.maps.LatLng(v1.lat, v1.lon);
+                var distance = getDistance(fromLlng, toLlng);
+                var rpath = null;
+                if (distance < 1000) {
+                    //console.log('Distance', distance);
+                    rpath = new google.maps.Polyline({
+                        path: spart,
+                        strokeColor: shipment.color,
+                        strokeOpacity: 1.0,
+                        strokeWeight: 4,
+                        map: VM.map,
+                        /*icons: [{
+                            icon: arrowSymbol,
+                            offset: '50%'
+                        }],*/
+                    });
+                } else {
+                    rpath = new google.maps.Polyline({
+                        path: spart,
+                        strokeColor: shipment.color,
+                        strokeOpacity: 1.0,
+                        strokeWeight: 4,
+                        map: VM.map,
+                        icons: [{
+                            icon: arrowSymbol,
+                            offset: '50%'
+                        }],
+                    });
+                }
+
                 VM.objectToRemove.push(rpath);
             }
         }); // end of travel
-
-
-        //angular.forEach(shipment.keyLocations, function(v, k) {
-        //    path1.push({lat: v.lat, lng: v.lon});
-        //});
-
-        //VM.objectToRemove = new google.maps.Polyline({
-        //    path: path1,
-        //    geodesic: true,
-        //    strokeColor: shipment.color,
-        //    strokeOpacity: 1.0,
-        //    strokeWeight: 4,
-        //    map: VM.map
-        //});
 
         var lineSymbol = {
             path: 'M 0,-1 0,1',
@@ -933,6 +978,8 @@
             closeBtn.style.cursor = 'pointer';
             closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
             closeBtn.addEventListener('click', function() {
+                VM.oldMarker = VM.currentMarker;
+                VM.updateCluster();
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                     if (VM.expectPath) VM.expectPath.setMap(null);
@@ -965,23 +1012,50 @@
                         VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
                         VM.updatePolylines(shipment);
                     }
+
                 } else {
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
                     //console.log('shipment', shipment);
                     VM.updatePolylines(shipment);
                 }
-
+                //restore cluster
+                VM.oldMarker = VM.currentMarker;
+                VM.currentMarker = marker;
+                VM.updateCluster();
             });
             VM.dynMarkers.push(marker);
             VM.labelMarkers.push(ilabel);
             bounds.extend(llng);
         });
 
-        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {minimumClusterSize:4});
+        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);
         }
+    }
+
+    VM.updateCluster = function() {
+        //-- remove marker from cluster
+        if (VM.oldMarker == VM.currentMarker) {
+            //add current marker to cluster
+            VM.dynMarkers.push(VM.currentMarker);
+            VM.oldMarker = null;
+            VM.currentMarker = null;
+        } else {
+            //add oldMarker (if not null) to cluster and remove current marker
+            for (var i = 0; i < VM.dynMarkers.length; i++) {
+                if (VM.dynMarkers[i] == VM.currentMarker) {
+                    VM.dynMarkers.splice(i, 1);
+                    break;
+                }
+            }
+            if (VM.oldMarker) {
+                VM.dynMarkers.push(VM.oldMarker);
+            }
+        }
+        VM.markerClusterer.setMap(null);
+        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
     }
 });
 
@@ -1096,24 +1170,56 @@ function getAlertContent(v, deviceSN, tripCount, color) {
         alertText = 'Movement Start Alert for shipment ';
     }
 
-    var htmlAlert = '';
-    htmlAlert += '<div style="width: 275px; height: 80px;">';
-    htmlAlert += '<table>';
-    htmlAlert += '<tr style="background-color: '+color+';">';
-    htmlAlert += '<td style="width: 24px; margin-right: 5px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px">';
-    htmlAlert += '<img src="'+alertImg+'">'
-    htmlAlert += '</td>';
-    htmlAlert += '<td style="padding-top: 5px; padding-bottom: 5px; color: #ffffff">';
-    htmlAlert += (alertText + deviceSN + ' (' + tripCount + ')');
-    htmlAlert += '</td>';
-    htmlAlert += '</tr>';
-    htmlAlert += '<tr>';
-    htmlAlert += '<td colspan="2" style="padding: 5px">';
-    htmlAlert += v.desc;
-    htmlAlert += '</td>';
-    htmlAlert += '</tr>';
-    htmlAlert += '</table>';
-    htmlAlert += '</div>';
+    var desc = v.desc ? v.desc.split('\n') : null;
 
+    var htmlAlert = '';
+    if (desc && alertText && alertImg) {
+        htmlAlert += '<div style="width: 275px; height: 70px;">';
+        htmlAlert += '<table width="100%">';
+        htmlAlert += '<tr style="background-color: '+color+';">';
+        htmlAlert += '<td style="width: 24px; margin-right: 5px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px">';
+        htmlAlert += '<img src="'+alertImg+'">'
+        htmlAlert += '</td>';
+        htmlAlert += '<td style="padding-top: 5px; padding-bottom: 5px; color: #ffffff">';
+        htmlAlert += (alertText + deviceSN + ' (' + tripCount + ')');
+        htmlAlert += '</td>';
+        htmlAlert += '</tr>';
+        if (desc[1] && desc[1] != 'undefined') {
+            htmlAlert += '<tr>';
+            htmlAlert += '<td colspan="2" style="padding-left: 5px; padding-right: 5px; padding-top: 5px;">';
+            htmlAlert += desc[1];
+            htmlAlert += '</td>';
+            htmlAlert += '</tr>';
+        }
+        if (desc[2] && desc[2] != 'undefined') {
+            htmlAlert += '<tr>';
+            htmlAlert += '<td colspan="2" style="padding-left: 5px; padding-right: 5px;">';
+            htmlAlert += desc[2];
+            htmlAlert += '</td>';
+            htmlAlert += '</tr>';
+        }
+        htmlAlert += '</table>';
+        htmlAlert += '</div>';
+    }
     return htmlAlert;
+}
+
+var rad = function(x) {
+    return x * Math.PI / 180;
+};
+
+var getDistance = function(p1, p2) {
+    var R = 6378137; // Earth’s mean radius in meter
+    var dLat = rad(p2.lat() - p1.lat());
+    var dLong = rad(p2.lng() - p1.lng());
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+        Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d; // returns the distance in meter
+};
+function shadeColor2(color, percent) {
+    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 }
