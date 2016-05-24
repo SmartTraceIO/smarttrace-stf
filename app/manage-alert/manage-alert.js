@@ -22,7 +22,7 @@
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
-                console.log('AlertList', data.response);
+                //console.log('AlertList', data.response);
                 $scope.AlertList.totalCount = data.totalCount;
                 angular.forEach($scope.AlertList, function (val, key) {
                     var rule;
@@ -215,23 +215,26 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
     }
 
     $scope.SaveData = function (isValid, closeModalPopup) {
+        console.log('IsValid', isValid);
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
-            angular.forEach($scope.coldAlerts, function (val, key) {
-                //convert F to C and save
+            for (var i = 0; i < $scope.coldAlerts.length; i++) {
+                var val = clone($scope.coldAlerts[i]);
                 if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
                 }
                 $scope.Alert.temperatureIssues.push(val);
-            });
-            angular.forEach($scope.hotAlerts, function (val, key) {
-                if ($scope.TempType == 'F') {
-                    val.temperature = F2C(val.temperature);
-                }
-                $scope.Alert.temperatureIssues.push(val);
-            });
+            }
 
-            console.log('Alert', $scope.Alert);
+            for (var i = 0; i < $scope.hotAlerts.length; i++) {
+                var val = clone($scope.hotAlerts[i]);
+                if ($scope.TempType == 'F') {
+                    val.temperature = F2C(val.temperature);
+                }
+                $scope.Alert.temperatureIssues.push(val);
+            }
+
+            //console.log('Alert', $scope.Alert);
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code==0) {
@@ -329,7 +332,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
 
             webSvc.getAlertProfile(alertId).success(function (data) {
                 if (data.status.code == 0) {
-                    console.log('Alert', data.response);
+                    //console.log('Alert', data.response);
                     $scope.Alert = data.response;
                     $scope.coldAlerts = [];
                     $scope.hotAlerts = [];
@@ -383,20 +386,24 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
     }
 
     $scope.SaveData = function (isValid, closeModalPopup) {
+        console.log('IsValid', isValid);
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
-            angular.forEach($scope.coldAlerts, function (val, key) {
+            for (var i = 0; i < $scope.coldAlerts.length; i++) {
+                var val = clone($scope.coldAlerts[i]);
                 if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
                 }
                 $scope.Alert.temperatureIssues.push(val);
-            });
-            angular.forEach($scope.hotAlerts, function (val, key) {
+            }
+
+            for (var i = 0; i < $scope.hotAlerts.length; i++) {
+                var val = clone($scope.hotAlerts[i]);
                 if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
                 }
                 $scope.Alert.temperatureIssues.push(val);
-            });
+            }
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -423,4 +430,37 @@ function F2C(fah) {
 }
 function C2F(cel) {
     return Math.round((cel * 9 / 5 + 32) * 10) / 10;
+}
+function clone(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
 }

@@ -507,8 +507,10 @@
                     //show info window
                     //-- get alert content here;
                     var alertContent = getAlertContent(v, shipment.deviceSN, shipment.tripCount, shipment.color);
-                    infoWindow.setContent(alertContent);
-                    infoWindow.open(VM.map, imarker);
+                    if (alertContent) {
+                        infoWindow.setContent(alertContent);
+                        infoWindow.open(VM.map, imarker);
+                    }
                 })
                 VM.objectToRemove.push(imarker);
             }
@@ -764,15 +766,15 @@
 
             htmlContent += '<td>';
 
-            if (shipment.siblingCount > 1) {
+            if (shipment.siblingCount > 2) {
                 htmlContent += '<span class="pull-left">';
                 htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += shipment.siblingCount + ' others';
+                htmlContent += (shipment.siblingCount-1) + ' others';
                 htmlContent += '</span>';
-            } else if (shipment.siblingCount = 1) {
+            } else if (shipment.siblingCount = 2) {
                 htmlContent += '<span class="pull-left">';
                 htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += shipment.siblingCount + ' other';
+                htmlContent += (shipment.siblingCount-1) + ' other';
                 htmlContent += '</span>';
             }
 
@@ -1068,9 +1070,11 @@ function getAlertContent(v, deviceSN, tripCount, color) {
     if (v.key == "LightOnAlert") {
         alertImg="theme/img/alertLightOn.png";
         alertText = 'Light On Alert for shipment ';
+        return null;
     } else if (v.key == "LightOffAlert") {
         alertImg="theme/img/alertLightOff.png";
         alertText = 'Light Off Alert for shipment ';
+        return null;
     } else if (v.key == "ColdAlert") {
         alertImg="theme/img/alertCold.png";
         alertText = 'Cold Alert for shipment ';
@@ -1093,7 +1097,7 @@ function getAlertContent(v, deviceSN, tripCount, color) {
     }
 
     var htmlAlert = '';
-    htmlAlert += '<div style="width: 270px; height: 75px;">';
+    htmlAlert += '<div style="width: 275px; height: 80px;">';
     htmlAlert += '<table>';
     htmlAlert += '<tr style="background-color: '+color+';">';
     htmlAlert += '<td style="width: 24px; margin-right: 5px; padding-left: 5px; padding-top: 5px; padding-bottom: 5px">';
