@@ -24,7 +24,6 @@
     }
 
     VM.expectPath = null;
-    VM.homeMarker = null;
     VM.destMarker = null;
     VM.objectToRemove = [];
     VM.oldMarker = null;
@@ -352,7 +351,8 @@
                 flat: true,
                 anchor: RichMarkerPosition.MIDDLE,
                 content: destContent,
-                map: VM.map
+                map: VM.map,
+                zIndex: 1e4
             });
             var destLabel = new MapLabel({
                 position: destLlng,
@@ -374,9 +374,6 @@
         } else {
             c = Color[0];
         }
-
-        console.log('Color', shadeColor2(c.code, 0.3));
-        console.log('Color', c.code);
 
         var arrowSymbol = {
             path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
@@ -423,7 +420,8 @@
                     flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
-                    map: VM.map
+                    map: VM.map,
+                    zIndex: 1e4
                 });
                 if (label) {
                     ilabel = new MapLabel({
@@ -719,16 +717,16 @@
     }
 
     VM.updateMap = function() {
-        if (VM.markerClusterer) {
-            // Unset all markers
-            var ms = VM.markerClusterer.getMarkers();
-            var l = ms ? ms.length : 0;
-            for (var i = 0; i<l; i++) {
-                ms[i].setMap(null)
-            }
-            // Clears all clusters and markers from the clusterer.
-            VM.markerClusterer.clearMarkers();
-        }
+        //if (VM.markerClusterer) {
+        //    // Unset all markers
+        //    var ms = VM.markerClusterer.getMarkers();
+        //    var l = ms ? ms.length : 0;
+        //    for (var i = 0; i<l; i++) {
+        //        ms[i].setMap(null)
+        //    }
+        //    // Clears all clusters and markers from the clusterer.
+        //    VM.markerClusterer.clearMarkers();
+        //}
         if (VM.dynMarkers) {
             var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
             for (var i = 0; i < lx; i++) {
@@ -746,6 +744,7 @@
         $log.debug('update Maps', VM.ShipmentList);
         // console.log('Custom Markers', VM.map.customMarkers);
         var bounds = new google.maps.LatLngBounds;
+        var infoBoxElement = document.createElement('div');
 
         angular.forEach(VM.ShipmentList, function(shipment, key) {
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
@@ -777,250 +776,31 @@
                 content: htmlIcon,
              });
             marker.bindTo('position', ilabel);
+            marker.shipment = shipment;
 
-            var htmlContent = '';
-            htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color+'">';  //+1
-
-            htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';                                                                   //+2
-            htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
-            htmlContent += '<tr>';
-            htmlContent += '<td>';
-            htmlContent += '<table>';
-            htmlContent += '<tr>';
-            htmlContent += '<td>'
-            htmlContent += '<span class="pull-left bold">';
-            htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
-            htmlContent +=  '<u style="color: #ffffff">Shipment ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
-            htmlContent += '</span>';
-            htmlContent += '</td>'
-            htmlContent += '</tr>';
-            htmlContent += '</table>';
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-            htmlContent += '<span class="pull-right">';
-            if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
-            if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
-            if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
-            if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
-            if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
-            if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
-            if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
-            if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
-            htmlContent += '</span>';
-            htmlContent += '</td>';
-
-            htmlContent += '<td>';
-
-            if (shipment.siblingCount > 2) {
-                htmlContent += '<span class="pull-left">';
-                htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += (shipment.siblingCount-1) + ' others';
-                htmlContent += '</span>';
-            } else if (shipment.siblingCount = 2) {
-                htmlContent += '<span class="pull-left">';
-                htmlContent += '<img src="theme/img/similarTrips.png"/>'
-                htmlContent += (shipment.siblingCount-1) + ' other';
-                htmlContent += '</span>';
-            }
-
-            htmlContent += '</td>';
-
-            htmlContent += '<td style="text-align: right; width: 10px;">';
-            htmlContent += '&nbsp;';
-            htmlContent += '</td>';
-            htmlContent += '</tr>';
-            htmlContent += '</table>';
-            htmlContent += '</div>';                                                                                        //-2
-
-            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-bottom: 1px solid; border-color: '+shipment.color+'">'; //+5
-            htmlContent += '<div style="font-weight: 700;">Description:</div>';
-            htmlContent += '<div>'+shipment.shipmentDescription+'</div>'
-            htmlContent += '</div>';
-
-            htmlContent += '<div class="portlet-body" style="padding: 5px!important;">'; //+5
-            htmlContent += '<table style="text-align: left;">';
-            htmlContent += '<tr>';
-            htmlContent += '<td>';
-            htmlContent += '<img src="theme/img/locationStart.png">';
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-            if (shipment.shippedFrom) {
-                htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
-            } else {
-                htmlContent += '<p class="bold no-margin no-padding">Default</p>';
-            }
-            if (shipment.shipmentDate) {
-                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
-            } else {
-                htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.firstReadingTime+'</p>';
-            }
-            htmlContent += '</td>';
-            htmlContent += '</tr>';
-            //-- interim stop here
-
-            if (shipment.interimStops) {
-                angular.forEach(shipment.interimStops, function(v, k) {
-                    htmlContent += '<tr>';
-                    htmlContent += '<td>';
-                    htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
-                    htmlContent += '</td>';
-                    htmlContent += '<td>';
-                    htmlContent += '<div class="bold">' + v.name + '</div>';
-                    htmlContent += '<div>' + v.time + '</div>';
-                    htmlContent += '</td>';
-                    htmlContent += '</tr>';
-                });
-            }
-
-            //--end
-            htmlContent += '<tr>';
-            htmlContent += '<td>';
-            if (shipment.status == "Ended" || shipment.status == "Default") {
-                htmlContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">';
-            } else {
-                htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
-            }
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-            if (shipment.shippedTo) {
-                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
-            } else {
-                htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">To be determined</p>';
-            }
-            if (shipment.status == 'Arrived') {
-                htmlContent += '<p class="text-muted no-margin no-padding">';
-                htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
-            } else if (shipment.status == 'Ended'){
-                htmlContent += '<p class="text-muted no-margin no-padding">';
-                htmlContent += '<span>ENDED AT</span>: '+shipment.lastReadingTime+'</p>';
-            }
-            htmlContent += '</td>';
-            htmlContent += '</tr>';
-            htmlContent += '</table>';
-            htmlContent += '<table>';
-            htmlContent += '<tr>';
-            htmlContent += '<td>';
-            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Status:</span>';
-            htmlContent += '</td>';
-            htmlContent += '<td>';
-            htmlContent += '<span>'+shipment.status+'</span>'
-            htmlContent += '</td>';
-            htmlContent += '</tr>'
-            htmlContent += '</table>';
-            htmlContent += '</div>';
-
-            htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+shipment.color+'">'; //+5
-            htmlContent += '<table style="text-align: left;">';
-            htmlContent += '<tr>';
-
-            htmlContent += '<td style="width: 20px;">';
-            if (shipment.status == 'Ended') {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +'; margin-right: 5px; position:relative;">';
-                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
-                htmlContent += '</div>';
-            } else if (shipment.status == 'Arrived') {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px; position:relative;">';
-                htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
-                htmlContent += '</div>';
-            } else {
-                htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px;">';
-                htmlContent += '</div>';
-            }
-            htmlContent += '</td>';
-
-
-            var temperature = shipment.lastReadingTemperature;
-            if (!isNaN(temperature)) {
-                temperature = temperature.toFixed(1) + '℃';
-            } else {
-                temperature = '';
-            }
-            var voltage = shipment.lastReadingBattery;
-            if (!isNaN(voltage)) {
-                voltage = voltToImg(voltage);
-            }
-
-            var lastReading = moment(shipment.lastReadingTime).fromNow();
-            htmlContent += '<td>';
-            htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
-            htmlContent += '</td>';
-            if (lastReading) {
-                htmlContent += '<td>';
-                htmlContent += lastReading;
-                htmlContent += '</td>';
-            }
-            if (temperature) {
-                htmlContent += '<td>';
-                htmlContent += '<span style="font-weight: 700; padding-left: 5px; color: '+shipment.color+'">';
-                htmlContent += temperature;
-                htmlContent += '</span>';
-                htmlContent += '</td>';
-            }
-            if (voltage) {
-                htmlContent += '<td>';
-                htmlContent += '<span style="padding-left: 5px;">';
-                htmlContent += voltage;
-                htmlContent += '</span>';
-                htmlContent += '</td>';
-            }
-            htmlContent += '</tr>'
-            htmlContent += '</table>'
-            htmlContent += '</div>';
-            htmlContent += '</div>';
-
-            //-- controls
-            //-- htmlContent += '<span style="font-size: 20px;">&times;</span>';
-            var closeBtn = document.createElement('div');
-            closeBtn.style.position='absolute';
-            closeBtn.style.top='5px';
-            closeBtn.style.right='10px';
-            closeBtn.style.color='#ffffff';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
-            closeBtn.addEventListener('click', function() {
-                VM.oldMarker = VM.currentMarker;
-                VM.updateCluster();
-                if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
-                    var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
-                    if (VM.expectPath) VM.expectPath.setMap(null);
-                    if (VM.destMarker) VM.destMarker.setMap(null);
-                    if (VM.homeMarker) VM.homeMarker.setMap(null);
-                    if (VM.objectToRemove && VM.objectToRemove.length > 0) {
-                        for (var i = 0; i< VM.objectToRemove.length; i++) {
-                            VM.objectToRemove[i].setMap(null);
-                        }
-                    }
-                }
-            });
-
-            var controlInfo = document.createElement('div');
-            controlInfo.innerHTML = htmlContent;
-            controlInfo.appendChild(closeBtn);
-
-            marker.addListener('click', function() {
-                if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
-                    var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
-                    if (VM.expectPath) VM.expectPath.setMap(null);
-                    if (VM.destMarker) VM.destMarker.setMap(null);
-                    if (VM.homeMarker) VM.homeMarker.setMap(null);
-                    if (VM.objectToRemove && VM.objectToRemove.length > 0) {
-                        for (var i = 0; i< VM.objectToRemove.length; i++) {
-                            VM.objectToRemove[i].setMap(null);
-                        }
-                    }
-                    if (!pContent.childNodes[0].isEqualNode(controlInfo.childNodes[0])) {
-                        VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
-                        VM.updatePolylines(shipment);
-                    }
-
-                } else {
-                    VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlInfo);
-                    //console.log('shipment', shipment);
-                    VM.updatePolylines(shipment);
-                }
-                //restore cluster
+            google.maps.event.addListener(marker, 'click', function() {
                 VM.oldMarker = VM.currentMarker;
                 VM.currentMarker = marker;
+                VM.getInfoBoxElement(infoBoxElement, marker.shipment);
+
+                if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+                    var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+                    if (VM.expectPath) VM.expectPath.setMap(null);
+                    if (VM.destMarker) VM.destMarker.setMap(null);
+                    if (VM.objectToRemove && VM.objectToRemove.length > 0) {
+                        for (var i = 0; i< VM.objectToRemove.length; i++) {
+                            VM.objectToRemove[i].setMap(null);
+                        }
+                    }
+                    if (VM.oldMarker != VM.currentMarker) {
+                        VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBoxElement);
+                        VM.updatePolylines(marker.shipment);
+                    }
+                } else {
+                    VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBoxElement);
+                    VM.updatePolylines(marker.shipment);
+                }
+                //restore cluster
                 VM.updateCluster();
             });
             VM.dynMarkers.push(marker);
@@ -1044,18 +824,234 @@
             VM.currentMarker = null;
         } else {
             //add oldMarker (if not null) to cluster and remove current marker
-            for (var i = 0; i < VM.dynMarkers.length; i++) {
-                if (VM.dynMarkers[i] == VM.currentMarker) {
-                    VM.dynMarkers.splice(i, 1);
-                    break;
-                }
-            }
+            var idx = VM.dynMarkers.indexOf(VM.currentMarker);
+            VM.dynMarkers.splice(idx, 1);
             if (VM.oldMarker) {
                 VM.dynMarkers.push(VM.oldMarker);
             }
         }
         VM.markerClusterer.setMap(null);
         VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
+    }
+
+    VM.getInfoBoxElement = function(controlInfo, shipment) {
+        var htmlContent = '';
+        htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color+'">';  //+1
+
+        htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';                                                                   //+2
+        htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
+        htmlContent += '<tr>';
+        htmlContent += '<td>';
+        htmlContent += '<table>';
+        htmlContent += '<tr>';
+        htmlContent += '<td>'
+        htmlContent += '<span class="pull-left bold">';
+        htmlContent += '<a href="#/view-shipment-detail?sn='+shipment.deviceSN+'&trip='+shipment.tripCount+'">';
+        htmlContent +=  '<u style="color: #ffffff">Shipment ' + shipment.deviceSN + ' (' + shipment.tripCount + ')</u></a>';
+        htmlContent += '</span>';
+        htmlContent += '</td>'
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+        htmlContent += '</td>';
+        htmlContent += '<td>';
+        htmlContent += '<span class="pull-right">';
+        if (shipment.alertSummary.LightOn)          htmlContent += '<img src="theme/img/alertLightOn.png"/>';
+        if (shipment.alertSummary.LightOff)         htmlContent += '<img src="theme/img/alertLightOff.png"/>';
+        if (shipment.alertSummary.Cold)             htmlContent += '<img src="theme/img/alertCold.png"/>';
+        if (shipment.alertSummary.Hot)              htmlContent += '<img src="theme/img/alertHot.png"/>';
+        if (shipment.alertSummary.CriticalCold)     htmlContent += '<img src="theme/img/alertCriticalCold.png"/>';
+        if (shipment.alertSummary.CriticalHot)      htmlContent += '<img src="theme/img/alertCriticalHot.png"/>';
+        if (shipment.alertSummary.Battery)          htmlContent += '<img src="theme/img/alertBattery.png"/>';
+        if (shipment.alertSummary.MovementStart)    htmlContent += '<img src="theme/img/alertShock.png"/>';
+        htmlContent += '</span>';
+        htmlContent += '</td>';
+
+        htmlContent += '<td>';
+
+        if (shipment.siblingCount > 2) {
+            htmlContent += '<span class="pull-left">';
+            htmlContent += '<img src="theme/img/similarTrips.png"/>'
+            htmlContent += (shipment.siblingCount-1) + ' others';
+            htmlContent += '</span>';
+        } else if (shipment.siblingCount = 2) {
+            htmlContent += '<span class="pull-left">';
+            htmlContent += '<img src="theme/img/similarTrips.png"/>'
+            htmlContent += (shipment.siblingCount-1) + ' other';
+            htmlContent += '</span>';
+        }
+
+        htmlContent += '</td>';
+
+        htmlContent += '<td style="text-align: right; width: 10px;">';
+        htmlContent += '&nbsp;';
+        htmlContent += '</td>';
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+        htmlContent += '</div>';                                                                                        //-2
+
+        htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-bottom: 1px solid; border-color: '+shipment.color+'">'; //+5
+        htmlContent += '<div style="font-weight: 700;">Description:</div>';
+        htmlContent += '<div>'+shipment.shipmentDescription+'</div>'
+        htmlContent += '</div>';
+
+        htmlContent += '<div class="portlet-body" style="padding: 5px!important;">'; //+5
+        htmlContent += '<table style="text-align: left;">';
+        htmlContent += '<tr>';
+        htmlContent += '<td>';
+        htmlContent += '<img src="theme/img/locationStart.png">';
+        htmlContent += '</td>';
+        htmlContent += '<td>';
+        if (shipment.shippedFrom) {
+            htmlContent += '<p class="bold no-margin no-padding">'+shipment.shippedFrom+'</p>';
+        } else {
+            htmlContent += '<p class="bold no-margin no-padding">Default</p>';
+        }
+        if (shipment.shipmentDate) {
+            htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.shipmentDate+'</p>';
+        } else {
+            htmlContent += '<p class="text-muted no-margin no-padding" style="height: 17px;">'+ shipment.firstReadingTime+'</p>';
+        }
+        htmlContent += '</td>';
+        htmlContent += '</tr>';
+        //-- interim stop here
+
+        if (shipment.interimStops) {
+            angular.forEach(shipment.interimStops, function(v, k) {
+                htmlContent += '<tr>';
+                htmlContent += '<td>';
+                htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
+                htmlContent += '</td>';
+                htmlContent += '<td>';
+                htmlContent += '<div class="bold">' + v.name + '</div>';
+                htmlContent += '<div>' + v.time + '</div>';
+                htmlContent += '</td>';
+                htmlContent += '</tr>';
+            });
+        }
+
+        //--end
+        htmlContent += '<tr>';
+        htmlContent += '<td>';
+        if (shipment.status == "Ended" || shipment.status == "Default") {
+            htmlContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">';
+        } else {
+            htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
+        }
+        htmlContent += '</td>';
+        htmlContent += '<td>';
+        if (shipment.shippedTo) {
+            htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">'+shipment.shippedTo+'</p>';
+        } else {
+            htmlContent += '<p class="bold no-margin no-padding" style="height: 17px;">To be determined</p>';
+        }
+        if (shipment.status == 'Arrived') {
+            htmlContent += '<p class="text-muted no-margin no-padding">';
+            htmlContent += '<span>ARRIVED AT</span>: '+shipment.actualArrivalDate+'</p>';
+        } else if (shipment.status == 'Ended'){
+            htmlContent += '<p class="text-muted no-margin no-padding">';
+            htmlContent += '<span>ENDED AT</span>: '+shipment.lastReadingTime+'</p>';
+        }
+        htmlContent += '</td>';
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+        htmlContent += '<table>';
+        htmlContent += '<tr>';
+        htmlContent += '<td>';
+        htmlContent += '<span style="font-weight: 600; padding-right: 5px">Status:</span>';
+        htmlContent += '</td>';
+        htmlContent += '<td>';
+        htmlContent += '<span>'+shipment.status+'</span>'
+        htmlContent += '</td>';
+        htmlContent += '</tr>'
+        htmlContent += '</table>';
+        htmlContent += '</div>';
+
+        htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-top: 1px solid; border-color: '+shipment.color+'">'; //+5
+        htmlContent += '<table style="text-align: left;">';
+        htmlContent += '<tr>';
+
+        htmlContent += '<td style="width: 20px;">';
+        if (shipment.status == 'Ended') {
+            htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +'; margin-right: 5px; position:relative;">';
+            htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&times;</span>'
+            htmlContent += '</div>';
+        } else if (shipment.status == 'Arrived') {
+            htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px; position:relative;">';
+            htmlContent += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -2px; left: 3px;;">&check;</span>'
+            htmlContent += '</div>';
+        } else {
+            htmlContent += '<div style="width: 15px; height: 15px;  background-color: '+ shipment.color +';margin-right: 5px;">';
+            htmlContent += '</div>';
+        }
+        htmlContent += '</td>';
+
+
+        var temperature = shipment.lastReadingTemperature;
+        if (!isNaN(temperature)) {
+            temperature = temperature.toFixed(1) + '℃';
+        } else {
+            temperature = '';
+        }
+        var voltage = shipment.lastReadingBattery;
+        if (!isNaN(voltage)) {
+            voltage = voltToImg(voltage);
+        }
+
+        var lastReading = moment(shipment.lastReadingTime).fromNow();
+        htmlContent += '<td>';
+        htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
+        htmlContent += '</td>';
+        if (lastReading) {
+            htmlContent += '<td>';
+            htmlContent += lastReading;
+            htmlContent += '</td>';
+        }
+        if (temperature) {
+            htmlContent += '<td>';
+            htmlContent += '<span style="font-weight: 700; padding-left: 5px; color: '+shipment.color+'">';
+            htmlContent += temperature;
+            htmlContent += '</span>';
+            htmlContent += '</td>';
+        }
+        if (voltage) {
+            htmlContent += '<td>';
+            htmlContent += '<span style="padding-left: 5px;">';
+            htmlContent += voltage;
+            htmlContent += '</span>';
+            htmlContent += '</td>';
+        }
+        htmlContent += '</tr>'
+        htmlContent += '</table>'
+        htmlContent += '</div>';
+        htmlContent += '</div>';
+
+        //-- controls
+        //-- htmlContent += '<span style="font-size: 20px;">&times;</span>';
+        var closeBtn = document.createElement('div');
+        closeBtn.style.position='absolute';
+        closeBtn.style.top='5px';
+        closeBtn.style.right='10px';
+        closeBtn.style.color='#ffffff';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
+        closeBtn.addEventListener('click', function() {
+            VM.oldMarker = VM.currentMarker;
+            VM.updateCluster();
+            if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+                var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+                if (VM.expectPath) VM.expectPath.setMap(null);
+                if (VM.destMarker) VM.destMarker.setMap(null);
+                if (VM.objectToRemove && VM.objectToRemove.length > 0) {
+                    for (var i = 0; i< VM.objectToRemove.length; i++) {
+                        VM.objectToRemove[i].setMap(null);
+                    }
+                }
+            }
+        });
+
+        controlInfo.innerHTML = htmlContent;
+        controlInfo.appendChild(closeBtn);
+        return controlInfo;
     }
 });
 
