@@ -868,15 +868,15 @@
 
         htmlContent += '<td>';
 
-        if (shipment.siblingCount > 2) {
+        if (shipment.siblingCount > 1) {
             htmlContent += '<span class="pull-left">';
             htmlContent += '<img src="theme/img/similarTrips.png"/>'
-            htmlContent += (shipment.siblingCount-1) + ' others';
+            htmlContent += (shipment.siblingCount) + ' others';
             htmlContent += '</span>';
-        } else if (shipment.siblingCount = 2) {
+        } else if (shipment.siblingCount = 1) {
             htmlContent += '<span class="pull-left">';
             htmlContent += '<img src="theme/img/similarTrips.png"/>'
-            htmlContent += (shipment.siblingCount-1) + ' other';
+            htmlContent += (shipment.siblingCount) + ' other';
             htmlContent += '</span>';
         }
 
