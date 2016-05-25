@@ -220,17 +220,17 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
             $scope.Alert.temperatureIssues = [];
             for (var i = 0; i < $scope.coldAlerts.length; i++) {
                 var val = clone($scope.coldAlerts[i]);
-                if ($scope.TempType == 'F') {
+                /*if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
-                }
+                }*/
                 $scope.Alert.temperatureIssues.push(val);
             }
 
             for (var i = 0; i < $scope.hotAlerts.length; i++) {
                 var val = clone($scope.hotAlerts[i]);
-                if ($scope.TempType == 'F') {
+                /*if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
-                }
+                }*/
                 $scope.Alert.temperatureIssues.push(val);
             }
 
@@ -337,9 +337,9 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
                     $scope.coldAlerts = [];
                     $scope.hotAlerts = [];
                     angular.forEach($scope.Alert.temperatureIssues, function (val, key) {
-                        if ($scope.TempType == 'F') {
+                        /*if ($scope.TempType == 'F') {
                             val.temperature = C2F(val.temperature);
-                        }
+                        }*/
                         val.temperature = Math.round(val.temperature*10)/10;
                         if (val.type == "Hot" || val.type == "CriticalHot")
                             $scope.hotAlerts.push(val);
@@ -391,17 +391,17 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
             $scope.Alert.temperatureIssues = [];
             for (var i = 0; i < $scope.coldAlerts.length; i++) {
                 var val = clone($scope.coldAlerts[i]);
-                if ($scope.TempType == 'F') {
+                /*if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
-                }
+                }*/
                 $scope.Alert.temperatureIssues.push(val);
             }
 
             for (var i = 0; i < $scope.hotAlerts.length; i++) {
                 var val = clone($scope.hotAlerts[i]);
-                if ($scope.TempType == 'F') {
+                /*if ($scope.TempType == 'F') {
                     val.temperature = F2C(val.temperature);
-                }
+                }*/
                 $scope.Alert.temperatureIssues.push(val);
             }
 
@@ -425,12 +425,12 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
     }
 });
 
-function F2C(fah) {
+/*function F2C(fah) {
     return (fah - 32) * 5 / 9;
-}
-function C2F(cel) {
+}*/
+/*function C2F(cel) {
     return Math.round((cel * 9 / 5 + 32) * 10) / 10;
-}
+}*/
 function clone(obj) {
     var copy;
 

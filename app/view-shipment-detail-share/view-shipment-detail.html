@@ -44,9 +44,6 @@
                                                 <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                             </tr>
                                         </table>
-                                        <!--<img class="tiny-icon15" ng-src="theme/img/Tracker{{trackers[MI].index + 1}}.png">-->
-                                        <!--<span class="tracker-id">Tracker {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span>-->
-                                        <!--<img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png">-->
                                     </div>
                                 </a>
                                 <div class="tools">
@@ -54,15 +51,11 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <!--<div class="shipment-desc">{{trackerInfo.shipmentDescription}}</div>-->
                                 <table class="tracker-desc">
                                     <tr ng-show="trackerInfo.assetNum"><td>Asset Num:</td><td>{{trackerInfo.assetNum}}</td></tr>
                                     <tr ng-show="trackerInfo.assetType"><td>Asset Type:</td><td>{{trackerInfo.assetType}}</td></tr>
                                     <tr ng-show="trackerInfo.palletId"><td>Pallet ID:</td><td>{{trackerInfo.palletId}}</td></tr>
                                 </table>
-                                <!-- <div>
-                                    <span class="bold-font">Tracker Position:</span>
-                                </div> -->
                                 <div>
                                     <div class="portlet-title">
                                             <span>
@@ -89,7 +82,6 @@
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
                                            class="fa fa-info-circle"/>
-                                        <!--<a href="" class="pull-right" ng-click="EditComment(trackerInfo.shipmentId)">Edit</a>-->
                                     </div>
                                     <div class="">
                                         <span>{{trackerInfo.commentsForReceiver}}</span>
@@ -111,26 +103,8 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"/>
                         </div>
-                        <!--<div class="tools">-->
-                            <!--<a href="javascript:;" class="collapse"> </a>-->
-                        <!--</div>-->
                     </div>
                     <div class="portlet-body">
-                        <!--<div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
-                            <div class="portlet-title">
-                                <a href="" class="tracker-info" ng-click="switchTracker($event, t.index)">
-                                    <div>
-                                        <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
-                                        <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
-                                        <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                        <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="portlet-body">
-                                <div class="shipment-desc">{{t.shipmentDescription}}</div>
-                            </div>
-                        </div>-->
                         <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
                             <div class="portlet-title">
                                 <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
@@ -143,17 +117,7 @@
                                             <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
                                         </tr>
                                     </table>
-
-                                    <!--<div>
-                                        <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
-                                        <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
-                                        <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                        <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                    </div>-->
                                 </a>
-                                <!--<div class="tools">
-                                    <a href="javascript:;" class="expand"> </a>
-                                </div>-->
                             </div>
                             <div class="portlet-body" style="padding:0px;">
                                 <table class="table" style="margin-bottom: 0px;">
@@ -738,12 +702,15 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <table class="tracker-desc">
+                            <table width="100%">
                                 <tr>
-                                    <td><img src="theme/img/tinyLocationStart.png"></td>
+                                    <td width="24px"><img src="theme/img/tinyLocationStart.png"></td>
                                     <td>
                                         <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
                                         <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
+                                    </td>
+                                    <td class="pull-right">
+                                        <a href="" ng-click="EditShipmentFrom()">Edit</a>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
@@ -766,9 +733,12 @@
                                         <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                         <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                                     </td>
+                                    <td class="pull-right">
+                                        <a href="" ng-click="EditShipmentTo()">Edit</a>
+                                    </td>
                                 </tr>
                             </table>
-                            <div>
+                            <div style="width: 100%;">
                                 <strong>Status:</strong>
                                 <span>{{trackerInfo.status}}</span>
                                 <span>
@@ -797,6 +767,7 @@
                                        tooltip-placement="top"
                                        class="fa fa-info-circle"/>
                                 </span>
+                                <span class="pull-right"><a href="" ng-click="EditShipmentStatus()">Edit</a></span>
                             </div>
                         </div>
                     </div>

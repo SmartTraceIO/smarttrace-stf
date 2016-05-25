@@ -1510,6 +1510,19 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         );
     }
+
+    //-- edit shippment from
+    $scope.EditShipmentFrom = function() {
+
+    }
+    //-- edit shipment to
+    $scope.EditShipmentTo = function() {
+
+    }
+    //-- edit shipment status
+    $scope.EditShipmentStatus = function() {
+
+    }
 };
 
 appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',

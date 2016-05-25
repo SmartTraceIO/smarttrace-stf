@@ -1,8 +1,9 @@
-    <div class="panel-heading">
+    <div class="modal-header">
         <strong>Edit Shipment Comment</strong>
         <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"><u>{{shipment.deviceSN}}({{shipment.tripCount}})</u></a>
+        <span class="pull-right btn-close" ng-click="cancelEdit()">&times;</span>
     </div>
-    <div class="panel-body">
+    <div class="modal-body">
         <form class="form" name="frmEditComment">
             <div class="form-group">
                 <label for="shipmentComment">Comments For Receiver</label>
@@ -22,4 +23,3 @@
             <button type="submit" class="btn green" ng-click="cancelEdit()">Cancel</button>
         </form>
     </div>
-</div>

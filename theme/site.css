@@ -460,18 +460,12 @@ h3 span.info {
     font-size: 14px;
     font-weight: 600;
 }
-.panel-heading a:after {
-    font-family:'Glyphicons Halflings';
-    content:"\e114";
-    float: right;
-    color: grey;
+
+.modal-header .btn-close {
+    font-size: 18px;
+    cursor: pointer;
 }
-.panel-heading a.collapsed:after {
-    content:"\e080";
-}
-.panel-body{
-    line-height: 20px;
-}
+
 .tabbable-line .col-sm-3{
     padding-left: 0 !important;
 }
