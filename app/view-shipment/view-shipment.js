@@ -302,6 +302,7 @@
 
     VM.updatePolylines = function (shipment) {
         var path2 = [];
+        var bounds = new google.maps.LatLngBounds;
         if (VM.objectToRemove.length > 0) {
             angular.forEach(VM.objectToRemove, function(v, k) {
                 VM.objectToRemove[k].setMap(null);
@@ -347,6 +348,8 @@
                 destText = 'To be determined'
             }
             path2.push({lat:shipment.shippedToLat, lng:shipment.shippedToLong});
+            //-- extend to destination lat/lon
+            bounds.extend(destLlng);
 
             VM.destMarker = new RichMarker({
                 position: destLlng,
@@ -405,6 +408,9 @@
         var ilabel = null;
         angular.forEach(shipment.keyLocations, function(v, k) {
             //if (v.key == "shippedFrom") {
+            var latlng = new google.maps.LatLng(v.lat, v.lon);
+            bounds.extend(latlng);
+
             if (k==0) {
                 icontent = '';
                 icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
@@ -418,7 +424,7 @@
                     label = 'Default'
                 }
                 var imarker = new RichMarker({
-                    position: new google.maps.LatLng(v.lat, v.lon),
+                    position: latlng,
                     flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
@@ -427,7 +433,7 @@
                 });
                 if (label) {
                     ilabel = new MapLabel({
-                        position: new google.maps.LatLng(v.lat, v.lon),
+                        position: latlng,
                         map: VM.map,
                         align: 'left',
                         fontSize: 15,
@@ -451,7 +457,7 @@
                 icontent += '</tr>';
                 icontent += '</table>';
                 var imarker = new RichMarker({
-                    position: new google.maps.LatLng(v.lat, v.lon),
+                    position: latlng,
                     flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
@@ -533,7 +539,7 @@
                     icontent += '</table>';
                 }
                 var imarker = new RichMarker({
-                    position: new google.maps.LatLng(v.lat, v.lon),
+                    position: new latlng,
                     flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
@@ -595,6 +601,10 @@
                 VM.objectToRemove.push(rpath);
             }
         }); // end of travel
+
+        if(bounds != null){
+            VM.map.fitBounds(bounds);
+        }
 
         var lineSymbol = {
             path: 'M 0,-1 0,1',
