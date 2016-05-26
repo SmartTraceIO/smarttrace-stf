@@ -140,24 +140,27 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //markers
             var pos = [locations[i].lat, locations[i].lng];
             if(locations[i].alerts.length > 0){
-                if(locations[i].alerts[0].type == 'LastReading'){
-                    $scope.specialMarkers.push(
-                        {
-                            index: $scope.specialMarkers.length,
-                            len: 16,
-                            oi: i,
-                            pos: pos,
-                            data: locations[i],
-                            iconUrl: "theme/img/Tracker" + (index + 1) + ".png",
-                            icon: {
-                                url:"theme/img/Tracker" + (index + 1) + ".png",
-                                scaledSize:[16, 16],
-                                anchor:[8, 8]
-                            },
-                            tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
-                        }
-                    );
-                } else if(locations[i].alerts[0].type.toLowerCase() != 'lighton' && locations[i].alerts[0].type.toLowerCase() != 'lightoff') {
+                //console.log('Alert', locations[i].alerts)
+                if(locations[i].alerts[0].type.toLowerCase() == 'lastreading'){
+                    $scope.specialMarkers.push({
+                        index: $scope.specialMarkers.length,
+                        len: 16,
+                        oi: i,
+                        pos: pos,
+                        data: locations[i],
+                        icon: {
+                            url:"theme/img/Tracker" + (index + 1) + ".png",
+                            scaledSize:[16, 16],
+                            anchor:[8, 8]
+                        },
+                        tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
+                    });
+                } else if (locations[i].alerts[0].type.toLowerCase() == 'lighton' || locations[i].alerts[0].type.toLowerCase() == 'lightoff') {
+                    $scope.specialMarkers.push({
+                        index:$scope.specialMarkers.length,
+                        oi: i
+                    })
+                } else {
                     $scope.specialMarkers.push(
                         {
                             index: $scope.specialMarkers.length,
@@ -165,7 +168,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             oi: i,
                             pos: pos,
                             data: locations[i],
-                            iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
+                            //iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
                             icon: {
                                 url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
                                 scaledSize:[24, 24],
@@ -361,17 +364,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     function prepareTrackerMessage(){
-
         var info = subSeries[$scope.MI];
         $scope.trackerMsg.length = 0;
-        for(i = 0; i < subSeries[$scope.MI].length; i++){
-                    //prepare tracker message data
+        for(i = 0; i < info.length; i++){
+            //prepare tracker message data
             var obj = {};
             obj.title = "Tracker " + info[i].deviceSN + "(" + info[i].tripCount + ")";
             obj.lines = ['<div><span class="tt_temperature">' + info[i].y.toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(info[i].x) + '</span></div>'];
             $scope.trackerMsg.push([obj]);
         }
-        // console.log($scope.trackerMsg.length);
     }
 
     $scope.showAlertsUI = function(){
@@ -380,6 +381,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         $scope.ttShow = true;
         $scope.msgForMap = [];
+
+        console.log('this.data.oi', this.data.oi);
 
         for(var i = 0; i < $scope.trackerMsg[this.data.oi].length; i++){
             var tmp = {};
@@ -399,39 +402,32 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
     $scope.showAlerts = function(index){
         //mouse out
-        if(index == -1){
-            $scope.currentPoint.iconUrl = "theme/img/edot.png";
-            $scope.currentPoint.len = 12;
-            $scope.currentPoint.icon = {
-                url: 'theme/img/edot.png',
-                anchor: [6,6]
-            }
-        } else {
-            //For alerts, only black circle without point in it.
-            $scope.currentPoint.iconUrl = "theme/img/dot.png";
-            //$scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
-            $scope.currentPoint.loc = {lat: subSeries[$scope.MI][index].lat, long: subSeries[$scope.MI][index].lng};
-            $scope.currentPoint.icon = {
-                url: 'theme/img/dot.png',
-                anchor: [17.5,17.5]
-            };
-            $scope.currentPoint.len = 35;
-            //console.log($scope.specialMarkers);
-            for(i = 0; i < $scope.specialMarkers.length; i++){
-                if($scope.specialMarkers[i].oi == index){
-                    $scope.currentPoint.iconUrl = "theme/img/outdot.png";
-                    $scope.currentPoint.icon = {
-                        url: 'theme/img/outdot.png',
-                        anchor: [17.5,17.5]
-                    };
-                    break;
+        $scope.$apply(function() {
+            if(index == -1){
+                $scope.currentPoint.icon = {
+                    url: 'theme/img/edot.png',
+                }
+            } else {
+                //For alerts, only black circle without point in it.
+                //$scope.currentPoint.loc = $scope.trackers[$scope.MI].locations[index];
+                $scope.currentPoint.len = 35;
+                $scope.currentPoint.loc = {lat: subSeries[$scope.MI][index].lat, long: subSeries[$scope.MI][index].lng};
+                $scope.currentPoint.icon = {
+                    url: 'theme/img/dot.png',
+                    anchor: [17.5,17.5]
+                };
+                for(i = 0; i < $scope.specialMarkers.length; i++){
+                    if($scope.specialMarkers[i].oi == index) {
+                        //$scope.currentPoint.iconUrl = "theme/img/outdot.png";
+                        $scope.currentPoint.icon = {
+                            url: 'theme/img/outdot.png',
+                            anchor: [17.5,17.5]
+                        };
+                        break;
+                    }
                 }
             }
-
-        }
-        if(!$scope.$$phase) {
-            $scope.$apply();
-        }
+        })
     }
 
     function  promiseGetNotes (params) {
@@ -711,7 +707,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             });
             var deviceList = [];
             var promiseDevice = webSvc.getDevices(1000, 1, 'description', 'asc').success(function(data) {
-                console.log('DeviceList', data.response);
+                //console.log('DeviceList', data.response);
                 deviceList = data.response;
             });
             promiseSibling.push(promiseDevice);
@@ -740,13 +736,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 })
                 prepareMainHighchartSeries();
                 refreshHighchartSeries();
-                updateMapData($scope.MI);
+            }).then(function () {
+                $scope.changeActiveTracker($scope.MI);
             });
-            //for(i = 0; i < $scope.trackers.length; i++){
-            //    //$scope.trackers[i].siblingColor = rootSvc.getTrackerColor(i);
-            //    //$scope.trackers[i].index = i;
-            //}
-            //------------PREPARE TRACKERS INFO    END-------------
 
             //set tracker information
             angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
@@ -758,8 +750,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var locations = info.locations;
             //google map data
             $scope.firstPoint = locations[0];
-            $scope.currentPoint.loc = locations[0];
-            $scope.currentPoint.iconUrl = "theme/img/edot.png";
+            //$scope.currentPoint.loc = locations[0];
+            //$scope.currentPoint.iconUrl = "theme/img/edot.png";
             $scope.changeActiveTracker($scope.MI);
 
 
@@ -769,33 +761,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 options:{
                     plotOptions: {
                         series: {
-                            point: {
-                                events: {
-                                    /*mouseOver: function () {
-                                     var idx;
-                                     for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                     if(subSeries[$scope.MI][index].x == this.x){
-                                     idx = index;
-                                     break;
-                                     }
-                                     }
-                                     $scope.showAlerts(idx);
-                                     },
-                                     mouseOut: function () {
-                                     $scope.showAlerts(-1);
-                                     },
-                                     click: function(e) {
-                                     if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
-                                     resetDoubleClick();
-                                     ondbclick(e, this);
-                                     } else {
-                                     doubleClicker.clickedOnce = true;
-                                     doubleClicker.timer = setTimeout(function(){
-                                     resetDoubleClick();
-                                     }, doubleClicker.timeBetweenClicks);
-                                     }
-                                     }*/
-                                }
+                            events: {
+                                //mouseOut: function () {
+                                //    console.log('Out of chart');
+                                //    $scope.showAlerts(-1);
+                                //},
                             }
                         }
                     },
@@ -846,7 +816,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                                 var color = this.points[0].series.color;
                                 msg = $scope.trackerMsg[index];
                                 var message = "";
-
                                 for(var j = 0; j < msg.length; j ++){
                                     //if this message is for alert show title
                                     if(msg[j].title.indexOf(".png") != -1){
@@ -990,7 +959,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI],
-            stickyTracking:false,
             point: {
                 events: {
                     mouseOver: function () {
@@ -1002,9 +970,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             }
                         }
                         $scope.showAlerts(idx);
-                    },
-                    mouseOut: function () {
-                        $scope.showAlerts(-1);
                     },
                     click: function(e) {
                         if (doubleClicker.clickedOnce === true && doubleClicker.timer) {
@@ -1057,7 +1022,22 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 color: "#b3bcbf",
                 lineWidth: 3,
                 //enableMouseTracking: false,
-                data: alertData[i]
+                data: alertData[i],
+                point: {
+                    events: {
+                        mouseOver: function () {
+                            var idx;
+                            for(index = 0; index < subSeries[$scope.MI].length; index ++){
+                                if(subSeries[$scope.MI][index].x == this.x){
+                                    idx = index;
+                                    break;
+                                }
+                            }
+                            $scope.showAlerts(idx);
+                        }
+                    }
+                }
+
             });
         }
         chartSeries.push({
@@ -1137,7 +1117,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 //update msg
                 var msg = {};
 
-                msg.title = "<img src='theme/img/tiny" + alert + str + ".png'/><span>" + alertinfo[0].title + "</span>";
+                msg.title = "<table><tr><td valign='middle'><img style='float: left; padding-right: 3px' src='theme/img/tiny" + alert + str + ".png'/></td><td>" + alertinfo[0].title + "</td></tr></table>";
                 msg.lines = [alertinfo[0].Line1];   
                 if(alertinfo[0].Line2 != undefined){
                     msg.lines.push(alertinfo[0].Line2);
@@ -1175,7 +1155,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                     else alert = "Alert";
                     var msg = {};
-                    msg.title = "<img src='theme/img/tiny" + alert + str + ".png'/><span>" + alertinfo[k].title + "</span>";
+                    msg.title = "<span><img src='theme/img/tiny" + alert + str + ".png'/></span><span>" + alertinfo[k].title + "</span>";
                     msg.lines = [alertinfo[k].Line1];   
                     if(alertinfo[k].Line2 != undefined){
                         msg.lines.push(alertinfo[k].Line2);

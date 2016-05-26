@@ -28,6 +28,8 @@
     VM.objectToRemove = [];
     VM.oldMarker = null;
     VM.currentMarker = null;
+    VM.dynMarkers = [];
+    VM.labelMarkers = [];
 
     VM.specificDates = false;
     VM.ViewShipment = {
@@ -717,30 +719,8 @@
     }
 
     VM.updateMap = function() {
-        if (VM.markerClusterer) {
-            // Unset all markers
-            var ms = VM.markerClusterer.getMarkers();
-            var l = ms ? ms.length : 0;
-            for (var i = 0; i<l; i++) {
-                ms[i].setMap(null)
-            }
-            // Clears all clusters and markers from the clusterer.
-            VM.markerClusterer.clearMarkers();
-        }
-        if (VM.dynMarkers) {
-            var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
-            for (var i = 0; i < lx; i++) {
-                VM.dynMarkers[i].setMap(null);
-            }
-        }
-        if (VM.labelMarkers) {
-            angular.forEach(VM.labelMarkers, function(label, k) {
-                label.setMap(null);
-            });
-        }
-        VM.dynMarkers = [];
-        VM.labelMarkers = [];
-
+        //-- reset first
+        VM.resetMap();
         $log.debug('update Maps', VM.ShipmentList);
         // console.log('Custom Markers', VM.map.customMarkers);
         var bounds = new google.maps.LatLngBounds;
@@ -1053,6 +1033,44 @@
         controlInfo.innerHTML = htmlContent;
         controlInfo.appendChild(closeBtn);
         return controlInfo;
+    }
+
+    VM.resetMap = function() {
+        if (VM.markerClusterer) {
+            // Unset all markers
+            var ms = VM.markerClusterer.getMarkers();
+            var l = ms ? ms.length : 0;
+            for (var i = 0; i<l; i++) {
+                ms[i].setMap(null)
+            }
+            // Clears all clusters and markers from the clusterer.
+            VM.markerClusterer.clearMarkers();
+        }
+        if (VM.dynMarkers) {
+            var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
+            for (var i = 0; i < lx; i++) {
+                VM.dynMarkers[i].setMap(null);
+            }
+        }
+        if (VM.labelMarkers) {
+            angular.forEach(VM.labelMarkers, function(label, k) {
+                label.setMap(null);
+            });
+        }
+        VM.dynMarkers.length = 0;
+        VM.labelMarkers.length = 0;
+        VM.oldMarker = null;
+        VM.currentMarker = null;
+        if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
+            var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+            if (VM.expectPath) VM.expectPath.setMap(null);
+            if (VM.destMarker) VM.destMarker.setMap(null);
+            if (VM.objectToRemove && VM.objectToRemove.length > 0) {
+                for (var i = 0; i < VM.objectToRemove.length; i++) {
+                    VM.objectToRemove[i].setMap(null);
+                }
+            }
+        }
     }
 });
 

@@ -384,12 +384,15 @@ h3 span.info {
 .tt_title{
     color: #fff;
     padding: 5px;
+    height: 24px;
 }
 .tt_title img{
-    vertical-align: text-bottom;
+    /*vertical-align: text-bottom;*/
+    /*margin-bottom: auto;*/
+    /*margin-top: auto;*/
 }
 .tt_title span{
-    line-height: 24px;
+
     /*margin: 5px;*/
     /*padding-left: 6px;*/
 }
