@@ -717,16 +717,16 @@
     }
 
     VM.updateMap = function() {
-        //if (VM.markerClusterer) {
-        //    // Unset all markers
-        //    var ms = VM.markerClusterer.getMarkers();
-        //    var l = ms ? ms.length : 0;
-        //    for (var i = 0; i<l; i++) {
-        //        ms[i].setMap(null)
-        //    }
-        //    // Clears all clusters and markers from the clusterer.
-        //    VM.markerClusterer.clearMarkers();
-        //}
+        if (VM.markerClusterer) {
+            // Unset all markers
+            var ms = VM.markerClusterer.getMarkers();
+            var l = ms ? ms.length : 0;
+            for (var i = 0; i<l; i++) {
+                ms[i].setMap(null)
+            }
+            // Clears all clusters and markers from the clusterer.
+            VM.markerClusterer.clearMarkers();
+        }
         if (VM.dynMarkers) {
             var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
             for (var i = 0; i < lx; i++) {
@@ -868,15 +868,15 @@
 
         htmlContent += '<td>';
 
-        if (shipment.siblingCount > 1) {
+        if (shipment.siblingCount > 2) {
             htmlContent += '<span class="pull-left">';
             htmlContent += '<img src="theme/img/similarTrips.png"/>'
-            htmlContent += (shipment.siblingCount) + ' others';
+            htmlContent += (shipment.siblingCount - 1) + ' others';
             htmlContent += '</span>';
-        } else if (shipment.siblingCount = 1) {
+        } else if (shipment.siblingCount == 2) {
             htmlContent += '<span class="pull-left">';
             htmlContent += '<img src="theme/img/similarTrips.png"/>'
-            htmlContent += (shipment.siblingCount) + ' other';
+            htmlContent += (shipment.siblingCount - 1) + ' other';
             htmlContent += '</span>';
         }
 
@@ -997,7 +997,8 @@
             voltage = voltToImg(voltage);
         }
 
-        var lastReading = moment(shipment.lastReadingTime).fromNow();
+        //"8:11 26 May 2016"
+        var lastReading = moment.tz(shipment.lastReadingTime, "h:m DD MMM YYYY", VM.rootScope.RunningTimeZoneId).fromNow();
         htmlContent += '<td>';
         htmlContent += '<span style="font-weight: 600; padding-right: 5px">Last Reading:</span>';
         htmlContent += '</td>';
