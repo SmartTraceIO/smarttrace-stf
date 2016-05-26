@@ -221,7 +221,7 @@
                         <option value="100">100</option>
                     </select>
                 </div>
-                <div class="pull-right">
+                <div class="pull-right" ng-show="vm.lastView==2">
                     <span>Sort By:</span>
                     <select class="form-control" style="width:auto;display:inline-block"
                             ng-change="vm.SortOptionChanged()" ng-model="sc">
@@ -461,11 +461,6 @@
                         <div class="caption">
                             {{shipment.shipmentDescription}}
                         </div>
-                        <!--<div class="pull-right" style="margin-top:6px">
-                            <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}"
-                               class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>
-                            &lt;!&ndash;<a ng-href="#/view-shipment-detail/{{shipment.shipmentId}}" class="btn btn-sm green-meadow" style="background-color:green;border-color:green">View</a>&ndash;&gt;
-                        </div>-->
                     </div>
                     <div class="portlet-body" style="position:relative">
                         <div class="row">
@@ -510,7 +505,8 @@
                                 </p>
                                 <p class="col-xs-10 no-margin no-padding text-center">{{shipment.assetType}} {{shipment.assetNum}} <span ng-if="shipment.assetType != null || shipment.assetNum != null">-</span> {{shipment.status}}</p>
                                 <p class="col-xs-1 text-right no-margin no-padding">
-                                    <img class="rev-horizon" ng-src="theme/img/locationStop.png">
+                                    <img ng-show="shipment.status=='Arrived'" class="rev-horizon" ng-src="theme/img/locationStop.png">
+                                    <img ng-show="shipment.status!='Arrived'" class="rev-horizon" ng-src="theme/img/locationStopToBeDetermined.png">
                                 </p>
                             </div>
                         </div>
@@ -529,11 +525,14 @@
                                 <p class="bold no-margin no-padding">{{shipment.shippedFrom}}</p>
                                 <p class="text-muted no-margin no-padding">{{shipment.shipmentDate| date:'dd MMM yyyy hh:mm a'}}</p>
                             </div>
-                            <div class="col-xs-6 text-right">
+                            <div class="col-xs-6 text-right" ng-show="shipment.shippedTo">
                                 <p class="bold no-margin no-padding">{{shipment.shippedTo}}</p>
                                 <p class="text-muted no-margin no-padding">
                                     <!--<span ng-if="shipment.status != 'Arrived'">ETA</span>-->
                                     <span ng-if="shipment.status == 'Arrived'">ARRIVED AT</span>: {{shipment.actualArrivalDate | date:'dd MMM yyyy hh:mm a'}}</p>
+                            </div>
+                            <div class="col-xs-6 text-right" ng-show="!shipment.shippedTo">
+                                <p class="bold no-margin no-padding">To be determined</p>
                             </div>
                         </div>
                         <div class="row">

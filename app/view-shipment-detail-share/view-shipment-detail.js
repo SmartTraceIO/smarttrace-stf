@@ -294,14 +294,14 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     function updatePlotLines(){
         //--reset plotline
-        //plotLines.length = 0;
-        //plotLines.splice(0, plotLines.length);// = 0;
-        plotLines = [];
-        $log.debug('SubSeries', subSeries);
-        $log.debug('Tracker.MI', $scope.trackers[$scope.MI]);
-        $log.debug('MI', $scope.MI);
-        var ti = subSeries[$scope.MI];
+        plotLines.length = 0;
         //var ti = $scope.trackers[$scope.MI].locations;
+        //plotLines.splice(0, plotLines.length);// = 0;
+        //plotLines = [];
+        //$log.debug('SubSeries', subSeries);
+        //$log.debug('Tracker.MI', $scope.trackers[$scope.MI]);
+        //$log.debug('MI', $scope.MI);
+        var ti = subSeries[$scope.MI];
         var lastPoint = ti.length - 1;
 
         var mainTrackerPeriod = parseDate(ti[lastPoint].timeISO) - parseDate(ti[0].timeISO);
@@ -329,10 +329,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         
         var dottext = "";
+        var endLocationText = '';
         if($scope.trackers[$scope.MI].status.toLowerCase() == "arrived"){
             time = parseDate($scope.trackerInfo.arrivalTimeISO);
+            endLocationText = $scope.mapInfo.endLocation;
         } else {
             var time = new Date();
+            endLocationText += "To be determined";
         }
 
         if(time > parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod ||
@@ -342,6 +345,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             time = parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod + 1;
             dottext = '<sup><b class="dottext">...</b></sup>';
         }
+
         plotLines.push({
             color: color, // Color value
             dashStyle: 'solid', // Style of the plot line. Default to solid
@@ -351,8 +355,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 //text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' +
                 text:   '<img src="theme/img/tinyLocationStop.png" class="rev-horizon" style="float:right; vertical-align:bottom;">' +
                         '<span style="text-align:right;float:right">' +
-                            '<b class="bold-font">' + $scope.mapInfo.endLocation + '</b><br/>' + 
-                            dottext + 
+                            //'<b class="bold-font">' + $scope.mapInfo.endLocation + '</b><br/>' +
+                            '<b class="bold-font">' + endLocationText + '</b><br/>' +
+                            dottext +
                         '</span>',
                 rotation: 0,
                 useHTML: true,
@@ -381,8 +386,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         $scope.ttShow = true;
         $scope.msgForMap = [];
-
-        console.log('this.data.oi', this.data.oi);
 
         for(var i = 0; i < $scope.trackerMsg[this.data.oi].length; i++){
             var tmp = {};
@@ -595,8 +598,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //--update color of tracker by calling getDevice
 
             groupList = info.deviceGroups ? info.deviceGroups : [];
-            $log.debug('Info', info);
-            $log.debug('groupList', groupList);
+            //$log.debug('Info', info);
+            //$log.debug('groupList', groupList);
 
         }).then(function() {
             var promises = [];
@@ -628,8 +631,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var numberOfSiblings = info.siblings.length;
             //-- modify siblings
             var siblings = [];
-            $log.debug('Number of Siblings', numberOfSiblings);
-            $log.debug('deviceSnListSameGroup', deviceSnListSameGroup);
+            //$log.debug('Number of Siblings', numberOfSiblings);
+            //$log.debug('deviceSnListSameGroup', deviceSnListSameGroup);
             for(var i = 0; i<numberOfSiblings; i++) {
                 if (deviceSnListSameGroup.indexOf(parseInt(info.siblings[i].deviceSN, 10)) >= 0) {
                     siblings.push(info.siblings[i]);
@@ -733,9 +736,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     if (!isNaN(tracker.deviceSN)) {
                         $scope.trackers[k].deviceSN = parseInt(tracker.deviceSN, 10);
                     }
-                })
-                prepareMainHighchartSeries();
-                refreshHighchartSeries();
+                });
+                //prepareMainHighchartSeries();
+                //refreshHighchartSeries();
             }).then(function () {
                 $scope.changeActiveTracker($scope.MI);
             });
@@ -752,7 +755,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.firstPoint = locations[0];
             //$scope.currentPoint.loc = locations[0];
             //$scope.currentPoint.iconUrl = "theme/img/edot.png";
-            $scope.changeActiveTracker($scope.MI);
+            //$scope.changeActiveTracker($scope.MI);
 
 
             // console.log($scope.trackerPath);
@@ -762,10 +765,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     plotOptions: {
                         series: {
                             events: {
-                                //mouseOut: function () {
-                                //    console.log('Out of chart');
-                                //    $scope.showAlerts(-1);
-                                //},
+                                mouseOut: function () {
+                                    $scope.showAlerts(-1);
+                                },
                             }
                         }
                     },
@@ -811,10 +813,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                                     if(subSeries[$scope.MI][index].x == this.x) break;
                                 }
 
-                                //console.log('POINTS', this.points[0]);
-
                                 var color = this.points[0].series.color;
                                 msg = $scope.trackerMsg[index];
+
                                 var message = "";
                                 for(var j = 0; j < msg.length; j ++){
                                     //if this message is for alert show title
@@ -959,6 +960,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             color: $scope.trackers[$scope.MI].siblingColor,
             lineWidth: 3,
             data: subSeries[$scope.MI],
+            //turboThreshold: 2000,
             point: {
                 events: {
                     mouseOver: function () {
@@ -1219,8 +1221,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(tempMax == null){
                 tempMax = tempMin = locations[0].temperature;
             }
-
-
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);
@@ -1233,8 +1233,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         tmpCnt = 0;
                     }
                 }
-
-                //temp = new Array();
 
                 temp = {};
                 temp.x = parseDate(locations[j].timeISO);
@@ -1259,7 +1257,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
             //console.log("--------",series.length);
             subSeries.push(series);
-
         }
         //console.log("TEMP", tempMin, tempMax);
         if(tempMax - tempMin <= 10) tickInterval = 1;
@@ -1267,8 +1264,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     function parseDate(date){
-        var newDate = date.replace('-', '/').replace('-', '/') + ":00";
-        return Date.parse(newDate);
+        var m = moment(date, 'YYYY-MM-DD hh:mm');
+        return m.valueOf();
     }
 
     function formatDate(date){

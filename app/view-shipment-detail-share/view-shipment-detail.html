@@ -724,11 +724,21 @@
                                         </span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="trackerInfo.status=='Arrived'">
                                     <td><img class="rev-horizon" src="theme/img/tinyLocationStop.png"></td>
                                     <td>
                                         <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
-                                        <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
+                                        <span style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
+                                    </td>
+                                    <td class="pull-right">
+                                        <a href="" ng-click="EditShipmentTo()">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr ng-show="trackerInfo.status!='Arrived'">
+                                    <td><img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png"></td>
+                                    <td>
+                                        <strong>To be determined</strong><span>({{trackerInfo.endLocation}})</span>
+                                        <br/>
                                         <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
                                         <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                         <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
