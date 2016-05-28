@@ -539,7 +539,7 @@
                     icontent += '</table>';
                 }
                 var imarker = new RichMarker({
-                    position: new latlng,
+                    position: latlng,
                     flat: true,
                     anchor: RichMarkerPosition.MIDDLE,
                     content: icontent,
@@ -791,14 +791,14 @@
                     VM.updatePolylines(marker.shipment);
                 }
                 //restore cluster
-                VM.updateCluster();
+                //VM.updateCluster();
             });
             VM.dynMarkers.push(marker);
             VM.labelMarkers.push(ilabel);
             bounds.extend(llng);
         });
 
-        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
+        //VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);
@@ -1027,7 +1027,7 @@
         closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
         closeBtn.addEventListener('click', function() {
             VM.oldMarker = VM.currentMarker;
-            VM.updateCluster();
+            //VM.updateCluster();
             if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                 var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
                 if (VM.expectPath) VM.expectPath.setMap(null);
@@ -1046,16 +1046,16 @@
     }
 
     VM.resetMap = function() {
-        if (VM.markerClusterer) {
-            // Unset all markers
-            var ms = VM.markerClusterer.getMarkers();
-            var l = ms ? ms.length : 0;
-            for (var i = 0; i<l; i++) {
-                ms[i].setMap(null)
-            }
-            // Clears all clusters and markers from the clusterer.
-            VM.markerClusterer.clearMarkers();
-        }
+        //if (VM.markerClusterer) {
+        //    // Unset all markers
+        //    var ms = VM.markerClusterer.getMarkers();
+        //    var l = ms ? ms.length : 0;
+        //    for (var i = 0; i<l; i++) {
+        //        ms[i].setMap(null)
+        //    }
+        //    // Clears all clusters and markers from the clusterer.
+        //    VM.markerClusterer.clearMarkers();
+        //}
         if (VM.dynMarkers) {
             var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
             for (var i = 0; i < lx; i++) {
