@@ -404,6 +404,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.ttShow = false;
     }
     $scope.showAlerts = function(index){
+        if (index === undefined) {
+            return;
+        }
         //mouse out
         $scope.$apply(function() {
             if(index == -1){
@@ -808,16 +811,22 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         hideDelay: 500,
                         formatter: function () {
                             if (this.points) {
-                                var index;
-                                for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                                    if(subSeries[$scope.MI][index].x == this.x) break;
+                                var index, length = subSeries[$scope.MI].length;
+                                for(index = 0; index < length; index ++){
+                                    var x = subSeries[$scope.MI][index].x;
+                                    var x1 = index+1 < length ? subSeries[$scope.MI][index+1].x : 0;
+                                    if (index == 0 && this.x < x) break;
+                                    if(x <= this.x && this.x < x1) break;
+                                    if (index == length-1) {
+                                        break;
+                                    }
                                 }
 
                                 var color = this.points[0].series.color;
                                 msg = $scope.trackerMsg[index];
 
                                 var message = "";
-                                for(var j = 0; j < msg.length; j ++){
+                                for(var j = 0; (j < msg.length); j ++){
                                     //if this message is for alert show title
                                     if(msg[j].title.indexOf(".png") != -1){
                                         message += "<div class='tt_title' style='background-color:" + color + "'>"
@@ -940,14 +949,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 }
             }
         }
-        //    return webSvc.getSingleShipmentShare(params).success( function (graphData) {
-        //
-        //
-        //
-        //
-        //    })
-        //});
-    }   
+    }
 
     function refreshHighchartSeries(){
         chartSeries.length=0;
@@ -964,11 +966,18 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             point: {
                 events: {
                     mouseOver: function () {
-                        var idx;
-                        for(index = 0; index < subSeries[$scope.MI].length; index ++){
-                            if(subSeries[$scope.MI][index].x == this.x){
-                                idx = index;
+                        var idx, length = subSeries[$scope.MI].length;
+                        for(idx = 0; idx < length; idx ++){
+                            var x = subSeries[$scope.MI][idx].x;
+                            if (idx == 0 && this.x < x) {
                                 break;
+                            }
+                            var x1 = (idx + 1 < subSeries[$scope.MI].length) ? subSeries[$scope.MI][idx+1].x : 0;
+                            if ((x <= this.x) && (this.x < x1)) {
+                                break;
+                            }
+                            if (idx == length-1) {
+                                break
                             }
                         }
                         $scope.showAlerts(idx);
