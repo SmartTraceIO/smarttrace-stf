@@ -602,9 +602,9 @@
             }
         }); // end of travel
 
-        if(bounds != null){
-            VM.map.fitBounds(bounds);
-        }
+        //if(bounds != null){
+        //    VM.map.fitBounds(bounds);
+        //}
 
         var lineSymbol = {
             path: 'M 0,-1 0,1',
@@ -798,31 +798,31 @@
             bounds.extend(llng);
         });
 
-        //VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
+        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);
         }
     }
 
-    VM.updateCluster = function() {
-        //-- remove marker from cluster
-        if (VM.oldMarker == VM.currentMarker) {
-            //add current marker to cluster
-            VM.dynMarkers.push(VM.currentMarker);
-            VM.oldMarker = null;
-            VM.currentMarker = null;
-        } else {
-            //add oldMarker (if not null) to cluster and remove current marker
-            var idx = VM.dynMarkers.indexOf(VM.currentMarker);
-            VM.dynMarkers.splice(idx, 1);
-            if (VM.oldMarker) {
-                VM.dynMarkers.push(VM.oldMarker);
-            }
-        }
-        VM.markerClusterer.setMap(null);
-        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
-    }
+    //VM.updateCluster = function() {
+    //    //-- remove marker from cluster
+    //    if (VM.oldMarker == VM.currentMarker) {
+    //        //add current marker to cluster
+    //        VM.dynMarkers.push(VM.currentMarker);
+    //        VM.oldMarker = null;
+    //        VM.currentMarker = null;
+    //    } else {
+    //        //add oldMarker (if not null) to cluster and remove current marker
+    //        var idx = VM.dynMarkers.indexOf(VM.currentMarker);
+    //        VM.dynMarkers.splice(idx, 1);
+    //        if (VM.oldMarker) {
+    //            VM.dynMarkers.push(VM.oldMarker);
+    //        }
+    //    }
+    //    VM.markerClusterer.setMap(null);
+    //    VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
+    //}
 
     VM.getInfoBoxElement = function(controlInfo, shipment) {
         var htmlContent = '';
