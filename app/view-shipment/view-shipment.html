@@ -252,7 +252,7 @@
                         <tr>
                             <th ng-click="vm.Sorting('deviceSN')">
                                     <span class="pull-left">Tracker (Trip)
-                                        <i uib-tooltip="A meaningful short name you assign to each tracker"
+                                        <i uib-tooltip="A shipment's unique identity includes Tracker Number and Trip Count. View the chart page for this shipment by clicking the link."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -265,7 +265,7 @@
                             </th>
                             <th ng-click="vm.Sorting('shipmentDescription')">
                                     <span class="pull-left">Shipment Description
-                                        <i uib-tooltip="A meaningful description you assign to each tracker"
+                                        <i uib-tooltip="The default value of ShipmentDescription includes Autostart Template Description and Shipment Date. Shipment Description can be modified in the chart page."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -278,7 +278,7 @@
                             </th>
                             <th ng-click="vm.Sorting('shippedFrom')">
                                     <span class="pull-left">Shipment From
-                                        <i uib-tooltip="Shipment From"
+                                        <i uib-tooltip="Shipment From is detected when the tracker is switched on. It can be modified in the chart page."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -291,7 +291,7 @@
                             </th>
                             <th ng-click="vm.Sorting('shipmentDate')">
                                     <span class="pull-left">Shipment Date
-                                        <i uib-tooltip="Shipment Date"
+                                        <i uib-tooltip=" The default value of Shipment Date is the time the tracker is switched on. Shipment Date can be modified in the chart page."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -304,7 +304,7 @@
                             </th>
                             <th ng-click="vm.Sorting('shippedTo')">
                                     <span class="pull-left">Shipment To
-                                        <i uib-tooltip="Shipment To"
+                                        <i uib-tooltip=" Shipment To is detected when the tracker reaches a destination listed in the Autostart Template. Shipment To can be modified in the chart page."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -317,7 +317,7 @@
                             </th>
                             <th ng-click="vm.Sorting('actualArrivalDate')">
                                     <span class="pull-left">Arrival Date
-                                        <i uib-tooltip="Arrival Date"
+                                        <i uib-tooltip="Arrival Date is the time the system detects arrival at a destination listed in the Autostart Template. Arrival Date can be modified in the chart page."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -330,7 +330,7 @@
                             </th>
                             <th ng-click="vm.Sorting('status')">
                                     <span class="pull-left">Status
-                                        <i uib-tooltip="Status"
+                                        <i uib-tooltip="Shipment Status can be either Default (an active shipment), Arrived (when arrival is detected) or Ended (when shipment ends but no arrival is detected)."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -343,7 +343,7 @@
                             </th>
                             <th ng-click="vm.Sorting('siblingCount')">
                                     <span class="pull-left">Siblings
-                                        <i uib-tooltip="Sibling Count"
+                                        <i uib-tooltip="Siblings are the number of other trackers that appear to be travelling on the same vehicle"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -356,7 +356,7 @@
                             </th>
                             <th ng-click="vm.Sorting('lastReadingTimeISO')">
                                     <span class="pull-left">Last Reading
-                                        <i uib-tooltip="Last reading time"
+                                        <i uib-tooltip="The time of the last reading for this tracker."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -369,7 +369,7 @@
                             </th>
                             <th ng-click="vm.Sorting('lastReadingTemperature')">
                                     <span class="pull-left">Temp.
-                                        <i uib-tooltip="Last reading temperature"
+                                        <i uib-tooltip="The Temperature on this last reading"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
@@ -382,7 +382,7 @@
                             </th>
                             <th ng-click="vm.Sorting('alertSummary')">
                                     <span class="pull-left">Alerts
-                                        <i uib-tooltip="Alert summary"
+                                        <i uib-tooltip=" Alerts that have fired during this shipment."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
