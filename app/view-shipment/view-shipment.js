@@ -66,6 +66,9 @@
     VM.SearchAdvance = function () {
         if(VM.ViewShipment.status == "")
             VM.ViewShipment.status = null;
+        if (VM.tracker) {
+            VM.ViewShipment.deviceImei = VM.tracker.imei;
+        }
         VM.BindCards();
     }
 
@@ -89,6 +92,10 @@
             VM.ViewShipment.shippedTo = VM.ViewShipment.shippedToLocation.map(function(val) {
                 return val.locationId;
             });
+        }
+
+        if (VM.tracker) {
+            VM.ViewShipment.deviceImei = VM.tracker.imei;
         }
 
         var devicesPromise = webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
@@ -220,7 +227,7 @@
             sc: 'lastReadingTimeISO'
         };
         VM.sc = "lastReadingTimeISO";
-
+        VM.tracker = null;
         BindShipmentList();
     }
 
@@ -923,7 +930,7 @@
         htmlContent += '<tr>';
         htmlContent += '<td>';
         if (shipment.status == "Ended" || shipment.status == "Default") {
-            htmlContent += '<img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png">';
+            htmlContent += '<img src="theme/img/locationStopToBeDetermined.png">';
         } else {
             htmlContent += '<img class="rev-horizon" src="theme/img/locationStop.png">';
         }
@@ -977,8 +984,10 @@
 
 
         var temperature = shipment.lastReadingTemperature;
+
+        var temtype = localDbSvc.getDegreeUnits() == "Celsius" ? "℃" : "°F";
         if (!isNaN(temperature)) {
-            temperature = temperature.toFixed(1) + '℃';
+            temperature = temperature.toFixed(1) + temtype;
         } else {
             temperature = '';
         }
@@ -1046,16 +1055,16 @@
     }
 
     VM.resetMap = function() {
-        //if (VM.markerClusterer) {
-        //    // Unset all markers
-        //    var ms = VM.markerClusterer.getMarkers();
-        //    var l = ms ? ms.length : 0;
-        //    for (var i = 0; i<l; i++) {
-        //        ms[i].setMap(null)
-        //    }
-        //    // Clears all clusters and markers from the clusterer.
-        //    VM.markerClusterer.clearMarkers();
-        //}
+        if (VM.markerClusterer) {
+            // Unset all markers
+            var ms = VM.markerClusterer.getMarkers();
+            var l = ms ? ms.length : 0;
+            for (var i = 0; i<l; i++) {
+                ms[i].setMap(null)
+            }
+            // Clears all clusters and markers from the clusterer.
+            VM.markerClusterer.clearMarkers();
+        }
         if (VM.dynMarkers) {
             var lx = VM.dynMarkers ? VM.dynMarkers.length : 0;
             for (var i = 0; i < lx; i++) {

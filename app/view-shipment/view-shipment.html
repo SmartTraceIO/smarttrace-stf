@@ -155,11 +155,45 @@
             </div>
             <div class="col-sm-2">
                 <label>Device</label>
-                <select class="form-control "
+                <!--<select class="form-control "
                         ng-model="vm.ViewShipment.deviceImei"
                         ng-options="tracker.imei as (tracker.sn + ' - ' + tracker.name + ' - ' + tracker.description) for tracker in vm.TrackerList">
-                    <option value="">-- Please Select --</option>
-                </select>
+                    <option value="">&#45;&#45; Please Select &#45;&#45;</option>
+                </select>-->
+
+                <ui-select ng-model="vm.tracker"
+                           theme="bootstrap"
+                           style="width: 100%"
+                           title="Please select a tracker">
+                    <ui-select-match placeholder="-- Please Select --">
+                        <table><tr>
+                            <td>
+                                <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': $select.selected.color}"></div>
+                            </td>
+                            <td>{{$select.selected.sn}}</td>
+                        </tr></table>
+                    </ui-select-match>
+                    <ui-select-choices repeat="tker in vm.TrackerList track by $index"
+                                       refresh="refreshAddresses($select.search)"
+                                       refresh-delay="0" style="width: 300px">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': tker.color}"></div>
+                                </td>
+                                <td>
+                                    <span ng-bind-html="tker.sn | highlight: $select.search" style="font-weight: 600; margin-right: 10px;"></span>
+                                </td>
+                                <td>
+                                    <span style="margin-right: 10px">-</span>
+                                </td>
+                                <td>
+                                    <span ng-bind-html="tker.name | highlight: $select.search"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="col-sm-2">
                 <label>Status</label>
