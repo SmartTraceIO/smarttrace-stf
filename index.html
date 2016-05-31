@@ -104,16 +104,11 @@
                                 <i class="icon-bell"></i>
                                 <span class="badge badge-default" ng-cloak> {{unreadNotification.length}} </span>
                             </a>
-                            <ul class="dropdown-menu notification-body" ng-cloak>
-
-                                <li class="external">
-                                    <h3>
-                                        <span class="bold">Notifications</span>
-                                    </h3>
-                                </li>
+                            <ul class="dropdown-menu notification-body" ng-cloak ng-click="$event.stopPropagation()">
+                                <li class="external"><h3><span class="bold">Notifications</span></h3></li>
                                 <li class="scrollable-menu" style="max-height:{{height - 150}}px;">
                                     <div class="alert alert-block alert-notification fade in" ng-repeat="data in unreadNotification">
-                                        <button tooltip-placement="top" uib-tooltip="Hide this notification" class="pull-right" style="border: 0px; background-color: #fff;" type="button" data-dismiss="alert" ng-click="readNotify(data.notificationId)">&times;</button>
+                                        <button tooltip-placement="top" uib-tooltip="Hide this notification" class="pull-right" style="border: 0px; background-color: #fff; width: 30px; height: 30px; font-size: 23px; color: #aaaaaa;" type="button" data-dismiss="alert" ng-click="readNotify(data.notificationId);">&times;</button>
                                         <img ng-src="theme/img/alert{{data.alertType}}.png">
                                         <h5 class="alert-heading"><a ng-href="{{data.link}}">{{data.Line1}}</a></h5>
                                         <p>{{data.Line2}}</p>
@@ -138,7 +133,7 @@
                                             <input name="remember" value="1" type="checkbox" ng-change="test()" ng-model="showRead">
                                         </span>
                                         </div>
-                                        Include Closed Notifications
+                                        Include hidden notifications
                                     </label>
                                 </li>
                             </ul>

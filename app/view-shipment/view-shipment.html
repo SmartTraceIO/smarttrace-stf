@@ -167,24 +167,24 @@
                            title="Please select a tracker">
                     <ui-select-match placeholder="-- Please Select --">
                         <table><tr>
-                            <td>
+                            <td ng-show="$select.selected.color">
                                 <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': $select.selected.color}"></div>
                             </td>
                             <td>{{$select.selected.sn}}</td>
                         </tr></table>
                     </ui-select-match>
-                    <ui-select-choices repeat="tker in vm.TrackerList track by $index"
+                    <ui-select-choices repeat="tker in vm.TrackerListPlus | propsFilter: {sn: $select.search}"
                                        refresh="refreshAddresses($select.search)"
-                                       refresh-delay="0" style="width: 300px">
+                                       refresh-delay="0" null-option="anyDevice" style="width: 300px">
                         <table>
                             <tr>
-                                <td>
+                                <td ng-show="tker.color">
                                     <div ng-style="{width: '15px', height: '15px', 'margin-right':'10px', 'background-color': tker.color}"></div>
                                 </td>
                                 <td>
                                     <span ng-bind-html="tker.sn | highlight: $select.search" style="font-weight: 600; margin-right: 10px;"></span>
                                 </td>
-                                <td>
+                                <td ng-show="tker.name">
                                     <span style="margin-right: 10px">-</span>
                                 </td>
                                 <td>

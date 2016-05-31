@@ -78,7 +78,8 @@
 
     VM.AdvanceSearch = localStorageService.get('advancedSearch');
     VM.LocationOptions = { multiple: true };
-
+    VM.anyDevice = {sn: '--Please Select--'}
+    VM.TrackerListPlus = [VM.anyDevice];
     
     var BindShipmentList = function () {
         VM.loading = true;
@@ -97,7 +98,7 @@
         if (VM.tracker) {
             VM.ViewShipment.deviceImei = VM.tracker.imei;
         }
-
+        console.log('VM.tracker', VM.tracker);
         var devicesPromise = webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
             if (data.status.code == 0) {
                 VM.TrackerList = data.response;
@@ -106,7 +107,8 @@
                         VM.TrackerList[key].sn=parseInt(tracker.sn, 10);
                     }
                 });
-                $log.debug('view-shipment', VM.TrackerList);
+                VM.TrackerListPlus = VM.TrackerListPlus.concat(VM.TrackerList);
+                $log.debug('view-shipment', VM.TrackerListPlus);
             }
         });
 
@@ -1105,7 +1107,7 @@ appFilters.filter('propsFilter', function() {
                 for (var i = 0; i < keys.length; i++) {
                     var prop = keys[i];
                     var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                    if (item[prop].toString().toLowerCase().startsWith(text)/* !== -1*/) {
                         itemMatches = true;
                         break;
                     }

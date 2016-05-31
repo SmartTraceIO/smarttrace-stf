@@ -1,0 +1,106 @@
+<div class="modal-header green">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 20px"></i>
+    <span>Edit alerts for shipment {{VM.shipment.deviceSN}} ({{VM.shipment.tripCount}})</span>
+    <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </span>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label>Alert profile</label>
+                <i uib-tooltip="Alert profile for this shipment"
+                   tooltip-append-to-body="true"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"
+                   class="fa fa-info-circle"></i>
+                <select class="form-control" ng-disabled="true">
+                    <option value="">-- Please select an alert profile --</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="control-label">Alert Suppression in cooldown&nbsp;
+                <i uib-tooltip="Alert suppression during cool down" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+            <div class="btn-group" role="group">
+                <button type="button"
+                        ng-class="{'active':AutoStartShipment.alertSuppressionMinutes==0}"
+                        ng-model="AutoStartShipment.alertSuppressionDuringCoolDown"
+                        ng-click="AutoStartShipment.alertSuppressionMinutes = 0"
+                        class="btn btn-default disabled">0 hrs</button>
+                <button type="button"
+                        ng-class="{'active':AutoStartShipment.alertSuppressionMinutes==120}"
+                        ng-model="AutoStartShipment.alertSuppressionDuringCoolDown"
+                        ng-click="AutoStartShipment.alertSuppressionMinutes = 120"
+                        class="btn btn-default disabled">2 hrs</button>
+                <button type="button"
+                        ng-class="{'active':AutoStartShipment.alertSuppressionMinutes==240}"
+                        ng-model="AutoStartShipment.alertSuppressionDuringCoolDown"
+                        ng-click="AutoStartShipment.alertSuppressionMinutes = 240"
+                        class="btn btn-default disabled">4 hrs</button>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label">
+                    <span>Notification Schedule(s) For Alerts</span>
+                    <i uib-tooltip="Notification schedule(s) for alerts"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"/>
+                </label>
+                <select class="form-control" ng-disabled="true">
+                    <option value="">-- Please select a notification schedule --</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label class="control-label">Suppress All Alert On Arrival&nbsp;
+                <i uib-tooltip="No alert after arrival minutes"
+                   tooltip-append-to-body="true"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"
+                   class="fa fa-info-circle"/>
+            </label>
+            <select class="form-control" ng-model="VM.shipment.noAlertsAfterArrivalMinutes">
+                <option value="0">Suppress On Arrival</option>
+                <option value="60">Suppress After 1 hr at destination</option>
+                <option value="120">Suppress After 2 hr at destination</option>
+                <option value="240">Suppress After 4 hr at destination</option>
+                <option value="480">Suppress After 8 hr at destination</option>
+                <option value="">Don't suppress on arrival</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <label class="control-label">
+                Suppress All Alerts After Time Period
+                <i uib-tooltip="Do not fire any alerts after this period of time"
+                   tooltip-append-to-body="true"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"
+                   class="fa fa-info-circle"/>
+            </label>
+            <select class="form-control" ng-model="VM.shipment.noAlertsAfterStartMinutes">
+                <option value="">Don't suppress after time period</option>
+                <option value="240">Suppress 4 hrs after start</option>
+                <option value="480">Suppress 8 hrs after start</option>
+                <option value="720">Suppress 12 hrs after start</option>
+                <option value="1080">Suppress 18 hrs after start</option>
+                <option value="1440">Suppress 1 day after start</option>
+                <option value="2880">Suppress 2 days after start</option>
+                <option value="4320">Suppress 3 days after start</option>
+                <option value="7200">Suppress 5 days after start</option>
+                <option value="14400">Suppress 10 days after start</option>
+                <option value="28800">Suppress 20 days after start</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn green" ng-click="VM.saveShipment()">Save</button>
+    <button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
+</div>

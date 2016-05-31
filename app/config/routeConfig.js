@@ -179,6 +179,7 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/create-note.js?v=' + version,
             'app/view-shipment-detail-share/edit-note.js?v=' + version,
             'app/view-shipment-detail-share/delete-note.js?v=' + version,
+            'app/view-shipment-detail-share/edit-alerts.js?v=' + version,
             'app/global/filters/filters.js?v=' + version,
         ]
     },

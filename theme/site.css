@@ -798,3 +798,22 @@ h3 span.info {
     height: 100%;
     margin: auto;
 }
+
+/*editing*/
+.btn-edit {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.btn-edit:hover {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px!important;
+    background-color: #aaaaaa;
+}
+
+.modal-header.green {
+    background-color: #5BCA45;
+    color: #ffffff;
+    font-size: 16px;
+}

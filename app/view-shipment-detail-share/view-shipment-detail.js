@@ -1509,6 +1509,27 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     $scope.EditShipmentStatus = function() {
 
     }
+
+
+    //-- Edit shipment alerts
+    $scope.EditShipmentAlerts =function(trackerInfo) {
+        //-- open confirmation of edit alert
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/edit-alerts.html',
+            controller: 'EditShipmentAlerts as VM',
+            size: 'lg',
+            resolve: {
+                shipmentId : function() {
+                    return trackerInfo.shipmentId;
+                }
+            }
+        });
+        modalInstance.result.then(
+            function(result) {
+                //$scope.trackerInfo.commentsForReceiver = result;
+            }
+        );
+    }
 };
 
 appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
