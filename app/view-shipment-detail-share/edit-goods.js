@@ -1,8 +1,8 @@
 /**
  * Created by beou on 31/05/2016.
  */
-appCtrls.controller('EditShipmentAlerts', EditShipmentAlerts);
-function EditShipmentAlerts($uibModalInstance, webSvc, shipmentId) {
+appCtrls.controller('EditShipmentArrival', EditShipmentArrival);
+function EditShipmentArrival($uibModalInstance, webSvc, shipmentId) {
     VM = this;
     VM.shipmentId = shipmentId;
     VM.shipment = null;
@@ -37,8 +37,11 @@ function EditShipmentAlerts($uibModalInstance, webSvc, shipmentId) {
         if (!isNaN(VM.shipment.noAlertsAfterStartMinutes)) {
             VM.shipment.noAlertsAfterStartMinutes = parseInt(VM.shipment.noAlertsAfterStartMinutes, 10);
         }
-        if (!VM.shipment.shutdownDeviceAfterMinutes) {
-            VM.shipment.shutdownDeviceAfterMinutes = null;
+        if (!isNaN(VM.shipment.shutdownDeviceAfterMinutes)) {
+            VM.shipment.shutdownDeviceAfterMinutes = parseInt(VM.shipment.shutdownDeviceAfterMinutes, 10);
+        }
+        if (!isNaN(VM.shipment.shutDownAfterStartMinutes)) {
+            VM.shipment.shutDownAfterStartMinutes = parseInt(VM.shipment.shutDownAfterStartMinutes, 10);
         }
         var obj = {};
         obj.saveAsNewTemplate = false;

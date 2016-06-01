@@ -861,12 +861,23 @@
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
-                                <span>Arrival</span>
-                                <i uib-tooltip="Arrival details for this shipment"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"></i>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <span>Arrival</span>
+                                            <i uib-tooltip="Arrival details for this shipment"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"></i>
+                                        </td>
+                                        <td>
+                                            <div class="btn-edit" ng-click="EditShipmentArrival(trackerInfo)">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="expand"> </a>

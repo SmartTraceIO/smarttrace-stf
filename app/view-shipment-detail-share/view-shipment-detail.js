@@ -1520,15 +1520,37 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             size: 'lg',
             resolve: {
                 shipmentId : function() {
-                    return trackerInfo.shipmentId;
+                    if (trackerInfo) {
+                        return trackerInfo.shipmentId;
+                    }
+                    return null;
                 }
             }
         });
         modalInstance.result.then(
             function(result) {
+                //TODO: update after share here
                 //$scope.trackerInfo.commentsForReceiver = result;
             }
         );
+    }
+    //-- Edit shipment arrival
+    $scope.EditShipmentArrival = function(trackerInfo) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/edit-arrival.html',
+            controller: 'EditShipmentArrival as VM',
+            resolve: {
+                shipmentId: function() {
+                    if (trackerInfo) {
+                        return trackerInfo.shipmentId;
+                    }
+                    return null;
+                }
+            }
+        });
+        modalInstance.result.then(function() {
+           //todo: update
+        });
     }
 };
 
