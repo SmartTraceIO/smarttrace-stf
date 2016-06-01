@@ -1570,6 +1570,41 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.trackerInfo.commentsForReceiver = result.commentsForReceiver;
         })
     }
+
+    $scope.EditShipmentRoute = function(trackerInfo) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/edit-route.html',
+            controller: 'EditShipmentRoute as VM',
+            size: 'lg',
+            resolve: {
+                shipmentId: function() {
+                    if (trackerInfo) {
+                        return trackerInfo.shipmentId;
+                    }
+                    return null;
+                }
+            }
+        });
+        modalInstance.result.then(function(result) {
+            var stLocation = filter($scope.LocationListFrom, {locationId: result.shippedFrom}, true);
+            var endLocation = filter($scope.LocationListTo, {locationId: result.shippedTo}, true);
+
+            if (stLocation && stLocation.length > 0) {
+                stLocation = stLocation[0];
+            }
+            if (endLocation && endLocation.length > 0) {
+                endLocation = endLocation[0];
+            }
+
+            $scope.trackerInfo.startLocation = stLocation.locationName;//must do filter
+            $scope.trackerInfo.endLocation = endLocation.locationName;
+            //startTime:"12:27 1 Jun 2016"
+
+            $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+            $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+            $scope.trackerInfo.status = result.status;
+        });
+    }
 };
 
 appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',

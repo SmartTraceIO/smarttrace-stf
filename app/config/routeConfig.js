@@ -182,6 +182,7 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/edit-alerts.js?v=' + version,
             'app/view-shipment-detail-share/edit-arrival.js?v=' + version,
             'app/view-shipment-detail-share/edit-goods.js?v=' + version,
+            'app/view-shipment-detail-share/edit-route.js?v=' + version,
             'app/global/filters/filters.js?v=' + version,
         ]
     },
