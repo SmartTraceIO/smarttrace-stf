@@ -118,9 +118,9 @@
                                            ng-model="NewShipment.shipment.palletId" />
 
                                     <div><small class="text-muted">Enter a Pallet unique Identity If available</small></div>
-                                <span ng-if="frmAddNewShipment.$invalid" ng-cloak>
-                                    <span ng-cloak class="text-danger" ng-if="frmAddNewShipment.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
-                                </span>
+                                    <span ng-if="frmAddNewShipment.$invalid" ng-cloak>
+                                        <span ng-cloak class="text-danger" ng-if="frmAddNewShipment.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
+                                    </span>
                                 </div>
                                 <div class="col-sm-12 visible-xs">&nbsp;</div>
                                 <div class="col-sm-4">

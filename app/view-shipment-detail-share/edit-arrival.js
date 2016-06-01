@@ -45,6 +45,7 @@ function EditShipmentArrival($uibModalInstance, webSvc, shipmentId) {
         }
         var obj = {};
         obj.saveAsNewTemplate = false;
+        obj.includePreviousData = false;
         obj.shipment = VM.shipment;
         webSvc.saveShipment(obj).success(function(data) {
             if (data.status.code == 0) {

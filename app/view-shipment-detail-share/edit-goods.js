@@ -1,8 +1,8 @@
 /**
  * Created by beou on 31/05/2016.
  */
-appCtrls.controller('EditShipmentArrival', EditShipmentArrival);
-function EditShipmentArrival($uibModalInstance, webSvc, shipmentId) {
+appCtrls.controller('EditMonitoredGoods', EditMonitoredGoods);
+function EditMonitoredGoods($uibModalInstance, webSvc, shipmentId) {
     VM = this;
     VM.shipmentId = shipmentId;
     VM.shipment = null;
@@ -45,11 +45,12 @@ function EditShipmentArrival($uibModalInstance, webSvc, shipmentId) {
         }
         var obj = {};
         obj.saveAsNewTemplate = false;
+        obj.includePreviousData = false;
         obj.shipment = VM.shipment;
         webSvc.saveShipment(obj).success(function(data) {
             if (data.status.code == 0) {
                 toastr.success('The shipment was updated success');
-                $uibModalInstance.close();
+                $uibModalInstance.close(VM.shipment);
             }
         })
     }

@@ -1552,6 +1552,24 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
            //todo: update
         });
     }
+    $scope.EditMonitoredGoods = function(trackerInfo) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/edit-goods.html',
+            controller: 'EditMonitoredGoods as VM',
+            resolve: {
+                shipmentId: function() {
+                    if (trackerInfo) {
+                        return trackerInfo.shipmentId;
+                    }
+                    return null;
+                }
+            }
+        });
+        modalInstance.result.then(function (result) {
+            $scope.trackerInfo.shipmentDescription = result.shipmentDescription;
+            $scope.trackerInfo.commentsForReceiver = result.commentsForReceiver;
+        })
+    }
 };
 
 appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',

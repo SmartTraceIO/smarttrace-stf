@@ -1,83 +1,101 @@
 <div class="modal-header green">
-    <i class="fa fa-flag-checkered" aria-hidden="true" style="font-size: 20px"></i>
-    <span>Edit arrival details for shipment {{VM.shipment.deviceSN}} ({{VM.shipment.tripCount}})</span>
+    <i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
+    <span>Edit goods being monitored for shipment {{VM.shipment.deviceSN}} ({{VM.shipment.tripCount}})</span>
     <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
         <i class="fa fa-times" aria-hidden="true"></i>
     </span>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Arrival notification</label>
-                <i uib-tooltip="Arrival notification for this shipment"
-                   tooltip-append-to-body="true"
-                   tooltip-trigger="mouseenter"
-                   tooltip-placement="top"
-                   class="fa fa-info-circle"></i>
-                <select class="form-control" ng-disabled="true">
-                    <option value="">-- Please select a notification --</option>
-                </select>
+    <form name="frmEditGoods">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label pull-left">
+                        <span>Shipment Description:</span>
+                        <i uib-tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
+                    </label>
+                    <label class="control-label pull-right"><span class="text-error">*</span></label>
+                    <div class="clearfix"></div>
+                <textarea ng-model="VM.shipment.shipmentDescription"
+                          id="shipmentDescription"
+                          name="description"
+                          ng-maxlength="120"
+                          class="form-control"
+                          name="shipmentDescription"/>
+                <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                    <span ng-cloak class="text-danger" ng-if="frmEditGoods.description.$error.maxlength">
+                        Error. The description field can not exceed 120 chars
+                    </span>
+                </span>
+                </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
+        <div class="row">
+            <div class="col-sm-6">
                 <label class="control-label">
-                    <span>Schedule(s) For Arrival notification</span>
-                    <i uib-tooltip="Schedule(s) For Arrival notification"
+                    <span>Pallet Id:</span>
+                    <i uib-tooltip="Pallet unique Identity If available"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"/>
                 </label>
-                <select class="form-control" ng-disabled="true">
-                    <option value="">-- Please select notification schedule(s) --</option>
-                </select>
+                <input type="text"
+                       ng-maxlength="31"
+                       name="palletId"
+                       class="form-control"
+                       placeholder="Enter Pallet Id"
+                       ng-model="VM.shipment.palletId" />
+
+                <div>
+                    <small class="text-muted">Enter a Pallet unique Identity If available</small>
+                </div>
+            <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                <span ng-cloak class="text-danger" ng-if="frmEditGoods.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
+            </span>
+            </div>
+            <div class="col-sm-6">
+                <label class="control-label">
+                    <span>Asset Num:</span>
+                    <i uib-tooltip="Enter the identity of the asset carrying the goods"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"/>
+                </label>
+                <input type="text"
+                       ng-maxlength="31"
+                       name="assetNum"
+                       class="form-control"
+                       placeholder="Enter Asset Num"
+                       ng-model="VM.shipment.assetNum" />
+                <div><small class="text-muted">Enter the identity of the asset carrying the goods</small></div>
+            <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                <span ng-cloak class="text-danger" ng-if="frmEditGoods.assetNum.$error.maxlength">Asset Number for a shipment must be less than or equal to 31 chars</span>
+            </span>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <label class="control-label">Shutdown Device On Arrival
-                <i uib-tooltip="Shutdown device after minutes"
-                   tooltip-append-to-body="true"
-                   tooltip-trigger="mouseenter"
-                   tooltip-placement="top"
-                   class="fa fa-info-circle"/>
-            </label>
-            <select class="form-control " ng-model="VM.shipment.shutdownDeviceAfterMinutes">
-                <option value="">Don't Shutdown on Arrival</option>
-                <option value="0">Shutdown upon Arrival</option>
-                <option value="60">Shutdown After 1 hr at destination</option>
-                <option value="120">Shutdown After 2 hr at destination</option>
-                <option value="240">Shutdown After 4 hr at destination</option>
-                <option value="480">Shutdown After 8 hr at destination</option>
-            </select>
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="control-label">
+                    <span>Comments For Receiver</span>
+                    <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                </label>
+            <textarea maxlength="300"
+                      name="comment"
+                      class="form-control"
+                      ng-model="VM.shipment.commentsForReceiver"
+                      placeholder="Tracker is located on last pallet loaded into trailer. Please collect tracker and hand to driver for return."/>
+            <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                <span ng-cloak class="text-danger" ng-if="frmEditGoods.comment.$error.maxlength">Comment for receiver must be less than or equal to 300 chars</span>
+            </span>
+            </div>
         </div>
-        <div class="col-sm-6">
-            <label class="control-label">
-                Shutdown Device After Time Period
-                <i uib-tooltip="Shutdown after start minutes"
-                   tooltip-append-to-body="true"
-                   tooltip-trigger="mouseenter"
-                   tooltip-placement="top"
-                   class="fa fa-info-circle"/>
-            </label>
-            <select class="form-control" ng-model="VM.shipment.shutDownAfterStartMinutes">
-                <option value="">Don't shutdown after time period</option>
-                <option value="240">Shutdown 4 hrs after start</option>
-                <option value="480">Shutdown 8 hrs after start</option>
-                <option value="720">Shutdown 12 hrs after start</option>
-                <option value="1080">Shutdown 18 hrs after start</option>
-                <option value="1440">Shutdown 1 day after start</option>
-                <option value="2880">Shutdown 2 days after start</option>
-                <option value="4320">Shutdown 3 days after start</option>
-                <option value="7200">Shutdown 5 days after start</option>
-                <option value="14400">Shutdown 10 days after start</option>
-                <option value="28800">Shutdown 20 days after start</option>
-            </select>
-        </div>
-    </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn green" ng-click="VM.saveShipment()">Save</button>

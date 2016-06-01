@@ -497,12 +497,23 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-page">
                             <h4 class="panel-title uppercase">
-                                Goods Being Monitored
-                                <i uib-tooltip="The Tracker (and Trip) featured in the chart, the map and the content down left side panel"
-                                   tooltip-append-to-body="true"
-                                   tooltip-trigger="mouseenter"
-                                   tooltip-placement="top"
-                                   class="fa fa-info-circle"/>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <span>Goods Being Monitored</span>
+                                            <i uib-tooltip="The Tracker (and Trip) featured in the chart, the map and the content down left side panel"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"/>
+                                        </td>
+                                        <td>
+                                            <div class="btn-edit" ng-click="EditMonitoredGoods(trackerInfo)">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </h4>
                         </div>
                         <div class="panel-body">
