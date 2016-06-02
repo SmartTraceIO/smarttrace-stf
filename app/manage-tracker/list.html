@@ -10,7 +10,8 @@
         </div>
     </div>
     <div class="portlet-body">
-        <div class="pull-left">Show
+        <div class="pull-left" ng-hide="lastView==3">
+            <span>Show</span>
             <select class="form-control" style="width:auto;display:inline-block" ng-change="PageSizeChanged()" ng-model="PageSize">
                 <option value="20" selected>20</option>
                 <option value="50">50</option>
@@ -22,10 +23,9 @@
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker
             </a>
         </div>
-        <div class="clearfix"></div>
-        <br />
-        <hr />
-        <div class="clearfix"></div>
+        <div class="clearfix" ng-hide="lastView==3"></div>
+        <hr ng-hide="lastView==3" />
+        <div class="clearfix" ng-hide="lastView==3"></div>
         <div class="table-responsive" ng-if="lastView==1">
             <table class="table table-bordered table-striped">
                 <tr>
@@ -229,7 +229,7 @@
             </table>
         </div>
         <div ng-if="lastView==3">
-            <div id="trackerMap" style="height: 600px" ng-init="initMap()"></div>
+            <div id="trackerMap" style="height: 500px" ng-init="initMap()"></div>
         </div>
         <uib-pagination total-items="TrackerList.totalCount"
                         ng-if="lastView==1"
