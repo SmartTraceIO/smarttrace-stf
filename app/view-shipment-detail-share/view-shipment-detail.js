@@ -424,7 +424,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 };
                 for(i = 0; i < $scope.specialMarkers.length; i++){
                     if($scope.specialMarkers[i].oi == index) {
-                        //$scope.currentPoint.iconUrl = "theme/img/outdot.png";
                         $scope.currentPoint.icon = {
                             url: 'theme/img/outdot.png',
                             anchor: [17.5,17.5]
@@ -1095,8 +1094,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
                 var alert = "";
-                
-                
+
                 if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
                 else alert = "Alert";
                 obj = {};
@@ -1227,8 +1225,14 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(tempMax == null){
                 tempMax = tempMin = locations[0].temperature;
             }
+
+            var lastValidLat = 0;
+            var lastValidLng = 0;
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
+                if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
+                if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
+
                 var check = updateNote(locations[j]);
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
@@ -1245,8 +1249,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 temp.y = locations[j].temperature;
                 temp.timeISO = locations[j].timeISO;
                 temp.alerts = locations[j].alerts;
-                temp.lat = locations[j].lat;
-                temp.lng = locations[j].long;
+                //temp.lat = locations[j].lat;
+                //temp.lng = locations[j].long;
+                temp.lat = lastValidLat;
+                temp.lng = lastValidLng;
                 temp.shipmentId = $scope.trackers[i].shipmentId;
                 temp.tripCount = $scope.trackers[i].tripCount;
                 temp.deviceSN = $scope.trackers[i].deviceSN;
