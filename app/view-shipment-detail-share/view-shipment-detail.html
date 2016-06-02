@@ -58,15 +58,12 @@
                                 </table>
                                 <div>
                                     <div class="portlet-title">
-                                            <span>
-                                                <strong>Description:</strong>
-                                            </span>
+                                        <span><strong>Description:</strong></span>
                                         <i uib-tooltip="The Shipment Description can be edited to provide a more meaningful name for a shipment. Max 120 chars"
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
                                            tooltip-placement="top"
                                            class="fa fa-info-circle"/>
-                                        <!--<a href="" class="pull-right" ng-click="EditDescription(trackerInfo.shipmentId)">Edit</a>-->
                                     </div>
                                     <div class="">
                                         <span>{{trackerInfo.shipmentDescription}}</span>
@@ -552,7 +549,6 @@
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
                                                class="fa fa-info-circle"/>
-                                            <a href="" class="pull-right" ng-click="EditDescription(trackerInfo.shipmentId)">Edit</a>
                                         </div>
                                         <div class="">
                                             <span>{{trackerInfo.shipmentDescription}}</span>
@@ -568,7 +564,6 @@
                                                tooltip-trigger="mouseenter"
                                                tooltip-placement="top"
                                                class="fa fa-info-circle"/>
-                                            <a href="" class="pull-right" ng-click="EditComment(trackerInfo.shipmentId)">Edit</a>
                                         </div>
                                         <div class="">
                                             <span>{{trackerInfo.commentsForReceiver}}</span>
@@ -607,13 +602,6 @@
                                                 <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
                                             </tr>
                                         </table>
-
-                                        <!--<div>
-                                            <img class="tiny-icon15" ng-src="theme/img/Tracker{{(t.index + 1)}}.png">
-                                            <span class="tracker-id">Tracker {{t.deviceSN}}({{t.tripCount}})</span>
-                                            <img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png">
-                                            <img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon">
-                                        </div>-->
                                     </a>
                                     <div class="tools">
                                         <a href="javascript:;" class="expand"> </a>
@@ -696,8 +684,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
@@ -731,9 +717,6 @@
                                         <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
                                         <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
                                     </td>
-                                    <td class="pull-right">
-                                        <a href="" ng-click="EditShipmentFrom()">Edit</a>
-                                    </td>
                                 </tr>
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
                                     <td><img src="theme/img/tinyInterimLocation.png"></td>
@@ -752,9 +735,6 @@
                                         <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
                                         <span style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
                                     </td>
-                                    <td class="pull-right">
-                                        <a href="" ng-click="EditShipmentTo()">Edit</a>
-                                    </td>
                                 </tr>
                                 <tr ng-show="trackerInfo.status!='Arrived'">
                                     <td><img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png"></td>
@@ -764,9 +744,6 @@
                                         <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
                                         <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                         <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
-                                    </td>
-                                    <td class="pull-right">
-                                        <a href="" ng-click="EditShipmentTo()">Edit</a>
                                     </td>
                                 </tr>
                             </table>
@@ -799,7 +776,6 @@
                                        tooltip-placement="top"
                                        class="fa fa-info-circle"/>
                                 </span>
-                                <span class="pull-right"><a href="" ng-click="EditShipmentStatus()">Edit</a></span>
                             </div>
                         </div>
                     </div>

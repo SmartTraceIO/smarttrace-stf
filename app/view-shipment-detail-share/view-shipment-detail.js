@@ -1382,7 +1382,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
     };
 
-    $scope.EditDescription = function(Id) {
+    /*$scope.EditDescription = function(Id) {
         var modalInstance = $uibModal.open({
             templateUrl: 'app/view-shipment-detail-share/edit-description.html',
             controller: 'EditShipmentDetailDescription',
@@ -1397,7 +1397,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $scope.trackerInfo.shipmentDescription = result;
             }
         );
-    }
+    }*/
     $scope.EditNote = function(note) {
         var modalInstance = $uibModal.open({
             templateUrl: 'app/view-shipment-detail-share/edit-note.html',
@@ -1477,37 +1477,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         );
     }
-    $scope.EditComment = function(Id) {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'app/view-shipment-detail-share/edit-comment.html',
-            controller: 'EditShipmentDetailComment',
-            resolve: {
-                editId : function() {
-                    return Id;
-                }
-            }
-        });
-        modalInstance.result.then(
-            function(result) {
-                $scope.trackerInfo.commentsForReceiver = result;
-            }
-        );
-    }
-
-    //-- edit shippment from
-    $scope.EditShipmentFrom = function() {
-
-    }
-    //-- edit shipment to
-    $scope.EditShipmentTo = function() {
-
-    }
-    //-- edit shipment status
-    $scope.EditShipmentStatus = function() {
-
-    }
-
-
     //-- Edit shipment alerts
     $scope.EditShipmentAlerts =function(trackerInfo) {
         //-- open confirmation of edit alert
@@ -1603,59 +1572,3 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         });
     }
 };
-
-appCtrls.controller('EditShipmentDetailDescription', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
-function($scope, $uibModalInstance, webSvc, editId) {
-    $scope.editId = editId;
-    webSvc.getShipment(editId).success(function(data) {
-        if (data.status.code == 0) {
-            $scope.shipment = data.response;
-        }
-    })
-    $scope.saveShipment  = function() {
-        var savingObject = {};
-        savingObject.saveAsNewTemplate = false;
-        savingObject.includePreviousData = false;
-
-        savingObject.shipment = $scope.shipment;
-        console.log('Shipment', $scope.shipment);
-        webSvc.saveShipment(savingObject).success(function(data) {
-            if (data.status.code == 0) {
-                toastr.success('Description updated for shipment ' + $scope.shipment.deviceSN + '(' + $scope.shipment.tripCount + ')');
-            } else {
-                toastr.error('You have no permission to update shipment');
-            }
-        })
-        $uibModalInstance.close($scope.shipment.shipmentDescription);
-    }
-    $scope.cancelEdit = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
-}]);
-appCtrls.controller('EditShipmentDetailComment', ['$scope', '$uibModalInstance', 'webSvc', 'editId',
-    function($scope, $uibModalInstance, webSvc, editId) {
-        $scope.editId = editId;
-        webSvc.getShipment(editId).success(function(data) {
-            if (data.status.code == 0) {
-                $scope.shipment = data.response;
-            }
-        });
-        $scope.saveShipment  = function() {
-            var savingObject = {};
-            savingObject.saveAsNewTemplate = false;
-            //savingObject.includePreviousData = false;
-
-            savingObject.shipment = $scope.shipment;
-            webSvc.saveShipment(savingObject).success(function(data) {
-                if (data.status.code == 0) {
-                    toastr.success('Comment updated for shipment ' + $scope.shipment.deviceSN + '(' + $scope.shipment.tripCount + ')');
-                } else {
-                    toastr.error('You have no permission to update shipment');
-                }
-            })
-            $uibModalInstance.close($scope.shipment.commentsForReceiver);
-        }
-        $scope.cancelEdit = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-}]);
