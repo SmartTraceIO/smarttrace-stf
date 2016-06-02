@@ -598,7 +598,7 @@
                             <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
                                 <div class="portlet-title">
                                     <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->
-                                    <a ng-href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
+                                    <a href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
                                         <table>
                                             <tr>
                                                 <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>

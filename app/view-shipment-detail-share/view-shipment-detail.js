@@ -600,58 +600,55 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
             //--update color of tracker by calling getDevice
 
-            groupList = info.deviceGroups ? info.deviceGroups : [];
+            //groupList = info.deviceGroups ? info.deviceGroups : [];
             //$log.debug('Info', info);
             //$log.debug('groupList', groupList);
 
         }).then(function() {
-            var promises = [];
-            if (groupList.length > 0) {
-                angular.forEach(groupList, function (val, key) {
-                    var p = webSvc.getDevicesOfGroup(val.groupId).success(function (data) {
-                        $log.debug('DevicesOfGroup#' + key, data);
-                        angular.forEach(data.response, function (val, key) {
-                            var serialNumber = val.sn;
-                            if (!isNaN(serialNumber)) {
-                                serialNumber = parseInt(val.sn, 10);
-                            }
-                            deviceSnListSameGroup.push(serialNumber);
-                        })
-                    });
-                    promises.push(p);
-                });
-                $q.all(promises).then(function() {
-                    calculateAndDraw();
-                });
-            } else {
-                //-- groupList == [] only one device!
-                calculateAndDraw();
-            }
+            calculateAndDraw();
+            //var promises = [];
+            //if (groupList.length > 0) {
+            //    angular.forEach(groupList, function (val, key) {
+            //        var p = webSvc.getDevicesOfGroup(val.groupId).success(function (data) {
+            //            $log.debug('DevicesOfGroup#' + key, data);
+            //            angular.forEach(data.response, function (val, key) {
+            //                var serialNumber = val.sn;
+            //                if (!isNaN(serialNumber)) {
+            //                    serialNumber = parseInt(val.sn, 10);
+            //                }
+            //                deviceSnListSameGroup.push(serialNumber);
+            //            })
+            //        });
+            //        promises.push(p);
+            //    });
+            //    $q.all(promises).then(function() {
+            //        calculateAndDraw();
+            //    });
+            //} else {
+            //    //-- groupList == [] only one device!
+            //    calculateAndDraw();
+            //}
         });
 
         function calculateAndDraw() {
             if (!info) return;
             var numberOfSiblings = info.siblings.length;
             //-- modify siblings
-            var siblings = [];
+            //var siblings = [];
             //$log.debug('Number of Siblings', numberOfSiblings);
             //$log.debug('deviceSnListSameGroup', deviceSnListSameGroup);
-            for(var i = 0; i<numberOfSiblings; i++) {
-                if (deviceSnListSameGroup.indexOf(parseInt(info.siblings[i].deviceSN, 10)) >= 0) {
-                    siblings.push(info.siblings[i]);
-                }
-            }
+            //for(var i = 0; i<numberOfSiblings; i++) {
+            //    if (deviceSnListSameGroup.indexOf(parseInt(info.siblings[i].deviceSN, 10)) >= 0) {
+            //        siblings.push(info.siblings[i]);
+            //    }
+            //}
 
-            numberOfSiblings = siblings.length;
+            //numberOfSiblings = siblings.length;
             if (numberOfSiblings >= 5) {
-                siblings.splice(5);
+                info.siblings.splice(5);
                 $scope.notListed = numberOfSiblings - 5;
             }
-            info.siblings = siblings;
-            if (info == null) {
-                $log.error('GRAPHDATA', graphData);
-                return;
-            }
+            //info.siblings = siblings;
             //--------Remove Light On, Off---------
             for(alert = 0; alert < info.alertSummary.length; alert ++){
                 if(info.alertSummary[alert].toLowerCase() == "lighton"
