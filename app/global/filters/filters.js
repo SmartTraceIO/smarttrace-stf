@@ -63,19 +63,26 @@ appFilters.filter('volt', function() {
                 return '20% (' + v + ")";
             } else if (input <= 3845) {
                 return '30% (' + v + ")";
-            } else if (input <= 3920) {
+            //} else if (input <= 3920) {
+            } else if (input <= 3895) {
                 return '40% (' + v + ")";
-            } else if (input <= 3995) {
+            //} else if (input <= 3995) {
+            } else if (input <= 3925) {
                 return '50% (' + v + ")";
-            } else if (input <= 4070) {
+            //} else if (input <= 4070) {
+            } else if (input <= 3975) {
                 return '60% (' + v + ")";
-            } else if (input <= 4109) {
+            //} else if (input <= 4109) {
+            } else if (input <= 4025) {
                 return '70% (' + v + ")";
-            } else if (input <= 4148) {
+            //} else if (input <= 4148) {
+            } else if (input <= 4075) {
                 return '80% (' + v + ")";
-            } else if (input <= 4187) {
+            //} else if (input <= 4187) {
+            } else if (input <= 4125) {
                 return '90% (' + v + ")";
-            } else if (input < 4220) {
+            //} else if (input < 4220) {
+            } else if (input < 4150) {
                 return '95% (' + v + ")";
             } else {
                 return '100% (' + v + ")";
