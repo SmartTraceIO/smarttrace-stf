@@ -30,7 +30,7 @@ appSvcs.factory('HttpRequestTimeoutInterceptor', function ($q, HttpPendingReques
         },
 
         responseError: function (response) {
-            if (response.config.timeout.isGloballyCancelled) {
+            if (response.config && response.config.timeout && response.config.timeout.isGloballyCancelled) {
                 return $q.defer().promise;
             }
             return $q.reject(response);

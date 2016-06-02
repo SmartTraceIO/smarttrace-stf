@@ -44,7 +44,9 @@
 
     $rootScope.height = $document.height();
 
+    $scope.showRead = false;
     $rootScope.test = function(){
+        $scope.showRead = !$scope.showRead; // toggle
         if($scope.showRead == true){
             $rootScope.closeText = "------------------  Closed  ------------------";
             $rootScope.closedNotification = $rootScope.readNotification;
@@ -52,6 +54,7 @@
             $rootScope.closeText = "";
             $rootScope.closedNotification = [];
         }
+        console.log('Changing notification',$scope.showRead, $rootScope.closedNotification);
     }
 
     markAsRead = function(data){

@@ -116,9 +116,10 @@
                                         <p class="notification-time">{{data.date}}</p>
                                     </div>
                                     <p>{{closeText}}</p>
-                                    <div ng-show=showRead class="alert alert-block alert-notification alert-read fade in" ng-repeat="data in closedNotification">
+                                    <div ng-show="showRead" class="alert alert-block alert-notification alert-read fade in" ng-repeat="data in closedNotification">
                                         <img ng-src="theme/img/alert{{data.alertType}}.png">
-                                        <h5 class="alert-heading">{{data.Line1}}</h5>
+                                        <!--<h5 class="alert-heading">{{data.Line1}}</h5>-->
+                                        <h5 class="alert-heading"><a ng-href="{{data.link}}">{{data.Line1}}</a></h5>
                                         <p>{{data.Line2}}</p>
                                         <p>{{data.Line3}}</p>
                                         <p class="notification-time">{{data.date}}</p>
@@ -127,10 +128,9 @@
                                 <li class="external bottom">
                                     <button type="button" ng-click="closeAll()">Hide All</button>
                                     <label class="checkbox pull-right">
-
                                         <div class="checker">
                                         <span  ng-class="{'checked' : showRead}">
-                                            <input name="remember" value="1" type="checkbox" ng-change="test()" ng-model="showRead">
+                                            <input name="remember" type="checkbox" ng-click="test()">
                                         </span>
                                         </div>
                                         Include hidden notifications
