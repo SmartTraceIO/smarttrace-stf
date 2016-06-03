@@ -94,13 +94,13 @@ function EnterTimeCtrl($uibModalInstance, convertSimDateFilter, webSvc, sim) {
     self.endTime = null;
     self.startTime = null;
 
-    console.log('Sim', sim);
     webSvc.getDevice(sim.sourceDevice).success(function(data) {
         if (data.status.code == 0) {
             if (data.response) {
                 console.log("Device", data.response);
                 self.lastShipmentId = data.response.lastShipmentId;
-                self.endTime = convertSimDateFilter(data.response.lastReadingTime);
+                //lastReadingTime:"3:15 3 Jun 2016"
+                self.endTime = convertSimDateFilter(data.response.lastReadingTime, 'HH:mm DD MMM YYYY');
             }
         } else {
             return;
@@ -111,7 +111,8 @@ function EnterTimeCtrl($uibModalInstance, convertSimDateFilter, webSvc, sim) {
             console.log('LastShipment', data);
             if (data.status.code == 0) {
                 if (data.response) {
-                    self.startTime = convertSimDateFilter(data.response.startDate);
+                    //shipmentDate:"2016-06-01T22:35"
+                    self.startTime = convertSimDateFilter(data.response.shipmentDate, 'YYYY-MM-DDTHH:mm');
                 }
             } else {
                 return;
@@ -139,9 +140,9 @@ function EnterTimeCtrl($uibModalInstance, convertSimDateFilter, webSvc, sim) {
 }
 
 appFilters.filter('convertSimDate', function(localDbSvc) {
-    return function (input) {
+    return function (input, fmt) {
         if (input) {
-            var dt = moment.tz(input, localDbSvc.getUserTimezone());
+            var dt = moment(input, fmt);
             return dt.format('YYYY-MM-DD HH:mm');
         } else  {
             return '';
