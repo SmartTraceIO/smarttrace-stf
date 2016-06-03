@@ -20,63 +20,63 @@
                     </label>
                     <label class="control-label pull-right"><span class="text-error">*</span></label>
                     <div class="clearfix"></div>
-                <textarea ng-model="VM.shipment.shipmentDescription"
+                    <textarea ng-model="VM.shipment.shipmentDescription"
                           id="shipmentDescription"
                           name="description"
                           ng-maxlength="120"
                           class="form-control"
                           name="shipmentDescription"/>
-                <span ng-if="frmEditGoods.$invalid" ng-cloak>
-                    <span ng-cloak class="text-danger" ng-if="frmEditGoods.description.$error.maxlength">
-                        Error. The description field can not exceed 120 chars
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.description.$error.maxlength">
+                            Error. The description field can not exceed 120 chars
+                        </span>
                     </span>
-                </span>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <label class="control-label">
-                    <span>Pallet Id:</span>
-                    <i uib-tooltip="Pallet unique Identity If available"
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"/>
-                </label>
-                <input type="text"
-                       ng-maxlength="31"
-                       name="palletId"
-                       class="form-control"
-                       placeholder="Enter Pallet Id"
-                       ng-model="VM.shipment.palletId" />
+                <div class="form-group">
+                    <label class="control-label">
+                        <span>Pallet Id:</span>
+                        <i uib-tooltip="Enter a Pallet unique Identity If available"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                    </label>
+                    <input type="text"
+                           ng-maxlength="31"
+                           name="palletId"
+                           class="form-control"
+                           placeholder="Enter Pallet Id"
+                           ng-model="VM.shipment.palletId" />
 
-                <div>
-                    <small class="text-muted">Enter a Pallet unique Identity If available</small>
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
+                    </span>
                 </div>
-            <span ng-if="frmEditGoods.$invalid" ng-cloak>
-                <span ng-cloak class="text-danger" ng-if="frmEditGoods.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
-            </span>
             </div>
             <div class="col-sm-6">
-                <label class="control-label">
-                    <span>Asset Num:</span>
-                    <i uib-tooltip="Enter the identity of the asset carrying the goods"
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"/>
-                </label>
-                <input type="text"
-                       ng-maxlength="31"
-                       name="assetNum"
-                       class="form-control"
-                       placeholder="Enter Asset Num"
-                       ng-model="VM.shipment.assetNum" />
-                <div><small class="text-muted">Enter the identity of the asset carrying the goods</small></div>
-            <span ng-if="frmEditGoods.$invalid" ng-cloak>
-                <span ng-cloak class="text-danger" ng-if="frmEditGoods.assetNum.$error.maxlength">Asset Number for a shipment must be less than or equal to 31 chars</span>
-            </span>
+                <div class="form-group">
+                    <label class="control-label">
+                        <span>Asset Num:</span>
+                        <i uib-tooltip="Enter the identity of the asset carrying the goods"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                    </label>
+                    <input type="text"
+                           ng-maxlength="31"
+                           name="assetNum"
+                           class="form-control"
+                           placeholder="Enter Asset Num"
+                           ng-model="VM.shipment.assetNum" />
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.assetNum.$error.maxlength">Asset Number for a shipment must be less than or equal to 31 chars</span>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row">
