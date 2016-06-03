@@ -774,7 +774,8 @@
                 anchor: RichMarkerPosition.MIDDLE,
                 content: htmlIcon,
              });
-            marker.bindTo('position', ilabel);
+            //marker.bindTo('position', ilabel);
+            //marker.label = ilabel;
             marker.shipment = shipment;
 
             google.maps.event.addListener(marker, 'click', function() {
@@ -807,7 +808,26 @@
             bounds.extend(llng);
         });
 
-        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
+        VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {
+            averageCenter:true,
+            spiderer:true,
+            imagePath: 'Scripts/google-map/images/m',
+            styles: [{
+                height: 30,
+                width: 30,
+                //textColor: '#ffffff',
+                textSize: 15,
+            }]
+        });
+        google.maps.event.addListener(VM.markerClusterer, 'update_position', function() {
+            for (var i = 0; i < VM.dynMarkers.length; i++) {
+                console.log('Test update postion', VM.dynMarkers[i].getPosition());
+                VM.dynMarkers[i].bindTo('position', VM.labelMarkers[i]);
+                //markers[i].bindTo('position', markers[i].label);
+                //markers[i].label.setPosition(markers[i].getPosition());
+            }
+
+        });
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);

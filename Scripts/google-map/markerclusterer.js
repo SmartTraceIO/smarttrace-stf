@@ -149,6 +149,15 @@ function MarkerClusterer(map, opt_markers, opt_options) {
     this.averageCenter_ = options['averageCenter'];
   }
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.spiderer_ = false;
+  if (options['spiderer'] != undefined) {
+    this.spiderer_ = options['spiderer'];
+  }
+
   this.setupStyles_();
 
   this.setMap(map);
@@ -187,7 +196,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  * @type {string}
  * @private
  */
-MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = 'Scripts/google-map/images/m';
+MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = '../images/m';
 
 
 /**
@@ -580,6 +589,13 @@ MarkerClusterer.prototype.setGridSize = function(size) {
   this.gridSize_ = size;
 };
 
+MarkerClusterer.prototype.setSpiderer = function(isSpiderer) {
+  this.spiderer_ = isSpiderer;
+}
+
+MarkerClusterer.prototype.isSpiderer = function() {
+  return this.spiderer_;
+}
 
 /**
  * Returns the min cluster size.
@@ -786,6 +802,9 @@ MarkerClusterer.prototype.createClusters_ = function() {
       this.addToClosestCluster_(marker);
     }
   }
+
+  //-- update label position here
+  google.maps.event.trigger(this, 'update_position');
 };
 
 
@@ -803,6 +822,7 @@ function Cluster(markerClusterer) {
   this.gridSize_ = markerClusterer.getGridSize();
   this.minClusterSize_ = markerClusterer.getMinClusterSize();
   this.averageCenter_ = markerClusterer.isAverageCenter();
+  this.spiderer_ = markerClusterer.isSpiderer();
   this.center_ = null;
   this.markers_ = [];
   this.bounds_ = null;
@@ -923,6 +943,11 @@ Cluster.prototype.getSize = function() {
   return this.markers_.length;
 };
 
+/**
+ * */
+Cluster.prototype.isSpiderer = function() {
+  return this.spiderer_;
+}
 
 /**
  * Returns the center of the cluster.
@@ -1002,6 +1027,8 @@ Cluster.prototype.updateIcon = function() {
   this.clusterIcon_.setCenter(this.center_);
   this.clusterIcon_.setSums(sums);
   this.clusterIcon_.show();
+
+  //google.maps.event.trigger(this.markerClusterer_, 'update_position', this.markers_);
 };
 
 
@@ -1035,6 +1062,7 @@ function ClusterIcon(cluster, styles, opt_padding) {
   this.visible_ = false;
 
   //--
+  this.spiderer_ = cluster.isSpiderer();
   this.origPosition = null;
   this.markers_ = cluster.getMarkers();
   this.paths_ = null;
@@ -1070,9 +1098,12 @@ ClusterIcon.prototype.onAdd = function() {
   this.div_ = document.createElement('DIV');
 
   if (this.visible_) {
-    for (var i = 0; i < this.markers_.length; i++) {
-      var omk = this.markers_[i].getPosition();
-      this.origPosition.push(omk);
+    if (this.spiderer_) {
+      //--store original position of marker
+      for (var i = 0; i < this.markers_.length; i++) {
+        var omk = this.markers_[i].getPosition();
+        this.origPosition.push(omk);
+      }
     }
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
@@ -1081,6 +1112,7 @@ ClusterIcon.prototype.onAdd = function() {
 
   var panes = this.getPanes();
   panes.overlayMouseTarget.appendChild(this.div_);
+  //console.log('Panes', panes);
   var that = this;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
     that.triggerClusterClick(event);
@@ -1115,7 +1147,9 @@ ClusterIcon.prototype.getPosFromLatLng_ = function(latlng) {
  */
 ClusterIcon.prototype.draw = function() {
   if (this.visible_) {
-    this.getCirclePosition();
+    if (this.spiderer_) {
+      this.getCirclePosition();
+    }
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.top = pos.y + 'px';
     this.div_.style.left = pos.x + 'px';
@@ -1137,13 +1171,12 @@ ClusterIcon.prototype.clearPath = function() {
 ClusterIcon.prototype.getCirclePosition = function() {
   var count = this.markers_.length;
   //var legLength = ((count + 2) * 23) / (2*Math.PI); //radius
-  //var centerPt = this.getPosFromLatLng_(this.center_); //center
   var centerPt = this.getProjection().fromLatLngToDivPixel(this.center_); //center
   var legLength = 50 / (2* Math.sin(Math.PI/count));
   var angleStep = (2*Math.PI)/(count);
   //this.paths_ = [];
   for (var i = 0; i < count; i++) {
-    var angle = Math.PI/2 + i * angleStep;
+    var angle = Math.PI + i * angleStep;
 
     var point = new google.maps.Point(
         centerPt.x + legLength * Math.sin(angle),
@@ -1193,7 +1226,9 @@ ClusterIcon.prototype.show = function() {
  * Remove the icon from the map
  */
 ClusterIcon.prototype.remove = function() {
-  this.clearPath();
+  if (this.spiderer_) {
+    this.clearPath();
+  }
   delete this.paths_;
   this.setMap(null);
 };
@@ -1267,10 +1302,15 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
-  //style.push('background-image:url(' + this.url_ + ');');
-  //var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
-  //style.push('background-position:' + backgroundPosition + ';');
-
+  if (!this.spiderer_) {
+    style.push('background-image:url(' + this.url_ + ');');
+    var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
+    style.push('background-position:' + backgroundPosition + ';');
+  } else {
+    style.push('background-color:red;');
+    style.push('border-radius:' + this.height_/2 +'px!important;');
+    style.push('opacity:0.7;');
+  }
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
         this.anchor_[0] < this.height_) {
@@ -1302,6 +1342,7 @@ ClusterIcon.prototype.createCss = function(pos) {
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
       txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+
   return style.join('');
 };
 
