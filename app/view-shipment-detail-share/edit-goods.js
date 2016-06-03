@@ -17,10 +17,10 @@ function EditMonitoredGoods($uibModalInstance, webSvc, shipmentId) {
                     if (!isNaN(VM.shipment.deviceSN)) {
                         VM.shipment.deviceSN = parseInt(VM.shipment.deviceSN, 10);
                     }
-                    VM.shipment.noAlertsAfterArrivalMinutes = !isNaN(VM.shipment.noAlertsAfterArrivalMinutes) ? VM.shipment.noAlertsAfterArrivalMinutes.toString() : '';
-                    VM.shipment.noAlertsAfterStartMinutes = !isNaN(VM.shipment.noAlertsAfterStartMinutes) ? VM.shipment.noAlertsAfterStartMinutes.toString() : '';
-                    VM.shipment.shutdownDeviceAfterMinutes = !isNaN(VM.shipment.shutdownDeviceAfterMinutes) ? VM.shipment.shutdownDeviceAfterMinutes.toString() : '';
-                    VM.shipment.shutDownAfterStartMinutes = !isNaN(VM.shipment.shutDownAfterStartMinutes) ? VM.shipment.shutDownAfterStartMinutes.toString() : '';
+                    VM.shipment.noAlertsAfterArrivalMinutes = (VM.shipment.noAlertsAfterArrivalMinutes!=null) ? VM.shipment.noAlertsAfterArrivalMinutes.toString() : '';
+                    VM.shipment.noAlertsAfterStartMinutes = (VM.shipment.noAlertsAfterStartMinutes!=null) ? VM.shipment.noAlertsAfterStartMinutes.toString() : '';
+                    VM.shipment.shutdownDeviceAfterMinutes = (VM.shipment.shutdownDeviceAfterMinutes!=null) ? VM.shipment.shutdownDeviceAfterMinutes.toString() : '';
+                    VM.shipment.shutDownAfterStartMinutes = (VM.shipment.shutDownAfterStartMinutes!=null) ? VM.shipment.shutDownAfterStartMinutes.toString() : '';
                     console.log('VM.shipment', VM.shipment);
                 } else {
                     toastr.warning('An error occurred while get shipment #' + VM.shipmentId);
