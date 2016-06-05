@@ -415,7 +415,22 @@
         var icontent = null;
         var label = null;
         var ilabel = null;
+        var oldLat = 0;
+        var oldLon = 0;
         angular.forEach(shipment.keyLocations, function(v, k) {
+            if ((!v.lat)) {
+                v.lat = oldLat;
+            } else {
+                oldLat = v.lat;
+            }
+            if (!v.lon) {
+                v.lon = oldLon;
+            } else {
+                oldLon = v.lon;
+            }
+
+            console.log('lat', v.lat);
+            console.log('lon', v.lon);
             //if (v.key == "shippedFrom") {
             var latlng = new google.maps.LatLng(v.lat, v.lon);
             bounds.extend(latlng);
@@ -575,6 +590,9 @@
             //----------------------------------------------------------------------------------------------------------
             if (k+1 < shipment.keyLocations.length) {
                 var v1 = shipment.keyLocations[k+1];
+                v1.lat = v1.lat ? v1.lat : v.lat;
+                v1.lon = v1.lon ? v1.lon : v.lon;
+
                 var spart = [{lat: v.lat, lng: v.lon}, {lat: v1.lat, lng: v1.lon}];
                 var fromLlng = new google.maps.LatLng(v.lat, v.lon);
                 var toLlng = new google.maps.LatLng(v1.lat, v1.lon);
@@ -594,6 +612,7 @@
                         }],*/
                     });
                 } else {
+                    console.log('Spath', spart);
                     rpath = new google.maps.Polyline({
                         path: spart,
                         strokeColor: shipment.color,
@@ -821,7 +840,6 @@
         });
         google.maps.event.addListener(VM.markerClusterer, 'update_position', function() {
             for (var i = 0; i < VM.dynMarkers.length; i++) {
-                console.log('Test update postion', VM.dynMarkers[i].getPosition());
                 VM.dynMarkers[i].bindTo('position', VM.labelMarkers[i]);
                 //markers[i].bindTo('position', markers[i].label);
                 //markers[i].label.setPosition(markers[i].getPosition());
