@@ -790,6 +790,9 @@
             htmlIcon += '<td>';
             htmlIcon += '<div style="background-color: #fff; border-top: 1px solid #5e5e5e; border-right: 1px solid #5e5e5e; border-bottom: 1px solid; border-color: ' +shipment.color+ '; border-bottom-right-radius: 8px!important; border-top-right-radius: 8px!important;">';
             htmlIcon += (shipment.deviceSN + "(" + shipment.tripCount + ")");
+            if (shipment.alertSummary) {
+                htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px;" aria-hidden="true"></i>'
+            }
             htmlIcon += '</div>';
             htmlIcon += '</td>';
             htmlIcon += '</tr>';
