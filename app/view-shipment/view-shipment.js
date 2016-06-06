@@ -304,7 +304,7 @@
         BindShipmentList();
     }
     VM.PageChanged = function () {
-        console.log('Page-changed');
+        //console.log('Page-changed');
         BindShipmentList();
     }
 
@@ -769,8 +769,8 @@
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
             //console.log('shipment.lastReadingLat', shipment.lastReadingLat);
             //console.log('shipment.lastReadingLong', shipment.lastReadingLong);
-            var htmlIcon = '';
-            htmlIcon += '<table>';
+            //var htmlIcon = VM.getMarkerContent(marker, false);
+            /*htmlIcon += '<table>';
             htmlIcon += '<tr>';
             htmlIcon += '<td>';
                 htmlIcon += '<div style="border:1px solid #5e5e5e; width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
@@ -788,15 +788,21 @@
                 htmlIcon += '</div>';
             htmlIcon += '</td>';
             htmlIcon += '<td>';
-            htmlIcon += '<div style="background-color: #fff; border-top: 1px solid #5e5e5e; border-right: 1px solid #5e5e5e; border-bottom: 1px solid; border-color: ' +shipment.color+ '; border-bottom-right-radius: 8px!important; border-top-right-radius: 8px!important;">';
+            htmlIcon += '<div style="background-color: #fff; border-bottom-right-radius: 8px!important; border-top-right-radius: 8px!important;">';
             htmlIcon += (shipment.deviceSN + "(" + shipment.tripCount + ")");
-            if (shipment.alertSummary) {
-                htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px;" aria-hidden="true"></i>'
+            if (shipment.alertSummary.Hot || shipment.alertSummary.CriticalHot) {
+                htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+            }
+            if (shipment.alertSummary.Cold || shipment.alertSummary.CriticalCold) {
+                htmlIcon += '<i class="fa fa-circle" style="color: #00faff; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+            }
+            if (shipment.alertSummary.Battery) {
+                htmlIcon += '<i class="fa fa-circle" style="color: #000000; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
             }
             htmlIcon += '</div>';
             htmlIcon += '</td>';
             htmlIcon += '</tr>';
-            htmlIcon += '</table>';
+            htmlIcon += '</table>';*/
 
             //var ilabel = new MapLabel({
             //    position: llng,
@@ -809,16 +815,17 @@
                 map: VM.map,
                 flat: true,
                 anchor: RichMarkerPosition.MIDDLE,
-                content: htmlIcon,
              });
-            //marker.bindTo('position', ilabel);
-            //marker.label = ilabel;
             marker.shipment = shipment;
+            VM.getMarkerContent(marker, false);
 
             google.maps.event.addListener(marker, 'click', function() {
                 VM.oldMarker = VM.currentMarker;
                 VM.currentMarker = marker;
-                VM.getInfoBoxElement(infoBoxElement, marker.shipment);
+                VM.origContent = marker.getContent();
+
+                VM.getInfoBoxElement(infoBoxElement, marker);
+                //marker.setContent(brContent);
 
                 if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                     var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -831,10 +838,15 @@
                     }
                     if (VM.oldMarker != VM.currentMarker) {
                         VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBoxElement);
+                        VM.getMarkerContent(VM.oldMarker, false);
+                        VM.getMarkerContent(VM.currentMarker, true);
                         VM.updatePolylines(marker.shipment);
+                    } else {
+                        VM.getMarkerContent(VM.currentMarker, false);
                     }
                 } else {
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBoxElement);
+                    VM.getMarkerContent(marker, true);
                     VM.updatePolylines(marker.shipment);
                 }
             });
@@ -887,10 +899,10 @@
     //    VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
     //}
 
-    VM.getInfoBoxElement = function(controlInfo, shipment) {
+    VM.getInfoBoxElement = function(controlInfo, marker) {
+        var shipment = marker.shipment;
         var htmlContent = '';
         htmlContent += '<div class="portlet box" style="border: 2px solid; border-color:'+shipment.color+'">';  //+1
-
         htmlContent += '<div style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: #bababa; color: #ffffff;">';                                                                   //+2
         htmlContent += '<table width="100%" height="100%" style="font-size: 13px;">';
         htmlContent += '<tr>';
@@ -1092,6 +1104,7 @@
         closeBtn.innerHTML = '<span style="font-size: 20px;">&times;</span>';
         closeBtn.addEventListener('click', function() {
             VM.oldMarker = VM.currentMarker;
+            VM.getMarkerContent(marker, false);
             //VM.updateCluster();
             if (VM.map.controls[google.maps.ControlPosition.TOP_LEFT].length > 0) {
                 var pContent = VM.map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -1108,6 +1121,95 @@
         controlInfo.innerHTML = htmlContent;
         controlInfo.appendChild(closeBtn);
         return controlInfo;
+    }
+
+    VM.getMarkerContent = function(marker, isBorder) {
+        var shipment = marker.shipment;
+        var htmlIcon = '';
+        if (isBorder) {
+            htmlIcon += '<table style="background-color: #fff; border-top: 1px solid; border-bottom: 1px solid; border-right: 1px solid; border-color: '+shipment.color+';">';
+        } else {
+            htmlIcon += '<table style="background-color: #ffffff">';
+        }
+        htmlIcon += '<tr>';
+        htmlIcon += '<td>';
+        htmlIcon += '<div style="border:1px solid #5e5e5e; width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
+        if (shipment.status == 'Ended') {
+            htmlIcon += "<div style='position:relative;'>";
+            htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
+            htmlIcon += '</div>';
+        } else if (shipment.status == 'Arrived') {
+            htmlIcon += "<div style='position:relative;'>";
+            htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 2px;;">&check;</span>'
+            htmlIcon += '</div>';
+        } else {
+            htmlIcon += "<div style='cursor: pointer;'></div>";
+        }
+        htmlIcon += '</div>';
+        htmlIcon += '</td>';
+        htmlIcon += '<td>';
+        htmlIcon += '<div>';
+        htmlIcon += (shipment.deviceSN + "(" + shipment.tripCount + ")");
+        htmlIcon += '</div>';
+        htmlIcon += '</td>';
+        htmlIcon += '<td>';
+        var alerts = [];
+        if (shipment.alertSummary.Hot || shipment.alertSummary.CriticalHot) {
+            alerts.push({type: 'hot', color: '#ff3e03'});
+            //htmlIcon += '<div>';
+            //htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+            //htmlIcon += '</div>';
+        }
+        if (shipment.alertSummary.Cold || shipment.alertSummary.CriticalCold) {
+            alerts.push({type: 'cold', color: '#00faff'});
+            //htmlIcon += '<div>';
+            //htmlIcon += '<i class="fa fa-circle" style="color: #00faff; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+            //htmlIcon += '</div>';
+        }
+        if (shipment.alertSummary.Battery) {
+            alerts.push({type: 'batt', color: '#000000'});
+            //htmlIcon += '<div>';
+            //htmlIcon += '<i class="fa fa-circle" style="color: #000000; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+            //htmlIcon += '</div>';
+        }
+        if (alerts.length == 1) {
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[0].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
+        } else if (alerts.length == 2) {
+            htmlIcon += '<table>';
+            htmlIcon += '<tr>';
+            htmlIcon += '<td style="line-height: 8px;">';
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[0].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px; line-height: 8px;" aria-hidden="true"></i>'
+            htmlIcon += '</td>';
+            htmlIcon += '</tr>';
+            htmlIcon += '<tr>';
+            htmlIcon += '<td style="line-height: 8px;">';
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[1].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px; line-height: 8px;" aria-hidden="true"></i>'
+            htmlIcon += '</td>';
+            htmlIcon += '</tr>';
+            htmlIcon += '</table>';
+        } else if (alerts.length == 3) {
+            htmlIcon += '<table>';
+            htmlIcon += '<tr>';
+            htmlIcon += '<td style="line-height: 8px;">';
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[0].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px; line-height: 8px;" aria-hidden="true"></i>'
+            htmlIcon += '</td>';
+            htmlIcon += '<td style="line-height: 8px;">';
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[2].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px; line-height: 8px;" aria-hidden="true"></i>'
+            htmlIcon += '</td>';
+            htmlIcon += '</tr>';
+            htmlIcon += '<tr>';
+            htmlIcon += '<td style="line-height: 8px;">';
+            htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[1].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px; line-height: 8px;" aria-hidden="true"></i>'
+            htmlIcon += '</td>';
+            htmlIcon += '</tr>';
+            htmlIcon += '</table>';
+        }
+        htmlIcon += '</td>';
+        htmlIcon += '</tr>';
+        htmlIcon += '</table>';
+
+        marker.setContent(htmlIcon);
+        //return htmlIcon;
     }
 
     VM.resetMap = function() {
