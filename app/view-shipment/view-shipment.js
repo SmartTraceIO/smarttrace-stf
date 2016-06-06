@@ -434,7 +434,7 @@
         VM.objectToRemove.push(infoWindow);
         var icontent = null;
         var label = null;
-        var ilabel = null;
+        //var ilabel = null;
         var oldLat = 0;
         var oldLon = 0;
         angular.forEach(shipment.keyLocations, function(v, k) {
@@ -770,25 +770,37 @@
             //console.log('shipment.lastReadingLat', shipment.lastReadingLat);
             //console.log('shipment.lastReadingLong', shipment.lastReadingLong);
             var htmlIcon = '';
-            htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color+'; cursor: pointer; ">';
-            if (shipment.status == 'Ended') {
-                htmlIcon += "<div style='position:relative;'>";
-                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
+            htmlIcon += '<table>';
+            htmlIcon += '<tr>';
+            htmlIcon += '<td>';
+                htmlIcon += '<div style="border:1px solid #5e5e5e; width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
+                if (shipment.status == 'Ended') {
+                    htmlIcon += "<div style='position:relative;'>";
+                    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
+                    htmlIcon += '</div>';
+                } else if (shipment.status == 'Arrived') {
+                    htmlIcon += "<div style='position:relative;'>";
+                    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 2px;;">&check;</span>'
+                    htmlIcon += '</div>';
+                } else {
+                    htmlIcon += "<div style='cursor: pointer;'></div>";
+                }
                 htmlIcon += '</div>';
-            } else if (shipment.status == 'Arrived') {
-                htmlIcon += "<div style='position:relative;'>";
-                htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 2px;;">&check;</span>'
-                htmlIcon += '</div>';
-            } else {
-                htmlIcon += "<div style='cursor: pointer;'></div>";
-            }
+            htmlIcon += '</td>';
+            htmlIcon += '<td>';
+            htmlIcon += '<div style="background-color: #fff; border-top: 1px solid #5e5e5e; border-right: 1px solid #5e5e5e; border-bottom: 1px solid; border-color: ' +shipment.color+ '; border-bottom-right-radius: 8px!important; border-top-right-radius: 8px!important;">';
+            htmlIcon += (shipment.deviceSN + "(" + shipment.tripCount + ")");
             htmlIcon += '</div>';
-            var ilabel = new MapLabel({
-                position: llng,
-                map: VM.map,
-                align: 'left',
-                text: shipment.deviceSN + "(" + shipment.tripCount + ")"
-            });
+            htmlIcon += '</td>';
+            htmlIcon += '</tr>';
+            htmlIcon += '</table>';
+
+            //var ilabel = new MapLabel({
+            //    position: llng,
+            //    map: VM.map,
+            //    align: 'left',
+            //    text: shipment.deviceSN + "(" + shipment.tripCount + ")"
+            //});
             var marker = new RichMarker({
                 position: llng,
                 map: VM.map,
@@ -822,11 +834,9 @@
                     VM.map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBoxElement);
                     VM.updatePolylines(marker.shipment);
                 }
-                //restore cluster
-                //VM.updateCluster();
             });
             VM.dynMarkers.push(marker);
-            VM.labelMarkers.push(ilabel);
+            //VM.labelMarkers.push(ilabel);
             bounds.extend(llng);
         });
 
@@ -841,14 +851,14 @@
                 textSize: 15,
             }]
         });
-        google.maps.event.addListener(VM.markerClusterer, 'update_position', function() {
+        /*google.maps.event.addListener(VM.markerClusterer, 'update_position', function() {
             for (var i = 0; i < VM.dynMarkers.length; i++) {
                 VM.dynMarkers[i].bindTo('position', VM.labelMarkers[i]);
                 //markers[i].bindTo('position', markers[i].label);
                 //markers[i].label.setPosition(markers[i].getPosition());
             }
 
-        });
+        });*/
         VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
             VM.map.fitBounds(bounds);
