@@ -362,7 +362,7 @@
         }
         if (shipment.shippedToLat && shipment.shippedToLong) {
             var destContent = '';
-            destContent += '<div style="width: 25px; height: 26px; border: 2px solid '+shipment.color+'; border-radius: 12px!important; background-color: #ffffff;">';
+            destContent += '<div style="width: 28px; height: 28px; border: 2px solid '+shipment.color+'; border-radius: 14px!important; background-color: #ffffff;">';
             if (shipment.status == 'Arrived') {
                 destContent += '<img class="rev-horizon" src="theme/img/locationStop.png">'
             } else {
@@ -444,7 +444,7 @@
 
             if (k==0) {
                 icontent = '';
-                icontent += '<div style="width: 25px; height: 26px; border: 2px solid; border-radius: 12px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
+                icontent += '<div style="width: 28px; height: 28px; border: 2px solid; border-radius: 14px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
                 icontent += '<img src="theme/img/locationStart.png">';
                 icontent += '</div>';
                 //--maplabel
