@@ -159,13 +159,9 @@
                     }
                 }
                 v.interimStops = interimL;
-
-                //-- trim shippedFrom
-                var indexShippedFrom = 0;
-                var indexFirstReading = 0;
                 var oldLat = 0;
                 var oldLon = 0;
-                for(var i = 0; i < v.keyLocations.length; i++) {
+                for (var i = 0; i < v.keyLocations.length; i++) {
                     //--
                     if (!v.keyLocations[i].lat) {
                         v.keyLocations[i].lat = oldLat;
@@ -178,6 +174,25 @@
                     } else {
                         oldLon = v.keyLocations[i].lon;
                     }
+                }
+                for (var i = v.keyLocations.length -1; i>= 0; i--) {
+                    if (!v.keyLocations[i].lat) {
+                        v.keyLocations[i].lat = oldLat;
+                    } else {
+                        oldLat = v.keyLocations[i].lat;
+                    }
+                    //--
+                    if (!v.keyLocations[i].lon) {
+                        v.keyLocations[i].lon = oldLon;
+                    } else {
+                        oldLon = v.keyLocations[i].lon;
+                    }
+                }
+                //-- trim shippedFrom
+                var indexShippedFrom = 0;
+                var indexFirstReading = 0;
+                for(var i = 0; i < v.keyLocations.length; i++) {
+
 
                     if (v.keyLocations[i].key == "shippedFrom") {
                         indexShippedFrom = i;
