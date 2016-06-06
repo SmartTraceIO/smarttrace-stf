@@ -98,7 +98,7 @@
         if (VM.tracker) {
             VM.ViewShipment.deviceImei = VM.tracker.imei;
         }
-        console.log('VM.tracker', VM.tracker);
+        //console.log('VM.tracker', VM.tracker);
         var devicesPromise = webSvc.getDevices(1000000, 1, 'locationName', 'asc').success( function (data) {
             if (data.status.code == 0) {
                 VM.TrackerList = data.response;
@@ -163,7 +163,22 @@
                 //-- trim shippedFrom
                 var indexShippedFrom = 0;
                 var indexFirstReading = 0;
+                var oldLat = 0;
+                var oldLon = 0;
                 for(var i = 0; i < v.keyLocations.length; i++) {
+                    //--
+                    if (!v.keyLocations[i].lat) {
+                        v.keyLocations[i].lat = oldLat;
+                    } else {
+                        oldLat = v.keyLocations[i].lat;
+                    }
+                    //--
+                    if (!v.keyLocations[i].lon) {
+                        v.keyLocations[i].lon = oldLon;
+                    } else {
+                        oldLon = v.keyLocations[i].lon;
+                    }
+
                     if (v.keyLocations[i].key == "shippedFrom") {
                         indexShippedFrom = i;
                     }
@@ -185,6 +200,11 @@
                     }
                     if (v.keyLocations[i].key == 'lastReading') {
                         indexLastReading = i;
+                        //-- update last reading
+                        if (!v.lastReadingLat) {
+                            v.lastReadingLat = v.keyLocations[i].lat;
+                            v.lastReadingLong = v.keyLocations[i].lon;
+                        }
                     }
                 }
                 if (v.status == 'Arrived') {
@@ -314,7 +334,7 @@
         var bounds = new google.maps.LatLngBounds;
         if (VM.objectToRemove.length > 0) {
             angular.forEach(VM.objectToRemove, function(v, k) {
-                VM.objectToRemove[k].setMap(null);
+                if (VM.objectToRemove[k]) VM.objectToRemove[k].setMap(null);
             });
         }
 
@@ -337,7 +357,7 @@
         //VM.objectToRemove
         if (VM.objectToRemove && (VM.objectToRemove.length > 0)) {
             for (var i = 0; i< VM.objectToRemove.length; i++) {
-                VM.objectToRemove[i].setMap(null);
+                if (VM.objectToRemove[i]) VM.objectToRemove[i].setMap(null);
             }
         }
         if (shipment.shippedToLat && shipment.shippedToLong) {
@@ -418,19 +438,6 @@
         var oldLat = 0;
         var oldLon = 0;
         angular.forEach(shipment.keyLocations, function(v, k) {
-            if ((!v.lat)) {
-                v.lat = oldLat;
-            } else {
-                oldLat = v.lat;
-            }
-            if (!v.lon) {
-                v.lon = oldLon;
-            } else {
-                oldLon = v.lon;
-            }
-
-            console.log('lat', v.lat);
-            console.log('lon', v.lon);
             //if (v.key == "shippedFrom") {
             var latlng = new google.maps.LatLng(v.lat, v.lon);
             bounds.extend(latlng);
@@ -590,8 +597,8 @@
             //----------------------------------------------------------------------------------------------------------
             if (k+1 < shipment.keyLocations.length) {
                 var v1 = shipment.keyLocations[k+1];
-                v1.lat = v1.lat ? v1.lat : v.lat;
-                v1.lon = v1.lon ? v1.lon : v.lon;
+                //v1.lat = v1.lat ? v1.lat : v.lat;
+                //v1.lon = v1.lon ? v1.lon : v.lon;
 
                 var spart = [{lat: v.lat, lng: v.lon}, {lat: v1.lat, lng: v1.lon}];
                 var fromLlng = new google.maps.LatLng(v.lat, v.lon);
@@ -599,20 +606,14 @@
                 var distance = getDistance(fromLlng, toLlng);
                 var rpath = null;
                 if (distance < 1000) {
-                    //console.log('Distance', distance);
                     rpath = new google.maps.Polyline({
                         path: spart,
                         strokeColor: shipment.color,
                         strokeOpacity: 1.0,
                         strokeWeight: 4,
                         map: VM.map,
-                        /*icons: [{
-                            icon: arrowSymbol,
-                            offset: '50%'
-                        }],*/
                     });
                 } else {
-                    console.log('Spath', spart);
                     rpath = new google.maps.Polyline({
                         path: spart,
                         strokeColor: shipment.color,
@@ -766,6 +767,8 @@
 
         angular.forEach(VM.ShipmentList, function(shipment, key) {
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
+            //console.log('shipment.lastReadingLat', shipment.lastReadingLat);
+            //console.log('shipment.lastReadingLong', shipment.lastReadingLong);
             var htmlIcon = '';
             htmlIcon += '<div style="border:1px solid #5e5e5e; width: 16px; height: 16px; background-color:'+shipment.color+'; cursor: pointer; ">';
             if (shipment.status == 'Ended') {
@@ -808,7 +811,7 @@
                     if (VM.destMarker) VM.destMarker.setMap(null);
                     if (VM.objectToRemove && VM.objectToRemove.length > 0) {
                         for (var i = 0; i< VM.objectToRemove.length; i++) {
-                            VM.objectToRemove[i].setMap(null);
+                            if (VM.objectToRemove[i]) VM.objectToRemove[i].setMap(null);
                         }
                     }
                     if (VM.oldMarker != VM.currentMarker) {
@@ -1083,7 +1086,7 @@
                 if (VM.destMarker) VM.destMarker.setMap(null);
                 if (VM.objectToRemove && VM.objectToRemove.length > 0) {
                     for (var i = 0; i< VM.objectToRemove.length; i++) {
-                        VM.objectToRemove[i].setMap(null);
+                        if (VM.objectToRemove[i]) VM.objectToRemove[i].setMap(null);
                     }
                 }
             }
@@ -1126,7 +1129,7 @@
             if (VM.destMarker) VM.destMarker.setMap(null);
             if (VM.objectToRemove && VM.objectToRemove.length > 0) {
                 for (var i = 0; i < VM.objectToRemove.length; i++) {
-                    VM.objectToRemove[i].setMap(null);
+                    if (VM.objectToRemove[i]) VM.objectToRemove[i].setMap(null);
                 }
             }
         }
