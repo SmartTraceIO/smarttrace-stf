@@ -81,6 +81,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     //google map first point
     $scope.firstPoint = {};
     $scope.currentPoint = {};
+    $scope.currentPoint.icon = {
+        url: 'theme/img/edot.png',
+    }
     //$scope.trackerPath = [];
     $scope.trackerColor = rootSvc.getTrackerColor(0);
     $scope.trackerMsg = new Array();
@@ -148,10 +151,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         oi: i,
                         pos: pos,
                         data: locations[i],
-                        icon: {
+                        /*icon: {
                             url:"theme/img/Tracker" + (index + 1) + ".png",
                             scaledSize:[16, 16],
                             anchor:[8, 8]
+                        },*/
+                        icon: {
+                            path: 'M-8,-8 L-8,8 L8,8 L8,-8 Z',
+                            fillColor: $scope.trackers[index].siblingColor,
+                            fillOpacity: 1,
+                            scale: 1,
+                            strokeWeight: 0
                         },
                         tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                     });
@@ -750,10 +760,23 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //start and end location info
 
             var locations = info.locations;
+            //-- get first valid point
+            var firstValidPoint = {lat: 0, lng : 0};
+            for (var i = locations.length -1 ; i >=0; i--) {
+                if (!info.locations[i].lat || !info.locations[i].long) {
+                    info.locations[i].lat = firstValidPoint.lat;
+                    info.locations[i].long = firstValidPoint.lng;
+                } else {
+                    firstValidPoint.lat = info.locations[i].lat;
+                    firstValidPoint.lng = info.locations[i].long;
+                }
+            }
+
             //google map data
             $scope.firstPoint = locations[0];
-            //$scope.currentPoint.loc = locations[0];
+            $scope.currentPoint.loc = locations[0];
             //$scope.currentPoint.iconUrl = "theme/img/edot.png";
+
             //$scope.changeActiveTracker($scope.MI);
 
 
@@ -1094,16 +1117,31 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
                 var alert = "";
-
-                if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
-                else alert = "Alert";
                 obj = {};
                 obj.x = subSeries[$scope.MI][i].x; //time-x
                 obj.y = subSeries[$scope.MI][i].y; //temperature-y
-                obj.marker = {
-                    enabled: true,
-                    symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
-                };
+                if(str == "LastReading") {
+                    str = "Tracker" + ($scope.MI + 1);
+                    obj.marker = {
+                        enabled: true,
+                        //symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
+                        symbol: 'square',
+                        height: 16,
+                        width: 16,
+                        radius: 8,
+                        fillColor:$scope.trackers[$scope.MI].siblingColor,
+                        state: {
+                            hover: {
+                            }
+                        }
+                    };
+                } else {
+                    alert = "Alert";
+                    obj.marker = {
+                        enabled: true,
+                        symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
+                    };
+                }
 
                 if(str.toLowerCase() == "lighton"){
                     plot.from = subSeries[$scope.MI][i].x;
