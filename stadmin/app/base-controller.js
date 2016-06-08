@@ -17,8 +17,8 @@ appCtrls.controller('BaseCtrl', function(VM) {
         toastr.warning('Your session was expired!')
         return state.go('login');
     }
-
-    VM.loadNotifications = function() {
+    rootScope.unreadNotification = [];
+    /*VM.loadNotifications = function() {
         //log.debug('loadNotifications', rootScope.loadedNotification);
         if (!rootScope.loadedNotification) {
             webSvc.getNotifications(true).success(function (data) {
@@ -54,7 +54,7 @@ appCtrls.controller('BaseCtrl', function(VM) {
             });
             rootScope.loadedNotification = true;
         }
-    }
+    }*/
     VM.reloadUserIfNeed = function() {
         //log.debug('reload user if needed!');
         var token = localDbSvc.getToken();
@@ -100,5 +100,5 @@ appCtrls.controller('BaseCtrl', function(VM) {
         }
     }
     VM.reloadUserIfNeed();
-    VM.loadNotifications();
+    //VM.loadNotifications();
 })

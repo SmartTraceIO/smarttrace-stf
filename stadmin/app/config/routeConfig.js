@@ -104,16 +104,16 @@
     {
         name: 'manage.tracker',
         config: {
-            url: 'tracker',
+            url: '/tracker',
             views: {
                 'sub-content': {
-                    templateUrl: 'app/tracker/list.html',
+                    templateUrl: 'app/tracker/tracker.html',
                     controller: 'TrackerCtrl as VM'
                 }
             }
         },
         dependencies: [
-            'app/tracker/manage-tracker.js'
+            'app/tracker/tracker.js'
         ]
     }
 ]);

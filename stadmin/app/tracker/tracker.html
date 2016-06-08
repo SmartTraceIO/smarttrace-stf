@@ -1,0 +1,45 @@
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <img src="theme/img/headerTrackerGroup.png" />
+            <span>Move Tracker</span>
+        </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="VM.Print()">
+                <i class="fa fa-print"></i>
+                <span>Print</span>
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Device</label>
+                    <input type="text" class="form-control" ng-model="VM.deviceImei">
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-top: 30px">
+                <select ng-model="VM.option" style="width:100%;">
+                    <option value="">--Choose an option--</option>
+                    <option value="delete">Delete all data in current company for this tracker</option>
+                    <option value="preserve">Preserve all data in current company for this tracker</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" class="form-control" ng-model="VM.newCompany">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <button class="btn green" ng-click="VM.moveDevice()">Move</button>
+                <button class="btn default" ng-click="VM.cancelMove()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

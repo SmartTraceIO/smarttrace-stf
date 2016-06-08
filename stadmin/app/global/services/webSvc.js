@@ -31,6 +31,13 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 				};
 			return $http.get(Api.url + '/resetPassword', params);
 		},
+		//-- move device
+		moveDevice : function(params) {
+			var config = {
+				params : params
+			}
+			return $http.get(Api.url + '/moveDevice/' + localDbSvc.getToken(), config);
+		},
 		//-- simulator
         getSimulator: function(param) {
             var config = {
