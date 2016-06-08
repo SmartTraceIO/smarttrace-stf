@@ -1,0 +1,143 @@
+<div ng-if="!showHeader" class="page-header navbar navbar-fixed-top green">
+    <div class="page-header-inner ">
+        <div class="page-logo">
+            <a ng-href="/">
+                <img src="theme/img/logo.jpg" alt="logo" class="logo-default" />
+            </a>
+        </div>
+        <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
+            <ul class="nav navbar-nav">
+                <li class="classic-menu-dropdown"  ng-class="{'active':ActiveMenu == 'New Shipment'}">
+                    <a href="#" ng-click="$event.preventDefault();" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        New Shipment<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="menu-li" ng-click="reload()"><a href="#/new-shipment">Manual Shipment</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">AutoStart Shipment</a></li>
+                    </ul>
+                </li>
+                <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
+                    <a href="#/view-shipment">
+                        View Shipments
+                        <span class="selected"> </span>
+                    </a>
+                </li>
+                <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'Trackers'}">
+                    <a href="#/tracker">
+                        Trackers
+                        <span class="selected"> </span>
+                    </a>
+                </li>
+                <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Setup'}">
+                    <a href="javascript:void(0)" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Setup<span class="caret"></span>
+                        <span class="selected"> </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/alert">Alert Profiles</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/notification">Notification Schedules</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/location">Locations</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/shipment-template">Manual Shipment Templates</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/autostart-template">AutoStart Templates</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/trackers-group">Tracker Groups</a></li>
+                        <li class="menu-li" ng-click="reload()"><a href="#/manage/user">Users</a></li>
+                    </ul>
+                </li>
+                <li class="classic-menu-dropdown" ng-click="reload()" ng-hide="!isSmartTraceAdmin"><a href="#/manage/simulator">Manage Simulator</a></li>
+            </ul>
+        </div>
+        <a href="javascript:void(0);" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="icon-bell"></i>
+                        <span class="badge badge-default" ng-cloak> {{unreadNotification.length}} </span>
+                    </a>
+                    <ul class="dropdown-menu notification-body" ng-cloak>
+
+                        <li class="external">
+                            <h3>
+                                <span class="bold">Notifications</span>
+                            </h3>
+                        </li>
+                        <li class="scrollable-menu" style="max-height:{{height - 150}}px;">
+                            <div class="alert alert-block alert-notification fade in" ng-repeat="data in unreadNotification">
+                                <button type="button" class="close" data-dismiss="alert" ng-click="readNotify(data.notificationId)"></button>
+                                <img ng-src="theme/img/alert{{data.alertType}}.png">
+                                <h5 class="alert-heading"><a ng-href="{{data.link}}">{{data.Line1}}</a></h5>
+                                <p>{{data.Line2}}</p>
+                                <p>{{data.Line3}}</p>
+                                <p class="notification-time">{{data.date}}</p>
+                            </div>
+                            <p>{{closeText}}</p>
+                            <div ng-show=showRead class="alert alert-block alert-notification alert-read fade in" ng-repeat="data in closedNotification">
+                                <img ng-src="theme/img/alert{{data.alertType}}.png">
+                                <h5 class="alert-heading">{{data.Line1}}</h5>
+                                <p>{{data.Line2}}</p>
+                                <p>{{data.Line3}}</p>
+                                <p class="notification-time">{{data.date}}</p>
+                            </div>
+                        </li>
+                        <li class="external bottom">
+                            <button type="button" ng-click="closeAll()">Close All</button>
+                            <label class="checkbox pull-right">
+
+                                <div class="checker">
+                                        <span  ng-class="{'checked' : showRead}">
+                                            <input name="remember" value="1" type="checkbox" ng-change="test()" ng-model="showRead">
+                                        </span>
+                                </div>
+                                Include Closed Notifications
+                            </label>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown dropdown-user">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <span class="username username-hide-on-mobile" ng-cloak> {{User.firstName}}</span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li>
+                            <a href="#/user-update">
+                                <i class="icon-user"></i> Change Password
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/preference">
+                                <i class="fa fa-gear"></i> Edit Preferences
+                            </a>
+                        </li>
+                        <li>
+                            <!--<a href="#/login">
+                                <i class="icon-key"></i> Log Out
+                            </a>-->
+                            <a href="#" ng-click="logout()">
+                                <i class="icon-key"></i> Log Out
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="page-content" ng-cloak>
+    <h3 class="page-title pull-left" ng-hide="showHeader" ng-cloak>
+        {{PageHeader}}
+    </h3>
+    <h3 class="page-title pull-right" ng-hide="showHeader" ng-cloak>
+                    <span style="color:#5BCA45;">
+                        Time:&nbsp;
+                    </span>
+        <!--<span ng-cloak>
+            {{RunningTime | date:'dd-MMM-yy h:mma' }} ({{RunningTimeZoneId}})
+        </span>-->
+                    <span>
+                        {{RunningTime}} ({{RunningTimeZoneId}})
+                    </span>
+    </h3>
+    <div class="clearfix"></div>
+
+</div>

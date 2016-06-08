@@ -1,0 +1,103 @@
+<div class="modal-header green">
+    <i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
+    <span>Edit goods being monitored for shipment {{VM.shipment.deviceSN}} ({{VM.shipment.tripCount}})</span>
+    <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </span>
+</div>
+<div class="modal-body">
+    <form name="frmEditGoods">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label pull-left">
+                        <span>Shipment Description:</span>
+                        <i uib-tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
+                    </label>
+                    <label class="control-label pull-right"><span class="text-error">*</span></label>
+                    <div class="clearfix"></div>
+                    <textarea ng-model="VM.shipment.shipmentDescription"
+                          id="shipmentDescription"
+                          name="description"
+                          ng-maxlength="120"
+                          class="form-control"
+                          name="shipmentDescription"/>
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.description.$error.maxlength">
+                            Error. The description field can not exceed 120 chars
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        <span>Pallet Id:</span>
+                        <i uib-tooltip="Enter a Pallet unique Identity If available"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                    </label>
+                    <input type="text"
+                           ng-maxlength="31"
+                           name="palletId"
+                           class="form-control"
+                           placeholder="Enter Pallet Id"
+                           ng-model="VM.shipment.palletId" />
+
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.palletId.$error.maxlength">PalletId for a shipment must be less than or equal to 31 chars</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        <span>Asset Num:</span>
+                        <i uib-tooltip="Enter the identity of the asset carrying the goods"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"/>
+                    </label>
+                    <input type="text"
+                           ng-maxlength="31"
+                           name="assetNum"
+                           class="form-control"
+                           placeholder="Enter Asset Num"
+                           ng-model="VM.shipment.assetNum" />
+                    <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                        <span ng-cloak class="text-danger" ng-if="frmEditGoods.assetNum.$error.maxlength">Asset Number for a shipment must be less than or equal to 31 chars</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="control-label">
+                    <span>Comments For Receiver</span>
+                    <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                </label>
+            <textarea maxlength="300"
+                      name="comment"
+                      class="form-control"
+                      ng-model="VM.shipment.commentsForReceiver"
+                      placeholder="Tracker is located on last pallet loaded into trailer. Please collect tracker and hand to driver for return."/>
+            <span ng-if="frmEditGoods.$invalid" ng-cloak>
+                <span ng-cloak class="text-danger" ng-if="frmEditGoods.comment.$error.maxlength">Comment for receiver must be less than or equal to 300 chars</span>
+            </span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn green" ng-click="VM.saveShipment()">Save</button>
+    <button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
+</div>

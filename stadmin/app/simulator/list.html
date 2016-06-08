@@ -1,0 +1,84 @@
+<div class="portlet box green" ng-hide="!isSmartTraceAdmin">
+    <div class="portlet-title">
+        <div class="caption">
+            <img src="theme/img/headerTrackerGroup.png" />
+            <span>List of simulators</span>
+        </div>
+        <div class="tools hidden-print">
+            <button class="btn default btn-sm uppercase" type="button" ng-click="VM.Print()">
+                <i class="fa fa-print"></i>
+                <span>Print</span>
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="table-responsive">
+
+                    <table class="table">
+                        <tr>
+                            <th>Source Device</th>
+                            <th>Target Device</th>
+                            <th>User</th>
+                            <th>Started</th>
+                            <th>AutoStart Template</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="sim in VM.simulatorList">
+                            <td>{{sim.sourceDevice}}</td>
+                            <td>{{sim.targetDevice}}</td>
+                            <td>{{sim.user}}</td>
+                            <td>{{sim.started}}</td>
+                            <td>{{sim.autoStartTemplate}}</td>
+                            <td>
+                                <button class="btn green" ng-show="sim.started" ng-click="VM.stopSimulator(sim)">Stop</button>
+                                <button class="btn green" ng-show="!sim.started" ng-click="VM.startSimulator(sim)">Start</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <!--form to add new simulator-->
+                <form>
+                    <div class="form-group">
+                        <label>Source Device</label>
+                        <input type="text" ng-model="VM.simulator.sourceDevice" class="form-control" placeholder="Enter imei of source device">
+                    </div>
+
+                    <!--<div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>From</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>To</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <button class="btn green">Update Time</button>
+                        </div>
+                    </div>
+                    </div>-->
+
+                    <div class="form-group">
+                        <label for="id-user-email">User Email</label>
+                        <input type="text" ng-model="VM.simulator.user" class="form-control" id="id-user-email" placeholder="Enter email of destination user">
+                    </div>
+                    <div class="form-group">
+                        <label>Auto Start Template</label>
+                        <input type="text" ng-model="VM.simulator.autoStartTemplate" class="form-control" placeholder="Enter the id of autostart-template">
+                    </div>
+                    <button class="btn green" ng-click="VM.saveSimulator()">Save</button>
+                    <button class="btn btn-default" ng-click="VM.resetSimulator()">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

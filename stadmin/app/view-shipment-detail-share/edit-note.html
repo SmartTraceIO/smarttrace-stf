@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <span class="h3 modal-title">Edit Note #{{note.noteNum}}</span>
+    <span class="pull-right btn-close" ng-click="cancel()">&times;</span>
+</div>
+<form class="form" name="formEditNote">
+    <div class="modal-body">
+        <textarea class="form-control"
+                  name="noteText"
+                  ng-maxlength="1000"
+                  ng-model="note.noteText"
+                  rows="3"></textarea>
+        <span ng-cloak class="text-danger" ng-if="formEditNote.noteText.$error.maxlength">
+            Note must be less than or equal to 1000 chars
+        </span>
+    </div>
+    <div class="modal-footer">
+        <button class="btn green" ng-click="saveNote(formEditNote.$invalid)" type="submit">OK</button>
+        <button class="btn green" ng-click="cancel()">Cancel</button>
+    </div>
+</form>
