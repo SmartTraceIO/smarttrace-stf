@@ -100,6 +100,21 @@
         dependencies: [
             'app/simulator/manage-simulator.js?v=' + version
         ]
+    },
+    {
+        name: 'manage.tracker',
+        config: {
+            url: 'tracker',
+            views: {
+                'sub-content': {
+                    templateUrl: 'app/tracker/list.html',
+                    controller: 'TrackerCtrl as VM'
+                }
+            }
+        },
+        dependencies: [
+            'app/tracker/manage-tracker.js'
+        ]
     }
 ]);
 
