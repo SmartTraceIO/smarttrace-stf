@@ -17,19 +17,15 @@
         </div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="text-center">
             <div class="col-md-6">
-                <label>
-                    <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipmentsFlag">Exclude Prior Shipments
-                    <i uib-tooltip="Exclude Prior Shipments."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
-                    <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
+                <div class="pull-right">
+                    <label>
+                        <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipmentsFlag">Exclude Prior Shipments
+                    </label>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
+                        <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -75,8 +71,6 @@
                     </button>
                 </div>
             </div>
-
-        </div>
     </div>
     <div ng-if="vm.specificDates">
         <div class="row">
