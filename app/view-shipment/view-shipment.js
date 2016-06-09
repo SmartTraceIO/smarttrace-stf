@@ -47,6 +47,7 @@
         shipmentDescription:null,
         pageIndex: 1,
         pageSize: "20",
+        goods: null,
         sc: 'lastReadingTimeISO',
         so: 'desc'
     };
@@ -60,6 +61,7 @@
         VM.ViewShipment.shippedFrom = [];
         VM.ViewShipment.shippedTo = [];
         VM.ViewShipment.status = null;
+        VM.ViewShipment.goods=null;
         VM.BindCards();
     }
 
@@ -113,6 +115,7 @@
         });
 
         var shipmentsPromise = webSvc.getShipments(VM.ViewShipment).success( function (data, textStatus, XmlHttpRequest) {
+            //console.log('VM.ViewShipment', VM.ViewShipment);
             if (data.status.code == 0) {
                 VM.ShipmentList = data.response;
                 $log.debug('ShipmentList', VM.ShipmentList);
@@ -260,6 +263,7 @@
             status: null,
             pageIndex: 1,
             pageSize: "20",
+            goods: null,
             so: 'desc',
             sc: 'lastReadingTimeISO'
         };
