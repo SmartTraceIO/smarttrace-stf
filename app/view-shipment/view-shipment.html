@@ -17,20 +17,22 @@
         </div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-12 text-center">
-            <div class="btn-group" role="group" aria-label="...">
+        <div class="text-center">
+            <div class="col-md-6">
+                <label>
+                    <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipmentsFlag">Exclude Prior Shipments
+                    <i uib-tooltip="Exclude Prior Shipments."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
-                </div>
-                <div class="btn-group" role="group">
                     <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
                 </div>
             </div>
-            <div class="btn-group" role="group" aria-label="...">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-            <div class="col-sm-12 visible-xs visible-sm">&nbsp;</div>
-            <div class="btn-group" role="group" aria-label="...">
+            <div class="col-md-6">
                 <div class="btn-group" role="group">
                     <button ng-click="vm.ViewShipment.lastDay = !vm.ViewShipment.lastDay;
                                 vm.specificDates = false;
@@ -41,8 +43,6 @@
                                 vm.ViewShipment.shipmentDateTo=null;"
                             ng-class="{'green': vm.ViewShipment.lastDay == true}"
                             type="button" class="btn btn-default">Last 24 hours</button>
-                </div>
-                <div class="btn-group" role="group">
                     <button ng-click="vm.ViewShipment.last2Days = !vm.ViewShipment.last2Days;
                                 vm.specificDates = false;
                                 vm.ViewShipment.lastDay = false;
@@ -52,8 +52,6 @@
                                 vm.ViewShipment.shipmentDateTo=null;"
                             ng-class="{'green': vm.ViewShipment.last2Days == true}"
                             type="button" class="btn btn-default">Last 48 hours</button>
-                </div>
-                <div class="btn-group" role="group">
                     <button ng-click="vm.ViewShipment.lastWeek = !vm.ViewShipment.lastWeek;
                                 vm.specificDates = false;
                                 vm.ViewShipment.lastDay = false;
@@ -63,8 +61,6 @@
                                 vm.ViewShipment.shipmentDateTo=null;"
                             ng-class="{'green': vm.ViewShipment.lastWeek == true}"
                             type="button" class="btn btn-default">Last 7 days</button>
-                </div>
-                <div class="btn-group" role="group">
                     <button ng-click="vm.ViewShipment.lastMonth = !vm.ViewShipment.lastMonth;
                                 vm.specificDates = false;
                                 vm.ViewShipment.lastDay = false;
@@ -74,13 +70,12 @@
                                 vm.ViewShipment.shipmentDateTo=null;"
                             ng-class="{'green': vm.ViewShipment.lastMonth == true}"
                             type="button" class="btn btn-default">Last 30 days</button>
+                    <button type="button" class="btn default" ng-click="vm.specificDates = !vm.specificDates;ViewShipment.lastDay = false;vm.ViewShipment.last2Days=false;vm.ViewShipment.lastWeek=false;vm.ViewShipment.lastMonth=false">
+                        <i class="fa fa-calendar"></i>
+                    </button>
                 </div>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn default" ng-click="vm.specificDates = !vm.specificDates;ViewShipment.lastDay = false;vm.ViewShipment.last2Days=false;vm.ViewShipment.lastWeek=false;vm.ViewShipment.lastMonth=false">
-                    <i class="fa fa-calendar"></i>
-                </button>
-            </div>
+
         </div>
     </div>
     <div ng-if="vm.specificDates">

@@ -84,6 +84,7 @@
     VM.TrackerListPlus = [VM.anyDevice];
     
     var BindShipmentList = function () {
+        $log.debug('ViewShipment', VM.ViewShipment);
         VM.loading = true;
 
         if (VM.ViewShipment.shippedFromLocation) {
