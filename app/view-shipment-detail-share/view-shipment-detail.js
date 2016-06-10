@@ -599,27 +599,27 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
             //info.siblings = siblings;
             //--------Remove Light On, Off---------
-            for(alert = 0; alert < info.alertSummary.length; alert ++){
-                if(info.alertSummary[alert].toLowerCase() == "lighton"
+            for (alert = 0; alert < info.alertSummary.length; alert++) {
+                if (info.alertSummary[alert].toLowerCase() == "lighton"
                     || info.alertSummary[alert].toLowerCase() == "lightoff") {
-                    info.alertSummary.splice(alert --, 1);
+                    info.alertSummary.splice(alert--, 1);
                 }
             }
             //------------PREPARE TRACKERS INFO  BEGIN-------------
             var tempObj = {};
-            for(var k in info){
-                if(info.hasOwnProperty(k)){
+            for (var k in info) {
+                if (info.hasOwnProperty(k)) {
                     tempObj[k] = info[k];
                 }
             }
-            if(tempObj.alertYetToFire != null)
+            if (tempObj.alertYetToFire != null)
                 tempObj.alertYetToFire = tempObj.alertYetToFire.split(",");
             tempObj.loaded = true;
             tempObj.loadedForIcon = true;
             //next time, it only updates the main tracker info, not insert it to $scope.trackers
-            if($scope.trackers.length == 0){
+            if ($scope.trackers.length == 0) {
                 $scope.trackers.push(tempObj);
-                for(i = 0; i < info.siblings.length; i++){
+                for (i = 0; i < info.siblings.length; i++) {
                     $scope.trackers.push(info.siblings[i]);
                     $scope.trackers[i + 1].loaded = false;
                 }
@@ -627,6 +627,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $scope.trackers[0] = tempObj;
             }
 
+            //set tracker information
+            angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
+                child.index = index;
+            });
+
+            $scope.isLoading = false;
+            $scope.changeActiveTracker(0); //load first
+            loadSibling();
+        }
+
+        function loadSibling() {
             var promiseSibling = [];
             angular.forEach(info.siblings, function(val, key) {
                 var params =     {
@@ -649,8 +660,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                                 $scope.trackers[j].alertYetToFire = $scope.trackers[j].alertYetToFire.split(",");
                             $scope.trackers[j].loaded = true;
                             $scope.trackers[j].loadedForIcon = true;
-                            //prepareMainHighchartSeries();
-                            //refreshHighchartSeries();
+                            prepareMainHighchartSeries();
+                            refreshHighchartSeries();
                             break;
                         }
                     }
@@ -674,10 +685,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $scope.changeActiveTracker($scope.MI);
             });
 
-            //set tracker information
-            angular.forEach(tempObj.alertsNotificationSchedules, function(child, index){
-                child.index = index;
-            });
+
 
             //start and end location info
 
