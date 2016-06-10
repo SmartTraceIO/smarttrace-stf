@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
 function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
-              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, Color, NgMap) {
+              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, NgMap) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -42,6 +42,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     //includes all tracker info here
     $scope.trackers = [];
     var trackerRoute = null;
+    //----------------------------------------------
+    $scope.isLoading = true;
+    //----------------------------------------------
+
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
     $scope.mapInfo = {};
@@ -666,6 +670,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 //prepareMainHighchartSeries();
                 //refreshHighchartSeries();
             }).then(function () {
+                $scope.isLoading = false;
                 $scope.changeActiveTracker($scope.MI);
             });
 
