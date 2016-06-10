@@ -158,7 +158,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         },*/
                         icon: {
                             path: 'M-8,-8 L-8,8 L8,8 L8,-8 Z',
-                            fillColor: $scope.trackers[index].siblingColor,
+                            //fillColor: $scope.trackers[index].siblingColor,
+                            fillColor: $scope.trackers[index].deviceColor,
                             fillOpacity: 1,
                             scale: 1,
                             strokeWeight: 0
@@ -198,7 +199,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         trackerRoute = new google.maps.Polyline({
             path: trackerPath,
-            strokeColor: $scope.trackers[index].siblingColor,
+            //strokeColor: $scope.trackers[index].siblingColor,
+            strokeColor: $scope.trackers[index].deviceColor,
             strokeOpacity: 1,
             strokeWeight: 5,
             map: map
@@ -269,48 +271,23 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         //check if latest shipment here
         $scope.shutdownAlready=false;
         $scope.suppressAlready=false;
-        currentShipmentId = $scope.trackerInfo.shipmentId;
 
-        var promise = webSvc.getShipment(currentShipmentId).success(function(data) {
-            //console.log('CURRENT-SHIPMENT',currentShipmentId, data)
-            currentShipment = data.response;
-            if (currentShipment.shutdownTime) {
-                $scope.shutdownAlready = true;
-            }
-            if (currentShipment.status == 'Ended' || currentShipment.status == 'Arrived') {
-                $scope.isEndedOrArrived = true;
-            }
-            if ($scope.trackerInfo.alertsSuppressionTime) {
-                $scope.suppressAlready = true;
-            }
-        }).then(function() {
-            webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
-                //console.log('CURRENT-DEVICE', dd);
-                currentDevice = dd.response;
-                if (currentShipmentId != currentDevice.lastShipmentId) {
-                    $scope.isLatest = false;
-                } else {
-                    $scope.isLatest = true;
-                }
-            });
-        });
-
-
-        $q.all([promise]).then(function() {
-            updatePlotLines();
-            updateMapData($scope.MI);
-        });
+        if ($scope.trackerInfo.shutdownTime) {
+            $scope.shutdownAlready = true;
+        }
+        if ($scope.trackerInfo.status == 'Ended' || $scope.trackerInfo.status == 'Arrived') {
+            $scope.isEndedOrArrived = true;
+        }
+        if ($scope.trackerInfo.alertsSuppressionTime) {
+            $scope.suppressAlready = true;
+        }
+        updatePlotLines();
+        updateMapData($scope.MI);
     }
 
     function updatePlotLines(){
         //--reset plotline
         plotLines.length = 0;
-        //var ti = $scope.trackers[$scope.MI].locations;
-        //plotLines.splice(0, plotLines.length);// = 0;
-        //plotLines = [];
-        //$log.debug('SubSeries', subSeries);
-        //$log.debug('Tracker.MI', $scope.trackers[$scope.MI]);
-        //$log.debug('MI', $scope.MI);
         var ti = subSeries[$scope.MI];
         var lastPoint = ti.length - 1;
 
@@ -364,10 +341,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             label: {
                 //text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' +
                 text:   '<img src="theme/img/tinyLocationStop.png" class="rev-horizon" style="float:right; vertical-align:bottom;">' +
-                        '<span style="text-align:right;float:right">' +
-                            //'<b class="bold-font">' + $scope.mapInfo.endLocation + '</b><br/>' +
-                            '<b class="bold-font">' + endLocationText + '</b><br/>' +
-                            dottext +
+                        '<span style="text-align:right;float:right; margin-right: 10px;">' +
+                            '<b class="bold-font">' + endLocationText + '</b><br/>' + dottext +
                         '</span>',
                 rotation: 0,
                 useHTML: true,
@@ -404,8 +379,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.msgForMap.push(tmp);
         }
         //console.log('msgForMap', $scope.msgForMap);
-        $scope.diagColor = $scope.trackers[$scope.MI].siblingColor;
-        
+        //$scope.diagColor = $scope.trackers[$scope.MI].siblingColor;
+        $scope.diagColor = $scope.trackers[$scope.MI].deviceColor;
+
         if(!$scope.$$phase) {
             $scope.$apply();
         }
@@ -591,8 +567,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             };
         }
 
-        var groupList = [];
-        var deviceSnListSameGroup = [];
+        //var groupList = [];
+        //var deviceSnListSameGroup = [];
         var info = null;
         webSvc.getSingleShipmentShare(params).success(function(graphData) {
             $log.debug("SINGLE-SHIPMENT", graphData);
@@ -606,53 +582,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $state.go('viewshipment'); //move to shipment-list
                 return;
             }
-
-            //--update color of tracker by calling getDevice
-
-            //groupList = info.deviceGroups ? info.deviceGroups : [];
-            //$log.debug('Info', info);
-            //$log.debug('groupList', groupList);
-
         }).then(function() {
             calculateAndDraw();
-            //var promises = [];
-            //if (groupList.length > 0) {
-            //    angular.forEach(groupList, function (val, key) {
-            //        var p = webSvc.getDevicesOfGroup(val.groupId).success(function (data) {
-            //            $log.debug('DevicesOfGroup#' + key, data);
-            //            angular.forEach(data.response, function (val, key) {
-            //                var serialNumber = val.sn;
-            //                if (!isNaN(serialNumber)) {
-            //                    serialNumber = parseInt(val.sn, 10);
-            //                }
-            //                deviceSnListSameGroup.push(serialNumber);
-            //            })
-            //        });
-            //        promises.push(p);
-            //    });
-            //    $q.all(promises).then(function() {
-            //        calculateAndDraw();
-            //    });
-            //} else {
-            //    //-- groupList == [] only one device!
-            //    calculateAndDraw();
-            //}
         });
 
         function calculateAndDraw() {
             if (!info) return;
             var numberOfSiblings = info.siblings.length;
-            //-- modify siblings
-            //var siblings = [];
-            //$log.debug('Number of Siblings', numberOfSiblings);
-            //$log.debug('deviceSnListSameGroup', deviceSnListSameGroup);
-            //for(var i = 0; i<numberOfSiblings; i++) {
-            //    if (deviceSnListSameGroup.indexOf(parseInt(info.siblings[i].deviceSN, 10)) >= 0) {
-            //        siblings.push(info.siblings[i]);
-            //    }
-            //}
-
-            //numberOfSiblings = siblings.length;
             if (numberOfSiblings >= 5) {
                 info.siblings.splice(5);
                 $scope.notListed = numberOfSiblings - 5;
@@ -717,30 +653,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 });
                 promiseSibling.push(p);
             });
-            var deviceList = [];
-            var promiseDevice = webSvc.getDevices(1000, 1, 'description', 'asc').success(function(data) {
-                //console.log('DeviceList', data.response);
-                deviceList = data.response;
-            });
-            promiseSibling.push(promiseDevice);
             $q.all(promiseSibling).then(function() {
                 //update color of tracker here
                 //var promiseTrackers = [];
                 angular.forEach($scope.trackers, function(tracker, k) {
-                    //update color
-                    var colorName = filter(deviceList, {sn: tracker.deviceSN}, true);
-                    if (colorName && (colorName.length > 0)) {
-                        colorName = colorName[0].color;
-                    }
-                    var color = filter(Color, {name: colorName}, true);
-                    if (color && (color.length > 0)) {
-                        color = color[0];
-                    } else {
-                        color = Color[0];
-                    }
-                    $scope.trackers[k].siblingColor = color.code;
                     $scope.trackers[k].index = k;
-
                     //-- update deviceSN
                     if (!isNaN(tracker.deviceSN)) {
                         $scope.trackers[k].deviceSN = parseInt(tracker.deviceSN, 10);
@@ -978,7 +895,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             marker: {
                 symbol: 'url(theme/img/dot.png)'
             },
-            color: $scope.trackers[$scope.MI].siblingColor,
+            //color: $scope.trackers[$scope.MI].siblingColor,
+            color: $scope.trackers[$scope.MI].deviceColor,
             lineWidth: 3,
             data: subSeries[$scope.MI],
             //turboThreshold: 2000,
@@ -1032,7 +950,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(i == $scope.MI || !$scope.trackers[i].loaded) continue;
             chartSeries.push({
                 name: "Tracker " + $scope.trackers[i].deviceSN + "(" + $scope.trackers[i].tripCount + ")",
-                color: $scope.trackers[i].siblingColor,
+                //color: $scope.trackers[i].siblingColor,
+                color: $scope.trackers[i].deviceColor,
                 lineWidth: 1,
                 data: subSeries[i],
                 enableMouseTracking: false
@@ -1076,7 +995,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             onSeries : 'dataseries',
             shape : 'circlepin',
             cursor: 'pointer',
-            color: $scope.trackers[$scope.MI].siblingColor,
+            //color: $scope.trackers[$scope.MI].siblingColor,
+            color: $scope.trackers[$scope.MI].deviceColor,
             stackDistance: 16,
             width: 8,
             style: {
@@ -1129,7 +1049,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         height: 16,
                         width: 16,
                         radius: 8,
-                        fillColor:$scope.trackers[$scope.MI].siblingColor,
+                        //fillColor:$scope.trackers[$scope.MI].siblingColor,
+                        fillColor:$scope.trackers[$scope.MI].deviceColor,
                         state: {
                             hover: {
                             }

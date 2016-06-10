@@ -38,7 +38,6 @@
                                     <div>
                                         <table>
                                             <tr>
-                                                <!--<td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>-->
                                                 <td><img class="tiny-icon15" ng-src="theme/img/Tracker{{trackers[MI].index + 1}}.png"></td>
                                                 <td><span class="tracker-id">Shipment {{trackers[MI].deviceSN}}({{trackers[MI].tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
@@ -173,7 +172,7 @@
                                 <table>
                                     <tr>
                                         <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
-                                        <td><div class="circle text-center" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
+                                        <td><div class="circle text-center" style="background-color: {{trackerInfo.deviceColor}};">{{note.noteNum}}</div></td>
                                         <td width="100%">
                                             <a href="" class="pull-right hidden-print" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                             <a href="" class="pull-right hidden-print" ng-click="DeleteNote(note)">Del</a>
@@ -519,7 +518,7 @@
                                     <a ng-href="#/view-shipment-detail?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}" class="tracker-info">
                                         <table>
                                             <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.siblingColor}}"></div></td>
+                                                <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.deviceColor}}"></div></td>
                                                 <td><span class="tracker-id">Shipment {{trackerInfo.deviceSN}}({{trackerInfo.tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                             </tr>
@@ -596,7 +595,7 @@
                                     <a href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
                                         <table>
                                             <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{t.siblingColor}}"></div></td>
+                                                <td><div style="width: 15px; height: 15px; background-color: {{t.deviceColor}}"></div></td>
                                                 <td><span class="tracker-id">Shipment {{t.deviceSN}}({{t.tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                                 <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
@@ -663,7 +662,7 @@
                                     <table>
                                         <tr>
                                             <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
-                                            <td><div class="circle text-center" style="background-color: {{trackerInfo.siblingColor}};">{{note.noteNum}}</div></td>
+                                            <td><div class="circle text-center" style="background-color: {{trackerInfo.deviceColor}};">{{note.noteNum}}</div></td>
                                             <td width="100%">
                                                 <a href="" class="pull-right" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                                 <a href="" class="pull-right" ng-click="DeleteNote(note)">Del</a>
@@ -969,7 +968,7 @@
                                 </tr>
                                 <tr ng-if="getRole() >= roles.Normal">
                                     <td colspan="2">
-                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatest || shutdownAlready)}">Shutdown tracker now</u></a>
+                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatestShipment || shutdownAlready)}">Shutdown tracker now</u></a>
                                         <i uib-tooltip="Shutdown this device now, provided this is the latest shipment for this device."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
