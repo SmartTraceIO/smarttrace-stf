@@ -16,20 +16,17 @@
             </div>
         </div>
     </div>
-    <div class="row" style="margin-bottom: 10px">
-            <div class="col-md-6">
-                <div class="pull-right">
-                    <label>
-                        <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipmentsFlag">Exclude Prior Shipments
-                    </label>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
-                        <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="text-center">
+                <label style="margin-bottom: 10px; margin-right: 50px;">
+                    <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipments">Exclude Prior Shipments
+                </label>
+                <div class="btn-group" role="group" style="margin-bottom: 10px; margin-right: 50px;">
+                    <button type="button" class="btn btn-default" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == true}" ng-click="vm.ViewShipment.alertsOnly = true;">Shipments with alerts</button>
+                    <button type="button" ng-model="vm.ViewShipment.alertsOnly" ng-class="{'green': vm.ViewShipment.alertsOnly == false}" ng-click="vm.ViewShipment.alertsOnly = false;" class="btn btn-default">All shipments</button>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="btn-group" role="group">
+                <div class="btn-group" role="group" style="margin-bottom: 10px">
                     <button ng-click="vm.ViewShipment.lastDay = !vm.ViewShipment.lastDay;
                                 vm.specificDates = false;
                                 vm.ViewShipment.last2Days = false;
@@ -71,6 +68,7 @@
                     </button>
                 </div>
             </div>
+        </div>
     </div>
     <div ng-if="vm.specificDates">
         <div class="row">
