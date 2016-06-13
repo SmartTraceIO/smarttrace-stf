@@ -971,7 +971,7 @@
                                 </tr>
                                 <tr ng-if="getRole() >= roles.Normal">
                                     <td colspan="2">
-                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!isLatestShipment || shutdownAlready)}">Shutdown tracker now</u></a>
+                                        <a href="" ng-click="confirmShutdown(trackerInfo.shipmentId)"><u ng-class="{'not-latest':(!trackerInfo.isLatestShipment || shutdownAlready)}">Shutdown tracker now</u></a>
                                         <i uib-tooltip="Shutdown this device now, provided this is the latest shipment for this device."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"

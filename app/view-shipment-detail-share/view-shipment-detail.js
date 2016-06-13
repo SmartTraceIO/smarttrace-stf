@@ -285,8 +285,19 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         if ($scope.trackerInfo.alertsSuppressionTime) {
             $scope.suppressAlready = true;
         }
-        updatePlotLines();
-        updateMapData($scope.MI);
+
+        var promise = webSvc.getShipment($scope.trackerInfo.shipmentId).success(function(data) {
+            currentShipment = data.response;
+        }).then(function() {
+            webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
+                currentDevice = dd.response;
+            });
+        });
+
+        promise.then(function() {
+            updatePlotLines();
+            updateMapData($scope.MI);
+        })
     }
 
     function updatePlotLines(){
@@ -1064,8 +1075,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         radius: 8,
                         //fillColor:$scope.trackers[$scope.MI].siblingColor,
                         fillColor:$scope.trackers[$scope.MI].deviceColor,
-                        state: {
+                        states: {
                             hover: {
+                                enabled: false,
                             }
                         }
                     };
@@ -1294,7 +1306,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     $scope.confirmShutdown = function(shipmentId) {
-        if ($scope.isLatest) {
+        if ($scope.trackerInfo.isLatestShipment) {
             if (!$scope.shutdownAlready) {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'app/view-shipment-detail-share/confirm-shutdown.html',
