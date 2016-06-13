@@ -286,18 +286,20 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.suppressAlready = true;
         }
 
-        var promise = webSvc.getShipment($scope.trackerInfo.shipmentId).success(function(data) {
-            currentShipment = data.response;
-        }).then(function() {
-            webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
-                currentDevice = dd.response;
-            });
-        });
+        //var promise = webSvc.getShipment($scope.trackerInfo.shipmentId).success(function(data) {
+        //    currentShipment = data.response;
+        //}).then(function() {
+        //    webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
+        //        currentDevice = dd.response;
+        //    });
+        //});
 
-        promise.then(function() {
-            updatePlotLines();
-            updateMapData($scope.MI);
-        })
+        //promise.then(function() {
+        //    updatePlotLines();
+        //    updateMapData($scope.MI);
+        //})
+        updatePlotLines();
+        updateMapData($scope.MI);
     }
 
     function updatePlotLines(){
@@ -1331,16 +1333,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 toastr.warning ('Device has already been shutdown during this shipment.');
             }
         } else {
-            var temShipmentNumber = currentDevice.shipmentNumber;
-            if (temShipmentNumber){
-                var idx1 = temShipmentNumber.indexOf('(');
-                var idx2 = temShipmentNumber.indexOf(')');
-                var n = temShipmentNumber.substr(idx1+1, idx2-1);
-                currentDevice.tripCount = parseInt(n);
-            }
-            currentDevice.sn = parseInt(currentDevice.sn);
-            var link = '<a ng-href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
-            toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
+            //var temShipmentNumber = currentDevice.shipmentNumber;
+            //if (temShipmentNumber){
+            //    var idx1 = temShipmentNumber.indexOf('(');
+            //    var idx2 = temShipmentNumber.indexOf(')');
+            //    var n = temShipmentNumber.substr(idx1+1, idx2-1);
+            //    currentDevice.tripCount = parseInt(n);
+            //}
+            //currentDevice.sn = parseInt(currentDevice.sn);
+            //var link = '<a ng-href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
+            //toastr.warning("Warning. This device can only be shutdown from the latest shipment " + link);
+            toastr.warning("Warning. This device can only be shutdown from the latest shipment.");
         }
     };
     $scope.confirmSuppress = function(Id) {
@@ -1348,16 +1351,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             toastr.warning('Alerts have already been suppressed for this shipment.');
         } else
         if ($scope.isEndedOrArrived) {
-            var temShipmentNumber = currentDevice.shipmentNumber;
-            if (temShipmentNumber){
-                var idx1 = temShipmentNumber.indexOf('(');
-                var idx2 = temShipmentNumber.indexOf(')');
-                var n = temShipmentNumber.substr(idx1+1, idx2-1);
-                currentDevice.tripCount = parseInt(n, 10);
-            }
-            currentDevice.sn = parseInt(currentDevice.sn);
-            var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
-            toastr.warning('Warning. This shipment was ended or arrived ' + link);
+            //var temShipmentNumber = currentDevice.shipmentNumber;
+            //if (temShipmentNumber){
+            //    var idx1 = temShipmentNumber.indexOf('(');
+            //    var idx2 = temShipmentNumber.indexOf(')');
+            //    var n = temShipmentNumber.substr(idx1+1, idx2-1);
+            //    currentDevice.tripCount = parseInt(n, 10);
+            //}
+            //currentDevice.sn = parseInt(currentDevice.sn);
+            //var link = '<a href=\'#/view-shipment-detail?sn='+currentDevice.sn+'&trip='+currentDevice.tripCount+'\'><u>'+currentDevice.sn +'(' + currentDevice.tripCount + ')' +'</u></a>'
+            //toastr.warning('Warning. This shipment was ended or arrived ' + link);
+            toastr.warning('Warning. This shipment was ended or arrived.');
         } else {
             var modalInstance = $uibModal.open({
                 templateUrl: 'app/view-shipment-detail-share/confirm-suppress.html',
