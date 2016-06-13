@@ -1065,7 +1065,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 obj.x = subSeries[$scope.MI][i].x; //time-x
                 obj.y = subSeries[$scope.MI][i].y; //temperature-y
                 if(str == "LastReading") {
-                    str = "Tracker" + ($scope.MI + 1);
+                    //str = "Tracker" + ($scope.MI + 1);
+                    str = "Tracker0";
                     obj.marker = {
                         enabled: true,
                         //symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
