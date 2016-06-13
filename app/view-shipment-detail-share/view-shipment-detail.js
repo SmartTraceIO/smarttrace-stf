@@ -1108,7 +1108,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 //update msg
                 var msg = {};
 
-                msg.title = "<table><tr><td valign='middle'><img style='float: left; padding-right: 3px' src='theme/img/tiny" + alert + str + ".png'/></td><td>" + alertinfo[0].title + "</td></tr></table>";
+                msg.title = "<table><tr><td valign='middle'><img style='float: left; padding-right: 3px' src='theme/img/tiny" + alert + str + ".png'/></td><td valign='middle'>" + alertinfo[0].title + "</td></tr></table>";
                 msg.lines = [alertinfo[0].Line1];   
                 if(alertinfo[0].Line2 != undefined){
                     msg.lines.push(alertinfo[0].Line2);
@@ -1143,11 +1143,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         }
                     }
                     var alert = "";
-                    if(str == "LastReading") str = "Tracker" + ($scope.MI + 1);
+                    if(str == "LastReading") str = "Tracker0";// + ($scope.MI + 1);
                     else alert = "Alert";
                     var msg = {};
-                    msg.title = "<span><img src='theme/img/tiny" + alert + str + ".png'/></span><span>" + alertinfo[k].title + "</span>";
-                    msg.lines = [alertinfo[k].Line1];   
+                    //msg.title = "<span><img src='theme/img/tiny" + alert + str + ".png'/></span><span>" + alertinfo[k].title + "</span>";
+                    msg.title = "<table><tr><td valign='middle'><img style='float: left; padding-right: 3px' src='theme/img/tiny" + alert + str + ".png'/></td><td valign='middle'>" + alertinfo[k].title + "</td></tr></table>";
+
+                    msg.lines = [alertinfo[k].Line1];
                     if(alertinfo[k].Line2 != undefined){
                         msg.lines.push(alertinfo[k].Line2);
                     }
