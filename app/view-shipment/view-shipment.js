@@ -1147,13 +1147,13 @@
         var shipment = marker.shipment;
         var htmlIcon = '';
         if (isBorder) {
-            htmlIcon += '<table style="background-color: #fff; border-top: 1px solid; border-bottom: 1px solid; border-right: 1px solid; border-color: '+shipment.color+';">';
+            htmlIcon += '<table style="background-color: #fff; border-top: 2px solid; border-bottom: 2px solid; border-right: 2px solid; border-color: '+shipment.color+';">';
         } else {
             htmlIcon += '<table style="background-color: #ffffff">';
         }
         htmlIcon += '<tr>';
         htmlIcon += '<td>';
-        htmlIcon += '<div style="border:1px solid #5e5e5e; width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
+        htmlIcon += '<div style="width: 15px; height: 15px; background-color:'+shipment.color+'; cursor: pointer; ">';
         if (shipment.status == 'Ended') {
             htmlIcon += "<div style='position:relative;'>";
             htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
