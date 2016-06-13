@@ -351,7 +351,6 @@
 
     VM.updatePolylines = function (shipment) {
         var path2 = [];
-        var bounds = new google.maps.LatLngBounds;
         if (VM.objectToRemove.length > 0) {
             angular.forEach(VM.objectToRemove, function(v, k) {
                 if (VM.objectToRemove[k]) VM.objectToRemove[k].setMap(null);
@@ -397,9 +396,6 @@
                 destText = 'To be determined'
             }
             path2.push({lat:shipment.shippedToLat, lng:shipment.shippedToLong});
-            //-- extend to destination lat/lon
-            bounds.extend(destLlng);
-
             VM.destMarker = new RichMarker({
                 position: destLlng,
                 flat: true,
@@ -460,8 +456,6 @@
         angular.forEach(shipment.keyLocations, function(v, k) {
             //if (v.key == "shippedFrom") {
             var latlng = new google.maps.LatLng(v.lat, v.lon);
-            bounds.extend(latlng);
-
             if (k==0) {
                 icontent = '';
                 icontent += '<div style="width: 28px; height: 28px; border: 2px solid; border-radius: 14px!important;  border-color:'+shipment.color+'; background-color: #ffffff;">';
@@ -651,10 +645,6 @@
             }
         }); // end of travel
 
-        //if(bounds != null){
-        //    VM.map.fitBounds(bounds);
-        //}
-
         var lineSymbol = {
             path: 'M 0,-1 0,1',
             strokeOpacity: 1,
@@ -786,50 +776,8 @@
         var infoBoxElement = document.createElement('div');
 
         angular.forEach(VM.ShipmentList, function(shipment, key) {
+            VM.boundsExtend(bounds, shipment);
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
-            //console.log('shipment.lastReadingLat', shipment.lastReadingLat);
-            //console.log('shipment.lastReadingLong', shipment.lastReadingLong);
-            //var htmlIcon = VM.getMarkerContent(marker, false);
-            /*htmlIcon += '<table>';
-            htmlIcon += '<tr>';
-            htmlIcon += '<td>';
-                htmlIcon += '<div style="border:1px solid #5e5e5e; width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
-                if (shipment.status == 'Ended') {
-                    htmlIcon += "<div style='position:relative;'>";
-                    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
-                    htmlIcon += '</div>';
-                } else if (shipment.status == 'Arrived') {
-                    htmlIcon += "<div style='position:relative;'>";
-                    htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 2px;;">&check;</span>'
-                    htmlIcon += '</div>';
-                } else {
-                    htmlIcon += "<div style='cursor: pointer;'></div>";
-                }
-                htmlIcon += '</div>';
-            htmlIcon += '</td>';
-            htmlIcon += '<td>';
-            htmlIcon += '<div style="background-color: #fff; border-bottom-right-radius: 8px!important; border-top-right-radius: 8px!important;">';
-            htmlIcon += (shipment.deviceSN + "(" + shipment.tripCount + ")");
-            if (shipment.alertSummary.Hot || shipment.alertSummary.CriticalHot) {
-                htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            }
-            if (shipment.alertSummary.Cold || shipment.alertSummary.CriticalCold) {
-                htmlIcon += '<i class="fa fa-circle" style="color: #00faff; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            }
-            if (shipment.alertSummary.Battery) {
-                htmlIcon += '<i class="fa fa-circle" style="color: #000000; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            }
-            htmlIcon += '</div>';
-            htmlIcon += '</td>';
-            htmlIcon += '</tr>';
-            htmlIcon += '</table>';*/
-
-            //var ilabel = new MapLabel({
-            //    position: llng,
-            //    map: VM.map,
-            //    align: 'left',
-            //    text: shipment.deviceSN + "(" + shipment.tripCount + ")"
-            //});
             var marker = new RichMarker({
                 position: llng,
                 map: VM.map,
@@ -871,8 +819,6 @@
                 }
             });
             VM.dynMarkers.push(marker);
-            //VM.labelMarkers.push(ilabel);
-            bounds.extend(llng);
         });
 
         VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers, {
@@ -882,42 +828,26 @@
             styles: [{
                 height: 30,
                 width: 30,
-                //textColor: '#ffffff',
                 textSize: 15,
             }]
         });
-        /*google.maps.event.addListener(VM.markerClusterer, 'update_position', function() {
-            for (var i = 0; i < VM.dynMarkers.length; i++) {
-                VM.dynMarkers[i].bindTo('position', VM.labelMarkers[i]);
-                //markers[i].bindTo('position', markers[i].label);
-                //markers[i].label.setPosition(markers[i].getPosition());
-            }
 
-        });*/
-        VM.map.setCenter(bounds.getCenter());
         if(bounds != null){
+            VM.map.setCenter(bounds.getCenter());
             VM.map.fitBounds(bounds);
         }
     }
 
-    //VM.updateCluster = function() {
-    //    //-- remove marker from cluster
-    //    if (VM.oldMarker == VM.currentMarker) {
-    //        //add current marker to cluster
-    //        VM.dynMarkers.push(VM.currentMarker);
-    //        VM.oldMarker = null;
-    //        VM.currentMarker = null;
-    //    } else {
-    //        //add oldMarker (if not null) to cluster and remove current marker
-    //        var idx = VM.dynMarkers.indexOf(VM.currentMarker);
-    //        VM.dynMarkers.splice(idx, 1);
-    //        if (VM.oldMarker) {
-    //            VM.dynMarkers.push(VM.oldMarker);
-    //        }
-    //    }
-    //    VM.markerClusterer.setMap(null);
-    //    VM.markerClusterer = new MarkerClusterer(VM.map, VM.dynMarkers/*, {minimumClusterSize:4}*/);
-    //}
+    VM.boundsExtend = function(bounds, shipment) {
+        if (!bounds) {
+            bounds = new google.maps.LatLngBounds;
+        }
+        angular.forEach(shipment.keyLocations, function(v, k) {
+            var latlng = new google.maps.LatLng(v.lat, v.lon);
+            bounds.extend(latlng);
+        });
+        return bounds;
+    }
 
     VM.getInfoBoxElement = function(controlInfo, marker) {
         var shipment = marker.shipment;
