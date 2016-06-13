@@ -429,17 +429,6 @@
                                             </div>
                                             <div ng-show="shipment.status != 'Ended' && shipment.status != 'Arrived'" ng-style="{'background-color':shipment.color}" style="border:1px solid #5e5e5e; width:16px; height: 16px; cursor: pointer; position:relative;">
                                             </div>
-                                            <!--htmlIcon += ''-->
-                                            <!--htmlIcon += '';-->
-                                            <!--} else if (shipment.status == 'Arrived') {-->
-                                            <!--htmlIcon += "<div style='border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; position:relative;'>";-->
-                                            <!--htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 0px;;">&check;</span>'-->
-                                            <!--htmlIcon += '</div>';-->
-                                            <!--} else {-->
-                                            <!--htmlIcon += "<div style=' border:2px solid #5e5e5e; width: 16px; height: 16px; background-color:"+shipment.color+"; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer;'></div>";-->
-                                            <!--}-->
-
-                                            <!--<div ng-style="{width:'15px', height:'15px', padding: '0px', 'margin-right':'5px', 'background-color': shipment.color}"></div>-->
                                         </td>
                                         <td>
                                             <a ng-href="#/view-shipment-detail?sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
@@ -449,7 +438,11 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td class="text-left">{{shipment.shipmentDescription}}</td>
+                            <td class="text-left">
+                                <span>{{shipment.shipmentDescription}}</span>
+                                <span ng-show="shipment.palletId!=null">(PalletID={{shipment.palletId}})</span>
+                                <span ng-show="shipment.assetNum!=null">(AssetNum={{shipment.assetNum}})</span>
+                            </td>
                             <td class="text-left">{{shipment.shippedFrom}}</td>
                             <td class="text-left">{{shipment.shipmentDate}}</td>
                             <td class="text-left">{{shipment.shippedTo}}</td>

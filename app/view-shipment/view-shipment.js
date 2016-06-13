@@ -977,6 +977,16 @@
         htmlContent += '<div style="background-color: #ffffff; padding: 5px; border-bottom: 1px solid; border-color: '+shipment.color+'">'; //+5
         htmlContent += '<div style="font-weight: 700;">Description:</div>';
         htmlContent += '<div>'+shipment.shipmentDescription+'</div>'
+        if (shipment.palletId || shipment.assetNum) {
+            htmlContent += '<div>'
+            if (shipment.palletId) {
+                htmlContent += '<span>(PalletID: ' + shipment.palletId + ')</span>'
+            }
+            if (shipment.assetNum) {
+                htmlContent += '<span>(AssetNum: ' + shipment.assetNum + ')</span>'
+            }
+            htmlContent += '</div>'
+        }
         htmlContent += '</div>';
 
         htmlContent += '<div class="portlet-body" style="padding: 5px!important;">'; //+5
