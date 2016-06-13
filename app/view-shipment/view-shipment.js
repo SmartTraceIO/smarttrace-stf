@@ -140,7 +140,8 @@
                 if (d && (d.length > 0)) {
                     //found a device
                     VM.ShipmentList[k].color = d[0].color;
-                } else {
+                }
+                if (!VM.ShipmentList[k].color){
                     VM.ShipmentList[k].color = Color[0].name;
                 }
                 //-- position
