@@ -128,7 +128,7 @@
             VM.loading = false;
 
         });
-
+        VM.ProcessedList = [];
         $q.all([devicesPromise, shipmentsPromise]).then(function() {
             angular.forEach(VM.ShipmentList, function(v, k) {
                 if (!isNaN(v.deviceSN)) {
@@ -238,8 +238,15 @@
                         v.keyLocations.splice(indexShippedTo, 1);
                     }
                 }
+
+                //--
+                if (oldLat != 0 && oldLon != 0) {
+                    VM.ProcessedList.push(v);
+                }
             });
         }).then(function() {
+            //remove all invalid shipment
+            VM.ShipmentList = VM.ProcessedList;
             if (VM.map) {
                 VM.updateMap();
             }
