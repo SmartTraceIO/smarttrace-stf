@@ -38,15 +38,16 @@
                             $scope.TrackerList[k].sn = parseInt(v.sn, 10);
                         }
                         if (!v.color) {
-                            $scope.TrackerList[k].trackerColor=Color[0];
-                        } else {
+                            $scope.TrackerList[k].color = Color[0].name;
+                            //$scope.TrackerList[k].trackerColor=Color[0];
+                        } /*else {
                             var cl = filter(Color, {name: v.color}, true);
-                            if (cl) {
-                                $scope.TrackerList[k].trackerColor=cl[0];;
+                            if (cl && cl.lenght > 0) {
+                                $scope.TrackerList[k].trackerColor=cl[0];
                             } else {
                                 $scope.TrackerList[k].trackerColor=Color[0];;
                             }
-                        }
+                        }*/
                     })
                 }
             }).then(function(){
@@ -95,12 +96,12 @@
                 promises.push(promiseLocation);
                 $q.all(promises).then(function() {
                     angular.forEach($scope.TrackerList, function(t, k) {
-                        var cl = filter(Color, {name: t.color}, true);
-                            if (cl && angular.isArray(cl) && cl.length>0) {
-                                $scope.TrackerList[k].trackerColor = cl[0];
-                            } else {
-                                $scope.TrackerList[k].trackerColor = Color[0];
-                            }
+                        //var cl = filter(Color, {name: t.color}, true);
+                        //if (cl && angular.isArray(cl) && cl.length>0) {
+                        //    $scope.TrackerList[k].trackerColor = cl[0];
+                        //} else {
+                        //    $scope.TrackerList[k].trackerColor = Color[0];
+                        //}
 
                         if (t.lastShipment) {
                             var shippedFromId = t.lastShipment.shippedFrom;
@@ -352,7 +353,7 @@
                         position: llng,
                         map: $scope.map,
                         flat: true,
-                        anchor: RichMarkerPosition.TOP,
+                        anchor: RichMarkerPosition.MIDDLE,
                         content: htmlIcon,
                     });
 
@@ -556,7 +557,16 @@
                 }
             });//end angular.forEach();
 
-            $scope.markerClusterer = new MarkerClusterer($scope.map, $scope.dynMarkers, {minimumClusterSize:4});
+            $scope.markerClusterer = new MarkerClusterer($scope.map, $scope.dynMarkers, {
+                averageCenter:true,
+                spiderer:true,
+                imagePath: 'Scripts/google-map/images/m',
+                styles: [{
+                    height: 30,
+                    width: 30,
+                    textSize: 15,
+                }]
+            });
             $scope.map.setCenter(bounds.getCenter());
             if(bounds != null){
                 $scope.map.fitBounds(bounds);
@@ -675,6 +685,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 $scope.tracker = data.response;
                 if (!$scope.tracker.color) {
                     $scope.tracker.trackerColor  = Color[0];
+                    //$scope.tracker.color  = Color[0].name;
                 } else {
                     var fcolor = filter(Color, {name: $scope.tracker.color}, true);
                     if (fcolor) {
