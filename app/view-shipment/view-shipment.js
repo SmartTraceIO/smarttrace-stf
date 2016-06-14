@@ -1094,7 +1094,7 @@
         }
         htmlIcon += '<tr>';
         htmlIcon += '<td>';
-        htmlIcon += '<div style="width: 15px; height: 15px; background-color:'+shipment.color+'; cursor: pointer; ">';
+        htmlIcon += '<div style="width: 17px; height: 17px; background-color:'+shipment.color+'; cursor: pointer; ">';
         if (shipment.status == 'Ended') {
             htmlIcon += "<div style='position:relative;'>";
             htmlIcon += '<span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -3px; left: 3px;;">&times;</span>'
@@ -1116,22 +1116,13 @@
         htmlIcon += '<td>';
         var alerts = [];
         if (shipment.alertSummary.Hot || shipment.alertSummary.CriticalHot) {
-            alerts.push({type: 'hot', color: '#ff3e03'});
-            //htmlIcon += '<div>';
-            //htmlIcon += '<i class="fa fa-circle" style="color: #ff3e03; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            //htmlIcon += '</div>';
+            alerts.push({type: 'hot', color: '#DF2410'});
         }
         if (shipment.alertSummary.Cold || shipment.alertSummary.CriticalCold) {
-            alerts.push({type: 'cold', color: '#00faff'});
-            //htmlIcon += '<div>';
-            //htmlIcon += '<i class="fa fa-circle" style="color: #00faff; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            //htmlIcon += '</div>';
+            alerts.push({type: 'cold', color: '#57BEFC'});
         }
         if (shipment.alertSummary.Battery) {
             alerts.push({type: 'batt', color: '#000000'});
-            //htmlIcon += '<div>';
-            //htmlIcon += '<i class="fa fa-circle" style="color: #000000; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
-            //htmlIcon += '</div>';
         }
         if (alerts.length == 1) {
             htmlIcon += '<i class="fa fa-circle" style="color: '+alerts[0].color+'; margin-right: 0px; margin-left: 2px; font-size: 8px;" aria-hidden="true"></i>'
