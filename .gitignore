@@ -2,3 +2,8 @@
 /node_modules
 /theme/node_modules
 /.project
+.idea/
+Scripts/custom_events-master/index.html~
+dist/Scripts/
+dist/app/
+dist/theme/
