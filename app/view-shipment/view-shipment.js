@@ -519,7 +519,7 @@
                 });
                 VM.objectToRemove.push(imarker);
             } else { //-- alert
-                if (v.key == "LightOnAlert") {
+                /*if (v.key == "LightOnAlert") {
                     icontent = '';
                     icontent += '<table>';
                     icontent += '<tr>';
@@ -537,7 +537,7 @@
                     icontent += '</td>';
                     icontent += '</tr>';
                     icontent += '</table>';
-                } else if (v.key == "ColdAlert") {
+                } else */if (v.key == "ColdAlert") {
                     icontent = '';
                     icontent += '<table>';
                     icontent += '<tr>';

@@ -1172,7 +1172,7 @@ ClusterIcon.prototype.getCirclePosition = function() {
   var count = this.markers_.length;
   //var legLength = ((count + 2) * 23) / (2*Math.PI); //radius
   var centerPt = this.getProjection().fromLatLngToDivPixel(this.center_); //center
-  var legLength = 50 / (2* Math.sin(Math.PI/count));
+  var legLength = 75 / (2* Math.sin(Math.PI/count));
   var angleStep = (2*Math.PI)/(count);
 
   this.clearPath();
