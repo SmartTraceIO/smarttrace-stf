@@ -110,6 +110,7 @@
                         VM.TrackerList[key].sn=parseInt(tracker.sn, 10);
                     }
                 });
+                VM.TrackerListPlus = [VM.anyDevice];
                 VM.TrackerListPlus = VM.TrackerListPlus.concat(VM.TrackerList);
                 $log.debug('view-shipment', VM.TrackerListPlus);
             }
