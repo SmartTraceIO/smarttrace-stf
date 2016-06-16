@@ -7,3 +7,5 @@ Scripts/custom_events-master/index.html~
 dist/Scripts/
 dist/app/
 dist/theme/
+/dist/
+/download/
