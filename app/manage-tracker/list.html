@@ -18,7 +18,7 @@
                 <option value="100">100</option>
             </select>
         </div>
-         <div ng-if="getRole() >= Role.SmartTraceAdmin" class="pull-right">
+         <div ng-show="getRole() >= Role.SmartTraceAdmin && lastView!=3" class="pull-right">
             <a class="btn btn-default pull-right" ng-href="#/add-tracker">
                 <i class="fa fa-plus"></i>&nbsp;Add New Tracker
             </a>

@@ -35,6 +35,7 @@ module.exports = function(grunt) {
             html: {
                 files: [
                     {expand: true, cwd: 'app/', src: ['**/*.json'], dest: '<%= distdir %>/app'},
+                    {expand: true, cwd: 'app/', src: ['**/*.html'], dest: '<%= distdir %>/app'},
                 ]
             }
         },
@@ -43,7 +44,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {                                 // Target options
                     removeComments: true,
-                    collapseWhitespace: true
+                    //collapseWhitespace: true
                 },
                 files: [{
                     expand: true,
@@ -56,7 +57,7 @@ module.exports = function(grunt) {
             my_index: {
                 options: {                                 // Target options
                     removeComments: true,
-                    collapseWhitespace: true
+                    //collapseWhitespace: true
                 },
                 files: {
                     '<%= distdir %>/index.html': 'index.html'
@@ -70,7 +71,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin']);
+    grunt.registerTask('build', ['copy', 'uglify'/*, 'htmlmin'*/]);
     grunt.registerTask('default', ['build']);
 
 };
