@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ListUserCtrl', function ($rootScope, $state, $window, $scope, rootSvc, webSvc, localDbSvc, $window,
-                                              $log, $timeout, $interval, $controller) {
+                                              $log, $timeout, $interval, $controller, $location) {
     rootSvc.SetPageTitle('List User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -11,6 +11,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     var BindUserList = function () {
@@ -70,7 +71,7 @@
 
 });
 
-appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc,
+appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootSvc, webSvc, localDbSvc, $location,
                                              $state, $filter, $uibModal, $window, $q, $log, $interval, $controller) {
     rootSvc.SetPageTitle('Add User');
     rootSvc.SetActiveMenu('Setup');
@@ -91,6 +92,7 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     var BindRoles = function () {
@@ -179,7 +181,7 @@ appCtrls.controller('AddUserCtrl', function ($rootScope, $timeout, $scope, rootS
 
 //-- edit user
 appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $state,
-                                              $timeout, $interval, $filter, $window, $q, $log, $controller) {
+                                              $timeout, $interval, $filter, $window, $q, $log, $controller, $location) {
     rootSvc.SetPageTitle('Edit User');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Users");
@@ -194,6 +196,7 @@ appCtrls.controller('EditUserCtrl', function ($rootScope, $scope, rootSvc, webSv
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     $scope.Print = function() {

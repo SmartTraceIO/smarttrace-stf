@@ -14,13 +14,13 @@
         <div class="portlet-body">
             <div class="container-fluid">
                 <div class="row">
-                    <span>Autostart Shipment(s) are based on Autostart Templates, which are assigned to each device in
+                    <span>Shipments are based on Autostart Templates, which are assigned to each device in
                         <a ng-href="#/tracker">Trackers</a>
                     page.</span>
                 </div>
                 <div class="row">&nbsp;</div>
                 <div class="row">
-                    <span>There are two ways to create an Autostart Shipment:</span>
+                    <span>There are two ways to create a Shipment:</span>
                 </div>
 
                 <div class="row">
@@ -38,7 +38,7 @@
                                     ​</td>
                                 <td width="63%" style="padding-left: 50px;">
                                     <p>
-                                        <span class="word"> 2.</span> If the tracker is already switched on, choose it below and hit "Create Autostart Shipment".
+                                        <span class="word"> 2.</span> If the tracker is already switched on, choose it below and hit "Create Shipment".
                                     </p>
                                     <p>This will stop the current shipment and create a new shipment using the Autostart Template.</p>
                                     <form role="form" name="frmAddNewShipment" id="frmAddNewShipment" novalidate class="form-horizontal">
@@ -99,7 +99,7 @@
 
                                         </div>
                                         <div class="form-actions text-center ab">
-                                            <button class="btn green" form="frmAddNewShipment" ng-click="VM.createNewAutoStartShipment(frmAddNewShipment.$valid)" type="submit">Create AutoStart Shipment</button>
+                                            <button class="btn green" form="frmAddNewShipment" ng-click="VM.createNewAutoStartShipment(frmAddNewShipment.$valid)" type="submit">Create Shipment</button>
                                             <button class="btn default" type="button" ng-click="VM.ResetForm()">Reset</button>
                                         </div>
                                     </form>

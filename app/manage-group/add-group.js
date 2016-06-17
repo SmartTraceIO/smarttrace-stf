@@ -2,7 +2,7 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('AddGroupCtrl', AddGroupCtrl);
-function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $interval, $log, localDbSvc, $controller) {
+function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $interval, $log, localDbSvc, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -11,6 +11,7 @@ function AddGroupCtrl($rootScope, rootSvc, $state, webSvc, $q, $timeout, $interv
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 

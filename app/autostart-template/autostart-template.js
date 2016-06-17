@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ListAutoTempCtrl', function ($rootScope,$scope, $state, $filter, $uibModal, rootSvc, localDbSvc,
-                                                  webSvc, $window, $timeout, $interval, $log, $controller) {
+                                                  webSvc, $window, $timeout, $interval, $log, $controller, $location) {
     rootSvc.SetPageTitle('List of Autostart Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -12,6 +12,7 @@
     this.localDbSvc = localDbSvc;
     this.timeout = $timeout;
     this.interval = $interval;
+    this.location = $location;
     $controller('BaseCtrl', {VM:this});
 
     var BindAutoShipmentList = function () {
@@ -75,7 +76,7 @@
 });
 
 appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $window, $log, $controller,
-                                                 $filter, arrayToStringFilter, $uibModal, $rootScope, $timeout, $interval) {
+                                                 $filter, arrayToStringFilter, $uibModal, $rootScope, $timeout, $interval, $location) {
     rootSvc.SetPageTitle('Add an Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -93,6 +94,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     this.localDbSvc = localDbSvc;
     this.timeout    = $timeout;
     this.interval   = $interval;
+    this.location = $location;
     $controller('BaseCtrl', {VM:this});
 
     var BindAutoShipmentList = function () {
@@ -453,7 +455,7 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $stateParams, arrayToStringFilter, $log, $controller,
-                                                  $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q, $interval){
+                                                  $state, $filter, $rootScope, $timeout, $uibModal, webSvc, $window, $q, $interval, $location){
     rootSvc.SetPageTitle('Edit Autostart template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Autostart Templates");
@@ -468,6 +470,7 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     this.localDbSvc = localDbSvc;
     this.timeout    = $timeout;
     this.interval   = $interval;
+    this.location = $location;
     $controller('BaseCtrl', {VM:this});
 
     $scope.Print = function() {

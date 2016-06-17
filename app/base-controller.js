@@ -10,11 +10,13 @@ appCtrls.controller('BaseCtrl', function(VM) {
     var log         = VM.log;
     var timeout     = VM.timeout;
     var interval    = VM.interval;
+    var location    = VM.location;
     rootScope.isSmartTraceAdmin = false;
 
     //log.debug('Starting base controller ...');
     if (localDbSvc.getToken() == '_') {
         toastr.warning('Your session was expired!')
+        rootScope.redirectUrl = location.url();
         return state.go('login');
     }
 

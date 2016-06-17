@@ -3,7 +3,7 @@
  */
 appCtrls.controller('ListGroupCtrl', ListGroupCtrl);
 
-function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, localDbSvc, $timeout, $interval, $q, $log, $controller) {
+function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, localDbSvc, $timeout, $interval, $q, $log, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -12,6 +12,7 @@ function ListGroupCtrl($rootScope, $uibModal, $state, rootSvc, $window, webSvc, 
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 

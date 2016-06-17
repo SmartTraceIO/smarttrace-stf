@@ -1,8 +1,8 @@
 ﻿appCtrls.controller('NewAutoStartShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state,
-                                                 $filter, $timeout, $interval, $rootScope, $window, $log, $controller) {
-    rootSvc.SetPageTitle('New AutoStart Shipment');
+                                                 $filter, $timeout, $interval, $rootScope, $window, $log, $controller, $location) {
+    rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
-    rootSvc.SetPageHeader("New AutoStart Shipment");
+    rootSvc.SetPageHeader("New Shipment");
     var VM = this;
     VM.trackers = [];
     {
@@ -13,6 +13,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     $scope.Print = function() {

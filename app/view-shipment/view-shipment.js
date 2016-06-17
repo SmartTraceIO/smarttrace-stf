@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $filter, temperatureFilter, Color, $q,
                                                   $rootScope, $state, $window, $log, $timeout, $interval, $controller,
-                                                  localStorageService) {
+                                                  localStorageService, $location) {
     rootSvc.SetPageTitle('View Shipments');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipments");
@@ -15,6 +15,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     var token = localDbSvc.getToken();

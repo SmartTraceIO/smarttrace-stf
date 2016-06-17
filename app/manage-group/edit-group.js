@@ -2,7 +2,7 @@
  * Created by beou on 11/04/2016.
  */
 appCtrls.controller('EditGroupCtrl', EditGroupCtrl);
-function EditGroupCtrl($rootScope, rootSvc, $state, $stateParams, webSvc, $timeout, $interval, $q, localDbSvc, $log, $controller) {
+function EditGroupCtrl($rootScope, rootSvc, $state, $stateParams, webSvc, $timeout, $interval, $q, localDbSvc, $log, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -11,6 +11,7 @@ function EditGroupCtrl($rootScope, rootSvc, $state, $stateParams, webSvc, $timeo
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 

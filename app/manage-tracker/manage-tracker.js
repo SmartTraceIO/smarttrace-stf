@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ListTrackerCtrl',
     function ($scope, $rootScope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, localStorageService,
-              $log, $q, $timeout, $interval, $controller, Color) {
+              $log, $q, $timeout, $interval, $controller, Color, $location) {
         rootSvc.SetPageTitle('List Trackers');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -14,6 +14,7 @@
             this.localDbSvc = localDbSvc;
             this.timeout    = $timeout;
             this.interval   = $interval;
+            this.location = $location;
             $controller('BaseCtrl', {VM:this});
         }
 
@@ -25,6 +26,7 @@
                     $scope.TrackerList.totalCount = data.totalCount;
 
                     //parsing TrackerList
+                    var tmpList = [];
                     angular.forEach($scope.TrackerList, function(v, k) {
                         var temShipmentNumber = v.shipmentNumber;
                         if (temShipmentNumber){
@@ -39,16 +41,13 @@
                         }
                         if (!v.color) {
                             $scope.TrackerList[k].color = Color[0].name;
-                            //$scope.TrackerList[k].trackerColor=Color[0];
-                        } /*else {
-                            var cl = filter(Color, {name: v.color}, true);
-                            if (cl && cl.lenght > 0) {
-                                $scope.TrackerList[k].trackerColor=cl[0];
-                            } else {
-                                $scope.TrackerList[k].trackerColor=Color[0];;
-                            }
-                        }*/
-                    })
+                        }
+                        //-- remove invalid
+                        if (v.lastReadingLat && v.lastReadingLong) {
+                            tmpList.push(v);
+                        }
+                    });
+                    $scope.TrackerList = tmpList;
                 }
             }).then(function(){
                 var promises = [];
@@ -272,7 +271,6 @@
                 var ms = $scope.markerClusterer.getMarkers();
                 // Unset all markers
                 var l = ms ? ms.length : 0;
-                console.log('Markers-tracker', ms);
                 for (var i = 0; i<l; i++) {
                     ms[i].setMap(null)
                 }
@@ -554,7 +552,7 @@
 });
 appCtrls.controller('AddTrackerCtrl',
     function($rootScope, $scope, $filter, $state, rootSvc, localDbSvc, webSvc, $window, Role, $timeout, $interval,
-             $log, $controller, Color) {
+             $log, $controller, Color, $location) {
         rootSvc.SetPageTitle('Add Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -569,6 +567,7 @@ appCtrls.controller('AddTrackerCtrl',
             this.localDbSvc = localDbSvc;
             this.timeout    = $timeout;
             this.interval   = $interval;
+            this.location = $location;
             $controller('BaseCtrl', {VM:this});
         }
         var filter = $filter('filter');
@@ -612,7 +611,7 @@ appCtrls.controller('AddTrackerCtrl',
         };
 });
 appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $filter, $stateParams, rootSvc, localDbSvc, Color,
-                                                webSvc, $window, $uibModal, Role, $log, $timeout, $interval, $controller) {
+                                                webSvc, $window, $uibModal, Role, $log, $timeout, $interval, $controller, $location) {
         rootSvc.SetPageTitle('Edit Tracker');
         rootSvc.SetActiveMenu('Trackers');
         rootSvc.SetPageHeader("Trackers");
@@ -628,6 +627,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
             this.localDbSvc = localDbSvc;
             this.timeout    = $timeout;
             this.interval   = $interval;
+            this.location = $location;
             $controller('BaseCtrl', {VM:this});
         }
 

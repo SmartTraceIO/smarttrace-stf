@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ListAlertCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $window,
-                                               $timeout, $log, $uibModal, $interval, $controller) {
+                                               $timeout, $log, $uibModal, $interval, $controller, $location) {
     rootSvc.SetPageTitle('List Alert');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Alert Profiles");
@@ -12,6 +12,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 
@@ -92,7 +93,7 @@
 });
 
 appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, webSvc, $state, $timeout, $interval,
-                                              $window,$log, $controller) {
+                                              $window,$log, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -101,6 +102,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 
@@ -258,7 +260,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
 });
 
 appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, localDbSvc, $stateParams, webSvc, $state,
-                                               $timeout, $interval, $window, $log, $controller) {
+                                               $timeout, $interval, $window, $log, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -267,6 +269,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 

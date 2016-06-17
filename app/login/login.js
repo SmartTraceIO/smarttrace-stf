@@ -40,7 +40,7 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
 			});
         promise0.then(function() {
             if ($rootScope.redirectUrl == "" || $rootScope.redirectUrl == undefined) {
-                $rootScope.redirectUrl = "/view-shipment";
+                $rootScope.redirectUrl = "/tracker";
             }
             $rootScope.showHeader = false;
             loadUserAndMove($rootScope.redirectUrl);

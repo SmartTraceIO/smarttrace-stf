@@ -1,4 +1,4 @@
-﻿appCtrls.controller('ListNotiCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $timeout, $interval, $window, $log, $controller) {
+﻿appCtrls.controller('ListNotiCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $timeout, $location, $interval, $window, $log, $controller) {
     rootSvc.SetPageTitle('List Notification');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Notifications Schedules");
@@ -11,6 +11,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 
@@ -62,7 +63,7 @@
 });
 
 appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state, $rootScope, $timeout, $interval,
-                                             $filter, webSvc, $window, $log, $controller) {
+                                             $filter, webSvc, $window, $log, $controller, $location) {
     {
         this.rootScope  = $rootScope;
         this.state      = $state;
@@ -71,6 +72,7 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     if (!$rootScope.modalInstance) {
@@ -244,7 +246,7 @@ appCtrls.controller('AddNotiCtrl', function ($scope, rootSvc, localDbSvc, $state
 });
 
 appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSvc, $stateParams, $state, $rootScope,
-                                              $timeout, $interval, $filter, $window, $log, $controller) {
+                                              $timeout, $interval, $filter, $window, $log, $controller, $location) {
 
     {
         this.rootScope  = $rootScope;
@@ -254,6 +256,7 @@ appCtrls.controller('EditNotiCtrl', function ($scope, webSvc, rootSvc, localDbSv
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 

@@ -4,7 +4,7 @@
 
 appCtrls.controller('ListSimulatorCtrl', ListSimulatorCtrl);
 appCtrls.controller('EnterTimeCtrl', EnterTimeCtrl);
-function ListSimulatorCtrl ($rootScope, $state, $log, webSvc, localDbSvc, $timeout, $interval, $controller, $q, $uibModal) {
+function ListSimulatorCtrl ($rootScope, $state, $log, webSvc, localDbSvc, $timeout, $interval, $controller, $q, $uibModal, $location) {
     var self = this;
     self.simulatorList = [];
     self.userList = [];
@@ -16,6 +16,7 @@ function ListSimulatorCtrl ($rootScope, $state, $log, webSvc, localDbSvc, $timeo
         self.localDbSvc = localDbSvc;
         self.timeout    = $timeout;
         self.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:self});
     }
 

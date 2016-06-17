@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('ListShipTempCtrl', function ($rootScope, $scope, $state, rootSvc, localDbSvc, webSvc, $window,
-                                                  $timeout, $interval, $log, $controller) {
+                                                  $timeout, $interval, $log, $controller, $location) {
     rootSvc.SetPageTitle('List Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -11,6 +11,7 @@
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 
@@ -69,7 +70,7 @@
 });
 
 appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localDbSvc, $state, $filter, arrayToStringFilter,
-                                                 $uibModal, $rootScope, $window, $timeout, $log, $interval, $controller) {
+                                                 $uibModal, $rootScope, $window, $timeout, $log, $interval, $controller, $location) {
     rootSvc.SetPageTitle('Add Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -83,6 +84,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
 
@@ -436,7 +438,7 @@ appCtrls.controller('AddShipTempCtrl', function ($scope, rootSvc, webSvc, localD
 });
 
 appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, arrayToStringFilter, $stateParams, $state, $filter,
-                                                  $rootScope, $timeout, $uibModal, webSvc, $window, $log, $q, $interval, $controller) {
+                                                  $rootScope, $timeout, $uibModal, webSvc, $window, $log, $q, $location, $interval, $controller) {
     rootSvc.SetPageTitle('Edit Manual Shipment Template');
     rootSvc.SetActiveMenu('Setup');
     rootSvc.SetPageHeader("Manual Shipment Templates");
@@ -452,6 +454,7 @@ appCtrls.controller('EditShipTempCtrl', function ($scope, rootSvc, localDbSvc, a
         this.localDbSvc = localDbSvc;
         this.timeout    = $timeout;
         this.interval   = $interval;
+        this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
     $scope.Print = function() {
