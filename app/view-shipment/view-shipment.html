@@ -273,11 +273,10 @@
                     <table class="table table-bordered table-striped">
                         <tr>
                             <th ng-click="vm.Sorting('deviceSN')">
-                                    <span class="pull-left">Tracker (Trip)
-                                        <i uib-tooltip="A shipment's unique identity includes Tracker Number and Trip Count. View the chart page for this shipment by clicking the link."
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
+                                    <span class="pull-left">View Shipment
+                                        <i uib-tooltip="Click to view the temperature chart for this shipment.
+                                         The ShipmentNumber consists of TrackerNumber and TripCount."
+                                           tooltip-placement="top-left"
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
@@ -407,7 +406,7 @@
                                         <i uib-tooltip=" Alerts that have fired during this shipment."
                                            tooltip-append-to-body="true"
                                            tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
+                                           tooltip-placement="top-right"
                                            class="fa fa-info-circle"></i>
                                     </span>
                                     <span class="pull-right" style="position:relative;">
