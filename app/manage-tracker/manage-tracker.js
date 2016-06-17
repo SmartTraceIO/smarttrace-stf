@@ -96,13 +96,6 @@
                 promises.push(promiseLocation);
                 $q.all(promises).then(function() {
                     angular.forEach($scope.TrackerList, function(t, k) {
-                        //var cl = filter(Color, {name: t.color}, true);
-                        //if (cl && angular.isArray(cl) && cl.length>0) {
-                        //    $scope.TrackerList[k].trackerColor = cl[0];
-                        //} else {
-                        //    $scope.TrackerList[k].trackerColor = Color[0];
-                        //}
-
                         if (t.lastShipment) {
                             var shippedFromId = t.lastShipment.shippedFrom;
                             var shippedToId = t.lastShipment.shippedTo;
@@ -511,20 +504,6 @@
                     htmlContent += '</div>';                                                                  //-5
                     htmlContent += '</div>';
 
-                    //var infowindow = new InfoBubble({
-                    //    content: htmlContent,
-                    //    shadowStyle: 3,
-                    //    padding: 0,
-                    //    borderRadius: 4,
-                    //    arrowSize: 10,
-                    //    borderWidth: 0,
-                    //    borderColor: '#7ed56d',
-                    //    disableAutoPan: true,
-                    //    arrowPosition: 10,
-                    //    arrowStyle: 2,
-                    //    minWidth: 300,
-                    //    backgroundClassName: 'phoney'
-                    //});
                     var infoWindow = document.createElement('div');
                     infoWindow.innerHTML = htmlContent;
                     var closeBtn = document.createElement('div');
