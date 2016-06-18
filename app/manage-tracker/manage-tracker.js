@@ -17,7 +17,7 @@
             this.location = $location;
             $controller('BaseCtrl', {VM:this});
         }
-
+        $scope.TrackerListOnMap = [];
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
                 if (data.status.code == 0) {
@@ -25,8 +25,6 @@
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
 
-                    //parsing TrackerList
-                    var tmpList = [];
                     angular.forEach($scope.TrackerList, function(v, k) {
                         var temShipmentNumber = v.shipmentNumber;
                         if (temShipmentNumber){
@@ -42,12 +40,7 @@
                         if (!v.color) {
                             $scope.TrackerList[k].color = Color[0].name;
                         }
-                        //-- remove invalid
-                        if (v.lastReadingLat && v.lastReadingLong) {
-                            tmpList.push(v);
-                        }
                     });
-                    $scope.TrackerList = tmpList;
                 }
             }).then(function(){
                 var promises = [];
@@ -94,6 +87,8 @@
                 });
                 promises.push(promiseLocation);
                 $q.all(promises).then(function() {
+                    //parsing TrackerList
+                    var tmpList = [];
                     angular.forEach($scope.TrackerList, function(t, k) {
                         if (t.lastShipment) {
                             var shippedFromId = t.lastShipment.shippedFrom;
@@ -108,7 +103,12 @@
 
                             }
                         }
+                        //-- remove invalid
+                        if (v.lastReadingLat && v.lastReadingLong) {
+                            tmpList.push(v);
+                        }
                     });
+                    $scope.TrackerListOnMap = tmpList;
                     if ($scope.map) {
                         $scope.updateMap();
                     }
@@ -262,7 +262,7 @@
             $scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].pop();
             $scope.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(bottomLeftInfo);
 
-            if ($scope.TrackerList) {
+            if ($scope.TrackerListOnMap) {
                 $scope.updateMap();
             }
         }
@@ -286,7 +286,7 @@
             $scope.dynMarkers = [];
             var bounds = new google.maps.LatLngBounds;
 
-            angular.forEach($scope.TrackerList, function(tracker, key) {
+            angular.forEach($scope.TrackerListOnMap, function(tracker, key) {
                 if (tracker.lastReadingTime) {
                     //$log.debug('Tracker#' + key, tracker);
                     var shipment = tracker.lastShipment;
