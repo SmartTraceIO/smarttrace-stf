@@ -286,8 +286,8 @@
             $scope.dynMarkers = [];
             var bounds = new google.maps.LatLngBounds;
 
-            angular.forEach($scope.TrackerListOnMap, function(tracker, key) {
-                if (tracker.lastReadingTime) {
+            angular.forEach($scope.TrackerList, function(tracker, key) {
+                if (/*tracker.lastReadingTime && */tracker.lastReadingLat && tracker.lastReadingLong) {
                     //$log.debug('Tracker#' + key, tracker);
                     var shipment = tracker.lastShipment;
                     if (!shipment) {
