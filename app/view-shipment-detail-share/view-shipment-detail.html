@@ -739,9 +739,9 @@
                                     </td>
                                 </tr>
                                 <tr ng-show="trackerInfo.status!='Arrived'">
-                                    <td><img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png"></td>
+                                    <td><img src="theme/img/locationStopToBeDetermined.png"></td>
                                     <td>
-                                        <strong>To be determined</strong><span>({{trackerInfo.endLocation}})</span>
+                                        <strong>To be determined</strong><span ng-show="trackerInfo.endLocation">({{trackerInfo.endLocation}})</span>
                                         <br/>
                                         <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
                                         <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>

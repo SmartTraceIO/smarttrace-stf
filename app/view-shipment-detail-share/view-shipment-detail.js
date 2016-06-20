@@ -357,11 +357,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             value: time,//mainData[lastPoint][0], // Value of where the line will appear
             width: width, // Width of the line    
             label: {
-                //text:   '<img src="theme/img/locationStop.png" style="float:right; vertical-align:bottom;">' +
-                text:   '<img src="theme/img/tinyLocationStop.png" class="rev-horizon" style="float:right; vertical-align:bottom;">' +
-                        '<span style="text-align:right;float:right; margin-right: 10px;">' +
-                            '<b class="bold-font">' + endLocationText + '</b><br/>' + dottext +
-                        '</span>',
+                text: '<span><b class="bold-font">' + endLocationText + '</b>' +
+                        '<img src="theme/img/locationStopToBeDetermined.png"></span>',
                 rotation: 0,
                 useHTML: true,
                 align: 'right',
