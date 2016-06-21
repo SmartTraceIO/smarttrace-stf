@@ -312,7 +312,7 @@
             $scope.NewShipment.shipment.assetType = null;
             $scope.NewShipment.shipment.customFields = null;
             $scope.NewShipment.shipment.tripCount = null;
-            $scope.NewShipment.shipment.status = "InProgress";
+            $scope.NewShipment.shipment.status = "Default";
             $scope.NewShipment.shipment.detectLocationForShippedFrom = false;
 
             /*if ($scope.AddDateShipped && !$scope.NewShipment.saveAsNewTemplate) {

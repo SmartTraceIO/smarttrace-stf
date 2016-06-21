@@ -225,7 +225,6 @@
                         <td>
                             <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
                             <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
-                            <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
                             <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                             <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                         </td>
@@ -234,12 +233,12 @@
                         <strong>Status:</strong>
                         <span>{{trackerInfo.status}}</span>
                                 <span>
-                                    <i ng-if="trackerInfo.status=='InProgress'"
+                                    <!--<i ng-if="trackerInfo.status=='InProgress'"
                                        tooltip="An active shipment with manually entered shipment data."
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
-                                       class="fa fa-info-circle"/>
+                                       class="fa fa-info-circle"/>-->
                                     <i ng-if="trackerInfo.status=='Default'"
                                        tooltip="An active shipment generated via an Autostart Template."
                                        tooltip-append-to-body="true"
@@ -743,7 +742,6 @@
                                     <td>
                                         <strong>To be determined</strong><span ng-show="trackerInfo.endLocation">({{trackerInfo.endLocation}})</span>
                                         <br/>
-                                        <!--<span ng-show="trackerInfo.status == 'InProgress'" style="color:#AAA"><b class="light-bold-font">ETA:</b> {{trackerInfo.eta}}</span>-->
                                         <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                         <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                                     </td>
@@ -753,12 +751,12 @@
                                 <strong>Status:</strong>
                                 <span>{{trackerInfo.status}}</span>
                                 <span>
-                                    <i ng-if="trackerInfo.status=='InProgress'"
+                                    <!--<i ng-if="trackerInfo.status=='InProgress'"
                                        tooltip="An active shipment with manually entered shipment data."
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
-                                       class="fa fa-info-circle"/>
+                                       class="fa fa-info-circle"/>-->
                                     <i ng-if="trackerInfo.status=='Default'"
                                        tooltip="An active shipment generated via an Autostart Template."
                                        tooltip-append-to-body="true"
