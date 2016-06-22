@@ -22,11 +22,11 @@ module.exports = function(grunt) {
         },
     //    copy
         copy : {
-            theme: {
+            /*theme: {
                 files : [
                     {expand: true, cwd: 'theme/', src: ['**'], dest: '<%= distdir %>/theme'},
                 ],
-            },
+            },*/
             scripts : {
                 files: [
                     {expand: true, cwd: 'Scripts/', src: ['**'], dest: '<%= distdir %>/Scripts'},
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {                                 // Target options
                     removeComments: true,
-                    //collapseWhitespace: true
+                    collapseWhitespace: true
                 },
                 files: [{
                     expand: true,
@@ -63,6 +63,19 @@ module.exports = function(grunt) {
                     '<%= distdir %>/index.html': 'index.html'
                 }
             }
+        },
+
+        //--cssmin
+        cssmin : {
+            target: {
+                files: [{
+                    expand: true,
+                    cwd: 'theme',
+                    src: ['**/*.css', '!**/*.min.css'],
+                    dest: '<%= distdir %>/theme',
+                    ext: '.css'
+                }]
+            }
         }
     });
 
@@ -70,8 +83,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin']);
+    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin', 'cssmin']);
     grunt.registerTask('default', ['build']);
 
 };
