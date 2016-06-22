@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                 files : [
                     {expand: true, cwd: 'theme/', src: ['**/*.jpg'], dest: '<%= distdir %>/theme'},
                     {expand: true, cwd: 'theme/', src: ['**/*.png'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.gif'], dest: '<%= distdir %>/theme'},
                     {expand: true, cwd: 'theme/', src: ['**/*.js'], dest: '<%= distdir %>/theme'},
                     {expand: true, cwd: 'theme/', src: ['**/*.min.css'], dest: '<%= distdir %>/theme'},
                     {expand: true, cwd: 'theme/', src: ['**/*.ttf'], dest: '<%= distdir %>/theme'},
@@ -63,7 +64,9 @@ module.exports = function(grunt) {
             my_index: {
                 options: {                                 // Target options
                     removeComments: true,
-                    collapseWhitespace: true
+                    collapseWhitespace: true,
+                    minifyJS: true,
+                    minifyCSS:true
                 },
                 files: {
                     '<%= distdir %>/index.html': 'index.html'
