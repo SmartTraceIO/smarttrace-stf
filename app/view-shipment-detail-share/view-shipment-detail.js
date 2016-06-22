@@ -565,6 +565,37 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     loadTrackerData();
     function loadTrackerData() {
+        //-- load location list
+        $scope.LocationListFrom = [];
+        $scope.LocationListTo = [];
+        $scope.LocationListInterim = [];
+        webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
+            $log.debug("LocationList", data);
+            if (data.status.code == 0) {
+                $scope.LocationList = data.response;
+                angular.forEach($scope.LocationList, function (val, key) {
+                    if (val.companyName) {
+                        var dots = val.companyName.length > 20 ? '...' : '';
+                        var companyName = $filter('limitTo')(val.companyName, 20) + dots;
+                        $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
+                    }
+                    else {
+                        $scope.LocationList[key].DisplayText = val.locationName;
+                    }
+
+                    if (val.startFlag=='Y') {
+                        $scope.LocationListFrom.push(val);
+                    }
+                    if (val.endFlag == 'Y') {
+                        $scope.LocationListTo.push(val)
+                    }
+                    if (val.interimFlag == 'Y') {
+                        $scope.LocationListInterim.push(val);
+                    }
+                })
+            }
+        });
+
         console.log('start load tracker data');
         var params = null;
         if ($scope.ShipmentId) {
@@ -1529,6 +1560,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         modalInstance.result.then(function (result) {
             $scope.trackerInfo.shipmentDescription = result.shipmentDescription;
             $scope.trackerInfo.commentsForReceiver = result.commentsForReceiver;
+            $scope.trackerInfo.palletId = result.palletId;
+            $scope.trackerInfo.assetNum = result.assetNum;
         })
     }
 

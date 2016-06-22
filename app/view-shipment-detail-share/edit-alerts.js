@@ -48,7 +48,7 @@ function EditShipmentAlerts($uibModalInstance, webSvc, shipmentId) {
             if (data.status.code == 0) {
                 toastr.success('The shipment was updated success');
             }
-            $uibModalInstance.close();
+            $uibModalInstance.close(VM.shipment);
         })
     }
     //-- cancel

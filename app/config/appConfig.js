@@ -114,7 +114,7 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     appConstants.constant = $provide.constant;
 
     //--enable debug
-    $logProvider.debugEnabled(false);
+    $logProvider.debugEnabled(true);
 
     //#endregion Register Controllers,Services,Factorys,Values,Constants,Directives & Filters
     $httpProvider.defaults.useXDomain = true;
