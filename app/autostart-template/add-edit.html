@@ -9,12 +9,7 @@
             <div class="form-body">
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
-                        <label class="control-label pull-left">Autostart Shipment Template Name:&nbsp;
-                            <i uib-tooltip="Shipment template name"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
+                        <label class="control-label pull-left">Autostart Shipment Template Name:
                         </label>
                         <label class="control-label pull-right text-error">*</label>
                         <input ng-model="AutoStartShipment.shipmentTemplateName"
@@ -40,7 +35,7 @@
                     <div class="col-sm-4">
                         <label class="control-label pull-left">
                             <span>Shipment Description:</span>
-                            <i uib-tooltip="Shipment Description(Trip name / PO num / Load identity / etc)"
+                            <i uib-tooltip="Enter a Shipment Description for shipments created with this autostart template"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -64,10 +59,14 @@
                         <br />
                         <span class="hidden-xs">-&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span>
-                            <input type="checkbox" ng-model="AutoStartShipment.addDateShipped"
-                                   id="add-date-shipped">
+                            <input type="checkbox" ng-model="AutoStartShipment.addDateShipped" id="add-date-shipped">
                             Add date shipped to shipment Description
                         </span>
+                        <i uib-tooltip="Add the 'time that tracker is switched on' to the end of Shipment Description"
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -82,7 +81,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Shipment From&nbsp;
-                                    <i uib-tooltip="Options for auto-detection of Shipment From"
+                                    <i uib-tooltip="Add possible start locations to be detected when the tracker is switched on."
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                        tooltip-placement="top" class="fa fa-info-circle"></i>
                                 </label>
@@ -109,7 +108,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Interim Stop
-                                    <i uib-tooltip="Options for auto-detection of Interim Stop"
+                                    <i uib-tooltip="Add possible interim stops to be detected while the shipment is in progress."
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                        tooltip-placement="top" class="fa fa-info-circle">
                                     </i>
@@ -136,7 +135,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Shipment To&nbsp;
-                                    <i uib-tooltip="Options for auto-detection of Shipment To"
+                                    <i uib-tooltip="Add possible locations to be detected as the shipment destination."
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -202,7 +201,11 @@
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-2">
                         <label class="control-label">Alert Suppression in cooldown&nbsp;
-                            <i uib-tooltip="Alert suppression during cool down" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i></label>
+                            <i uib-tooltip="Enter the period of time that alerts will be suppressed at the start of a shipment. This is to allow for cooldown of both the load and tracker."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i></label>
                         <div class="btn-group" role="group">
                             <button type="button"
                                     ng-class="{'active':AutoStartShipment.alertSuppressionMinutes==0}"
@@ -226,7 +229,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             <span>Notification Schedule(s) For Alerts</span>
-                            <i uib-tooltip="Notification schedule(s) for alerts"
+                            <i uib-tooltip="Enter the schedule to be used for sending out alerts."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -261,8 +264,8 @@
 
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label class="control-label">Suppress All Alert On Arrival&nbsp;
-                            <i uib-tooltip="No alert after arrival minutes"
+                        <label class="control-label">Suppress All Alerts On Arrival&nbsp;
+                            <i uib-tooltip="Specify the time period after arrival that alerts will no longer be generated."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -280,7 +283,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             Suppress All Alerts After Time Period
-                            <i uib-tooltip="Do not fire any alerts after this period of time"
+                            <i uib-tooltip="Specify the time period after start that alerts will no longer be generated."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -312,8 +315,10 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label class="control-label">Comments For Receiver&nbsp;
-                            <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                        <label class="control-label">Comments&nbsp;
+                            <i uib-tooltip="Enter a comment that will appear on the shipment report."
+                               tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
                         </label>
                         <textarea maxlength="300"
                                   name="comment"
@@ -327,7 +332,11 @@
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-3">
                         <label class="control-label">Arrival Notification&nbsp;
-                            <i uib-tooltip="Arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                            <i uib-tooltip="Enter the distance from specified destination that the arrival notification should be sent out. If a destination is not specified, the arrival notification will be sent out upon arrival."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control " ng-model="AutoStartShipment.arrivalNotificationWithinKm">
                             <option value="">No notification needed</option>
@@ -340,14 +349,18 @@
                         <label class="checkbox-inline" for="exc-noti">
                             <input ng-model="AutoStartShipment.excludeNotificationsIfNoAlerts" type="checkbox" id="exc-noti">
                                 Only notify if alerts fired&nbsp;
-                                <i uib-tooltip="Exclude Notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
+                                <i uib-tooltip="Only send arrival notification if temperature alerts have fired."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
                         </label>
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">
                             <span>Schedule(s) For Arrival Notification</span>
-                            <i uib-tooltip="Schedule(s) for arrival notification"
+                            <i uib-tooltip="Enter the schedule to be used for sending out arrival notification."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -389,7 +402,7 @@
                     <div class="col-sm-12">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">Shutdown Device On Arrival
-                            <i uib-tooltip="Shutdown device after minutes"
+                            <i uib-tooltip="Specify the time period after arrival that the tracker should be shutdown."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -407,7 +420,7 @@
                     <div class="col-sm-4">
                         <label class="control-label">
                             Shutdown Device After Time Period
-                            <i uib-tooltip="Shutdown after start minutes"
+                            <i uib-tooltip="Specify the time period after start that the tracker should be shutdown."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
