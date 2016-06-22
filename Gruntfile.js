@@ -57,7 +57,7 @@ module.exports = function(grunt) {
             my_index: {
                 options: {                                 // Target options
                     removeComments: true,
-                    //collapseWhitespace: true
+                    collapseWhitespace: true
                 },
                 files: {
                     '<%= distdir %>/index.html': 'index.html'
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify'/*, 'htmlmin'*/]);
+    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin']);
     grunt.registerTask('default', ['build']);
 
 };

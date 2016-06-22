@@ -300,7 +300,7 @@ appConstants.constant('routes', [
               'app/manage-alert/manage-alert.js?v=' + version,
           ]
       },
-    {
+    /*{
         name: 'manage.group',
         config: {
             url: '/trackers-group',
@@ -316,7 +316,7 @@ appConstants.constant('routes', [
             'app/manage-group/delete-group.js?v=' + version,
             'app/global/filters/filters.js?v=' + version
         ]
-    },
+    },*/
     {
         name: 'manage.addgroup',
         config: {

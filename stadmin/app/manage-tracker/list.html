@@ -74,7 +74,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -87,7 +87,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentNumber'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -113,7 +113,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -126,7 +126,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </span>
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
@@ -187,25 +187,25 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>-->
+                               class="fa fa-info-circle"></i>-->
                             <i ng-if="tracker.shipmentStatus=='Default'"
                                uib-tooltip="An active shipment generated via an Autostart Template."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                             <i ng-if="tracker.shipmentStatus=='Arrived'"
                                uib-tooltip="A shipment that has reached its destination."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                             <i ng-if="tracker.shipmentStatus=='Ended'"
                                uib-tooltip="A shipment that has ended but has no known destination."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </td>
                         <td ng-if="tracker.lastReadingTime!=null">
                             <span ng-if="tracker.lastShipmentId!=null">{{tracker.lastReadingTime}}</span>

@@ -84,8 +84,7 @@
                                 <label class="control-label">Options for auto-detection of Shipment From&nbsp;
                                     <i uib-tooltip="Options for auto-detection of Shipment From"
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
-                                       tooltip-placement="top" class="fa fa-info-circle">
-                                    </i>
+                                       tooltip-placement="top" class="fa fa-info-circle"></i>
                                 </label>
                                 <br />
                                 <!--ng-change="ChangeNotiScheduleForArrival()"-->
@@ -141,7 +140,7 @@
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
-                                       class="fa fa-info-circle"/>
+                                       class="fa fa-info-circle"></i>
                                 </label>
                                 <ui-select multiple
                                            on-select="VerifyEndLocations()"
@@ -183,7 +182,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Alert Profile&nbsp;
-                            <i uib-tooltip="Alert Profile" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Alert Profile" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </label>
                         <select ng-model="AutoStartShipment.alertProfileId"
                                 ng-change="CreateAlertRule()"
@@ -231,7 +230,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
 
                         <ui-select multiple
@@ -267,7 +266,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control" ng-model="AutoStartShipment.noAlertsAfterArrivalMinutes">
                             <option value="0">Suppress On Arrival</option>
@@ -285,7 +284,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control" ng-model="AutoStartShipment.noAlertsAfterStartMinutes">
                             <option value="">Don't suppress after time period</option>
@@ -314,7 +313,7 @@
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="control-label">Comments For Receiver&nbsp;
-                            <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </label>
                         <textarea maxlength="300"
                                   name="comment"
@@ -328,7 +327,7 @@
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-3">
                         <label class="control-label">Arrival Notification&nbsp;
-                            <i uib-tooltip="Arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                            <i uib-tooltip="Arrival notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control " ng-model="AutoStartShipment.arrivalNotificationWithinKm">
                             <option value="">No notification needed</option>
@@ -341,7 +340,7 @@
                         <label class="checkbox-inline" for="exc-noti">
                             <input ng-model="AutoStartShipment.excludeNotificationsIfNoAlerts" type="checkbox" id="exc-noti">
                                 Only notify if alerts fired&nbsp;
-                                <i uib-tooltip="Exclude Notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"/>
+                                <i uib-tooltip="Exclude Notification" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                         </label>
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
@@ -352,7 +351,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
                         <ui-select multiple
                                    on-select="ChangeNotiScheduleForArrival()"
@@ -394,7 +393,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control " ng-model="AutoStartShipment.shutdownDeviceAfterMinutes">
                             <option value="">Don't Shutdown on Arrival</option>
@@ -412,7 +411,7 @@
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
-                               class="fa fa-info-circle"/>
+                               class="fa fa-info-circle"></i>
                         </label>
                         <select class="form-control" ng-model="AutoStartShipment.shutDownAfterStartMinutes">
                             <option value="">Don't shutdown after time period</option>
