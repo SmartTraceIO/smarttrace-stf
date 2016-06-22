@@ -22,11 +22,17 @@ module.exports = function(grunt) {
         },
     //    copy
         copy : {
-            /*theme: {
+            theme: {
                 files : [
-                    {expand: true, cwd: 'theme/', src: ['**'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.jpg'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.png'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.js'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.min.css'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.ttf'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.woff'], dest: '<%= distdir %>/theme'},
+                    {expand: true, cwd: 'theme/', src: ['**/*.woff2'], dest: '<%= distdir %>/theme'},
                 ],
-            },*/
+            },
             scripts : {
                 files: [
                     {expand: true, cwd: 'Scripts/', src: ['**'], dest: '<%= distdir %>/Scripts'},
