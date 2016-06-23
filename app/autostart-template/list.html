@@ -39,7 +39,7 @@
                 <tr>
                     <th ng-click="Sorting('shipmentTemplateName')">
                         <span class="pull-left">Autostart Template</span>
-                        <i uib-tooltip="A short name for this autostart template"
+                        <i uib-tooltip="A name for this autostart template"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -51,7 +51,7 @@
                     </th>
                     <th ng-click="Sorting('shipmentDescription')">
                         <span class="pull-left">Shipment description</span>
-                        <i uib-tooltip="A longer description for this autostart template"
+                        <i uib-tooltip="A default 'Shipment Description' assigned to shipments created with this template"
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -63,7 +63,7 @@
                     </th>
                     <th ng-click="Sorting('startLocations')">
                         <span class="pull-left">Shipped from</span>
-                        <i uib-tooltip="Locations that a shipment created with this autostart template may start from."
+                        <i uib-tooltip="Possible locations when detecting the 'Start Location' for shipments created by this template."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -75,7 +75,7 @@
                     </th>
                     <th ng-click="Sorting('endLocations')">
                         <span class="pull-left">Shipped to</span>
-                        <i uib-tooltip="Locations that a shipment created with this autostart template may end to."
+                        <i uib-tooltip="Possible locations when detecting the Destination for shipments created by this template."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
@@ -87,7 +87,7 @@
                     </th>
                     <th ng-click="Sorting('alertProfileName')">
                         <span class="pull-left">Alert profile</span>
-                        <i uib-tooltip="The name of alert(s) that may fire for the shipment created by this autostart template."
+                        <i uib-tooltip="The alert profile to be used for shipments created by this template."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
