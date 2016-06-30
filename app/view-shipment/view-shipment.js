@@ -139,13 +139,14 @@
 
                 //-- bind color to shipment here by get color of device.
                 var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
+                VM.ShipmentList[k].color = Color[0].name;
                 if (d && (d.length > 0)) {
                     //found a device
                     VM.ShipmentList[k].color = d[0].color;
                 }
-                if (!VM.ShipmentList[k].color){
-                    VM.ShipmentList[k].color = Color[0].name;
-                }
+                //if (!VM.ShipmentList[k].color){
+                //    VM.ShipmentList[k].color = Color[0].name;
+                //}
                 //-- position
                 VM.ShipmentList[k].position = [v.lastReadingLat, v.lastReadingLong];
                 VM.ShipmentList[k].icon = {
@@ -168,6 +169,9 @@
                 v.interimStops = interimL;
                 var oldLat = 0;
                 var oldLon = 0;
+                if (v.keyLocations == null) {
+                    v.keyLocations = [];
+                }
                 for (var i = 0; i < v.keyLocations.length; i++) {
                     //--
                     if (!v.keyLocations[i].lat) {
@@ -248,7 +252,7 @@
             });
         }).then(function() {
             //remove all invalid shipment
-            VM.ShipmentList = VM.ProcessedList;
+            //VM.ShipmentList = VM.ProcessedList;
             if (VM.map) {
                 VM.updateMap();
             }
@@ -780,12 +784,12 @@
     VM.updateMap = function() {
         //-- reset first
         VM.resetMap();
-        $log.debug('update Maps', VM.ShipmentList);
+        $log.debug('update Maps', VM.ProcessedList);
         // console.log('Custom Markers', VM.map.customMarkers);
         var bounds = new google.maps.LatLngBounds;
         var infoBoxElement = document.createElement('div');
 
-        angular.forEach(VM.ShipmentList, function(shipment, key) {
+        angular.forEach(VM.ProcessedList, function(shipment, key) {
             VM.boundsExtend(bounds, shipment);
             var llng = new google.maps.LatLng(shipment.lastReadingLat, shipment.lastReadingLong);
             var marker = new RichMarker({

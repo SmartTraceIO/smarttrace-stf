@@ -612,8 +612,8 @@ appConstants.constant('routes', [
 
 //#endregion Register Routes Here
 
-app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'routes',
-    function ($stateProvider, $urlRouterProvider, $httpProvider, routes) {
+app.config(['$stateProvider', '$urlRouterProvider', 'routes',
+    function ($stateProvider, $urlRouterProvider, routes) {
         ////following code is for add route with its dependancies for lazyloading
         angular.forEach(routes, function (route) {
             if (route.dependencies) {
