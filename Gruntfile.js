@@ -50,8 +50,8 @@ module.exports = function(grunt) {
         htmlmin : {
             dist: {
                 options: {                                 // Target options
-                    removeComments: true,
-                    collapseWhitespace: true
+                    removeComments: false,
+                    collapseWhitespace: false
                 },
                 files: [{
                     expand: true,
@@ -63,8 +63,8 @@ module.exports = function(grunt) {
             },
             my_index: {
                 options: {                                 // Target options
-                    removeComments: true,
-                    collapseWhitespace: true,
+                    removeComments: false,
+                    collapseWhitespace: false,
                     minifyJS: true,
                     minifyCSS:true
                 },
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin', 'cssmin']);
+    grunt.registerTask('build', ['copy', 'uglify', /*'htmlmin',*/ 'cssmin']);
     grunt.registerTask('default', ['build']);
 
 };
