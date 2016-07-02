@@ -348,8 +348,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             color = "#ccc";
             width = 1;
             time = parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod + 1;
-            dottext = '<sup><b class="dottext">...</b></sup>';
+            dottext = '<span><b class="bold-font">' + endLocationText + '</b><img src="theme/img/locationStopToBeDetermined.png"></span>';
+        } else {
+            dottext = '<span><b class="bold-font">' + endLocationText + '</b><img class="rev-horizon" src="theme/img/locationStop.png"></span>';
         }
+
+        //console.log("Shipment-status", status)
 
         plotLines.push({
             color: color, // Color value
@@ -357,8 +361,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             value: time,//mainData[lastPoint][0], // Value of where the line will appear
             width: width, // Width of the line    
             label: {
-                text: '<span><b class="bold-font">' + endLocationText + '</b>' +
-                        '<img src="theme/img/locationStopToBeDetermined.png"></span>',
+                text: dottext,
                 rotation: 0,
                 useHTML: true,
                 align: 'right',
