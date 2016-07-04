@@ -20,14 +20,8 @@
                     <hr />
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-1 col-md-2">
-                        <label class="control-label">Title&nbsp;
-                            <i uib-tooltip="Title"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
+                    <!--<div class="col-md-offset-1 col-md-2">
+                        &lt;!&ndash;<label class="control-label">Title</label>
                         <div class="row">
                             <div class="col-md-6">
                                 <select class="form-control" ng-model="User.user.title">
@@ -38,17 +32,11 @@
                                     <option value="MS.">MS</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 visible-xs">&nbsp;</div>
-                    <div class="col-md-4">
-                        <label class="control-label pull-left">First Name:&nbsp;
-                            <i uib-tooltip="First Name"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
+                        </div>&ndash;&gt;
+                    </div>-->
+                    <!--<div class="col-md-12 visible-xs">&nbsp;</div>-->
+                    <div class="col-md-offset-1 col-md-4">
+                        <label class="control-label pull-left">First Name:</label>
                         <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <div class="clearfix"></div>
                         <input type="text" name="Firstname" maxlength="30" placeholder="Enter a First Name" class="form-control" ng-model="User.user.firstName" required />
@@ -59,13 +47,7 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
-                        <label class="control-label">Last Name&nbsp;
-                            <i uib-tooltip="Last Name"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
+                        <label class="control-label">Last Name:</label>
                         <input type="text" name="Lastname" maxlength="30" placeholder="Enter a Last Name" class="form-control" ng-model="User.user.lastName" />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Lastname.$error.maxlength">Last name must be less than or equal to 30 chars</span>
@@ -73,26 +55,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-1 col-md-2">
-                        <label for="external_user" class="checkbox-inline">
-                            <br />
-                            <input type="checkbox" ng-model="User.user.external" id="external_user"> External User&nbsp;
-                            <i uib-tooltip="External User"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
-                    </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
-                    <div class="col-md-4">
+                    <div class="col-md-offset-1 col-md-4">
                         <label class="control-label">
                             <span>Company:</span>
-                            <i uib-tooltip="Company"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
                         </label>
                         <input type="text" name="Company"
                                maxlength="30"
@@ -109,28 +75,27 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
-                        <label class="control-label">Position:&nbsp;
-                            <i uib-tooltip="Position"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
+                        <label class="control-label">Position:</label>
                         <input type="text" name="Position" maxlength="30" placeholder="Enter a Position" class="form-control" ng-model="User.user.position" />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Position.$error.maxlength">Position must be less than or equal to 30 chars</span>
                         </span>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-1 col-md-4">
-                        <label class="control-label">Email:&nbsp;
-                            <i uib-tooltip="Email"
+                    <div class="col-md-2 text-right">
+                        <label for="external_user" class="checkbox-inline">
+                            <br />
+                            <input type="checkbox" ng-model="User.user.external" id="external_user"> External User&nbsp;
+                            <i uib-tooltip="Tick this box if this user is from an external company rather than your own."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
                         </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-4">
+                        <label class="control-label">Email:</label>
                         <label class="control-label pull-right"><span class="text-error">*</span></label>
                         <input type="email" name="Email" maxlength="60" placeholder="Enter an Email" class="form-control" ng-model="User.user.email" required />
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
@@ -142,7 +107,7 @@
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-4">
                         <label class="control-label">Password:&nbsp;
-                            <i uib-tooltip="Password"
+                            <i uib-tooltip="Password needs to have an least 8 characters including 1 number"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -156,7 +121,7 @@
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Password.$error.pattern">Password must be minimum 8 chars long and contain at least one number</span>
                         </span>
                     </div>
-                    <div class="col-md-2 text-right">
+                    <!--<div class="col-md-2 text-right">
                         <label for="reset_login" class="checkbox-inline">
                             <br />
                             <input type="checkbox" ng-model="User.resetOnLogin" id="reset_login"> Reset on login&nbsp;
@@ -168,12 +133,12 @@
 
                             </i>
                         </label>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-1 col-md-4">
                         <label class="control-label">Phone(for SMS):&nbsp;
-                            <i uib-tooltip="Phone(for SMS)"
+                            <i uib-tooltip="Enter a mobile phone number to enable SMS message. Should be in international format with the country code and removal of leading zero eg. 61414565432"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -190,7 +155,7 @@
                     <div class="col-md-4">
                         <label class="control-label">
                             <span>Roles:</span>
-                            <i uib-tooltip="Roles"
+                            <i uib-tooltip="Enter the role(s) required for this user. The 'BasicUser' has read-only access. Most users will be 'NormalUser'. An 'AdminUser' also has access to this User page for maintaining other users."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -229,7 +194,7 @@
                         <label for="currently_active" class="checkbox-inline">
                             <br />
                             <input type="checkbox" ng-model="User.user.active" id="currently_active"> Currently active&nbsp;
-                            <i uib-tooltip="Currently Active"
+                            <i uib-tooltip="Untick this box to disable a user's access to SmartTrace"
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
@@ -246,12 +211,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-1 col-md-offset-1">
-                        <label class="control-label">Scale&nbsp;
-                            <i uib-tooltip="Scale"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
+                        <label class="control-label">Scale:
                         </label>
                         <select class="form-control" ng-model="User.user.temperatureUnits">
                             <option value="Celsius">Celsius</option>
@@ -260,12 +220,7 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-2 col-md-offset-1">
-                        <label class="control-label">Units&nbsp;
-                            <i uib-tooltip="Units"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
+                        <label class="control-label">Units:
                         </label>
                         <select class="form-control" ng-model="User.user.measurementUnits">
                             <option value="Metric">Metric (meters)</option>
@@ -273,12 +228,7 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-1 col-md-offset-1">
-                        <label class="control-label">Language&nbsp;
-                            <i uib-tooltip="Language"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
+                        <label class="control-label">Language:
                         </label>
                         <select class="form-control"
                                 ng-model="User.user.language"
@@ -287,12 +237,7 @@
                     </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
                     <div class="col-md-3 col-md-offset-1">
-                        <label class="control-label">Timezone&nbsp;
-                            <i uib-tooltip="Timezone"
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
+                        <label class="control-label">Timezone:
                         </label>
                         <label class="control-label pull-right"><span class="text-error">*</span></label>
 

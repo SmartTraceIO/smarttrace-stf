@@ -82,14 +82,14 @@
         <div class="row">
             <div class="col-sm-12">
                 <label class="control-label">
-                    <span>Comments For Receiver</span>
+                    <span>Comments</span>
                     <i uib-tooltip="Comments for Receiver" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" class="fa fa-info-circle"></i>
                 </label>
             <textarea maxlength="300"
                       name="comment"
                       class="form-control"
                       ng-model="VM.shipment.commentsForReceiver"
-                      placeholder="Tracker is located on last pallet loaded into trailer. Please collect tracker and hand to driver for return."/>
+                      placeholder=""/>
             <span ng-if="frmEditGoods.$invalid" ng-cloak>
                 <span ng-cloak class="text-danger" ng-if="frmEditGoods.comment.$error.maxlength">Comment for receiver must be less than or equal to 300 chars</span>
             </span>

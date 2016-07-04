@@ -104,7 +104,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
                 toastr.success('The shipment was updated success');
                 $uibModalInstance.close(VM.shipment);
             }
-        }).then(function() {
+        })/*.then(function() {
             if (VM.shutdownNow) {
                 webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
                     if (data.status.code == 0) {
@@ -116,7 +116,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
                     $uibModalInstance.close()
                 })
             }
-        })
+        })*/
     }
     //-- cancel
     VM.cancel = function() {
