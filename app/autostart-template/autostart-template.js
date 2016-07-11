@@ -188,22 +188,22 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
 
     $scope.VerifyStartLocations = function() {
         if ($scope.AutoStartShipment.start_locations) {
-            var lastSelectLoc = $scope.AutoStartShipment.start_locations[$scope.AutoStartShipment.start_locations.length-1];
+            /*var lastSelectLoc = $scope.AutoStartShipment.start_locations[$scope.AutoStartShipment.start_locations.length-1];
             if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0) ||
                 ($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
             {
                 toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
-            }
+            }*/
         }
     }
     $scope.VerifyInterimLocations = function() {
         if ($scope.AutoStartShipment.interim_stops) {
             var lastSelectLoc = $scope.AutoStartShipment.interim_stops[$scope.AutoStartShipment.interim_stops.length-1];
-            if (($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0) ||
-                ($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
+            if (/*($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0) ||
+                */($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
             {
-                toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
+                toastr.warning('Warning. A location can only appear in one section - Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
             }
         }
@@ -211,10 +211,10 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
     $scope.VerifyEndLocations = function() {
         if ($scope.AutoStartShipment.end_locations) {
             var lastSelectLoc = $scope.AutoStartShipment.end_locations[$scope.AutoStartShipment.end_locations.length-1];
-            if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0) ||
-                ($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0))
+            if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0)/* ||
+                ($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0)*/)
             {
-                toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
+                toastr.warning('Warning. A location can only appear in one section - Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
             }
         }
@@ -613,21 +613,21 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.VerifyStartLocations = function() {
         if ($scope.AutoStartShipment.start_locations) {
             var lastSelectLoc = $scope.AutoStartShipment.start_locations[$scope.AutoStartShipment.start_locations.length-1];
-            if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0) ||
+            /*if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0) ||
                 ($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
             {
                 toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
-            }
+            }*/
         }
     }
     $scope.VerifyInterimLocations = function() {
         if ($scope.AutoStartShipment.interim_stops) {
             var lastSelectLoc = $scope.AutoStartShipment.interim_stops[$scope.AutoStartShipment.interim_stops.length-1];
-            if (($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0) ||
-                ($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
+            if (/*($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0) ||
+                */($scope.AutoStartShipment.end_locations && $scope.AutoStartShipment.end_locations.indexOf(lastSelectLoc) >= 0))
             {
-                toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
+                toastr.warning('Warning. A location can only appear in one section - Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
             }
         }
@@ -635,10 +635,10 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
     $scope.VerifyEndLocations = function() {
         if ($scope.AutoStartShipment.end_locations) {
             var lastSelectLoc = $scope.AutoStartShipment.end_locations[$scope.AutoStartShipment.end_locations.length-1];
-            if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0) ||
-                ($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0))
+            if (($scope.AutoStartShipment.interim_stops && $scope.AutoStartShipment.interim_stops.indexOf(lastSelectLoc) >= 0)/* ||
+                ($scope.AutoStartShipment.start_locations && $scope.AutoStartShipment.start_locations.indexOf(lastSelectLoc) >= 0)*/)
             {
-                toastr.warning('Warning. A location can only appear in one section - either Shipped From, Interim or Shipped To.' +
+                toastr.warning('Warning. A location can only appear in one section - Interim or Shipped To.' +
                     ' You could consider adding a nearby location as an alternative. ');
             }
         }
