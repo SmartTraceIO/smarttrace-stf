@@ -55,8 +55,19 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="col-md-offset-1 col-md-2 text-right">
+                        <label for="external_user" class="checkbox-inline">
+                            <br />
+                            <input type="checkbox" ng-model="User.user.external" id="external_user"> External User&nbsp;
+                            <i uib-tooltip="Tick this box if this user is from an external company rather than your own."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </label>
+                    </div>
                     <div class="col-md-12 visible-xs">&nbsp;</div>
-                    <div class="col-md-offset-1 col-md-4">
+                    <div class="col-md-4">
                         <label class="control-label">
                             <span>Company:</span>
                         </label>
@@ -80,17 +91,6 @@
                         <span ng-cloak ng-if="frmAddEditUser.$invalid && frmAddEditUser.$submitted">
                             <span ng-cloak class="text-danger" ng-if="frmAddEditUser.Position.$error.maxlength">Position must be less than or equal to 30 chars</span>
                         </span>
-                    </div>
-                    <div class="col-md-2 text-right">
-                        <label for="external_user" class="checkbox-inline">
-                            <br />
-                            <input type="checkbox" ng-model="User.user.external" id="external_user"> External User&nbsp;
-                            <i uib-tooltip="Tick this box if this user is from an external company rather than your own."
-                               tooltip-append-to-body="true"
-                               tooltip-trigger="mouseenter"
-                               tooltip-placement="top"
-                               class="fa fa-info-circle"></i>
-                        </label>
                     </div>
                 </div>
                 <div class="form-group">

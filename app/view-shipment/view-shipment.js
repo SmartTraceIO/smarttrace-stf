@@ -80,12 +80,15 @@
     }
 
     VM.AdvanceSearch = localStorageService.get('advancedSearch');
+    VM.ViewShipment.excludePriorShipments = localStorageService.get("excludesivePrior");
     VM.LocationOptions = { multiple: true };
     VM.anyDevice = {sn: '--Please Select--'}
     VM.TrackerListPlus = [VM.anyDevice];
     
     var BindShipmentList = function () {
         $log.debug('ViewShipment', VM.ViewShipment);
+
+        localStorageService.set("excludesivePrior", VM.ViewShipment.excludePriorShipments);
         VM.loading = true;
 
         if (VM.ViewShipment.shippedFromLocation) {

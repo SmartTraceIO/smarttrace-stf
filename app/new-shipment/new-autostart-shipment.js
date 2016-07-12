@@ -29,11 +29,14 @@
         return webSvc.getDevices(9999, 1, '', '').success(function(data) {
             $log.debug(data);
             if (data.status.code == 0) {
-                VM.trackers = data.response;
-                angular.forEach(VM.trackers, function(v, k) {
-                   if (!isNaN(v.sn)) {
-                       VM.trackers[k].sn = parseInt(v.sn, 10);
-                   }
+                //VM.trackers = data.response;
+                angular.forEach(data.response, function(v, k) {
+                    if (v.active) {
+                        if (!isNaN(v.sn)) {
+                            v.sn = parseInt(v.sn, 10);
+                        }
+                        VM.trackers.push(v);
+                    }
                 });
             } else {
                 toastr.warning('Warngin. An error has occurred while trying to get list of trackers');
