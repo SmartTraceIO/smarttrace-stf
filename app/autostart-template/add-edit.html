@@ -408,7 +408,7 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
                         </label>
-                        <select class="form-control " ng-model="AutoStartShipment.shutdownDeviceAfterMinutes">
+                        <select class="form-control " ng-model="AutoStartShipment.shutdownDeviceAfterMinutes" ng-disabled="AutoStartShipment.startOnLeavingLocation">
                             <option value="">Don't Shutdown on Arrival</option>
                             <option value="0">Shutdown upon Arrival</option>
                             <option value="60">Shutdown After 1 hr at destination</option>
@@ -426,7 +426,7 @@
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
                         </label>
-                        <select class="form-control" ng-model="AutoStartShipment.shutDownAfterStartMinutes">
+                        <select class="form-control" ng-model="AutoStartShipment.shutDownAfterStartMinutes" ng-disabled="AutoStartShipment.startOnLeavingLocation">
                             <option value="">Don't shutdown after time period</option>
                             <option value="240">Shutdown 4 hrs after start</option>
                             <option value="480">Shutdown 8 hrs after start</option>
@@ -439,6 +439,15 @@
                             <option value="14400">Shutdown 10 days after start</option>
                             <option value="28800">Shutdown 20 days after start</option>
                         </select>
+                    </div>
+                    <div class="col-sm-4" style="margin-top: 30px">
+                        <input ng-model="AutoStartShipment.startOnLeavingLocation" type="checkbox" ng-change="changeStateOnLeaving()">
+                        Start on leaving location
+                        <i uib-tooltip="Automatically create a new shipment if device departs after arrival."
+                           tooltip-append-to-body="true"
+                           tooltip-trigger="mouseenter"
+                           tooltip-placement="top"
+                           class="fa fa-info-circle"></i>
                     </div>
                 </div>
                 <div class="clearfix"></div>

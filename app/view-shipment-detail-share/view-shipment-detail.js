@@ -146,8 +146,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             bounds.extend(ll);
             trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
             //markers
+            if (locations[i].lat == 0 && locations[i].lng==0) {
+                continue;
+            }
             var pos = [locations[i].lat, locations[i].lng];
-            if(locations[i].alerts.length > 0){
+            if(locations[i].alerts.length > 0) {
                 //console.log('Alert', locations[i].alerts)
                 if(locations[i].alerts[0].type.toLowerCase() == 'lastreading'){
                     $scope.specialMarkers.push({
@@ -172,10 +175,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                     });
                 } else if (locations[i].alerts[0].type.toLowerCase() == 'lighton' || locations[i].alerts[0].type.toLowerCase() == 'lightoff') {
-                    $scope.specialMarkers.push({
+                    /*$scope.specialMarkers.push({
                         index:$scope.specialMarkers.length,
-                        oi: i
-                    })
+                        oi: i,
+                        pos: pos,
+                        data: locations[i],
+                        icon: {
+                            url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
+                            scaledSize:[24, 24],
+                            anchor:[12, 12]
+                        }
+                    })*/
                 } else {
                     $scope.specialMarkers.push(
                         {
@@ -184,7 +194,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             oi: i,
                             pos: pos,
                             data: locations[i],
-                            //iconUrl: "theme/img/alert" + locations[i].alerts[0].type + ".png",
                             icon: {
                                 url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
                                 scaledSize:[24, 24],
