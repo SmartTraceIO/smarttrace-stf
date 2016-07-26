@@ -918,11 +918,11 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
         console.log("$scope.AutoStartShipment.shutdownDeviceAfterMinutes", $scope.AutoStartShipment.shutdownDeviceAfterMinutes);
         if ($scope.AutoStartShipment.startOnLeavingLocation) {
             if ($scope.AutoStartShipment.shutDownAfterStartMinutes) {
-                toastr.warning("'Shutdown Device After Time Period' field must be set to \"Don’t shutdown after time period\"");
+                toastr.warning("\"Shutdown Device After Time Period\" field must be set to \"Don’t shutdown after time period\"");
                 $scope.AutoStartShipment.startOnLeavingLocation = false;
             }
             if ($scope.AutoStartShipment.shutdownDeviceAfterMinutes) {
-                toastr.warning("'Shutdown Device After Time Period' field must be set to \"Don’t shutdown after time period\"");
+                toastr.warning("\"Shutdown Device On Arrival\" field must be set to \"Don't shutdown on arrival\"");
                 $scope.AutoStartShipment.startOnLeavingLocation = false;
             }
         }
