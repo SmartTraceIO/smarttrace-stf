@@ -42,7 +42,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     $scope.previousActiveMarker = -1;
     //includes all tracker info here
     $scope.trackers = [];
-    var trackerRoute = null;
+    var trackerRoute = [];
     //----------------------------------------------
     $scope.isLoading = true;
     //----------------------------------------------
@@ -105,9 +105,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     refreshTimer = $timeout(refreshData, 300000);
     $scope.$on("$destroy", function(event){
         $timeout.cancel(refreshTimer);
-        if(trackerRoute != null){
-            trackerRoute.setMap(null);
-            trackerRoute = null;
+        if(trackerRoute != null && trackerRoute.length > 0){
+            for(var i = 0; i< trackerRoute.length; i++) {
+                trackerRoute[i].setMap(null);
+            }
+            trackerRoute = [];
         }
     });
 
@@ -142,91 +144,186 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         bounds = new google.maps.LatLngBounds;
 
         for(i = 0 ; i < locations.length; i ++){
-            var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
-            bounds.extend(ll);
-            trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
-            //markers
             if (locations[i].lat == 0 && locations[i].lng==0) {
                 continue;
             }
-            var pos = [locations[i].lat, locations[i].lng];
-            if(locations[i].alerts.length > 0) {
-                //console.log('Alert', locations[i].alerts)
-                if(locations[i].alerts[0].type.toLowerCase() == 'lastreading'){
-                    $scope.specialMarkers.push({
-                        index: $scope.specialMarkers.length,
-                        len: 16,
-                        oi: i,
-                        pos: pos,
-                        data: locations[i],
-                        /*icon: {
-                            url:"theme/img/Tracker" + (index + 1) + ".png",
-                            scaledSize:[16, 16],
-                            anchor:[8, 8]
-                        },*/
-                        icon: {
-                            path: 'M-8,-8 L-8,8 L8,8 L8,-8 Z',
-                            //fillColor: $scope.trackers[index].siblingColor,
-                            fillColor: $scope.trackers[index].deviceColor,
-                            fillOpacity: 1,
-                            scale: 1,
-                            strokeWeight: 0
-                        },
-                        tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
-                    });
-                } else if (locations[i].alerts[0].type.toLowerCase() == 'lighton' || locations[i].alerts[0].type.toLowerCase() == 'lightoff') {
-                    /*$scope.specialMarkers.push({
-                        index:$scope.specialMarkers.length,
-                        oi: i,
-                        pos: pos,
-                        data: locations[i],
-                        icon: {
-                            url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
-                            scaledSize:[24, 24],
-                            anchor:[12, 12]
-                        }
-                    })*/
+            var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
+
+            //if (!arrayContains({lat:locations[i].lat, lng:locations[i].lng}, trackerPath)) {
+            //    trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
+
+            if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
+
+                var le = trackerPath.length;
+                if (le >= 2) {
+                    var ag = calculateAngle(trackerPath[le-2], trackerPath[le-1], ll);
+                    console.log("Angle", ag);
+                    var a_type = locations[i].alerts.length > 0 ? locations[i].alerts[0].type.toLowerCase() : "none";
+
+                    if (ag && ag > 0.45 || (a_type !="none" && a_type != "lighton" && a_type != "lightoff")) {
+                        trackerPath.push(ll);
+                        bounds.extend(ll);
+                    } else {
+                        //trackerPath.push(trackerPath[le-1]);
+                    }
                 } else {
-                    $scope.specialMarkers.push(
-                        {
+                    trackerPath.push(ll);
+                    bounds.extend(ll);
+                }
+
+
+                //markers
+                var pos = [locations[i].lat, locations[i].lng];
+                if (locations[i].alerts.length > 0) {
+                    //console.log('Alert', locations[i].alerts)
+                    if (locations[i].alerts[0].type.toLowerCase() == 'lastreading') {
+                        $scope.specialMarkers.push({
                             index: $scope.specialMarkers.length,
-                            len: 24,
+                            len: 16,
                             oi: i,
                             pos: pos,
                             data: locations[i],
+                            /*icon: {
+                             url:"theme/img/Tracker" + (index + 1) + ".png",
+                             scaledSize:[16, 16],
+                             anchor:[8, 8]
+                             },*/
                             icon: {
-                                url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
-                                scaledSize:[24, 24],
-                                anchor:[12, 12]
+                                path: 'M-8,-8 L-8,8 L8,8 L8,-8 Z',
+                                //fillColor: $scope.trackers[index].siblingColor,
+                                fillColor: $scope.trackers[index].deviceColor,
+                                fillOpacity: 1,
+                                scale: 1,
+                                strokeWeight: 1,
+                                strokeColor: "#FFF"
                             },
-                            tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"
-                        }
-                    );
+                            tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
+                        });
+                    } else if (locations[i].alerts[0].type.toLowerCase() == 'lighton' || locations[i].alerts[0].type.toLowerCase() == 'lightoff') {
+                        /*$scope.specialMarkers.push({
+                         index:$scope.specialMarkers.length,
+                         oi: i,
+                         pos: pos,
+                         data: locations[i],
+                         icon: {
+                         url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
+                         scaledSize:[24, 24],
+                         anchor:[12, 12]
+                         }
+                         })*/
+                    } else {
+                        $scope.specialMarkers.push(
+                            {
+                                index: $scope.specialMarkers.length,
+                                len: 24,
+                                oi: i,
+                                pos: pos,
+                                data: locations[i],
+                                icon: {
+                                    url: "theme/img/alert" + locations[i].alerts[0].type + ".png",
+                                    scaledSize: [24, 24],
+                                    anchor: [12, 12]
+                                },
+                                tinyIconUrl: "theme/img/tinyAlert" + locations[i].alerts[0].type + ".png"
+                            }
+                        );
+                    }
                 }
             }
         }
 
-        if(trackerRoute != null){
-            trackerRoute.setMap(null);
-            trackerRoute = null;
+        if(trackerRoute != null && trackerRoute.length > 0){
+            for (var i = 0; i< trackerRoute.length; i++) {
+                trackerRoute[i].setMap(null);
+            }
+            //trackerRoute.setMap(null);
+            trackerRoute = [];
         }
 
-        trackerRoute = new google.maps.Polyline({
-            path: trackerPath,
-            //strokeColor: $scope.trackers[index].siblingColor,
-            strokeColor: $scope.trackers[index].deviceColor,
-            strokeOpacity: 1,
-            strokeWeight: 5,
-            map: map
-        });
-        map.fitBounds(bounds);
-        //trackerRoute.setMap(map);
-        //Apply Shape route first
-        if(!$scope.$$phase) {
-            $scope.$apply();
+        function refinePath(point, listPoint) {
+            if (listPoint == null || listPoint.length == 0) {
+                return false;
+            }
+            var cascadiaFault = new google.maps.Polyline({
+                path: listPoint
+            });
+            if (!google.maps.geometry.poly.isLocationOnEdge(point, cascadiaFault, 10e-3)) {
+                return false;
+            }
+            return true;
         }
+
+        function calculateAngle(l1, l2, l3) {
+            var v1 = {x: l1.lat() - l2.lat(), y: l1.lng() - l2.lng()};
+            var v2 = {x: l3.lat() - l2.lat(), y: l3.lng() - l2.lng()};
+
+            if ((v1.x == 0 && v1.y == 0) || (v2.x == 0 && v2.y == 0)) {
+                return 1;
+            }
+
+            var v1v2 = v1.x * v2.x + v1.y * v2.y;
+            var vvv = Math.sqrt(v1.x * v1.x + v1.y* v1.y) * Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+            return Math.acos(v1v2/vvv);
+        }
+
+        function arrayContains(obj, list) {
+            if (list != null && angular.isArray(list) && list.length > 0) {
+                for (var i = 0; i < list.length; i++) {
+                    if (angular.equals(obj, list[i])) return true;
+                }
+            }
+            return false;
+        }
+
+
+        //-- end
+        //var trackerPath = refinePath2(trackerPath);
+        //var trackerPath = refinePath2(trackerPath);
+        var color = $scope.trackers[index].deviceColor;
+        color = colourNameToHex(color);
+        console.log("Color", color);
+        var arrowIcon = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            scale: 2,
+            strokeWeight:2,
+            strokeColor: shadeColor2(color, -0.3),
+            fillColor: shadeColor2(color, -0.3),
+            fillOpacity: 1
+        }
+
+        for (var i = 0; i < trackerPath.length-1; i++) {
+            var tll = trackerPath[i];
+            var tll1 = trackerPath[i+1];
+            var pt = [{lat:tll.lat(), lng:tll.lng()}, {lat:tll1.lat(), lng:tll1.lng()}];
+
+            //if (google.maps.geometry.spherical.computeDistanceBetween(tll, tll1) > 1000) {}
+            var route = new google.maps.Polyline({
+                path:pt,
+                strokeColor: $scope.trackers[index].deviceColor,
+                strokeOpacity: 1,
+                strokeWeight: 4,
+                map: map,
+                icons: [{
+                    icon: arrowIcon,
+                    offset: '50%'
+                }],
+            });
+            trackerRoute.push(route);
+        }
+
+        map.setCenter(bounds.getCenter());
+        //map.fitBounds(bounds);
+        ////trackerRoute.setMap(map);
+        ////Apply Shape route firstss
+        //if(!$scope.$$phase) {
+        //    $scope.$apply();
+        //}
+
     }
-
+    function shadeColor2(color, percent) {
+        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+    }
     $scope.switchTracker = function($event, index){
         $event.preventDefault();
         $log.debug('SwithTracker...', index)
@@ -1610,5 +1707,39 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
             $scope.trackerInfo.status = result.status;
         });
+    }
+
+
+    function colourNameToHex(colour)
+    {
+        var colours = {"aliceblue":"#f0f8ff","antiquewhite":"#faebd7","aqua":"#00ffff","aquamarine":"#7fffd4","azure":"#f0ffff",
+            "beige":"#f5f5dc","bisque":"#ffe4c4","black":"#000000","blanchedalmond":"#ffebcd","blue":"#0000ff","blueviolet":"#8a2be2","brown":"#a52a2a","burlywood":"#deb887",
+            "cadetblue":"#5f9ea0","chartreuse":"#7fff00","chocolate":"#d2691e","coral":"#ff7f50","cornflowerblue":"#6495ed","cornsilk":"#fff8dc","crimson":"#dc143c","cyan":"#00ffff",
+            "darkblue":"#00008b","darkcyan":"#008b8b","darkgoldenrod":"#b8860b","darkgray":"#a9a9a9","darkgreen":"#006400","darkkhaki":"#bdb76b","darkmagenta":"#8b008b","darkolivegreen":"#556b2f",
+            "darkorange":"#ff8c00","darkorchid":"#9932cc","darkred":"#8b0000","darksalmon":"#e9967a","darkseagreen":"#8fbc8f","darkslateblue":"#483d8b","darkslategray":"#2f4f4f","darkturquoise":"#00ced1",
+            "darkviolet":"#9400d3","deeppink":"#ff1493","deepskyblue":"#00bfff","dimgray":"#696969","dodgerblue":"#1e90ff",
+            "firebrick":"#b22222","floralwhite":"#fffaf0","forestgreen":"#228b22","fuchsia":"#ff00ff",
+            "gainsboro":"#dcdcdc","ghostwhite":"#f8f8ff","gold":"#ffd700","goldenrod":"#daa520","gray":"#808080","green":"#008000","greenyellow":"#adff2f",
+            "honeydew":"#f0fff0","hotpink":"#ff69b4",
+            "indianred ":"#cd5c5c","indigo":"#4b0082","ivory":"#fffff0","khaki":"#f0e68c",
+            "lavender":"#e6e6fa","lavenderblush":"#fff0f5","lawngreen":"#7cfc00","lemonchiffon":"#fffacd","lightblue":"#add8e6","lightcoral":"#f08080","lightcyan":"#e0ffff","lightgoldenrodyellow":"#fafad2",
+            "lightgrey":"#d3d3d3","lightgreen":"#90ee90","lightpink":"#ffb6c1","lightsalmon":"#ffa07a","lightseagreen":"#20b2aa","lightskyblue":"#87cefa","lightslategray":"#778899","lightsteelblue":"#b0c4de",
+            "lightyellow":"#ffffe0","lime":"#00ff00","limegreen":"#32cd32","linen":"#faf0e6",
+            "magenta":"#ff00ff","maroon":"#800000","mediumaquamarine":"#66cdaa","mediumblue":"#0000cd","mediumorchid":"#ba55d3","mediumpurple":"#9370d8","mediumseagreen":"#3cb371","mediumslateblue":"#7b68ee",
+            "mediumspringgreen":"#00fa9a","mediumturquoise":"#48d1cc","mediumvioletred":"#c71585","midnightblue":"#191970","mintcream":"#f5fffa","mistyrose":"#ffe4e1","moccasin":"#ffe4b5",
+            "navajowhite":"#ffdead","navy":"#000080",
+            "oldlace":"#fdf5e6","olive":"#808000","olivedrab":"#6b8e23","orange":"#ffa500","orangered":"#ff4500","orchid":"#da70d6",
+            "palegoldenrod":"#eee8aa","palegreen":"#98fb98","paleturquoise":"#afeeee","palevioletred":"#d87093","papayawhip":"#ffefd5","peachpuff":"#ffdab9","peru":"#cd853f","pink":"#ffc0cb","plum":"#dda0dd","powderblue":"#b0e0e6","purple":"#800080",
+            "red":"#ff0000","rosybrown":"#bc8f8f","royalblue":"#4169e1",
+            "saddlebrown":"#8b4513","salmon":"#fa8072","sandybrown":"#f4a460","seagreen":"#2e8b57","seashell":"#fff5ee","sienna":"#a0522d","silver":"#c0c0c0","skyblue":"#87ceeb","slateblue":"#6a5acd","slategray":"#708090","snow":"#fffafa","springgreen":"#00ff7f","steelblue":"#4682b4",
+            "tan":"#d2b48c","teal":"#008080","thistle":"#d8bfd8","tomato":"#ff6347","turquoise":"#40e0d0",
+            "violet":"#ee82ee",
+            "wheat":"#f5deb3","white":"#ffffff","whitesmoke":"#f5f5f5",
+            "yellow":"#ffff00","yellowgreen":"#9acd32"};
+
+        if (typeof colours[colour.toLowerCase()] != 'undefined')
+            return colours[colour.toLowerCase()];
+
+        return false;
     }
 };
