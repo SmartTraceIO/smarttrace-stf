@@ -171,7 +171,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     bounds.extend(ll);
                 }
 
-
+                //trackerPath.push(ll);
+                //bounds.extend(ll);
                 //markers
                 var pos = [locations[i].lat, locations[i].lng];
                 if (locations[i].alerts.length > 0) {
@@ -240,42 +241,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             trackerRoute = [];
         }
 
-        function refinePath(point, listPoint) {
-            if (listPoint == null || listPoint.length == 0) {
-                return false;
-            }
-            var cascadiaFault = new google.maps.Polyline({
-                path: listPoint
-            });
-            if (!google.maps.geometry.poly.isLocationOnEdge(point, cascadiaFault, 10e-3)) {
-                return false;
-            }
-            return true;
-        }
-
-        function calculateAngle(l1, l2, l3) {
-            var v1 = {x: l1.lat() - l2.lat(), y: l1.lng() - l2.lng()};
-            var v2 = {x: l3.lat() - l2.lat(), y: l3.lng() - l2.lng()};
-
-            if ((v1.x == 0 && v1.y == 0) || (v2.x == 0 && v2.y == 0)) {
-                return 1;
-            }
-
-            var v1v2 = v1.x * v2.x + v1.y * v2.y;
-            var vvv = Math.sqrt(v1.x * v1.x + v1.y* v1.y) * Math.sqrt(v2.x * v2.x + v2.y * v2.y);
-            return Math.acos(v1v2/vvv);
-        }
-
-        function arrayContains(obj, list) {
-            if (list != null && angular.isArray(list) && list.length > 0) {
-                for (var i = 0; i < list.length; i++) {
-                    if (angular.equals(obj, list[i])) return true;
-                }
-            }
-            return false;
-        }
-
-
         //-- end
         //var trackerPath = refinePath2(trackerPath);
         //var trackerPath = refinePath2(trackerPath);
@@ -290,28 +255,48 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             fillColor: shadeColor2(color, -0.3),
             fillOpacity: 1
         }
-
-        for (var i = 0; i < trackerPath.length-1; i++) {
+        var whd = google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]);
+        var le = trackerPath.length;
+        var step = le/7;
+        var count = 0;
+        for (var i = 0; i < le-1; i++) {
             var tll = trackerPath[i];
             var tll1 = trackerPath[i+1];
             var pt = [{lat:tll.lat(), lng:tll.lng()}, {lat:tll1.lat(), lng:tll1.lng()}];
-
-            //if (google.maps.geometry.spherical.computeDistanceBetween(tll, tll1) > 1000) {}
-            var route = new google.maps.Polyline({
-                path:pt,
-                strokeColor: $scope.trackers[index].deviceColor,
-                strokeOpacity: 1,
-                strokeWeight: 4,
-                map: map,
-                icons: [{
-                    icon: arrowIcon,
-                    offset: '50%'
-                }],
-            });
+            var route = null;
+            var d = google.maps.geometry.spherical.computeDistanceBetween(tll, tll1);
+            if (d > whd/10 || count >= step) {
+                count = 0;
+                route = new google.maps.Polyline({
+                    path:pt,
+                    strokeColor: $scope.trackers[index].deviceColor,
+                    strokeOpacity: 1,
+                    strokeWeight: 4,
+                    map: map,
+                    icons: [{
+                        icon: arrowIcon,
+                        offset: '50%'
+                    }],
+                });
+            } else {
+                count++;
+                route = new google.maps.Polyline({
+                    path:pt,
+                    strokeColor: $scope.trackers[index].deviceColor,
+                    strokeOpacity: 1,
+                    strokeWeight: 4,
+                    map: map,
+                });
+            }
             trackerRoute.push(route);
         }
 
         map.setCenter(bounds.getCenter());
+        if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
+            map.setZoom(9);
+        } else {
+            map.fitBounds(bounds);
+        }
         //map.fitBounds(bounds);
         ////trackerRoute.setMap(map);
         ////Apply Shape route firstss
@@ -320,10 +305,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         //}
 
     }
-    function shadeColor2(color, percent) {
-        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-    }
+
     $scope.switchTracker = function($event, index){
         $event.preventDefault();
         $log.debug('SwithTracker...', index)
@@ -1355,11 +1337,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
             var lastValidLat = 0;
             var lastValidLng = 0;
+            var lastLocation = null;
+            var temPath = [];
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
-                if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
-                if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
-
                 var check = updateNote(locations[j]);
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
@@ -1371,27 +1352,138 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     }
                 }
 
-                temp = {};
-                temp.x = parseDate(locations[j].timeISO);
-                temp.y = locations[j].temperature;
-                temp.timeISO = locations[j].timeISO;
-                temp.alerts = locations[j].alerts;
-                //temp.lat = locations[j].lat;
-                //temp.lng = locations[j].long;
-                temp.lat = lastValidLat;
-                temp.lng = lastValidLng;
-                temp.shipmentId = $scope.trackers[i].shipmentId;
-                temp.tripCount = $scope.trackers[i].tripCount;
-                temp.deviceSN = $scope.trackers[i].deviceSN;
+                var ll = new google.maps.LatLng(locations[j].lat, locations[j].long);
 
-                if(tempMax < locations[j].temperature){
-                    tempMax = locations[j].temperature;
-                }
-                if(tempMin > locations[j].temperature){
-                    tempMin = locations[j].temperature;
-                }
-                if(startTime <= temp.x && temp.x <= endTime){
-                    series.push(temp);
+                if (!refinePath(ll, temPath) || locations[j].alerts.length > 0) {
+                    /*var le = temPath.length;
+                    if (le >= 2) {
+                        var ag = calculateAngle(temPath[le-2], temPath[le-1], ll);
+                        if (ag && ag > (Math.PI/6)) {
+                            temPath.push(ll);
+                            if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
+                            if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
+
+                            temp = {};
+                            temp.x = parseDate(locations[j].timeISO);
+                            temp.y = locations[j].temperature;
+                            temp.timeISO = locations[j].timeISO;
+                            temp.alerts = locations[j].alerts;
+                            temp.lat = lastValidLat;
+                            temp.lng = lastValidLng;
+                            temp.shipmentId = $scope.trackers[i].shipmentId;
+                            temp.tripCount = $scope.trackers[i].tripCount;
+                            temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                            if (tempMax < locations[j].temperature) {
+                                tempMax = locations[j].temperature;
+                            }
+                            if (tempMin > locations[j].temperature) {
+                                tempMin = locations[j].temperature;
+                            }
+                            if (startTime <= temp.x && temp.x <= endTime) {
+                                series.push(temp);
+                            }
+                        } else {
+                            //temPath.pop();
+                            //temPath.push(ll);
+                            temPath[temPath.length-1] = ll;
+                            //-- update series
+                            series[series.length-1].lat = lastValidLat;
+                            series[series.length-1].lng = lastValidLng;
+
+                            temp = {};
+                            temp.x = parseDate(locations[j].timeISO);
+                            temp.y = locations[j].temperature;
+                            temp.timeISO = locations[j].timeISO;
+                            temp.alerts = locations[j].alerts;
+                            temp.lat = lastValidLat;
+                            temp.lng = lastValidLng;
+                            temp.shipmentId = $scope.trackers[i].shipmentId;
+                            temp.tripCount = $scope.trackers[i].tripCount;
+                            temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                            if (tempMax < locations[j].temperature) {
+                                tempMax = locations[j].temperature;
+                            }
+                            if (tempMin > locations[j].temperature) {
+                                tempMin = locations[j].temperature;
+                            }
+                            if (startTime <= temp.x && temp.x <= endTime) {
+                                series.push(temp);
+                            }
+                        }
+                    } else {
+                        temPath.push(ll);
+                        if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
+                        if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
+
+                        temp = {};
+                        temp.x = parseDate(locations[j].timeISO);
+                        temp.y = locations[j].temperature;
+                        temp.timeISO = locations[j].timeISO;
+                        temp.alerts = locations[j].alerts;
+                        temp.lat = lastValidLat;
+                        temp.lng = lastValidLng;
+                        temp.shipmentId = $scope.trackers[i].shipmentId;
+                        temp.tripCount = $scope.trackers[i].tripCount;
+                        temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                        if (tempMax < locations[j].temperature) {
+                            tempMax = locations[j].temperature;
+                        }
+                        if (tempMin > locations[j].temperature) {
+                            tempMin = locations[j].temperature;
+                        }
+                        if (startTime <= temp.x && temp.x <= endTime) {
+                            series.push(temp);
+                        }
+                    }*/
+
+                    temPath.push(ll);
+                    if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
+                    if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
+
+                    temp = {};
+                    temp.x = parseDate(locations[j].timeISO);
+                    temp.y = locations[j].temperature;
+                    temp.timeISO = locations[j].timeISO;
+                    temp.alerts = locations[j].alerts;
+                    temp.lat = lastValidLat;
+                    temp.lng = lastValidLng;
+                    temp.shipmentId = $scope.trackers[i].shipmentId;
+                    temp.tripCount = $scope.trackers[i].tripCount;
+                    temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                    if (tempMax < locations[j].temperature) {
+                        tempMax = locations[j].temperature;
+                    }
+                    if (tempMin > locations[j].temperature) {
+                        tempMin = locations[j].temperature;
+                    }
+                    if (startTime <= temp.x && temp.x <= endTime) {
+                        series.push(temp);
+                    }
+                } else {
+                    temp = {};
+                    temp.x = parseDate(locations[j].timeISO);
+                    temp.y = locations[j].temperature;
+                    temp.timeISO = locations[j].timeISO;
+                    temp.alerts = locations[j].alerts;
+                    temp.lat = lastValidLat;
+                    temp.lng = lastValidLng;
+                    temp.shipmentId = $scope.trackers[i].shipmentId;
+                    temp.tripCount = $scope.trackers[i].tripCount;
+                    temp.deviceSN = $scope.trackers[i].deviceSN;
+
+                    if (tempMax < locations[j].temperature) {
+                        tempMax = locations[j].temperature;
+                    }
+                    if (tempMin > locations[j].temperature) {
+                        tempMin = locations[j].temperature;
+                    }
+                    if (startTime <= temp.x && temp.x <= endTime) {
+                        series.push(temp);
+                    }
                 }
             }
             //console.log("--------",series.length);
@@ -1709,9 +1801,47 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         });
     }
 
+    function shadeColor2(color, percent) {
+        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+    }
 
-    function colourNameToHex(colour)
-    {
+    function refinePath(point, listPoint) {
+        if (listPoint == null || listPoint.length == 0) {
+            return false;
+        }
+        var cascadiaFault = new google.maps.Polyline({
+            path: listPoint
+        });
+        if (!google.maps.geometry.poly.isLocationOnEdge(point, cascadiaFault, 10e-3)) {
+            return false;
+        }
+        return true;
+    }
+
+    function calculateAngle(l1, l2, l3) {
+        var v1 = {x: l1.lat() - l2.lat(), y: l1.lng() - l2.lng()};
+        var v2 = {x: l3.lat() - l2.lat(), y: l3.lng() - l2.lng()};
+
+        if ((v1.x == 0 && v1.y == 0) || (v2.x == 0 && v2.y == 0)) {
+            return 1;
+        }
+
+        var v1v2 = v1.x * v2.x + v1.y * v2.y;
+        var vvv = Math.sqrt(v1.x * v1.x + v1.y* v1.y) * Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+        return Math.acos(v1v2/vvv);
+    }
+
+    function arrayContains(obj, list) {
+        if (list != null && angular.isArray(list) && list.length > 0) {
+            for (var i = 0; i < list.length; i++) {
+                if (angular.equals(obj, list[i])) return true;
+            }
+        }
+        return false;
+    }
+
+    function colourNameToHex(colour) {
         var colours = {"aliceblue":"#f0f8ff","antiquewhite":"#faebd7","aqua":"#00ffff","aquamarine":"#7fffd4","azure":"#f0ffff",
             "beige":"#f5f5dc","bisque":"#ffe4c4","black":"#000000","blanchedalmond":"#ffebcd","blue":"#0000ff","blueviolet":"#8a2be2","brown":"#a52a2a","burlywood":"#deb887",
             "cadetblue":"#5f9ea0","chartreuse":"#7fff00","chocolate":"#d2691e","coral":"#ff7f50","cornflowerblue":"#6495ed","cornsilk":"#fff8dc","crimson":"#dc143c","cyan":"#00ffff",
