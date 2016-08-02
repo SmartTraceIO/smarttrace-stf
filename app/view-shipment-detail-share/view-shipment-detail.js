@@ -154,7 +154,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
             if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
 
-                var le = trackerPath.length;
+                /*var le = trackerPath.length;
                 if (le >= 2) {
                     var ag = calculateAngle(trackerPath[le-2], trackerPath[le-1], ll);
                     console.log("Angle", ag);
@@ -169,10 +169,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 } else {
                     trackerPath.push(ll);
                     bounds.extend(ll);
-                }
+                }*/
 
-                //trackerPath.push(ll);
-                //bounds.extend(ll);
+                trackerPath.push(ll);
+                bounds.extend(ll);
                 //markers
                 var pos = [locations[i].lat, locations[i].lng];
                 if (locations[i].alerts.length > 0) {
