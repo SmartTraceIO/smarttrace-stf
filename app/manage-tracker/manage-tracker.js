@@ -724,7 +724,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
         };
 
         $scope.confirmShutdown = function() {
-            if ($scope.tracker.shipmentStatus!='Ended' && $scope.tracker.shipmentStatus!='Arrived'){
+            if ($scope.tracker.shipmentStatus!='Default'){
                 $("#confirmShutdown").modal("show");
             } else {
                 toastr.error('You have already requested this tracker be shutdown')
@@ -739,13 +739,13 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 webSvc.getShipment(shipmentId).success(function(resp) {
                     //console.log('DATA', resp);
                     if (resp.status.code == 0) {
-                        $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
+                        $scope.shutdownTimeISO = resp.response.shutdownTimeISO;
                     } else {
                         toastr.error('Could not get a single shipment!');
                         return;
                     }
                 }).then(function() {
-                    if ($scope.arrivalTimeISO == null) {
+                    if ($scope.shutdownTimeISO == null) {
                         webSvc.shutdownDevice(shipmentId).success(function(resp) {
                             if (resp.status.code == 0) {
                                 //success shutdown
@@ -765,15 +765,15 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
         };
 
         $scope.confirmDeactive = function(shipmentId) {
-            webSvc.getSingleShipment(shipmentId).success(function(resp) {
+            webSvc.getShipment(shipmentId).success(function(resp) {
                 if (resp.status.code == 0) {
-                    $scope.arrivalTimeISO = resp.response.arrivalTimeISO;
+                    $scope.shutdownTimeISO = resp.response.shutdownTimeISO;
                 } else {
-                    $scope.arrivalTimeISO = -1;
+                    $scope.shutdownTimeISO = -1;
                     toastr.warning('There is no shipment with this device!');
                 }
             }).then(function() {
-                if ($scope.arrivalTimeISO != null){
+                if ($scope.shutdownTimeISO != null){
                     if ($scope.tracker.active) {
                         var modalInstance = $uibModal.open({
                             templateUrl: 'app/manage-tracker/confirm-deactivate.html',
