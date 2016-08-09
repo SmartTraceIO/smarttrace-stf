@@ -175,7 +175,7 @@
                                 <table>
                                     <tr>
                                         <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
-                                        <td><div class="circle text-center" style="background-color: {{trackerInfo.deviceColor}};">{{note.noteNum}}</div></td>
+                                        <td><div class="circle text-center" ng-style="{'background-color': trackerInfo.deviceColor}">{{note.noteNum}}</div></td>
                                         <td width="100%">
                                             <a href="" class="pull-right hidden-print" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                             <a href="" class="pull-right hidden-print" ng-click="DeleteNote(note)">Del</a>
@@ -476,11 +476,11 @@
 
                 <custom-marker id="gm-alert-1" position="{{markerData.data.lat}},{{markerData.data.long}}">
                     <div>
-                        <div class="ttbox" style="border-color:{{diagColor}}" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
-                            <div class="tt_title" style="background-color:{{diagColor}}">
-                                <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
+                        <div class="ttbox" ng-style="{'border-color':diagColor}" ng-hide="!ttShow" ng-repeat="message in msgForMap">
+                            <div class="tt_title" ng-style="{'background-color':diagColor}">
+                                <span ng-bind-html="message.mkttl" ng-hide="markerData.normal"></span>
                             </div>
-                            <div class="tt_body" ng-hide={{markerData.normal}}>
+                            <div class="tt_body" ng-hide="markerData.normal">
                                 <div ng-repeat="msg in message.mapMarkerMessage">{{msg}}</div>
                             </div>
                         </div>
@@ -520,7 +520,7 @@
                                     <a ng-href="#/view-shipment-detail?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}" class="tracker-info">
                                         <table>
                                             <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{trackerInfo.deviceColor}}"></div></td>
+                                                <td><div ng-style="{width: '15px', height: '15px', 'background-color': trackerInfo.deviceColor}"></div></td>
                                                 <td><span class="tracker-id">Shipment {{trackerInfo.deviceSN}}({{trackerInfo.tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in trackers[MI].alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                             </tr>
@@ -597,7 +597,7 @@
                                     <a href="#/view-shipment-detail?sn={{t.deviceSN}}&trip={{t.tripCount}}" class="tracker-info" ng-click="switchTracker($event, t.index)">
                                         <table>
                                             <tr>
-                                                <td><div style="width: 15px; height: 15px; background-color: {{t.deviceColor}}"></div></td>
+                                                <td><div ng-style="{width: '15px', height: '15px', 'background-color': t.deviceColor}"></div></td>
                                                 <td><span class="tracker-id">Shipment {{t.deviceSN}}({{t.tripCount}})</span></td>
                                                 <td><img class="tiny-icon17" ng-repeat="p in t.alertSummary" ng-src="theme/img/alert{{p}}.png"></td>
                                                 <td><img src="theme/img/load.gif" class="load-icon" ng-hide="t.loadedForIcon"></td>
@@ -664,7 +664,7 @@
                                     <table>
                                         <tr>
                                             <td class="bold-font" style="font-size: 15px">Note&nbsp;</td>
-                                            <td><div class="circle text-center" style="background-color: {{trackerInfo.deviceColor}};">{{note.noteNum}}</div></td>
+                                            <td><div class="circle text-center" ng-style="{'background-color': trackerInfo.deviceColor};">{{note.noteNum}}</div></td>
                                             <td width="100%">
                                                 <a href="" class="pull-right" ng-click="EditNote(note)" style="margin-left: 15px;">Edit</a>
                                                 <a href="" class="pull-right" ng-click="DeleteNote(note)">Del</a>
@@ -1085,11 +1085,11 @@
 
                             <custom-marker id="gm-alert" position="{{markerData.data.lat}},{{markerData.data.lng}}">
                                 <div>
-                                    <div class="ttbox" style="border-color:{{diagColor}}; z-index: 102;" ng-hide={{!ttShow}} ng-repeat="message in msgForMap">
-                                        <div class="tt_title" style="background-color:{{diagColor}}">
-                                            <span ng-bind-html="message.mkttl" ng-hide={{markerData.normal}}></span>
+                                    <div class="ttbox" ng-style="{'border-color':diagColor, 'z-index': 102}" ng-hide="!ttShow" ng-repeat="message in msgForMap">
+                                        <div class="tt_title" ng-style="{'background-color':diagColor}">
+                                            <span ng-bind-html="message.mkttl" ng-hide="markerData.normal"></span>
                                         </div>
-                                        <div class="tt_body" ng-hide={{markerData.normal}}>
+                                        <div class="tt_body" ng-hide="markerData.normal">
                                             <div ng-repeat="msg in message.mapMarkerMessage">{{msg}}</div>
                                         </div>
                                     </div>
