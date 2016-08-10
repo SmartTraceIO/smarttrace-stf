@@ -117,9 +117,17 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     $logProvider.debugEnabled(true);
 
     //#endregion Register Controllers,Services,Factorys,Values,Constants,Directives & Filters
+
+    $httpProvider.defaults.cache = false;
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+    // disable IE ajax request caching
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+
     $httpProvider.defaults.useXDomain = true;
-    delete $httpProvider.defaults.headers.common['Access-Control-Allow-Methods'];
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    //delete $httpProvider.defaults.headers.common['Access-Control-Allow-Methods'];
+    //delete $httpProvider.defaults.headers.common['X-Requested-With'];
     
     $httpProvider.interceptors.push([
         '$injector',
