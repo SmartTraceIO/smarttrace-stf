@@ -14,6 +14,13 @@
                ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
                 <span class="btn default btn-sm uppercase">View Readings</span>
             </a>
+            <a ng-href={{downloadUrl}} download=""
+               href={{downloadUrl}}>
+                <span  class="btn default btn-sm uppercase">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                    Download csv</span>
+            </a>
+
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                 <i class="fa fa-print"></i>
                 <span>Print</span>
@@ -1037,7 +1044,6 @@
                         <ng-map id="shipment-detail-map"
                                 disable-default-u-i="true"
                                 scale-control="true"
-                                zoom="9"
                                 map-type-control-options="mapTypeIds: ['ROADMAP']}">
 
                             <!-- end marker -->

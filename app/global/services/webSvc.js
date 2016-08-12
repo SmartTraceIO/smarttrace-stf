@@ -208,6 +208,17 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, config);
 		},
 
+		downloadCSV: function(sn, trip) {
+			var url = Api.url + 'getReadings/' + localDbSvc.getToken();
+			var config = {
+				params: {
+					sn: sn,
+					trip: trip,
+				}
+			};
+			return $http.get(url, config);
+		},
+
 		getSingleShipment: function(shipmentId){
 			var url = Api.url + 'getSingleShipment/' + localDbSvc.getToken();
 			var params = {

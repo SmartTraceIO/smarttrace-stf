@@ -1,7 +1,7 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
 function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
-              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, NgMap) {
+              $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, NgMap, Api, localStorageService) {
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -27,14 +27,16 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     var orderBy = $filter('orderBy');
 
-    //$scope.AuthToken = localDbSvc.getToken();
-    //$scope.ShipmentId = $stateParams.vsId;
     if ($stateParams.vsId) {
         $scope.ShipmentId = $stateParams.vsId;
+        $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?shipmentId="+$scope.ShipmentId;
     } else {
         $scope.sn = $stateParams.sn;
         $scope.trip = $stateParams.trip;
+        $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?sn="+$scope.sn + "&trip="+$scope.trip;
     }
+
+
 
     var plotLines = [];
     $scope.specialMarkers = [];
@@ -131,10 +133,20 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     function updateMapData(index){
         NgMap.getMap('shipment-detail-map').then(function(map) {
+            //var oldZoom = localStorageService.get("oldZoom");
+            //oldZoom = (isNaN(oldZoom)) ? 10 : oldZoom;
+            //map.setZoom(oldZoom);
+            //
+            //map.addListener('zoom_changed', function(e) {
+            //    //save zoom
+            //    console.log("NewZoom", map.getZoom());
+            //    localStorageService.set("oldZoom", map.getZoom());
+            //});
+            //console.log("OldZoom", oldZoom);
             drawMap(map, index);
         });
     }
-    function  drawMap(map, index) {
+    function  drawMap(map, index, oldZoom) {
         var locations = subSeries[index];
         var trackerPath = [];
         $scope.specialMarkers.length = 0;
@@ -177,6 +189,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 var pos = [locations[i].lat, locations[i].lng];
                 if (locations[i].alerts.length > 0) {
                     //console.log('Alert', locations[i].alerts)
+                    console.log("Alert type:", locations[i].alerts[0].type)
                     if (locations[i].alerts[0].type.toLowerCase() == 'lastreading') {
                         $scope.specialMarkers.push({
                             index: $scope.specialMarkers.length,
@@ -293,17 +306,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         map.setCenter(bounds.getCenter());
         if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
-            map.setZoom(9);
+            map.setZoom(10);
         } else {
             map.fitBounds(bounds);
         }
-        //map.fitBounds(bounds);
-        ////trackerRoute.setMap(map);
-        ////Apply Shape route firstss
-        //if(!$scope.$$phase) {
-        //    $scope.$apply();
-        //}
-
     }
 
     $scope.switchTracker = function($event, index){
@@ -427,7 +433,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             time = parseDate($scope.trackerInfo.arrivalTimeISO);
             endLocationText = $scope.mapInfo.endLocation;
         } else {
-            var time = new Date();
+            time = new Date();
             endLocationText += "To be determined";
         }
 
@@ -1314,7 +1320,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         //calculate chart arrange and cut down the others
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);
         var endTime = parseDate($scope.trackers[$scope.MI].locations[$scope.trackers[$scope.MI].locations.length - 1].timeISO);
-        
+        var status = $scope.trackers[$scope.MI].status;
+        var arrivalTime = parseDate($scope.trackers[$scope.MI].arrivalTimeISO);
+
         var gap = (endTime - startTime) / 25;
         startTime -= gap;
         endTime += gap;
@@ -1339,6 +1347,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var lastValidLng = 0;
             var lastLocation = null;
             var temPath = [];
+            var oldX = 0;
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);
@@ -1353,98 +1362,16 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 }
 
                 var ll = new google.maps.LatLng(locations[j].lat, locations[j].long);
-
-                if (!refinePath(ll, temPath) || locations[j].alerts.length > 0) {
-                    /*var le = temPath.length;
-                    if (le >= 2) {
-                        var ag = calculateAngle(temPath[le-2], temPath[le-1], ll);
-                        if (ag && ag > (Math.PI/6)) {
-                            temPath.push(ll);
-                            if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
-                            if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
-
-                            temp = {};
-                            temp.x = parseDate(locations[j].timeISO);
-                            temp.y = locations[j].temperature;
-                            temp.timeISO = locations[j].timeISO;
-                            temp.alerts = locations[j].alerts;
-                            temp.lat = lastValidLat;
-                            temp.lng = lastValidLng;
-                            temp.shipmentId = $scope.trackers[i].shipmentId;
-                            temp.tripCount = $scope.trackers[i].tripCount;
-                            temp.deviceSN = $scope.trackers[i].deviceSN;
-
-                            if (tempMax < locations[j].temperature) {
-                                tempMax = locations[j].temperature;
-                            }
-                            if (tempMin > locations[j].temperature) {
-                                tempMin = locations[j].temperature;
-                            }
-                            if (startTime <= temp.x && temp.x <= endTime) {
-                                series.push(temp);
-                            }
-                        } else {
-                            //temPath.pop();
-                            //temPath.push(ll);
-                            temPath[temPath.length-1] = ll;
-                            //-- update series
-                            series[series.length-1].lat = lastValidLat;
-                            series[series.length-1].lng = lastValidLng;
-
-                            temp = {};
-                            temp.x = parseDate(locations[j].timeISO);
-                            temp.y = locations[j].temperature;
-                            temp.timeISO = locations[j].timeISO;
-                            temp.alerts = locations[j].alerts;
-                            temp.lat = lastValidLat;
-                            temp.lng = lastValidLng;
-                            temp.shipmentId = $scope.trackers[i].shipmentId;
-                            temp.tripCount = $scope.trackers[i].tripCount;
-                            temp.deviceSN = $scope.trackers[i].deviceSN;
-
-                            if (tempMax < locations[j].temperature) {
-                                tempMax = locations[j].temperature;
-                            }
-                            if (tempMin > locations[j].temperature) {
-                                tempMin = locations[j].temperature;
-                            }
-                            if (startTime <= temp.x && temp.x <= endTime) {
-                                series.push(temp);
-                            }
-                        }
-                    } else {
-                        temPath.push(ll);
-                        if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
-                        if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
-
-                        temp = {};
-                        temp.x = parseDate(locations[j].timeISO);
-                        temp.y = locations[j].temperature;
-                        temp.timeISO = locations[j].timeISO;
-                        temp.alerts = locations[j].alerts;
-                        temp.lat = lastValidLat;
-                        temp.lng = lastValidLng;
-                        temp.shipmentId = $scope.trackers[i].shipmentId;
-                        temp.tripCount = $scope.trackers[i].tripCount;
-                        temp.deviceSN = $scope.trackers[i].deviceSN;
-
-                        if (tempMax < locations[j].temperature) {
-                            tempMax = locations[j].temperature;
-                        }
-                        if (tempMin > locations[j].temperature) {
-                            tempMin = locations[j].temperature;
-                        }
-                        if (startTime <= temp.x && temp.x <= endTime) {
-                            series.push(temp);
-                        }
-                    }*/
-
+                var xvalue = parseDate(locations[j].timeISO);
+                if (!refinePath(ll, temPath) ||
+                    locations[j].alerts.length > 0 ||
+                    (oldX < arrivalTime && arrivalTime <= xvalue)) {
                     temPath.push(ll);
                     if (locations[j].lat && (locations[j].lat != 0)) lastValidLat = locations[j].lat;
                     if (locations[j].long && (locations[j].long != 0)) lastValidLng = locations[j].long;
 
                     temp = {};
-                    temp.x = parseDate(locations[j].timeISO);
+                    temp.x = xvalue;
                     temp.y = locations[j].temperature;
                     temp.timeISO = locations[j].timeISO;
                     temp.alerts = locations[j].alerts;

@@ -1,6 +1,6 @@
 ﻿appCtrls.controller('ViewShipmentDetailTableCtrl',
     function ($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $log, $interval,
-              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $controller, $location) {
+              $filter, NgMap, $sce, $rootScope, $templateCache, $timeout, $window, $controller, $location, Api) {
     rootSvc.SetPageTitle('View Shipment Detail in Table');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail  in Table");
@@ -19,13 +19,23 @@
     $scope.Print = function() {
         $window.print();
     }
-    //$scope.ShipmentId = $stateParams.vsId;
-    if ($stateParams.vsId) {
-        $scope.ShipmentId = $stateParams.vsId;
-    } else {
-        $scope.sn = $stateParams.sn;
-        $scope.trip = $stateParams.trip;
-    }
+
+        //$scope.ShipmentId = $stateParams.vsId;
+        /*if ($stateParams.vsId) {
+            $scope.ShipmentId = $stateParams.vsId;
+        } else {
+            $scope.sn = $stateParams.sn;
+            $scope.trip = $stateParams.trip;
+        }*/
+        if ($stateParams.vsId) {
+            $scope.ShipmentId = $stateParams.vsId;
+            $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?shipmentId="+$scope.ShipmentId;
+        } else {
+            $scope.sn = $stateParams.sn;
+            $scope.trip = $stateParams.trip;
+            $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?sn="+$scope.sn + "&trip="+$scope.trip;
+        }
+
     //includes all tracker info here
     $scope.trackers = new Array();
     //------MAIN TRACKER INDEX ------
