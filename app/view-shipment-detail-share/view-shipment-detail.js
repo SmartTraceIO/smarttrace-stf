@@ -131,19 +131,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         window.open(url,"_blank", options);
     }
 
+    $scope.map = null;
+    $scope.oldZoom = localStorageService.get('zooom');
     function updateMapData(index){
         NgMap.getMap('shipment-detail-map').then(function(map) {
-            //var oldZoom = localStorageService.get("oldZoom");
-            //oldZoom = (isNaN(oldZoom)) ? 10 : oldZoom;
-            //map.setZoom(oldZoom);
-            //
-            //map.addListener('zoom_changed', function(e) {
-            //    //save zoom
-            //    console.log("NewZoom", map.getZoom());
-            //    localStorageService.set("oldZoom", map.getZoom());
-            //});
-            //console.log("OldZoom", oldZoom);
+            $scope.map = map;
             drawMap(map, index);
+        }).then(function() {
+            $scope.map.addListener('zoom_changed', function() {
+                var zooom = $scope.map.getZoom();
+                localStorageService.set('zooom', zooom);
+            });
         });
     }
     function  drawMap(map, index, oldZoom) {
@@ -160,36 +158,14 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 continue;
             }
             var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
-
-            //if (!arrayContains({lat:locations[i].lat, lng:locations[i].lng}, trackerPath)) {
-            //    trackerPath.push({lat: locations[i].lat, lng: locations[i].lng});
-
             if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
-
-                /*var le = trackerPath.length;
-                if (le >= 2) {
-                    var ag = calculateAngle(trackerPath[le-2], trackerPath[le-1], ll);
-                    console.log("Angle", ag);
-                    var a_type = locations[i].alerts.length > 0 ? locations[i].alerts[0].type.toLowerCase() : "none";
-
-                    if (ag && ag > 0.45 || (a_type !="none" && a_type != "lighton" && a_type != "lightoff")) {
-                        trackerPath.push(ll);
-                        bounds.extend(ll);
-                    } else {
-                        //trackerPath.push(trackerPath[le-1]);
-                    }
-                } else {
-                    trackerPath.push(ll);
-                    bounds.extend(ll);
-                }*/
-
                 trackerPath.push(ll);
                 bounds.extend(ll);
                 //markers
                 var pos = [locations[i].lat, locations[i].lng];
                 if (locations[i].alerts.length > 0) {
                     //console.log('Alert', locations[i].alerts)
-                    console.log("Alert type:", locations[i].alerts[0].type)
+                    //console.log("Alert type:", locations[i].alerts[0].type)
                     if (locations[i].alerts[0].type.toLowerCase() == 'lastreading') {
                         $scope.specialMarkers.push({
                             index: $scope.specialMarkers.length,
@@ -197,14 +173,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             oi: i,
                             pos: pos,
                             data: locations[i],
-                            /*icon: {
-                             url:"theme/img/Tracker" + (index + 1) + ".png",
-                             scaledSize:[16, 16],
-                             anchor:[8, 8]
-                             },*/
                             icon: {
                                 path: 'M-8,-8 L-8,8 L8,8 L8,-8 Z',
-                                //fillColor: $scope.trackers[index].siblingColor,
                                 fillColor: $scope.trackers[index].deviceColor,
                                 fillOpacity: 1,
                                 scale: 1,
@@ -214,17 +184,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             tinyIconUrl: "theme/img/tinyTracker" + (index + 1) + ".png"
                         });
                     } else if (locations[i].alerts[0].type.toLowerCase() == 'lighton' || locations[i].alerts[0].type.toLowerCase() == 'lightoff') {
-                        /*$scope.specialMarkers.push({
-                         index:$scope.specialMarkers.length,
-                         oi: i,
-                         pos: pos,
-                         data: locations[i],
-                         icon: {
-                         url:"theme/img/alert" + locations[i].alerts[0].type + ".png",
-                         scaledSize:[24, 24],
-                         anchor:[12, 12]
-                         }
-                         })*/
                     } else {
                         $scope.specialMarkers.push(
                             {
@@ -250,13 +209,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             for (var i = 0; i< trackerRoute.length; i++) {
                 trackerRoute[i].setMap(null);
             }
-            //trackerRoute.setMap(null);
             trackerRoute = [];
         }
 
-        //-- end
-        //var trackerPath = refinePath2(trackerPath);
-        //var trackerPath = refinePath2(trackerPath);
         var color = $scope.trackers[index].deviceColor;
         color = colourNameToHex(color);
         console.log("Color", color);
@@ -305,10 +260,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
 
         map.setCenter(bounds.getCenter());
-        if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
-            map.setZoom(10);
-        } else {
-            map.fitBounds(bounds);
+        if (!$scope.oldZoom) {
+            if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
+                map.setZoom(10);
+            } else {
+                map.fitBounds(bounds);
+            }
         }
     }
 
@@ -381,18 +338,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.suppressAlready = true;
         }
 
-        //var promise = webSvc.getShipment($scope.trackerInfo.shipmentId).success(function(data) {
-        //    currentShipment = data.response;
-        //}).then(function() {
-        //    webSvc.getDevice(currentShipment.deviceImei).success(function(dd) {
-        //        currentDevice = dd.response;
-        //    });
-        //});
-
-        //promise.then(function() {
-        //    updatePlotLines();
-        //    updateMapData($scope.MI);
-        //})
         updatePlotLines();
         updateMapData($scope.MI);
     }
