@@ -710,7 +710,7 @@
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
                 position: google.maps.ControlPosition.RIGHT_BOTTOM
             },
-            zoomControl: false,
+            zoomControl: true,
             streetViewControl: false,
             scaleControl: true,
             styles: [

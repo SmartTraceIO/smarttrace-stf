@@ -132,19 +132,26 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     $scope.map = null;
-    $scope.oldZoom = localStorageService.get('zooom');
+    //-reset zoom
+    $scope.oldBound = null;
+    var checkFirst = 0;
+    localStorageService.set('zooom', null);
+    //$scope.oldBound = localStorageService.get('zooom');
     function updateMapData(index){
         NgMap.getMap('shipment-detail-map').then(function(map) {
             $scope.map = map;
             drawMap(map, index);
         }).then(function() {
-            $scope.map.addListener('zoom_changed', function() {
-                var zooom = $scope.map.getZoom();
-                localStorageService.set('zooom', zooom);
+            $scope.map.addListener('bounds_changed', function() {
+                if (checkFirst > 0) {
+                    var zooom = $scope.map.getBounds();
+                    localStorageService.set('zooom', zooom);
+                }
+                checkFirst++;
             });
         });
     }
-    function  drawMap(map, index, oldZoom) {
+    function  drawMap(map, index) {
         var locations = subSeries[index];
         var trackerPath = [];
         $scope.specialMarkers.length = 0;
@@ -258,14 +265,16 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
             trackerRoute.push(route);
         }
-
-        map.setCenter(bounds.getCenter());
-        if (!$scope.oldZoom) {
+        $scope.oldBound = localStorageService.get('zooom');
+        if (checkFirst == 0) {
+            map.setCenter(bounds.getCenter());
             if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
                 map.setZoom(10);
             } else {
                 map.fitBounds(bounds);
             }
+        } else {
+            //map.fitBounds($scope.oldBound);
         }
     }
 
@@ -607,6 +616,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     loadTrackerData();
     function loadTrackerData() {
+        console.log("Loading data ...");
         //-- load location list
         $scope.LocationListFrom = [];
         $scope.LocationListTo = [];
