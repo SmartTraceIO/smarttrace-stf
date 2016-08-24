@@ -437,20 +437,26 @@ h3 span.info {
     background-color: rgba(255, 255, 255, 0.6);
     padding: 2px;
 }
+.custom-marker {
+
+}
 .start-loc-box{
     width: 300px;
-    float: left;
+    text-align: right;
+    margin-top: 10px;
+    margin-left: 26px;
 }
-.start-marker-content{
-    margin-left: 138px;
-}
+
 .end-loc-box{
     width: 300px;
     text-align: right;
+    padding-top: 25px;
+    margin-left: 25px;
 }
 .end-marker-content{
-    margin-right: 138px;
+    margin-right: 100px;
     float: right;
+    margin-bottom: -10px;
 }
 .panel{
     margin: 0;

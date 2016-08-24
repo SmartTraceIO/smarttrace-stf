@@ -45,6 +45,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     //includes all tracker info here
     $scope.trackers = [];
     var trackerRoute = [];
+    $scope.objectToRemove = [];
     //----------------------------------------------
     $scope.isLoading = true;
     //----------------------------------------------
@@ -277,6 +278,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //map.fitBounds($scope.oldBound);
         }
     }
+
 
     $scope.switchTracker = function($event, index){
         $event.preventDefault();

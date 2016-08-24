@@ -173,6 +173,8 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
+            'Scripts/google-map/richmarker.js',
+            'Scripts/google-map/maplabel.js',
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
             'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
             'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
