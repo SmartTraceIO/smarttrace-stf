@@ -107,7 +107,7 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, $locati
         $scope.fromModalPopup = true
     }
     geocode = function(isRev, param, fn) {
-        console.log('Geocode Param', param);
+        //console.log('Geocode Param', param);
         var geocoder = new google.maps.Geocoder();
         var params = null;
         if (isRev){
@@ -157,6 +157,8 @@ appCtrls.controller('AddLocCtrl', function ($scope, rootSvc, localDbSvc, $locati
             zoom: 13,
             center: $scope.myLatLng,
             draggable: true,
+            scaleControl: true,
+            streetViewControl: false,
             disableDoubleClickZoom:true,
             draggableCursor: 'crosshair',
         }
@@ -408,6 +410,8 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
             zoom: 13,
             center: $scope.myLatLng,
             draggable: true,
+            scaleControl: true,
+            streetViewControl: false,
             disableDoubleClickZoom:true,
             draggableCursor: 'crosshair',
         }

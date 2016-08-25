@@ -383,7 +383,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         });
 
         
-        var dottext = "";
+        var dotIcon = "";
+        var dotText = "";
         var endLocationText = '';
         if($scope.trackers[$scope.MI].status.toLowerCase() == "arrived"){
             time = parseDate($scope.trackerInfo.arrivalTimeISO);
@@ -398,10 +399,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             color = "#ccc";
             width = 1;
             time = parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod + 1;
-            dottext = '<span><b class="bold-font">' + endLocationText + '</b><img src="theme/img/locationStopToBeDetermined.png"></span>';
+            dotIcon = '<span><img src="theme/img/locationStopToBeDetermined.png"></span>';
         } else {
-            dottext = '<span><b class="bold-font">' + endLocationText + '</b><img class="rev-horizon" src="theme/img/locationStop.png"></span>';
+            dotIcon = '<span><img class="rev-horizon" src="theme/img/locationStop.png"></span>';
         }
+        dotText = '<span><b class="bold-font">' + endLocationText + '</b></span>';
 
         //console.log("Shipment-status", status)
 
@@ -411,11 +413,24 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             value: time,//mainData[lastPoint][0], // Value of where the line will appear
             width: width, // Width of the line    
             label: {
-                text: dottext,
+                text: dotIcon,
+                rotation: 0,
+                useHTML: true,
+                align: 'center',
+                y: -15,
+                x: -15
+            }
+        });
+        plotLines.push({
+            color: color, // Color value
+            value: time,//mainData[lastPoint][0], // Value of where the line will appear
+            width: 1, // Width of the line
+            label: {
+                text: dotText,
                 rotation: 0,
                 useHTML: true,
                 align: 'right',
-                y: -20,
+                y: -15,
                 x: -15
             }
         });
@@ -853,16 +868,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         backgroundColor: 'rgba(249, 249, 249, 0)',
                         borderWidth: 0,
                         useHTML: true,
-                        hideDelay: 500,
+                        hideDelay: 1000,
                         formatter: function () {
+                            //console.log("Tooltip", this);
                             if (this.points) {
                                 var index, length = subSeries[$scope.MI].length;
-                                for(index = 0; index < length; index ++){
+
+                                for (index = 0; index < length; index++) {
                                     var x = subSeries[$scope.MI][index].x;
-                                    var x1 = index+1 < length ? subSeries[$scope.MI][index+1].x : 0;
-                                    if (index == 0 && this.x < x) break;
-                                    if(x <= this.x && this.x < x1) break;
-                                    if (index == length-1) {
+                                    if (x < this.x) {
+                                        continue;
+                                    } else {
                                         break;
                                     }
                                 }
