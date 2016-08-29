@@ -20,7 +20,12 @@
                     <i class="fa fa-download" aria-hidden="true"></i>
                     Download csv</span>
             </a>
-
+            <a ng-href={{downloadPdfUrl}} download=""
+               href={{downloadPdfUrl}}>
+                <span  class="btn default btn-sm uppercase">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                    Summary Report</span>
+            </a>
             <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
                 <i class="fa fa-print"></i>
                 <span>Print</span>

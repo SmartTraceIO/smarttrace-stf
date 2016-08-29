@@ -30,10 +30,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     if ($stateParams.vsId) {
         $scope.ShipmentId = $stateParams.vsId;
         $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?shipmentId="+$scope.ShipmentId;
+        $scope.downloadPdfUrl = Api.url + 'getShipmentReport/' + localDbSvc.getToken() + "?shipmentId="+$scope.ShipmentId;
     } else {
         $scope.sn = $stateParams.sn;
         $scope.trip = $stateParams.trip;
         $scope.downloadUrl = Api.url + 'getReadings/' + localDbSvc.getToken() + "?sn="+$scope.sn + "&trip="+$scope.trip;
+        $scope.downloadPdfUrl = Api.url + 'getShipmentReport/' + localDbSvc.getToken() + "?sn="+$scope.sn + "&trip="+$scope.trip;
     }
 
 
