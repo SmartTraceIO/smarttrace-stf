@@ -233,7 +233,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             fillColor: shadeColor2(color, -0.3),
             fillOpacity: 1
         }
-        var whd = google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]);
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+        var whd = google.maps.geometry.spherical.computeDistanceBetween(ne, sw);
         var le = trackerPath.length;
         var step = le/7;
         var count = 0;
@@ -270,9 +272,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
         $scope.oldBound = localStorageService.get('zooom');
         if (checkFirst == 0) {
-            map.setCenter(bounds.getCenter());
-            if (google.maps.geometry.spherical.computeDistanceBetween(trackerPath[0], trackerPath[trackerPath.length-1]) < 10000) {
+            if (google.maps.geometry.spherical.computeDistanceBetween(ne, sw) < 10000) {
                 map.setZoom(10);
+                map.setCenter(bounds.getCenter());
             } else {
                 map.fitBounds(bounds);
             }
@@ -432,8 +434,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 rotation: 0,
                 useHTML: true,
                 align: 'right',
-                y: -15,
-                x: -15
+                y: -10,
+                x: -30
             }
         });
     }
