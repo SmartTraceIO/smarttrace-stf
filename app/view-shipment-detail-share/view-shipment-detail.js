@@ -125,6 +125,14 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $window.print();
     }
 
+    $scope.ViewReport = function($e, url) {
+        $e.preventDefault();
+        var w = window.innerWidth * 0.7; //70% of fullwidth
+        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
+        $log.debug('#Url', url);
+        window.open(url,"_blank", options);
+    }
+
     $scope.ViewReading = function($e, sn, trip) {
         $e.preventDefault();
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
@@ -166,6 +174,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         for(i = 0 ; i < locations.length; i ++){
             if (locations[i].lat == 0 && locations[i].lng==0) {
                 continue;
+            }
+            if (!$scope.mapInfo.startLocationForMap) {
+                $scope.mapInfo.startLocationForMap = {};
+                $scope.mapInfo.startLocationForMap.latitude = locations[i].lat;
+                $scope.mapInfo.startLocationForMap.longitude = locations[i].lng;
             }
             var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
             if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
@@ -383,6 +396,27 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 align: 'left',
                 y: -20,
                 x: -10
+            }
+        });
+        var startLocationText='';
+        if ($scope.mapInfo.startLocation) {
+            startLocationText = $scope.mapInfo.startLocation;
+        } else {
+            startLocationText = "Undetermined";
+        }
+        plotLines.push({
+            color: color, // Color value
+            dashStyle: 'solid', // Style of the plot line. Default to solid
+            value: parseDate(ti[0].timeISO), // Value of where the line will appear
+            //value: parseDate($scope.mapInfo.startTimeISO), // Value of where the line will appear
+            width: width, // Width of the line
+            label: {
+                text: '<span><b class="bold-font">' + startLocationText + '</b></span>',
+                rotation: 0,
+                useHTML: true,
+                align: 'left',
+                y: -15,
+                x: 15
             }
         });
 
