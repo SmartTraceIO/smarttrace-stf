@@ -615,14 +615,14 @@
                         <div class="portlet-body">
                             <table width="100%">
                                 <tr>
-                                    <td width="24px"><img src="theme/img/tinyLocationStart.png"></td>
+                                    <td width="24px" valign="top"><img src="theme/img/tinyLocationStart.png"></td>
                                     <td>
-                                        <b class="bold-font">{{trackerInfo.startLocation}}</b><br/>
+                                        <b class="bold-font">{{trackerInfo.startLocationText}}</b><br/>
                                         <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
-                                    <td><img src="theme/img/tinyInterimLocation.png"></td>
+                                    <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
                                         <span style="color:#AAA">
@@ -632,20 +632,29 @@
                                         </span>
                                     </td>
                                 </tr>
-                                <tr ng-show="trackerInfo.status=='Arrived'">
-                                    <td><img class="rev-horizon" src="theme/img/tinyLocationStop.png"></td>
+
+                                <!--End Location-->
+                                <tr ng-show="trackerInfo.status=='Default'">
+                                    <td valign="top"><img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png"></td>
                                     <td>
-                                        <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
+                                        <b class="bold-font">{{trackerInfo.endLocationText}}</b><br/>
                                         <span style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
                                     </td>
                                 </tr>
-                                <tr ng-show="trackerInfo.status!='Arrived'">
-                                    <td><img src="theme/img/locationStopToBeDetermined.png"></td>
+                                <tr ng-show="trackerInfo.status=='Arrived'">
+                                    <td valign="top"><img src="theme/img/locationStop.png"></td>
                                     <td>
-                                        <strong>To be determined</strong><span ng-show="trackerInfo.endLocation">({{trackerInfo.endLocation}})</span>
+                                        <span ng-show="trackerInfo.endLocationText">{{trackerInfo.endLocationText}}</span>
                                         <br/>
-                                        <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
-                                        <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
+                                        <span style="color:#AAA"><b class="light-bold-font">ARRIVED AT:</b> {{trackerInfo.lastReadingTime}}</span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="trackerInfo.status=='Ended'">
+                                    <td valign="top"><img src="theme/img/locationStopToBeDetermined.png"></td>
+                                    <td>
+                                        <span ng-show="trackerInfo.endLocationText">{{trackerInfo.endLocationText}}</span>
+                                        <br/>
+                                        <span style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
                                     </td>
                                 </tr>
                             </table>

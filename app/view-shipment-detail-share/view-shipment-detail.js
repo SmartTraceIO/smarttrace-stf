@@ -366,8 +366,50 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.suppressAlready = true;
         }
 
+        //update trackerInfo
+        $scope.trackerInfo.endLocationText = "";
+        if (!$scope.trackerInfo.endLocation) {
+            //-- status == default
+            if ($scope.trackerInfo.status=="Default") {
+                $scope.trackerInfo.endLocationAlternatives;
+                $scope.trackerInfo.endLocationText = "To be determined (" + getEndLocationAlt() + ")";
+            } else if ($scope.trackerInfo.status=="Ended") {
+                $scope.trackerInfo.endLocationText = "Undetermined (" + getEndLocationAlt() + ")";
+            } else if ($scope.trackerInfo.status=="Arrived") {
+                $scope.trackerInfo.endLocationText = "Undetermined (" + getEndLocationAlt() + ")";
+            }
+        } else {
+            if ($scope.trackerInfo.status=="Default") {
+                $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
+            } else if ($scope.trackerInfo.status=="Ended") {
+                $scope.trackerInfo.endLocationText = "Undetermined (" + $scope.trackerInfo.endLocation + ")";
+            } else if ($scope.trackerInfo.status=="Arrived") {
+                $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
+            }
+        }
+
+        if (!$scope.trackerInfo.startLocation) {
+            $scope.trackerInfo.startLocationText = "Undetermined";
+        } else {
+            $scope.trackerInfo.startLocationText = $scope.trackerInfo.startLocation;
+        }
+
         updatePlotLines();
         updateMapData($scope.MI);
+    }
+
+    function getEndLocationAlt() {
+        var endAlter = $scope.trackerInfo.endLocationAlternatives;
+        var length = endAlter.length;
+        if (length <= 0) {
+            return "";
+        } else if (length == 1) {
+            return endAlter[0].locationName;
+        } else if (length == 2) {
+            return endAlter[0].locationName + ", " + endAlter[1].locationName;
+        } else {
+            return endAlter[0].locationName + ", " + endAlter[1].locationName + " or " + (length - 2) + " others";
+        }
     }
 
     function updatePlotLines(){
@@ -424,12 +466,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var dotIcon = "";
         var dotText = "";
         var endLocationText = '';
-        if($scope.trackers[$scope.MI].status.toLowerCase() == "arrived"){
+        if($scope.trackerInfo.status == "Arrived"){
             time = parseDate($scope.trackerInfo.arrivalTimeISO);
-            endLocationText = $scope.mapInfo.endLocation;
         } else {
             time = new Date();
-            endLocationText += "To be determined";
+
+        }
+
+        if (!$scope.trackerInfo.endLocation) {
+            endLocationText = "Undetermined";
+        } else {
+            endLocationText = $scope.trackerInfo.endLocation;
         }
 
         if(time > parseDate(ti[lastPoint].timeISO) + mainTrackerPeriod ||
@@ -1547,22 +1594,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
     };
 
-    /*$scope.EditDescription = function(Id) {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'app/view-shipment-detail-share/edit-description.html',
-            controller: 'EditShipmentDetailDescription',
-            resolve: {
-                editId : function() {
-                    return Id;
-                }
-            }
-        });
-        modalInstance.result.then(
-            function(result) {
-                $scope.trackerInfo.shipmentDescription = result;
-            }
-        );
-    }*/
     $scope.EditNote = function(note) {
         var modalInstance = $uibModal.open({
             templateUrl: 'app/view-shipment-detail-share/edit-note.html',
@@ -1755,28 +1786,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             return false;
         }
         return true;
-    }
-
-    function calculateAngle(l1, l2, l3) {
-        var v1 = {x: l1.lat() - l2.lat(), y: l1.lng() - l2.lng()};
-        var v2 = {x: l3.lat() - l2.lat(), y: l3.lng() - l2.lng()};
-
-        if ((v1.x == 0 && v1.y == 0) || (v2.x == 0 && v2.y == 0)) {
-            return 1;
-        }
-
-        var v1v2 = v1.x * v2.x + v1.y * v2.y;
-        var vvv = Math.sqrt(v1.x * v1.x + v1.y* v1.y) * Math.sqrt(v2.x * v2.x + v2.y * v2.y);
-        return Math.acos(v1v2/vvv);
-    }
-
-    function arrayContains(obj, list) {
-        if (list != null && angular.isArray(list) && list.length > 0) {
-            for (var i = 0; i < list.length; i++) {
-                if (angular.equals(obj, list[i])) return true;
-            }
-        }
-        return false;
     }
 
     function colourNameToHex(colour) {
