@@ -96,11 +96,11 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
 
         if (VM.dateTimeFrom) {
             //startDate:"2016-06-01T12:27"
-            VM.shipment.startDate = moment.tz(VM.dateTimeFrom, $rootScope.RunningTimeZoneId).format('YYYY-MM-DDThh:mm');
+            VM.shipment.startDate = moment(VM.dateTimeFrom).format('YYYY-MM-DDThh:mm');
         }
         if (VM.dateTimeTo) {
-            VM.shipment.actualArrivalDate = moment.tz(VM.dateTimeTo, $rootScope.RunningTimeZoneId).format('YYYY-MM-DDThh:mm');
-            VM.shipment.endDate = moment.tz(VM.dateTimeTo, $rootScope.RunningTimeZoneId).format('YYYY-MM-DDThh:mm');
+            VM.shipment.actualArrivalDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
+            VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
         }
 
         var obj = {};
