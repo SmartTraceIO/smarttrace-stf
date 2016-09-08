@@ -119,11 +119,21 @@
                            tooltip-placement="top"
                            class="fa fa-info-circle"></i>
                     </label>
-                    <select  ng-disabled="true" class="form-control" ng-model="VM.shipment.status">
+                    <!--<select class="form-control" ng-model="VM.shipment.status">
                         <option value="Default">Default</option>
                         <option value="Ended">Ended</option>
                         <option value="Arrived">Arrived</option>
-                    </select>
+                    </select>-->
+
+                    <ui-select ng-model="VM.shipment.status"
+                               ng-disabled="disabled"
+                               theme="bootstrap">
+                        <ui-select-match placeholder="Change status">{{$select.selected}}</ui-select-match>
+                        <ui-select-choices repeat="status in VM.posibleStatus | filter: $select.search">
+                            <div ng-bind-html="status | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
                 </div>
             </div>
             <!--<div class="col-md-6" style="margin-top: 30px">

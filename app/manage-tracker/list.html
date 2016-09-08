@@ -29,123 +29,135 @@
         <div class="table-responsive" ng-if="lastView==1">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th class="text-center" ng-click="Sorting('sn')">
-                        <span class="pull-left">Tracker Num
+                    <th ng-click="Sorting('sn')">
+                        <div>
+                            <span class="pull-left">Tracker Num</span>
                             <i uib-tooltip="The unique 6 digit number of this tracker."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='sn'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='sn'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
                     <th ng-click="Sorting('name')">
-                        <span class="pull-left">Tracker Name
+                        <div>
+                            <span class="pull-left">Tracker Name</span>
                             <i uib-tooltip="A meaningful name given to this tracker. Can be changed via EDIT button."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"/></a>
-                        </span>
+
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"/></a>
+                            </span>
+                        </div>
                     </th>
                     <th ng-click="Sorting('autostartTemplateName')">
-                        <span class="pull-left">Autostart Template
+                        <div>
+                            <span class="pull-left">Autostart Template</span>
                             <i uib-tooltip="The Autostart Template assigned to this tracker. An Autostart Template provides default shipment data when a tracker is switched on."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='name'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='name'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='autostartTemplateName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='autostartTemplateName'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('active')">
-                        <span class="pull-left">Active
+                    <th ng-click="Sorting('active')">
+                        <div>
+                            <span class="pull-left">Active</span>
                             <i uib-tooltip="Active trackers are available for usage. Inactive trackers can be re-activated by contacting SmartTrace."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='active'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='active'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('shipmentNumber')">
-                        <span class="pull-left">Latest Shipment
+                    <th ng-click="Sorting('shipmentNumber')">
+                        <div>
+                            <span class="pull-left">Latest Shipment</span>
                             <i uib-tooltip="The Tracker Number and Trip Number of the most recent shipment for this tracker. Click the link to view shipment details."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentNumber'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentNumber'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentNumber'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentNumber'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('shipmentStatus')">
-                        <span class="pull-left">Status
+                    <th ng-click="Sorting('shipmentStatus')">
+                        <div>
+                            <span class="pull-left">Status</span>
                             <i uib-tooltip="The status of latest shipment."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='shipmentStatus'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('lastReadingTimeISO')">
-                        <span class="pull-left">Last Reading
+                    <th ng-click="Sorting('lastReadingTimeISO')">
+                        <div>
+                            <span class="pull-left">Last Reading</span>
                             <i uib-tooltip="The time of the last known reading for this tracker."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('lastReadingTemperature')">
-                        <span class="pull-left">Temp.
+                    <th ng-click="Sorting('lastReadingTemperature')">
+                        <div>
+                            <span class="pull-left">Temp.</span>
                             <i uib-tooltip="The temperature for this last reading."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
-                    <th class="text-center" ng-click="Sorting('lastReadingBattery')">
-                        <span class="pull-left">Battery
+                    <th ng-click="Sorting('lastReadingBattery')">
+                        <div>
+                            <span class="pull-left">Battery</span>
                             <i uib-tooltip="The Battery level at the last reading.
                                 A battery alert is sent when the battery has 10% remaining life."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
                                tooltip-placement="top"
                                class="fa fa-info-circle"></i>
-                        </span>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
+                            <span class="pull-right" style="position:relative;">
+                                <a ng-class="{'active-sort':So=='asc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                <a ng-class="{'active-sort':So=='desc' && Sc=='lastReadingBattery'}"><i class="fa fa-sort-desc"></i></a>
+                            </span>
+                        </div>
                     </th>
 
                     <th ng-if="getRole() >= Role.Admin"></th>

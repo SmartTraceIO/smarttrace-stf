@@ -129,9 +129,9 @@
                         <td><img src="theme/img/tinyLocationStop.png"></td>
                         <td>
                             <b class="bold-font">{{trackerInfo.endLocation}}</b><br/>
-                            <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
-                            <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
-                            <span ng-show="trackerInfo.status == 'AutoStart'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
+                            <span ng-show="trackerInfo.status == 'Arrived'" style="color:#AAA"><b class="light-bold-font">ARRIVED AT:</b> {{trackerInfo.arrivalTime}}</span>
+                            <span ng-show="trackerInfo.status == 'Ended'" style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.shutdownTime}}</span>
+                            <span ng-show="trackerInfo.status == 'Default'" style="color:#AAA"><b class="light-bold-font">To be determined</b></span>
                         </td>
                     </tr></table>
                     <div>
@@ -519,7 +519,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-edit" ng-click="EditMonitoredGoods(trackerInfo)">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                <i uib-tooltip="Edit the fields in GOODS BEING MONITORED section"
+                                                   tooltip-append-to-body="true"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="top"
+                                                   class="fa fa-pencil" aria-hidden="true"></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -602,7 +606,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-edit" ng-click="EditShipmentRoute(trackerInfo)">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                <i uib-tooltip="Edit the fields in ROUTE section"
+                                                   tooltip-append-to-body="true"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="top"
+                                                   class="fa fa-pencil" aria-hidden="true"></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -635,58 +643,47 @@
 
                                 <!--End Location-->
                                 <tr ng-show="trackerInfo.status=='Default'">
-                                    <td valign="top"><img class="rev-horizon" src="theme/img/locationStopToBeDetermined.png"></td>
+                                    <td valign="top"><img src="theme/img/locationStopToBeDetermined.png"></td>
                                     <td>
-                                        <b class="bold-font">{{trackerInfo.endLocationText}}</b><br/>
-                                        <span style="color:#AAA"><b class="light-bold-font">ARRIVED:</b> {{trackerInfo.arrivalTime}}</span>
+                                        <b ng-show="trackerInfo.endLocationTextPrefix">{{trackerInfo.endLocationTextPrefix}}</b>
+                                        <span ng-show="trackerInfo.endLocationText">({{trackerInfo.endLocationText}})</span>
+                                        <br/>
+                                        <span style="color:#AAA"><b class="light-bold-font">YET TO ARRIVE</b></span>
                                     </td>
                                 </tr>
                                 <tr ng-show="trackerInfo.status=='Arrived'">
-                                    <td valign="top"><img src="theme/img/locationStop.png"></td>
+                                    <td valign="top"><img class="rev-horizon" src="theme/img/locationStop.png"></td>
                                     <td>
-                                        <span ng-show="trackerInfo.endLocationText">{{trackerInfo.endLocationText}}</span>
+                                        <span>
+                                            <b ng-show="trackerInfo.endLocationTextPrefix">{{trackerInfo.endLocationTextPrefix}}</b>
+                                            <span ng-show="trackerInfo.endLocationText">({{trackerInfo.endLocationText}})</span>
+                                        </span>
                                         <br/>
-                                        <span style="color:#AAA"><b class="light-bold-font">ARRIVED AT:</b> {{trackerInfo.lastReadingTime}}</span>
+                                        <span style="color:#AAA"><b class="light-bold-font">ARRIVED AT:</b>
+                                            <span ng-show="trackerInfo.arrivalTime">{{trackerInfo.arrivalTime}}</span>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr ng-show="trackerInfo.status=='Ended'">
                                     <td valign="top"><img src="theme/img/locationStopToBeDetermined.png"></td>
                                     <td>
-                                        <span ng-show="trackerInfo.endLocationText">{{trackerInfo.endLocationText}}</span>
+                                        <span>
+                                            <b ng-show="trackerInfo.endLocationTextPrefix">{{trackerInfo.endLocationTextPrefix}}</b>
+                                            <span ng-show="trackerInfo.endLocationText">({{trackerInfo.endLocationText}})</span>
+                                        </span>
                                         <br/>
-                                        <span style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.lastReadingTime}}</span>
+                                        <span style="color:#AAA"><b class="light-bold-font">ENDED AT:</b> {{trackerInfo.shutdownTime}}</span>
                                     </td>
                                 </tr>
                             </table>
                             <div style="width: 100%; margin-top: 10px">
                                 <strong>Status:</strong>
                                 <span>{{trackerInfo.status}}</span>
-                                <span>
-                                    <!--<i ng-if="trackerInfo.status=='InProgress'"
-                                       tooltip="An active shipment with manually entered shipment data."
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"></i>-->
-                                    <i ng-if="trackerInfo.status=='Default'"
-                                       tooltip="An active shipment generated via an Autostart Template."
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"></i>
-                                    <i ng-if="trackerInfo.status=='Arrived'"
-                                       tooltip="A shipment that has reached its destination."
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"></i>
-                                    <i ng-if="trackerInfo.status=='Ended'"
-                                       tooltip="A shipment that has ended but has no known destination."
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"></i>
-                                </span>
+                                <i uib-tooltip="Shipment Status can be either Default (an active shipment) Arrived (when arrival is detected) or Ended (when shipment ends but no arrival is detected)."
+                                   tooltip-append-to-body="true"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="top"
+                                   class="fa fa-info-circle"></i>
                             </div>
                         </div>
                     </div>
@@ -705,7 +702,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-edit" ng-click="EditShipmentAlerts(trackerInfo)">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                <i uib-tooltip="Edit the fields in ALERTS section"
+                                                   tooltip-append-to-body="true"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="top"
+                                                   class="fa fa-pencil" aria-hidden="true"></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -782,7 +783,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-edit" ng-click="EditShipmentArrival(trackerInfo)">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                <i uib-tooltip="Edit the fields in ARRIVAL section"
+                                                   tooltip-append-to-body="true"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="top"
+                                                   class="fa fa-pencil" aria-hidden="true"></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -797,11 +802,6 @@
                                 <tr ng-show="trackerInfo.arrivalTime">
                                     <td>
                                         <span>Time of arrival</span>
-                                        <i uib-tooltip="Waiting your tooltip text"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>
                                         {{trackerInfo.arrivalTime}}
@@ -810,11 +810,6 @@
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
-                                        <i uib-tooltip="Notify when"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>
                                         {{trackerInfo.arrivalNotificationText}}
@@ -823,22 +818,12 @@
                                 <tr ng-show="!trackerInfo.isNotifying">
                                     <td>
                                         <span>Notify when</span>
-                                        <i uib-tooltip="Notify when"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>Don't notify</td>
                                 </tr>
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Notified at</span>
-                                        <i uib-tooltip="Notified at"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>
                                         {{trackerInfo.arrivalNotificationTime}}
@@ -847,11 +832,6 @@
                                 <tr ng-show="trackerInfo.isNotifying">
                                     <td>
                                         <span>Who to notify</span>
-                                        <i uib-tooltip="Notify to people"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>{{trackerInfo.alertPeopleToNotify}}</td>
                                 </tr>
@@ -866,11 +846,6 @@
                                 <tr>
                                     <td>
                                         <span>Time of shutdown</span>
-                                        <i uib-tooltip="Time of shutdown"
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
                                     </td>
                                     <td>
                                         <span ng-show="trackerInfo.shutdownTime">{{trackerInfo.shutdownTime}}</span>

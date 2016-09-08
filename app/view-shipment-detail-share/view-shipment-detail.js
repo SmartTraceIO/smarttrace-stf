@@ -128,7 +128,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     $scope.ViewReport = function($e, url) {
         $e.preventDefault();
         var w = window.innerWidth * 0.7; //70% of fullwidth
-        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
+        var h = window.innerHeight * 0.95;
+        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
         $log.debug('#Url', url);
         window.open(url,"_blank", options);
     }
@@ -324,6 +325,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
         $scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
         $scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
+
+        if (!$scope.mapInfo.startLocation) {
+            $scope.mapInfo.startLocation = "Undetermined";
+        }
+
         $scope.mapInfo.endLocationForMap = $scope.trackers[index].endLocationForMap;
         $scope.mapInfo.endLocation = $scope.trackers[index].endLocation;
         if (!$scope.mapInfo.endLocation) {
@@ -368,21 +374,26 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         //update trackerInfo
         $scope.trackerInfo.endLocationText = "";
+        $scope.trackerInfo.endLocationTextPrefix = "";
         if (!$scope.trackerInfo.endLocation) {
             //-- status == default
             if ($scope.trackerInfo.status=="Default") {
                 $scope.trackerInfo.endLocationAlternatives;
-                $scope.trackerInfo.endLocationText = "To be determined (" + getEndLocationAlt() + ")";
+                $scope.trackerInfo.endLocationTextPrefix = "To be determined";
+                $scope.trackerInfo.endLocationText = getEndLocationAlt();
             } else if ($scope.trackerInfo.status=="Ended") {
-                $scope.trackerInfo.endLocationText = "Undetermined (" + getEndLocationAlt() + ")";
+                $scope.trackerInfo.endLocationTextPrefix = "Undetermined";
+                $scope.trackerInfo.endLocationText = getEndLocationAlt();
             } else if ($scope.trackerInfo.status=="Arrived") {
-                $scope.trackerInfo.endLocationText = "Undetermined (" + getEndLocationAlt() + ")";
+                $scope.trackerInfo.endLocationTextPrefix = "Undetermined";
+                $scope.trackerInfo.endLocationText = getEndLocationAlt();
             }
         } else {
             if ($scope.trackerInfo.status=="Default") {
                 $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
             } else if ($scope.trackerInfo.status=="Ended") {
-                $scope.trackerInfo.endLocationText = "Undetermined (" + $scope.trackerInfo.endLocation + ")";
+                $scope.trackerInfo.endLocationTextPrefix = "Undetermined";
+                $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
             } else if ($scope.trackerInfo.status=="Arrived") {
                 $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
             }
@@ -474,7 +485,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         }
 
         if (!$scope.trackerInfo.endLocation) {
-            endLocationText = "Undetermined";
+            if ($scope.trackerInfo.status == "Default") {
+                endLocationText = "To be determined";
+            } else {
+                endLocationText = "Undetermined";
+            }
         } else {
             endLocationText = $scope.trackerInfo.endLocation;
         }
@@ -1764,8 +1779,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.trackerInfo.endLocation = endLocation.locationName;
             //startTime:"12:27 1 Jun 2016"
 
-            $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
-            $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+            if (result.startDate) {
+                $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+            }
+            if (result.endDate) {
+                $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+            }
             $scope.trackerInfo.status = result.status;
         });
     }

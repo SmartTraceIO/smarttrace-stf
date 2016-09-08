@@ -34,6 +34,15 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
                     } else {
                         VM.dateTimeTo = null;
                     }
+
+                    if (VM.shipment.status == "Arrived") {
+                        VM.posibleStatus = ["Arrived", "Ended"];
+                    } else if (VM.shipment.status == "Ended") {
+                        VM.posibleStatus = ["Ended"];
+                    } else {
+                        VM.posibleStatus = ["Default", "Arrived", "Ended"];
+                    }
+                    //VM.posibleStatus = ["Default", "Arrived", "Ended"]
                     console.log('VM.shipment', VM.shipment);
                 } else {
                     toastr.warning('An error occurred while get shipment #' + VM.shipmentId);
@@ -102,10 +111,10 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
         webSvc.saveShipment(obj).success(function(data) {
             if (data.status.code == 0) {
                 toastr.success('The shipment was updated success');
-                $uibModalInstance.close(VM.shipment);
             }
-        })/*.then(function() {
-            if (VM.shutdownNow) {
+        }).then(function() {
+            if (VM.shipment.status == "Ended") {
+                //--trigger shutdown
                 webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
                     if (data.status.code == 0) {
                         toastr.success("Success. The shutdown process has been triggered for this device");
@@ -113,10 +122,12 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
                         toastr.error("You have no permission to shutdown this device!");
                     }
                     //--close anyway
-                    $uibModalInstance.close()
+                    $uibModalInstance.close(VM.shipment);
                 })
+            } else {
+                $uibModalInstance.close(VM.shipment);
             }
-        })*/
+        });
     }
     //-- cancel
     VM.cancel = function() {

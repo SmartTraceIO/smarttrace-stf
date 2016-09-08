@@ -724,7 +724,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
         };
 
         $scope.confirmShutdown = function() {
-            if ($scope.tracker.shipmentStatus!='Default'){
+            if ($scope.tracker.shipmentStatus!='Ended'){
                 $("#confirmShutdown").modal("show");
             } else {
                 toastr.error('You have already requested this tracker be shutdown')
@@ -769,32 +769,31 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 if (resp.status.code == 0) {
                     $scope.shutdownTimeISO = resp.response.shutdownTimeISO;
                 } else {
-                    $scope.shutdownTimeISO = -1;
+                    $scope.shutdownTimeISO = null;
                     toastr.warning('There is no shipment with this device!');
                 }
             }).then(function() {
-                if ($scope.tracker.active) {
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'app/manage-tracker/confirm-deactivate.html',
-                        controller: 'ConfirmDeactivateCtrl',
-                        resolve: {
-                            tracker: function () {
-                                return $scope.tracker;
+                if ($scope.shutdownTimeISO != null) {
+                    if ($scope.tracker.active) {
+                        var modalInstance = $uibModal.open({
+                            templateUrl: 'app/manage-tracker/confirm-deactivate.html',
+                            controller: 'ConfirmDeactivateCtrl',
+                            resolve: {
+                                tracker: function () {
+                                    return $scope.tracker;
+                                }
                             }
-                        }
-                    });
-                    modalInstance.result.then(
-                        function() {
-                            //$scope.trackerInfo.shutdownTime = moment.tz($rootScope.RunningTimeZoneId).format("h:mmA DD MMM YYYY");
-                            //$scope.trackerInfo.status = 'Ended';
-                            //$scope.shutdownAlready = true;
-                        }
-                    );
-                } else {
-                    toastr.warning('This device was deactivated!');
-                }
-                if ($scope.shutdownTimeISO != null){
-
+                        });
+                        modalInstance.result.then(
+                            function () {
+                                //$scope.trackerInfo.shutdownTime = moment.tz($rootScope.RunningTimeZoneId).format("h:mmA DD MMM YYYY");
+                                //$scope.trackerInfo.status = 'Ended';
+                                //$scope.shutdownAlready = true;
+                            }
+                        );
+                    } else {
+                        toastr.warning('This device was deactivated!');
+                    }
                 } else {
                     toastr.warning('You must shut the device down first!')
                 }

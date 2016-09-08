@@ -12,7 +12,7 @@ app.constant("Color", [
     {"name": "DarkCyan", "code": "#008B8B"},
     {"name": "DarkGoldenrod", code: "#B8860B"},
     {"name": "DarkGreen", "code":"#006400"},
-    {"name": "DarkHhaki", "code": "#BDB76B"},
+    {"name": "DarkKhaki", "code": "#BDB76B"},
     {"name": "DarkMagenta", "code": "#8B008B"},
     {"name": "DarkOlivegreen", "code": "#556B2F"},
     {"name": "DarkOrange", "code":"#FF8C00"},
