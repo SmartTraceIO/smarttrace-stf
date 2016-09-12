@@ -1056,10 +1056,7 @@
                             </custom-marker>
                             <marker position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
                                     optimized="false"
-                                    icon="{
-                                        url:'theme/img/tinyLocationStop.png',
-                                        anchor: [12,12]
-                                      }"></marker>
+                                    icon="{{mapInfo.endLocationIcon}}"></marker>
 
                             <!--special markers -->
                             <marker ng-if="specialMarkers.length != 0"

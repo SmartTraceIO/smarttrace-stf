@@ -335,6 +335,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         if (!$scope.mapInfo.endLocation) {
             $scope.mapInfo.endLocation = 'Default';
         }
+        if (!$scope.trackers[index].status && $scope.trackers[index].status == "Arrived") {
+            $scope.mapInfo.endLocationIcon = {
+                'url':'theme/img/locationStop.png',
+                'anchor': [12,12]};
+        } else {
+            $scope.mapInfo.endLocationIcon = {
+                'url':'theme/img/locationStopToBeDetermined.png',
+                'anchor': [12,12]};
+        }
 
         $scope.mapInfo.etaISO = $scope.trackers[index].etaISO;
         $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
@@ -390,12 +399,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         } else {
             if ($scope.trackerInfo.status=="Default") {
+                $scope.trackerInfo.endLocationTextPrefix = "To be determined";
                 $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
             } else if ($scope.trackerInfo.status=="Ended") {
                 $scope.trackerInfo.endLocationTextPrefix = "Undetermined";
                 $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
             } else if ($scope.trackerInfo.status=="Arrived") {
-                $scope.trackerInfo.endLocationText = $scope.trackerInfo.endLocation;
+                $scope.trackerInfo.endLocationTextPrefix = $scope.trackerInfo.endLocation;
             }
         }
 
@@ -1805,6 +1815,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             return false;
         }
         return true;
+        //return false;
     }
 
     function colourNameToHex(colour) {

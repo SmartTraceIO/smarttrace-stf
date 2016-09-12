@@ -143,7 +143,7 @@
                 //-- bind color to shipment here by get color of device.
                 var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
                 VM.ShipmentList[k].color = Color[0].name;
-                if (d && (d.length > 0)) {
+                if (d && (d.length > 0) && d[0].color) {
                     //found a device
                     VM.ShipmentList[k].color = d[0].color;
                 }
