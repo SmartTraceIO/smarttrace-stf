@@ -1,0 +1,86 @@
+<div class="modal-header green">
+    <i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
+    <span>Share shipment report {{VM.sn}} ({{VM.trip}})</span>
+    <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </span>
+</div>
+<div class="modal-body">
+    <form name="frmShareReport">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">
+                    <span>Recipients (Users):</span>
+                    <i uib-tooltip="List of existing user that would receive this share"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <select class="form-control"
+                        ng-change="GetShippedFromAddress()"
+                        ng-model="VM.shipment.shippedFrom"
+                        ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
+                    <option value="">-- Please Select --</option>
+                </select>
+                <small class="text-muted">
+                    {{VM.shippedFromAddress}}
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">
+                    <span>Recipients (Emails):</span>
+                    <i uib-tooltip="List of emails that would receive this share"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <select class="form-control"
+                        ng-change="GetShippedFromAddress()"
+                        ng-model="VM.shipment.shippedFrom"
+                        ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
+                    <option value="">-- Please Select --</option>
+                </select>
+                <small class="text-muted">
+                    {{VM.shippedFromAddress}}
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">
+                    <span>Subject:</span>
+                    <i uib-tooltip="Subject of the message that recipients would receive."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <input type="text" class="form-control">
+                <small class="text-muted">
+                    {{VM.shippedFromAddress}}
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">
+                    <span>Message:</span>
+                    <i uib-tooltip="Content of the message that recipients would receive."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <textarea type="text"  class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn green" ng-click="VM.share()">Share</button>
+    <button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
+</div>

@@ -134,11 +134,70 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         window.open(url,"_blank", options);
     }
 
+    $scope.shareReport = function($e) {
+        $e.preventDefault();
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/share-report.html',
+            controller: 'ShareReportCtrl as VM',
+            resolve: {
+                sn: function() {
+                    return $scope.sn;
+                },
+                trip: function() {
+                    return $scope.trip;
+                }
+                //note : function() {
+                //    return note;
+                //}
+            }
+        });
+        modalInstance.result.then(
+            /*function(result) {
+                //$scope.trackerInfo.shipmentDescription = result;
+                console.log('Result', result);
+                if (result) {
+                    var params = null;
+                    if (result.shipmentId) {
+                        params = {
+                            params: {
+                                shipmentId: result.shipmentId
+                            }
+                        };
+                    } else {
+                        params = {
+                            params: {
+                                sn: result.sn,
+                                trip: result.trip
+                            }
+                        };
+                    }
+                    var promise = promiseGetNotes(params);
+                    promise.then(
+                        function (res) {
+                            console.log('Note', res);
+                            $scope.trackerInfo.notes = res;
+                            $scope.shipmentNotes = res;
+                            prepareMainHighchartSeries();
+                            prepareNoteChartSeries();
+                            refreshHighchartSeries();
+                        },
+                        function (status) {
+                        }
+                    );
+                }
+            }*/
+        );
+
+
+    }
+
     $scope.ViewReading = function($e, sn, trip) {
         $e.preventDefault();
         var url = $state.href('viewshipmentdetailtable', {sn:sn, trip: trip});
         var w = window.innerWidth * 0.7; //70% of fullwidth
-        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height=600, width=" + w;
+        var h = window.innerHeight * 0.95;
+        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
         $log.debug('#Url', url);
         window.open(url,"_blank", options);
     }
@@ -439,7 +498,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var ti = subSeries[$scope.MI];
         var lastPoint = ti.length - 1;
 
-        var mainTrackerPeriod = parseDate(ti[lastPoint].timeISO) - parseDate(ti[0].timeISO);
+        var firstTime = parseDate(ti[0].timeISO);
+        var lastTime = parseDate(ti[lastPoint].timeISO);
+
+        //var mainTrackerPeriod = parseDate(ti[lastPoint].timeISO) - parseDate(ti[0].timeISO);
+        var mainTrackerPeriod = lastTime - firstTime;
+
         mainTrackerPeriod /= 25;
         var color = "#000";
         var width = 2;
@@ -516,34 +580,65 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         dotText = '<span><b class="bold-font">' + endLocationText + '</b></span>';
 
         //console.log("Shipment-status", status)
+        if (time < (firstTime + lastTime)/2) {
+            plotLines.push({
+                color: color, // Color value
+                dashStyle: 'solid', // Style of the plot line. Default to solid
+                value: time,//mainData[lastPoint][0], // Value of where the line will appear
+                width: width, // Width of the line
+                label: {
+                    text: dotIcon,
+                    rotation: 0,
+                    useHTML: true,
+                    align: 'center',
+                    y: -10,
+                    x: -10
+                }
+            });
 
-        plotLines.push({
-            color: color, // Color value
-            dashStyle: 'solid', // Style of the plot line. Default to solid
-            value: time,//mainData[lastPoint][0], // Value of where the line will appear
-            width: width, // Width of the line    
-            label: {
-                text: dotIcon,
-                rotation: 0,
-                useHTML: true,
-                align: 'center',
-                y: -15,
-                x: -15
-            }
-        });
-        plotLines.push({
-            color: color, // Color value
-            value: time,//mainData[lastPoint][0], // Value of where the line will appear
-            width: 1, // Width of the line
-            label: {
-                text: dotText,
-                rotation: 0,
-                useHTML: true,
-                align: 'right',
-                y: -10,
-                x: -30
-            }
-        });
+            plotLines.push({
+                color: color, // Color value
+                value: time,//mainData[lastPoint][0], // Value of where the line will appear
+                width: 1, // Width of the line
+                label: {
+                    text: dotText,
+                    rotation: 0,
+                    useHTML: true,
+                    align: 'left',
+                    y: -5,
+                    x: 0
+                }
+            });
+        } else {
+            plotLines.push({
+                color: color, // Color value
+                dashStyle: 'solid', // Style of the plot line. Default to solid
+                value: time,//mainData[lastPoint][0], // Value of where the line will appear
+                width: width, // Width of the line
+                label: {
+                    text: dotIcon,
+                    rotation: 0,
+                    useHTML: true,
+                    align: 'center',
+                    y: -16,
+                    x: -10
+                }
+            });
+
+            plotLines.push({
+                color: color, // Color value
+                value: time,//mainData[lastPoint][0], // Value of where the line will appear
+                width: 1, // Width of the line
+                label: {
+                    text: dotText,
+                    rotation: 0,
+                    useHTML: true,
+                    align: 'right',
+                    y: -10,
+                    x: -30
+                }
+            });
+        }
     }
 
     function prepareTrackerMessage(){

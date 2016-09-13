@@ -175,7 +175,6 @@ appConstants.constant('routes', [
         dependencies: [
             'Scripts/google-map/richmarker.js',
             'Scripts/google-map/maplabel.js',
-            'Scripts/GDouglasPeuker.js',
             'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
             'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
             'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
@@ -186,6 +185,7 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/edit-arrival.js?v=' + version,
             'app/view-shipment-detail-share/edit-goods.js?v=' + version,
             'app/view-shipment-detail-share/edit-route.js?v=' + version,
+            'app/view-shipment-detail-share/share-report.js?v=' + version,
             'app/global/filters/filters.js?v=' + version,
         ]
     },
