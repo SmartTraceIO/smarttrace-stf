@@ -31,7 +31,7 @@
                 <span>Print</span>
             </button>-->
             <div class="btn-group" uib-dropdown dropdown-append-to-body>
-                <button id="btn-report" type="button" class="btn default btn-sm uppercase">
+                <button id="btn-report" type="button" class="btn default btn-sm uppercase" ng-click="ViewReport($event, downloadPdfUrl)">
                     <a ng-href={{downloadPdfUrl}} download="" style="color: #666; text-decoration: none;" ng-click="ViewReport($event, downloadPdfUrl)">
                     <span>
                         <i class="fa fa-bar-chart" aria-hidden="true"></i>Shipment Report (PDF)</span>
@@ -43,12 +43,12 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu" aria-labelledby="btn-report">
                     <li role="menuitem">
-                        <a ng-href={{downloadPdfUrl}} download="" style="color: #666; text-decoration: none;" ng-click="ViewReport($event, downloadPdfUrl)">
+                        <a ng-href={{downloadPdfUrl}} style="color: #666; text-decoration: none;">
                             <span><i class="fa fa-eye" aria-hidden="true"></i>View</span>
                         </a>
                     </li>
                     <li role="menuitem">
-                        <a ng-href={{downloadPdfUrl}} download="" style="color: #666; text-decoration: none;">
+                        <a href={{downloadPdfUrl}} download style="color: #666; text-decoration: none;" ng-click="DownloadReport($event)">
                             <span><i class="fa fa-download" aria-hidden="true"></i>Download</span>
                         </a>
                     </li>
@@ -61,10 +61,10 @@
                 </ul>
             </div>
             <div class="btn-group" uib-dropdown dropdown-append-to-body>
-                <button id="btn-reading" type="button" class="btn default btn-sm uppercase">
+                <button id="btn-reading" type="button" class="btn default btn-sm uppercase"
+                        ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
                     <a ng-href="#/view-shipment-detail-table?sn={{trackerInfo.deviceSN}}&trip={{trackerInfo.tripCount}}"
-                       style="color: #666; text-decoration: none;"
-                       ng-click="ViewReading($event, trackerInfo.deviceSN, trackerInfo.tripCount)">
+                       style="color: #666; text-decoration: none;">
                         <span><i class="fa fa-table" aria-hidden="true"></i>Readings</span>
                     </a>
                 </button>

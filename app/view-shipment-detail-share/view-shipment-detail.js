@@ -64,9 +64,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     var lightPlotBand = new Array();
     var noteData = new Array();
 
-    var currentShipmentId = null;
-    var currentShipment = {};
-    var currentDevice = {};
     $scope.roles = {};
     $scope.roles.SmartTraceAdmin = 1000;
     $scope.roles.Admin = 999;
@@ -394,9 +391,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         if (!$scope.mapInfo.endLocation) {
             $scope.mapInfo.endLocation = 'Default';
         }
-        if (!$scope.trackers[index].status && $scope.trackers[index].status == "Arrived") {
+
+        console.log("###STATUS", $scope.trackers[index].status);
+
+        if ($scope.trackers[index].status && $scope.trackers[index].status == "Arrived") {
             $scope.mapInfo.endLocationIcon = {
-                'url':'theme/img/locationStop.png',
+                'url':'theme/img/locationStopRev.png',
                 'anchor': [12,12]};
         } else {
             $scope.mapInfo.endLocationIcon = {
