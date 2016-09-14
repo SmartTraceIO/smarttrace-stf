@@ -1,6 +1,6 @@
 <div class="modal-header green">
-    <i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
-    <span>Share shipment report {{VM.sn}} ({{VM.trip}})</span>
+    <i class="fa fa-envelope" aria-hidden="true"></i>
+    <span>Share shipment report {{VM.report.sn}} ({{VM.report.trip}})</span>
     <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
         <i class="fa fa-times" aria-hidden="true"></i>
     </span>
@@ -17,36 +17,41 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <select class="form-control"
-                        ng-change="GetShippedFromAddress()"
-                        ng-model="VM.shipment.shippedFrom"
-                        ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
-                <small class="text-muted">
-                    {{VM.shippedFromAddress}}
-                </small>
+                <ui-select multiple
+                           ng-model="VM.users"
+                           theme="select2"
+                           ng-disabled="disabled"
+                           style="width:100%">
+                    <ui-select-match placeholder="Select user for sharing">
+                        <div>
+                            <span>{{$item.firstName}}</span>
+                            <span>{{$item.lastName}}</span>
+                            <span>&lt;{{$item.email}}&gt;</span>
+                        </div>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user in VM.userList | propsFilter: {id: $select.search, firstName: $select.search, lastName: $select.search, position:$select.search, roles:$select.search}">
+                        <div>
+                            <span ng-bind-html="user.firstName | highlight: $select.search"></span>
+                            <span ng-bind-html="user.lastName | highlight: $select.search"></span>
+                        </div>
+                        <small>
+                            {{user.email}}
+                        </small>
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <label class="control-label">
-                    <span>Recipients (Emails):</span>
+                    <span>Other recipients (emails separated by comma):</span>
                     <i uib-tooltip="List of emails that would receive this share"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <select class="form-control"
-                        ng-change="GetShippedFromAddress()"
-                        ng-model="VM.shipment.shippedFrom"
-                        ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
-                <small class="text-muted">
-                    {{VM.shippedFromAddress}}
-                </small>
+                <input type="text" class="form-control" ng-model="VM.emails" placeholder="supports@smarttrace.com.au; tech@smarttrace.com.au">
             </div>
         </div>
         <div class="row">
@@ -59,10 +64,7 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <input type="text" class="form-control">
-                <small class="text-muted">
-                    {{VM.shippedFromAddress}}
-                </small>
+                <input type="text" class="form-control" ng-model="VM.report.subject">
             </div>
         </div>
         <div class="row">
@@ -75,7 +77,7 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <textarea type="text"  class="form-control"></textarea>
+                <textarea type="text"  class="form-control" ng-model="VM.report.messageBody"></textarea>
             </div>
         </div>
     </form>

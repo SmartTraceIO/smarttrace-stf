@@ -243,6 +243,11 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.get(url, params);
 		},
 
+		emailShipmentReport: function(params) {
+			var url = Api.url + 'emailShipmentReport/' + localDbSvc.getToken();
+			return $http.post(url, params);
+		},
+
 		getNotes: function(params) {
 			var url = Api.url + 'getNotes/' + localDbSvc.getToken();
 			return $http.get(url, params);
