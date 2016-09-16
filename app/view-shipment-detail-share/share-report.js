@@ -8,7 +8,13 @@ function ShareReportCtrl($uibModalInstance, webSvc, $rootScope, $filter, sn, tri
     VM.report.sn = sn;
     VM.report.trip = trip;
     VM.userList = [];
-    VM.report.subject = "Share Report for " + VM.report.sn + "(" + VM.report.trip + ")";
+    VM.currentUser = {};
+    //VM.report.subject = "Share Report for " + VM.report.sn + "(" + VM.report.trip + ")";
+
+    webSvc.getUser({}, true).success(function(data) {
+        VM.currentUser = data.response;
+        VM.report.subject = "[" + VM.currentUser.internalCompany + "] Share Report for " + VM.report.sn + "(" + VM.report.trip + ")";
+    });
 
     webSvc.getUsers(1000, 1, null, "desc").success(function(data) {
         if (data.status.code == 0) {
@@ -22,8 +28,8 @@ function ShareReportCtrl($uibModalInstance, webSvc, $rootScope, $filter, sn, tri
 
     //-- share
     VM.share = function() {
-        console.log("Users", VM.users);
-        console.log("Emails", VM.emails);
+        //console.log("Users", VM.users);
+        //console.log("Emails", VM.emails);
         VM.report.recipients = [];
         if (VM.users) {
             angular.forEach(VM.users, function(user, key) {
@@ -46,7 +52,7 @@ function ShareReportCtrl($uibModalInstance, webSvc, $rootScope, $filter, sn, tri
             if (data.status.code == 0) {
                 toastr.success("You have shared a shipment report");
             } else {
-                toastr.error("There are some hard while sharing this shipment report");
+                toastr.error("There is an error while sharing this shipment report");
             }
 
         }).error(function(err) {
