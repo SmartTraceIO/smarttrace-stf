@@ -13,7 +13,8 @@ function ShareReportCtrl($uibModalInstance, webSvc, $rootScope, $filter, sn, tri
 
     webSvc.getUser({}, true).success(function(data) {
         VM.currentUser = data.response;
-        VM.report.subject = "[" + VM.currentUser.internalCompany + "] Share Report for " + VM.report.sn + "(" + VM.report.trip + ")";
+        VM.report.subject = VM.currentUser.internalCompany + " Share Report for " + VM.report.sn + "(" + VM.report.trip + ")";
+        VM.report.messageBody = "Sent from " + VM.currentUser.firstName + " " + VM.currentUser.lastName + " via SmartTrace.";
     });
 
     webSvc.getUsers(1000, 1, null, "desc").success(function(data) {
