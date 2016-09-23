@@ -42,8 +42,8 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
                     } else {
                         VM.posibleStatus = ["Default", "Arrived", "Ended"];
                     }
-                    //VM.posibleStatus = ["Default", "Arrived", "Ended"]
-                    console.log('VM.shipment', VM.shipment);
+                    VM.interimStop = VM.shipment.interimLocations[0];
+                    //console.log('VM.shipment', VM.shipment);
                 } else {
                     toastr.warning('An error occurred while get shipment #' + VM.shipmentId);
                 }
@@ -102,6 +102,9 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
             VM.shipment.actualArrivalDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
             VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
         }
+
+        VM.shipment.interimLocations=[];
+        VM.shipment.interimLocations.push(VM.interimStop);
 
         var obj = {};
         obj.saveAsNewTemplate = false;

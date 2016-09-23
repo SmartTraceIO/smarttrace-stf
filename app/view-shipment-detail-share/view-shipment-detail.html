@@ -652,7 +652,7 @@
                                         <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
                                     </td>
                                 </tr>
-                                <tr ng-repeat="itm in trackerInfo.interimStops">
+                                <!--<tr ng-repeat="itm in trackerInfo.interimStops">
                                     <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
@@ -662,8 +662,18 @@
                                             <span ng-if="!itm.stopDate">{{itm.date | convertDate}}</span>
                                         </span>
                                     </td>
+                                </tr>-->
+                                <tr>
+                                    <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
+                                    <td>
+                                        <div class="strong">{{trackerInfo.interimStops[0].location.locationName}}</div>
+                                        <span style="color:#AAA">
+                                            <span class="light-bold-font uppercase">Stopped at:</span>
+                                            <span ng-if="trackerInfo.interimStops[0].stopDate">{{trackerInfo.interimStops[0].stopDate}}</span>
+                                            <span ng-if="!trackerInfo.interimStops[0].stopDate">{{trackerInfo.interimStops[0].date | convertDate}}</span>
+                                        </span>
+                                    </td>
                                 </tr>
-
                                 <!--End Location-->
                                 <tr ng-show="trackerInfo.status=='Default'">
                                     <td valign="top"><img src="theme/img/locationStopToBeDetermined.png"></td>

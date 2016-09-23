@@ -8,43 +8,52 @@
 <div class="modal-body">
     <form name="frmEditGoods">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="control-label">
                     <span>Shipment From:</span>
-                    <i uib-tooltip="Shipment from"
+                    <i uib-tooltip="Location where the shipment start"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
                 <select class="form-control"
-                        ng-change="GetShippedFromAddress()"
                         ng-model="VM.shipment.shippedFrom"
                         ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
                     <option value="">-- Please Select --</option>
                 </select>
-                <small class="text-muted">
-                    {{VM.shippedFromAddress}}
-                </small>
             </div>
-            <div class="col-md-6">
+
+            <div class="col-md-4">
                 <label class="control-label">
-                    <span>Shipment To:</span>
-                    <i uib-tooltip="Shipment to"
+                    <span>Interim Stop:</span>
+                    <i uib-tooltip="Location where the shipment stop temporarily."
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
                 <select class="form-control"
-                        ng-change="GetShippedToAddress()"
+                        ng-model="VM.interimStop"
+                        ng-options="location.locationId as location.DisplayText for location in VM.InterimLocationList">
+                    <option value="">-- Please Select --</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="control-label">
+                    <span>Shipment To:</span>
+                    <i uib-tooltip="Location where the shipment come finally."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <select class="form-control"
                         ng-model="VM.shipment.shippedTo"
                         ng-options="location.locationId as location.DisplayText for location in VM.ToLocationList">
                     <option value="">-- Please Select --</option>
                 </select>
-                <small class="text-muted">
-                    {{VM.shippedToAddress}}
-                </small>
             </div>
         </div>
         <div class="row" style="margin-top: 15px;">
