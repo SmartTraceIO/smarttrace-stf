@@ -81,7 +81,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
     VM.getLocations();
 
     VM.saveShipment = function() {
-        console.log("saving shipment changes");
+        console.log("saving shipment changes", VM.shipment);
         if (!isNaN(VM.shipment.noAlertsAfterArrivalMinutes)){
             VM.shipment.noAlertsAfterArrivalMinutes = parseInt(VM.shipment.noAlertsAfterArrivalMinutes, 10);
         }
@@ -115,6 +115,11 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
         obj.saveAsNewTemplate = false;
         obj.includePreviousData = false;
         obj.shipment = VM.shipment;
+
+        if (VM.shipment.status == "Arrived" && !VM.dateTimeTo) {
+            toastr.warning("Please enter \"Arrival Date\"");
+            return;
+        }
 
         webSvc.saveShipment(obj).success(function(data) {
             if (data.status.code == 0) {
