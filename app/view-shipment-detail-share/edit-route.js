@@ -2,7 +2,7 @@
  * Created by beou on 31/05/2016.
  */
 appCtrls.controller('EditShipmentRoute', EditShipmentRoute);
-function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $filter) {
+function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
     VM = this;
     VM.shipmentId = shipmentId;
     VM.shipment = null;
@@ -81,6 +81,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
     VM.getLocations();
 
     VM.saveShipment = function() {
+        console.log("saving shipment changes");
         if (!isNaN(VM.shipment.noAlertsAfterArrivalMinutes)){
             VM.shipment.noAlertsAfterArrivalMinutes = parseInt(VM.shipment.noAlertsAfterArrivalMinutes, 10);
         }
@@ -103,8 +104,12 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
             VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
         }
 
-        VM.shipment.interimLocations=[];
-        VM.shipment.interimLocations.push(VM.interimStop);
+        if (VM.interimStop) {
+            VM.shipment.interimLocations=[];
+            VM.shipment.interimLocations.push(VM.interimStop);
+        } else {
+            VM.shipment.interimLocations=[];
+        }
 
         var obj = {};
         obj.saveAsNewTemplate = false;
@@ -114,6 +119,8 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $rootScope, $f
         webSvc.saveShipment(obj).success(function(data) {
             if (data.status.code == 0) {
                 toastr.success('The shipment was updated success');
+            } else {
+                toastr.error('Cannot save the shipment this time. Try again later');
             }
         }).then(function() {
             if (VM.shipment.status == "Ended") {

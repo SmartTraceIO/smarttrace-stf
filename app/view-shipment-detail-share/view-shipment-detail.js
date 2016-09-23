@@ -54,7 +54,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     //------MAIN TRACKER INDEX ------
     $scope.MI = 0;
-    $scope.mapInfo = {};
+    //$scope.mapInfo = {};
     var bounds= null;
 
     //------CHART SERIES DATA  ------
@@ -232,10 +232,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if (locations[i].lat == 0 && locations[i].lng==0) {
                 continue;
             }
-            if (!$scope.mapInfo.startLocationForMap) {
-                $scope.mapInfo.startLocationForMap = {};
-                $scope.mapInfo.startLocationForMap.latitude = locations[i].lat;
-                $scope.mapInfo.startLocationForMap.longitude = locations[i].lng;
+            if (!$scope.trackerInfo.startLocationForMap) {
+                $scope.trackerInfo.startLocationForMap = {};
+                $scope.trackerInfo.startLocationForMap.latitude = locations[i].lat;
+                $scope.trackerInfo.startLocationForMap.longitude = locations[i].lng;
             }
             var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
             if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
@@ -378,38 +378,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         prepareNoteChartSeries();
         refreshHighchartSeries();
         //-------PREPARE HIGHCHART DATA-------
-        $scope.mapInfo.startLocationForMap = $scope.trackers[index].startLocationForMap;
-        $scope.mapInfo.startTimeISO = $scope.trackers[index].startTimeISO;
-        $scope.mapInfo.startLocation = $scope.trackers[index].startLocation;
-
-        if (!$scope.mapInfo.startLocation) {
-            $scope.mapInfo.startLocation = "Undetermined";
-        }
-
-        $scope.mapInfo.endLocationForMap = $scope.trackers[index].endLocationForMap;
-        $scope.mapInfo.endLocation = $scope.trackers[index].endLocation;
-        if (!$scope.mapInfo.endLocation) {
-            $scope.mapInfo.endLocation = 'Default';
-        }
-
-        console.log("###STATUS", $scope.trackers[index].status);
-
-        if ($scope.trackers[index].status && $scope.trackers[index].status == "Arrived") {
-            $scope.mapInfo.endLocationIcon = {
-                'url':'theme/img/locationStopRev.png',
-                'anchor': [12,12]};
-        } else {
-            $scope.mapInfo.endLocationIcon = {
-                'url':'theme/img/locationStopToBeDetermined.png',
-                'anchor': [12,12]};
-        }
-
-        $scope.mapInfo.etaISO = $scope.trackers[index].etaISO;
-        $scope.mapInfo.arrivalTimeISO = $scope.trackers[index].arrivalTimeISO;
-        $scope.mapInfo.lastReadingTimeISO = $scope.trackers[index].lastReadingTimeISO;
-
         $scope.trackerInfo = $scope.trackers[index];
-
         //-- update trackerInfo here
         $scope.trackerInfo.shutdownDeviceAfterMinutesText = parseInt($scope.trackerInfo.shutdownDeviceAfterMinutes/60) + " hr(s) after arrival";
         $scope.trackerInfo.shutDownAfterStartMinutesText = parseInt($scope.trackerInfo.shutDownAfterStartMinutes/60) + " hr(s) after start";
@@ -440,6 +409,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.suppressAlready = true;
         }
 
+        updateTrackerInfo();
+        updatePlotLines();
+        updateMapData($scope.MI);
+    }
+
+    function updateTrackerInfo() {
         //update trackerInfo
         $scope.trackerInfo.endLocationText = "";
         $scope.trackerInfo.endLocationTextPrefix = "";
@@ -468,14 +443,28 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         }
 
+        //--update for map
+        if ($scope.trackerInfo.status =="Arrived") {
+            $scope.trackerInfo.endLocationIcon = {
+                'url':'theme/img/locationStopRev.png',
+                'anchor': [12,12]};
+        } else {
+            $scope.trackerInfo.endLocationIcon = {
+                'url':'theme/img/locationStopToBeDetermined.png',
+                'anchor': [12,12]};
+        }
+
         if (!$scope.trackerInfo.startLocation) {
             $scope.trackerInfo.startLocationText = "Undetermined";
         } else {
             $scope.trackerInfo.startLocationText = $scope.trackerInfo.startLocation;
         }
 
-        updatePlotLines();
-        updateMapData($scope.MI);
+        //update interimStops //TODO
+        if ($scope.trackerInfo.interimStops && $scope.trackerInfo.interimStops.length > 1) {
+            var item = $scope.trackerInfo.interimStops.slice(0, 1);
+            $scope.trackerInfo.interimStops = item;
+        }
     }
 
     function getEndLocationAlt() {
@@ -526,8 +515,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         });
         var startLocationText='';
-        if ($scope.mapInfo.startLocation) {
-            startLocationText = $scope.mapInfo.startLocation;
+        if ($scope.trackerInfo.startLocation) {
+            startLocationText = $scope.trackerInfo.startLocation;
         } else {
             startLocationText = "Undetermined";
         }
@@ -535,7 +524,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             color: color, // Color value
             dashStyle: 'solid', // Style of the plot line. Default to solid
             value: parseDate(ti[0].timeISO), // Value of where the line will appear
-            //value: parseDate($scope.mapInfo.startTimeISO), // Value of where the line will appear
             width: width, // Width of the line
             label: {
                 text: '<span><b class="bold-font">' + startLocationText + '</b></span>',
@@ -1880,6 +1868,9 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 endLocation = endLocation[0];
             }
 
+            console.log("StartLocation Modified", stLocation);
+            console.log("EndLocation Modified", endLocation);
+
             $scope.trackerInfo.startLocation = stLocation.locationName;//must do filter
             $scope.trackerInfo.endLocation = endLocation.locationName;
             //startTime:"12:27 1 Jun 2016"
@@ -1890,7 +1881,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if (result.endDate) {
                 $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
             }
+
             $scope.trackerInfo.status = result.status;
+            updateTrackerInfo();
+            updatePlotLines();
         });
     }
 

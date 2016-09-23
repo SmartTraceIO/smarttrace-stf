@@ -652,7 +652,7 @@
                                         <span style="color:#AAA"><b class="light-bold-font">START:</b> {{trackerInfo.startTime}}</span>
                                     </td>
                                 </tr>
-                                <!--<tr ng-repeat="itm in trackerInfo.interimStops">
+                                <tr ng-repeat="itm in trackerInfo.interimStops">
                                     <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
@@ -660,17 +660,6 @@
                                             <span class="light-bold-font uppercase">Stopped at:</span>
                                             <span ng-if="itm.stopDate">{{itm.stopDate}}</span>
                                             <span ng-if="!itm.stopDate">{{itm.date | convertDate}}</span>
-                                        </span>
-                                    </td>
-                                </tr>-->
-                                <tr>
-                                    <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
-                                    <td>
-                                        <div class="strong">{{trackerInfo.interimStops[0].location.locationName}}</div>
-                                        <span style="color:#AAA">
-                                            <span class="light-bold-font uppercase">Stopped at:</span>
-                                            <span ng-if="trackerInfo.interimStops[0].stopDate">{{trackerInfo.interimStops[0].stopDate}}</span>
-                                            <span ng-if="!trackerInfo.interimStops[0].stopDate">{{trackerInfo.interimStops[0].date | convertDate}}</span>
                                         </span>
                                     </td>
                                 </tr>
@@ -1074,22 +1063,22 @@
 
                             <!-- end marker -->
                             <custom-marker id="end-location"
-                                           position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
+                                           position="{{trackerInfo.endLocationForMap.latitude}},{{trackerInfo.endLocationForMap.longitude}}"
                                            optimized="false"
                                            z-index="101">
                                 <div class="end-loc-box">
                                     <table class="end-marker-content"><tr>
                                         <td>
-                                            <b>{{mapInfo.endLocation}}</b><br/>
-                                            <!-- {{mapInfo.eta}} -->
+                                            <b>{{trackerInfo.endLocation}}</b><br/>
+                                            <!-- {{trackerInfo.eta}} -->
                                         </td>
                                         <!--<td><img src="theme/img/tinyLocationStop.png" class="rev-horizon"></td>-->
                                     </tr></table>
                                 </div>
                             </custom-marker>
-                            <marker position="{{mapInfo.endLocationForMap.latitude}},{{mapInfo.endLocationForMap.longitude}}"
+                            <marker position="{{trackerInfo.endLocationForMap.latitude}},{{trackerInfo.endLocationForMap.longitude}}"
                                     optimized="false"
-                                    icon="{{mapInfo.endLocationIcon}}"></marker>
+                                    icon="{{trackerInfo.endLocationIcon}}"></marker>
 
                             <!--special markers -->
                             <marker ng-if="specialMarkers.length != 0"
@@ -1104,45 +1093,25 @@
 
                             <!-- start marker -->
                             <custom-marker id="start-location"
-                                           position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}"
+                                           position="{{trackerInfo.startLocationForMap.latitude}},{{trackerInfo.startLocationForMap.longitude}}"
                                            optimized="false"
                                            z-index="101">
                                 <div class="start-loc-box">
                                     <table class="end-marker-content"><tr>
                                         <td>
-                                            <b>{{mapInfo.startLocation}}</b><br/>
+                                            <b>{{trackerInfo.startLocation}}</b><br/>
                                             <!-- {{mapInfo.eta}} -->
                                         </td>
                                         <!--<td><img src="theme/img/locationStart.png" class="rev-horizon"></td>-->
                                     </tr></table>
                                 </div>
                             </custom-marker>
-                            <marker position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}"
+                            <marker position="{{trackerInfo.startLocationForMap.latitude}},{{trackerInfo.startLocationForMap.longitude}}"
                                     optimized="false"
                                     icon="{
                                         url:'theme/img/locationStart.png',
                                         anchor: [12,12]
                                       }"></marker>
-
-
-
-                            <!--<marker position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}"
-                                    optimized="false"
-                                    icon="{
-                                        url:'theme/img/locationStart.png',
-                                        anchor: [12,12]
-                                      }"></marker>
-                            <custom-marker id="start-location"
-                                           optimized="false"
-                                           z-index="101"
-                                           position="{{mapInfo.startLocationForMap.latitude}},{{mapInfo.startLocationForMap.longitude}}">
-                                <div class="start-loc-box">
-                                    <table><tr>
-                                        &lt;!&ndash;<td><img src="theme/img/locationStart.png"></td>&ndash;&gt;
-                                        <td><b>{{mapInfo.startLocation}}</b><br/></td>
-                                    </tr></table>
-                                </div>
-                            </custom-marker>-->
 
                             <marker position="{{currentPoint.loc.lat}},{{currentPoint.loc.long}}"
                                     icon='{{currentPoint.icon}}'
