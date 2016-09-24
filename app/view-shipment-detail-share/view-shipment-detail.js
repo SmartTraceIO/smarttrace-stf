@@ -1346,24 +1346,35 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var plot = {};
         plot.from = null;
         alertData.length = 0;
-        // console.log($scope.MI);
+         console.log("prepareAlertHighchartSeries", subSeries);
         // debugger;
-        //for(i = 0 ; i < $scope.trackers[$scope.MI].locations.length; i ++){
         for(i = 0 ; i < subSeries[$scope.MI].length; i ++){
-        //    var alertinfo = $scope.trackers[$scope.MI].locations[i].alerts;
-            var alertinfo = subSeries[$scope.MI][i].alerts;
+            //-- update plotBand
+            var location = subSeries[$scope.MI][i];
+            var eventType = location.type;
+            if(eventType.toLowerCase() == "lighton"){
+                plot.from = location.x;
+            } else if(eventType.toLowerCase() == "lightoff"){
+                plot.to = location.x;
+                plot.color = 'rgba(255, 255, 0, 0.2)';
+                if(plot.from != null){
+                    lightPlotBand.push(plot);
+                    plot = {};
+                    plot.from = null;
+                }
+            }
+
+            var alertinfo = location.alerts;
             if(alertinfo.length == 1){
                 var str = alertinfo[0].type;
                 var alert = "";
                 obj = {};
-                obj.x = subSeries[$scope.MI][i].x; //time-x
-                obj.y = subSeries[$scope.MI][i].y; //temperature-y
+                obj.x = location.x; //time-x
+                obj.y = location.y; //temperature-y
                 if(str == "LastReading") {
-                    //str = "Tracker" + ($scope.MI + 1);
                     str = "Tracker0";
                     obj.marker = {
                         enabled: true,
-                        //symbol: 'url(theme/img/' + alert.toLowerCase() + str + '.png)'
                         symbol: 'square',
                         height: 16,
                         width: 16,
@@ -1385,15 +1396,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 }
 
                 if(str.toLowerCase() == "lighton"){
-                    plot.from = subSeries[$scope.MI][i].x;
+                    //plot.from = location.x;
                 } else if(str.toLowerCase() == "lightoff"){
-                    plot.to = subSeries[$scope.MI][i].x;
-                    plot.color = 'rgba(255, 255, 0, 0.2)';
-                    if(plot.from != null){
-                        lightPlotBand.push(plot);
-                        plot = {};
-                        plot.from = null;
-                    }
+                    //plot.to = location.x;
+                    //plot.color = 'rgba(255, 255, 0, 0.2)';
+                    //if(plot.from){
+                    //    lightPlotBand.push(plot);
+                    //    plot = {};
+                    //    plot.from = null;
+                    //}
                 } else {
                     var tmpArray = new Array();
                     tmpArray.push(obj);
@@ -1410,8 +1421,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $scope.trackerMsg[i] = [msg];
             } else if(alertinfo.length > 1){
                 obj = {};
-                obj.x = subSeries[$scope.MI][i].x;
-                obj.y = subSeries[$scope.MI][i].y;
+                obj.x = location.x;
+                obj.y = location.y;
                 obj.marker = {
                     enabled: true,
                     symbol: 'url(theme/img/alerts.png)'
@@ -1426,15 +1437,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     //for light on/off, show yellow bar and hide icons
                     //by not adding to the alert list
                     if(str.toLowerCase() == "lighton"){
-                        plot.from = subSeries[$scope.MI][i].x;
+                        //plot.from = location.x;
                     } else if(str.toLowerCase() == "lightoff"){
-                        plot.to = subSeries[$scope.MI][i].x;
-                        plot.color = 'rgba(255, 255, 0, 0.2)';
-                        if(plot.from != null){
-                            lightPlotBand.push(plot);
-                            plot = {};
-                            plot.from = null;
-                        }
+                        //plot.to = location.x;
+                        //plot.color = 'rgba(255, 255, 0, 0.2)';
+                        //if(plot.from != null){
+                        //    lightPlotBand.push(plot);
+                        //    plot = {};
+                        //    plot.from = null;
+                        //}
                     }
                     var alert = "";
                     if(str == "LastReading") str = "Tracker0";// + ($scope.MI + 1);
@@ -1517,9 +1528,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             for(j = 0; j < locations.length; j++){
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);
+                var isLightEvent = false;
+                if (locations[j].type == "LightOn" || locations[j].type == "LightOff") {
+                    isLightEvent = true;
+                }
                 if(j != 0){
                     if(++tmpCnt <= skipCnt) {
-                        if((locations[j].alerts.length == 0) && !check){
+                        if((locations[j].alerts.length == 0) && !check && !isLightEvent){
                             continue;
                         }
                     } else {
@@ -1541,6 +1556,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     temp.y = locations[j].temperature;
                     temp.timeISO = locations[j].timeISO;
                     temp.alerts = locations[j].alerts;
+                    temp.type = locations[j].type;
                     temp.lat = lastValidLat;
                     temp.lng = lastValidLng;
                     temp.shipmentId = $scope.trackers[i].shipmentId;
@@ -1562,6 +1578,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     temp.y = locations[j].temperature;
                     temp.timeISO = locations[j].timeISO;
                     temp.alerts = locations[j].alerts;
+                    temp.type = locations[j].type;
                     temp.lat = lastValidLat;
                     temp.lng = lastValidLng;
                     temp.shipmentId = $scope.trackers[i].shipmentId;
