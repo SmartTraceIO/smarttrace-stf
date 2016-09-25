@@ -1346,15 +1346,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         var plot = {};
         plot.from = null;
         alertData.length = 0;
-         console.log("prepareAlertHighchartSeries", subSeries);
+        //console.log("prepareAlertHighchartSeries", subSeries);
         // debugger;
         for(i = 0 ; i < subSeries[$scope.MI].length; i ++){
             //-- update plotBand
             var location = subSeries[$scope.MI][i];
             var eventType = location.type;
-            if(eventType.toLowerCase() == "lighton"){
+            if(eventType && eventType.toLowerCase() == "lighton"){
                 plot.from = location.x;
-            } else if(eventType.toLowerCase() == "lightoff"){
+            } else if(eventType && eventType.toLowerCase() == "lightoff"){
                 plot.to = location.x;
                 plot.color = 'rgba(255, 255, 0, 0.2)';
                 if(plot.from != null){
