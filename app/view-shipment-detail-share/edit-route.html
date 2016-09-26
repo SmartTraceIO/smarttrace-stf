@@ -11,7 +11,7 @@
             <div class="col-md-4">
                 <label class="control-label">
                     <span>Shipment From:</span>
-                    <i uib-tooltip="Location where the shipment start"
+                    <i uib-tooltip="Location where the shipment was launched. The origin"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -27,7 +27,7 @@
             <div class="col-md-4">
                 <label class="control-label">
                     <span>Interim Stop:</span>
-                    <i uib-tooltip="Location where the shipment stop temporarily."
+                    <i uib-tooltip="Location where the shipment temporarily stopped such as a cross-docking site."
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -43,7 +43,7 @@
             <div class="col-md-4">
                 <label class="control-label">
                     <span>Shipment To:</span>
-                    <i uib-tooltip="Location where the shipment come finally."
+                    <i uib-tooltip="Location where the shipment ended. The destination."
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -58,8 +58,8 @@
         </div>
         <div class="row" style="margin-top: 15px;">
             <div class="col-md-6 col-sm-12">
-                <label class="control-label">Date Shipped:&nbsp;
-                    <i uib-tooltip="Date shipped"
+                <label class="control-label">Start Date:
+                    <i uib-tooltip="The date and time the shipment started"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -89,7 +89,7 @@
             <div class="col-md-6 col-sm-12">
                 <label class="control-label">
                     <span>Arrival Date:</span>
-                    <i uib-tooltip="Date arrived"
+                    <i uib-tooltip="The date and time of arrival."
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -122,7 +122,7 @@
                 <div class="form-group">
                     <label class="control-label">
                         <span>Status</span>
-                        <i uib-tooltip="Status of the shipment"
+                        <i uib-tooltip=" 'Default' is an active shipment. 'Arrived' is a completed shipment with a destination. 'Ended' is a completed shipment without a destination. Note that only some changes are possible to status."
                            tooltip-append-to-body="true"
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"

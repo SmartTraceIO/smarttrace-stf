@@ -1354,7 +1354,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var eventType = location.type;
             if(eventType && eventType.toLowerCase() == "lighton"){
                 plot.from = location.x;
-            } else if(eventType && eventType.toLowerCase() == "lightoff"){
+            }
+            if(eventType && eventType.toLowerCase() == "lightoff"){
                 plot.to = location.x;
                 plot.color = 'rgba(255, 255, 0, 0.2)';
                 if(plot.from != null){
@@ -1387,6 +1388,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             }
                         }
                     };
+
+                    //-- check if door is opened
+                    if (plot.from) {
+                        plot.to = location.x;
+                        plot.color = 'rgba(255, 255, 0, 0.2)';
+                        lightPlotBand.push(plot);
+                    }
                 } else {
                     alert = "Alert";
                     obj.marker = {

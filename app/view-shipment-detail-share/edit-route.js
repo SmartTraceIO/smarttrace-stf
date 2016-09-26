@@ -125,7 +125,8 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
             if (data.status.code == 0) {
                 toastr.success('The shipment was updated success');
             } else {
-                toastr.error('Cannot save the shipment this time. Try again later');
+                console.log("Error", data);
+                toastr.error('Cannot save the shipment this time. Try again later!');
             }
         }).then(function() {
             if (VM.shipment.status == "Ended") {

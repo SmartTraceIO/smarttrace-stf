@@ -107,7 +107,7 @@
                         <div class="form-group">
                             <div class="container-fluid">
                                 <label class="control-label">Options for auto-detection of Interim Stop
-                                    <i uib-tooltip="Add possible interim stops to be detected while the shipment is in progress."
+                                    <i uib-tooltip="Add options for an interim stop to be detected while shipment is in progress. eg Cross-docking site."
                                        tooltip-append-to-body="true" tooltip-trigger="mouseenter"
                                        tooltip-placement="top" class="fa fa-info-circle">
                                     </i>
@@ -119,7 +119,7 @@
                                            theme="select2"
                                            ng-disabled="disabled"
                                            style="width:100%">
-                                    <ui-select-match placeholder="Select location for auto detection of interim stops">
+                                    <ui-select-match placeholder="Select location for auto detection of interim stop">
                                         {{$item.DisplayText}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="loc in InterimLocationList | propsFilter: {locationId: $select.search, DisplayText: $select.search}">
