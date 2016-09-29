@@ -958,7 +958,8 @@
         //-- interim stop here
 
         if (shipment.interimStops) {
-            angular.forEach(shipment.interimStops, function(v, k) {
+            var v = shipment.interimStops[0];
+            //angular.forEach(shipment.interimStops, function(v, k) {
                 htmlContent += '<tr>';
                 htmlContent += '<td>';
                 htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
@@ -968,7 +969,7 @@
                 htmlContent += '<div>' + v.time + '</div>';
                 htmlContent += '</td>';
                 htmlContent += '</tr>';
-            });
+            //});
         }
 
         //--end

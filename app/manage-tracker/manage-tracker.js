@@ -415,18 +415,30 @@
                     htmlContent += '</tr>';
                     //-- interim stop here
 
-                    if (shipment.interimStops) {
-                        angular.forEach(shipment.interimStops, function(v, k) {
+                    if (shipment.interimStops && shipment.interimStops.length > 0) {
+                        var stop = null;
+                        for (var i = 0; i < shipment.interimStops.length; i++) {
+                            var id = shipment.interimStops[i];
+                            console.log("ID", id);
+                            stop = filter($scope.LocationListInterim, {locationId: id}, true);
+                            if (stop && stop.length > 0) {
+                                stop = stop[0];
+                                break;
+                            }
+                        }
+                        if (stop & !angular.isArray(stop)) {
+                            //angular.forEach(shipment.interimStops, function(v, k) {*/
                             htmlContent += '<tr>';
                             htmlContent += '<td>';
                             htmlContent += '<img src="theme/img/tinyInterimLocation.png">';
                             htmlContent += '</td>';
                             htmlContent += '<td>';
-                            htmlContent += '<div class="bold">' + v.name + '</div>';
-                            htmlContent += '<div>' + v.time + '</div>';
+                            htmlContent += '<div class="bold">' + stop.name + '</div>';
+                            htmlContent += '<div>' + stop.time + '</div>';
                             htmlContent += '</td>';
                             htmlContent += '</tr>';
-                        });
+                            //});
+                        }
                     }
 
                     //--end
