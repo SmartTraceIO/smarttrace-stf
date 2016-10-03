@@ -74,6 +74,50 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3 col-md-offset-3">
+
+                                    <label for="id-alert-low-temp">
+                                        Low temperature
+                                        <i uib-tooltip="The temperature that is set low limitation"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number"
+                                               id="id-alert-low-temp"
+                                               name="lowTemp"
+                                               class="form-control"
+                                               placeholder="Enter low temperature limitation"
+                                               ng-model="Alert.lowerTemperatureLimit"
+                                               aria-describedby="id-low-temp-units"/>
+                                        <span class="input-group-addon" id="id-low-temp-units">&deg;{{TempType}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="id-alert-hight-temp">Hight temperature
+                                        <i uib-tooltip="The temperature that is set hight limitation"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" name="hightTemp"
+                                               id="id-alert-hight-temp"
+                                               class="form-control"
+                                               placeholder="Enter hight temperature limitation"
+                                               ng-model="Alert.upperTemperatureLimit"
+                                               aria-describedby="id-hight-temp-units"/>
+                                        <span class="input-group-addon" id="id-hight-temp-units">&deg;{{TempType}}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-md-12">
                                 <div class="portlet-title">
                                     <div class="caption">
