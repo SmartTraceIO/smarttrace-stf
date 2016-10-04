@@ -354,9 +354,9 @@ appCtrls.controller('EditLocCtrl', function ($resource, $scope, rootSvc, localDb
         }
 
         webSvc.getLocation(locId).success(function(data){
-            if (data.status.code == 0) {
+            if (data.status.code == 0 && data.response != null) {
                 $scope.Location = data.response;
-                console.log(data.response);
+                //console.log(data.response);
                 //$scope.myLatLng = {};
                 //$scope.myLatLng.lat = data.response.location.lat;
                 //$scope.myLatLng.lng = data.response.location.lon;

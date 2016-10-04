@@ -8,7 +8,7 @@
 <div class="modal-body">
     <form name="frmEditGoods">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="control-label">
                     <span>Shipment From:</span>
                     <i uib-tooltip="Location where the shipment was launched. The origin"
@@ -24,6 +24,23 @@
                 </select>
             </div>
 
+            <div class="col-md-6">
+                <label class="control-label">
+                    <span>Shipment To:</span>
+                    <i uib-tooltip="Location where the shipment ended. The destination."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <select class="form-control"
+                        ng-model="VM.shipment.shippedTo"
+                        ng-options="location.locationId as location.DisplayText for location in VM.ToLocationList">
+                    <option value="">-- Please Select --</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px;">
             <div class="col-md-4">
                 <label class="control-label">
                     <span>Interim Stop:</span>
@@ -39,21 +56,45 @@
                     <option value="">-- Please Select --</option>
                 </select>
             </div>
-
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <label class="control-label">
-                    <span>Shipment To:</span>
-                    <i uib-tooltip="Location where the shipment ended. The destination."
+                    <span>Elapsed time:</span>
+                    <i uib-tooltip="Number of minutes that the shipment was stopped."
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <select class="form-control"
-                        ng-model="VM.shipment.shippedTo"
-                        ng-options="location.locationId as location.DisplayText for location in VM.ToLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
+                <input class="form-control" type="number" ng-model="VM.elapsedTime">
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">
+                    <span>Stopped time:</span>
+                    <i uib-tooltip="The time that the shipment has stopped at."
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input show-button-bar="false" id="txtDateStopped" type="text" class="form-control"
+                                       max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
+                                       is-open="stop.opened"
+                                       ng-click="stop.opened = true";
+                                       ng-model="VM.dateTimeStopped" close-text="Close" />
+                                <label for="txtDateStopped" class="input-group-addon">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div uib-timepicker ng-model="VM.dateTimeStopped" show-meridian='true' show-spinners="false"/>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="row" style="margin-top: 15px;">
@@ -80,7 +121,7 @@
                             </div>
                         </td>
                         <td>
-                            <uib-timepicker ng-model="VM.dateTimeFrom" show-meridian='true' show-spinners="false"/>
+                            <div uib-timepicker ng-model="VM.dateTimeFrom" show-meridian='true' show-spinners="false"/>
                         </td>
                     </tr>
                 </table>
@@ -110,7 +151,7 @@
                             </div>
                         </td>
                         <td>
-                            <uib-timepicker ng-model="VM.dateTimeTo" show-meridian='true' show-spinners="false" />
+                            <div uib-timepicker ng-model="VM.dateTimeTo" show-meridian='true' show-spinners="false" />
                         </td>
                     </tr>
                 </table>
@@ -118,7 +159,7 @@
             </div>
         </div>
         <div class="row" style="margin-top: 15px;">
-            <div class="col-md-3 col-md-offset-3">
+            <div class="col-md-4 col-md-offset-4">
                 <div class="form-group">
                     <label class="control-label">
                         <span>Status</span>
@@ -128,12 +169,6 @@
                            tooltip-placement="top"
                            class="fa fa-info-circle"></i>
                     </label>
-                    <!--<select class="form-control" ng-model="VM.shipment.status">
-                        <option value="Default">Default</option>
-                        <option value="Ended">Ended</option>
-                        <option value="Arrived">Arrived</option>
-                    </select>-->
-
                     <ui-select ng-model="VM.shipment.status"
                                ng-disabled="disabled"
                                theme="bootstrap">
@@ -145,15 +180,6 @@
 
                 </div>
             </div>
-            <!--<div class="col-md-6" style="margin-top: 30px">
-                <input type="checkbox" ng-model="VM.shutdownNow">
-                <span>Shutdown Tracker now</span>
-                <i uib-tooltip="Tick to shutdown the tracker"
-                   tooltip-append-to-body="true"
-                   tooltip-trigger="mouseenter"
-                   tooltip-placement="top"
-                   class="fa fa-info-circle"></i>
-            </div>-->
         </div>
     </form>
 </div>

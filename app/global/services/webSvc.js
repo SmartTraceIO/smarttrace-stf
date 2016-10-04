@@ -497,6 +497,11 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.post(url, data);
 		},
 
+		addInterimStop: function(data) {
+			var url = Api.url + "addInterimStop/" + localDbSvc.getToken();
+			return $http.post(url, data);
+		},
+
 		saveShipmentTemplate: function(data){
 			var url = Api.url + 'saveShipmentTemplate/' + localDbSvc.getToken();
 			return $http.post(url, data);

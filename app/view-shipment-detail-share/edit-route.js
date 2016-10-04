@@ -6,6 +6,10 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
     VM = this;
     VM.shipmentId = shipmentId;
     VM.shipment = null;
+    VM.elapsedTime = 10
+
+    var filter = $filter('filter');
+
     VM.getShipment = function() {
         if (VM.shipmentId) {
             webSvc.getShipment(VM.shipmentId).success(function(data) {
@@ -29,7 +33,6 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                     }
 
                     if (VM.shipment.actualArrivalDate) {
-                        //VM.dateTimeTo = moment.tz(VM.shipment.actualArrivalDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).toDate();
                         VM.dateTimeTo = moment(VM.shipment.actualArrivalDate,'YYYY-MM-DDThh:mm').toDate();
                     } else {
                         VM.dateTimeTo = null;
@@ -42,7 +45,10 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                     } else {
                         VM.posibleStatus = ["Default", "Arrived", "Ended"];
                     }
+                    //VM.interimStop = VM.shipment.interimStops[0];
                     VM.interimStop = VM.shipment.interimLocations[0];
+
+                    VM.dateTimeStopped = new Date();
                     //console.log('VM.shipment', VM.shipment);
                 } else {
                     toastr.warning('An error occurred while get shipment #' + VM.shipmentId);
@@ -57,7 +63,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                 VM.ToLocationList = [];
                 VM.InterimLocationList = [];
                 VM.LocationList = data.response;
-                console.log('LocationList', VM.LocationList);
+                console.log("LocationList", VM.LocationList);
                 angular.forEach(VM.LocationList, function (val, key) {
                     if (val.companyName) {
                         var dots = val.companyName.length > 20 ? '...' : '';
@@ -105,10 +111,9 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
         }
 
         if (VM.interimStop) {
-            VM.shipment.interimLocations=[];
-            VM.shipment.interimLocations.push(VM.interimStop);
+            VM.shipment.interimStops=[];
         } else {
-            VM.shipment.interimLocations=[];
+            VM.shipment.interimStops=[];
         }
 
         var obj = {};
@@ -127,6 +132,37 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
             } else {
                 console.log("Error", data);
                 toastr.error('Cannot save the shipment this time. Try again later!');
+            }
+        }).then(function() {
+            if (VM.interimStop) {
+                //var d = filter(VM.TrackerList, {sn: VM.ShipmentList[k].deviceSN}, true);
+                var stopLocation = filter(VM.InterimLocationList, {locationId: VM.interimStop}, true);
+                if (stopLocation && stopLocation.length > 0) {
+                    stopLocation = stopLocation[0];
+                }
+                if (stopLocation.location) {
+                    VM.interimStopLatitude = stopLocation.location.lat;
+                    VM.interimStopLongitude = stopLocation.location.lon;
+                }
+                if (VM.dateTimeStopped) {
+                    VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD hh:mm');
+                }
+                //add to interimStops
+                var params = {
+                    "shipmentId": VM.shipmentId,
+                    "locationId": VM.interimStop,
+                    "latitude": VM.interimStopLatitude,
+                    "longitude": VM.interimStopLongitude,
+                    "time": VM.elapsedTime,
+                    "stopDate": VM.stoppedTime //"2016-09-28 06:13"
+                };
+                webSvc.addInterimStop(params).success(function(data) {
+                    var status = data.status;
+                    console.log("Interim", data);
+                    if (status.code == 0) {
+                        toastr.success("Success to add an interimStop");
+                    }
+                });
             }
         }).then(function() {
             if (VM.shipment.status == "Ended") {
