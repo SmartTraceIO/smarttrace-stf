@@ -356,7 +356,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.switchTracker = function($event, index){
         $event.preventDefault();
-        $log.debug('SwithTracker...', index)
         $location.search('sn', $scope.trackers[index].deviceSN);
         $location.search('trip', $scope.trackers[index].tripCount);
         $scope.chartConfig.redraw= true;
@@ -826,8 +825,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     loadTrackerData();
     function loadTrackerData() {
-        console.log("Loading data ...");
-        //-- load location list
         $scope.LocationListFrom = [];
         $scope.LocationListTo = [];
         $scope.LocationListInterim = [];
@@ -1910,6 +1907,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.trackerInfo.status = result.status;
             updateTrackerInfo();
             updatePlotLines();
+
         });
     }
 

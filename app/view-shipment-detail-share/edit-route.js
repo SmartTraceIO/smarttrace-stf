@@ -45,8 +45,8 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                     } else {
                         VM.posibleStatus = ["Default", "Arrived", "Ended"];
                     }
-                    //VM.interimStop = VM.shipment.interimStops[0];
-                    VM.interimStop = VM.shipment.interimLocations[0];
+                    VM.interimStop = VM.shipment.interimStops[0];
+                    //VM.interimStop = VM.shipment.interimLocations[0];
 
                     VM.dateTimeStopped = new Date();
                     //console.log('VM.shipment', VM.shipment);
