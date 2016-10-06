@@ -502,6 +502,30 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.post(url, data);
 		},
 
+		saveInterimStop: function(data) {
+			var url = Api.url + "saveInterimStop/" + localDbSvc.getToken();
+			return $http.post(url, data);
+		},
+		deleteInterimStop: function(id, shipmentId) {
+			var url = Api.url + "deleteInterimStop/" + localDbSvc.getToken();
+			var params = {
+				params: {
+					id: id,
+					shipment: shipmentId
+				}
+			}
+			return $http.get(url, params);
+		},
+		getInterimStops : function(shipmentId) {
+			var url = Api.url + "getInterimStops/" + localDbSvc.getToken();
+			var params = {
+				params: {
+					shipment:shipmentId
+				}
+			}
+			return $http.get(url, params);
+		},
+
 		saveShipmentTemplate: function(data){
 			var url = Api.url + 'saveShipmentTemplate/' + localDbSvc.getToken();
 			return $http.post(url, data);

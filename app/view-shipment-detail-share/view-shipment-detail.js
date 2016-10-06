@@ -1879,7 +1879,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 }
             }
         });
-        modalInstance.result.then(function(result) {
+        modalInstance.result.then(function(resultObject) {
+            console.log("Result Object", resultObject);
+            console.log("Result shipment", resultObject.shipment);
+            console.log("Result interimStop", resultObject.interimStop);
+
+            var result = resultObject.shipment;
             var stLocation = filter($scope.LocationListFrom, {locationId: result.shippedFrom}, true);
             var endLocation = filter($scope.LocationListTo, {locationId: result.shippedTo}, true);
 
@@ -1890,13 +1895,19 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 endLocation = endLocation[0];
             }
 
-            console.log("StartLocation Modified", stLocation);
-            console.log("EndLocation Modified", endLocation);
+            //console.log("StartLocation Modified", stLocation);
+            //console.log("EndLocation Modified", endLocation);
 
             $scope.trackerInfo.startLocation = stLocation.locationName;//must do filter
             $scope.trackerInfo.endLocation = endLocation.locationName;
-            //startTime:"12:27 1 Jun 2016"
 
+            if (resultObject.interimStop) {
+                $scope.trackerInfo.interimStops = [];
+                $scope.trackerInfo.interimStops.push(resultObject.interimStop);
+            } else {
+                $scope.trackerInfo.interimStops = [];
+            }
+            //startTime:"12:27 1 Jun 2016"
             if (result.startDate) {
                 $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
             }

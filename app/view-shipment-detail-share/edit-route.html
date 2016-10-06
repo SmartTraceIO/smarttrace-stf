@@ -67,7 +67,7 @@
                 </label>
                 <input class="form-control" type="number" ng-model="VM.elapsedTime">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <label class="control-label">
                     <span>Stopped time:</span>
                     <i uib-tooltip="The time that the shipment has stopped at."
@@ -95,6 +95,11 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div class="col-md-1" style="margin-top: 25px;">
+                <button type="submit" class="btn btn-danger" ng-click="VM.deleteInterimStop()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
             </div>
         </div>
         <div class="row" style="margin-top: 15px;">

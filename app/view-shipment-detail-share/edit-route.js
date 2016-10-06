@@ -2,11 +2,14 @@
  * Created by beou on 31/05/2016.
  */
 appCtrls.controller('EditShipmentRoute', EditShipmentRoute);
-function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
+function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
     VM = this;
     VM.shipmentId = shipmentId;
     VM.shipment = null;
-    VM.elapsedTime = 10
+    VM.elapsedTime = 10;
+
+    VM.interimStops = [];
+    VM.resultObject = {};
 
     var filter = $filter('filter');
 
@@ -45,8 +48,6 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                     } else {
                         VM.posibleStatus = ["Default", "Arrived", "Ended"];
                     }
-                    VM.interimStop = VM.shipment.interimStops[0];
-                    //VM.interimStop = VM.shipment.interimLocations[0];
 
                     VM.dateTimeStopped = new Date();
                     //console.log('VM.shipment', VM.shipment);
@@ -63,7 +64,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                 VM.ToLocationList = [];
                 VM.InterimLocationList = [];
                 VM.LocationList = data.response;
-                console.log("LocationList", VM.LocationList);
+                //console.log("LocationList", VM.LocationList);
                 angular.forEach(VM.LocationList, function (val, key) {
                     if (val.companyName) {
                         var dots = val.companyName.length > 20 ? '...' : '';
@@ -83,11 +84,44 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
             }
         });
     }
+
+    VM.getInterimStops = function() {
+        webSvc.getInterimStops(VM.shipmentId).success(function(data) {
+            //console.log("Data", data);
+           if (data.status.code == 0) {
+               VM.interimStops = data.response;
+               if (VM.interimStops[0]) {
+                   VM.interimStop = VM.interimStops[0].locationId;
+                   VM.elapsedTime = VM.interimStops[0].time;
+                   //"2016-10-04 10:32"
+                   VM.dateTimeStopped = moment(VM.interimStops[0].stopDate,'YYYY-MM-DD hh:mm').toDate();
+               }
+           }
+        });
+    }
+
     VM.getShipment();
     VM.getLocations();
+    VM.getInterimStops();
+
+    VM.deleteInterimStop = function() {
+        if (!VM.interimStop) return;
+        var currentStop = filter(VM.interimStops, {locationId: VM.interimStop}, true);
+        if (currentStop && currentStop.length > 0) {
+            currentStop = currentStop[0];
+
+            webSvc.deleteInterimStop(currentStop.id, VM.shipmentId).success(function(data) {
+                var status = data.status;
+                if (status.code == 0) {
+                    // clear
+                    VM.interimStop = null;
+                }
+            });
+        }
+    }
 
     VM.saveShipment = function() {
-        console.log("saving shipment changes", VM.shipment);
+        //console.log("saving shipment changes", VM.shipment);
         if (!isNaN(VM.shipment.noAlertsAfterArrivalMinutes)){
             VM.shipment.noAlertsAfterArrivalMinutes = parseInt(VM.shipment.noAlertsAfterArrivalMinutes, 10);
         }
@@ -110,11 +144,12 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
             VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
         }
 
-        if (VM.interimStop) {
+        /*if (VM.interimStop) {
             VM.shipment.interimStops=[];
+            VM.shipment.interimStops.push(VM.interimStop);
         } else {
             VM.shipment.interimStops=[];
-        }
+        }*/
 
         var obj = {};
         obj.saveAsNewTemplate = false;
@@ -147,6 +182,134 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                 if (VM.dateTimeStopped) {
                     VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD hh:mm');
                 }
+                //-- filter interimStops
+                //var currentStop = filter(VM.interimStops, {locationId: VM.interimStop}, true);
+                var currentStop = null; // VM.interimStops[0];
+                if (VM.interimStops && VM.interimStops.length > 0) {
+                    currentStop = VM.interimStops[0];
+                }
+                if (currentStop) {
+                    currentStop.shipmentId = VM.shipmentId;
+                    currentStop.locationId = VM.interimStop;
+                    currentStop.time = VM.elapsedTime;
+                    currentStop.stopDate = VM.stoppedTime;
+
+                    webSvc.deleteInterimStop(currentStop.id, VM.shipmentId).success(function(data) {
+                        var status = data.status;
+                        if (status.code == 0) {
+
+                        } else {
+
+                        }
+                    }).then(function(){
+                        webSvc.saveInterimStop(currentStop).success(function(data) {
+                            if (data.status.code == 0) {
+                                toastr.success("Success to update the interimStop")
+                                VM.resultObject.interimStop = currentStop;
+                                VM.resultObject.interimStop.location = stopLocation;
+                            } else {
+                                console.log("Error", data);
+                            }
+                        }).then(function() {
+                            VM.shutdownAndUpdateParent()
+                        });
+                    });
+                } else {
+                    // need to add new stop
+                    //add to interimStops
+                    var params = {
+                        "shipmentId": VM.shipmentId,
+                        "locationId": VM.interimStop,
+                        "latitude": VM.interimStopLatitude,
+                        "longitude": VM.interimStopLongitude,
+                        "time": VM.elapsedTime,
+                        "stopDate": VM.stoppedTime //"2016-09-28 06:13"
+                    };
+                    webSvc.addInterimStop(params).success(function(data) {
+                        var status = data.status;
+                        //console.log("Interim", data);
+                        if (status.code == 0) {
+                            params.location = stopLocation;
+                            VM.resultObject.interimStop = params;
+                            toastr.success("Success to add an interimStop");
+                        }
+                    }).then(function() {
+                        VM.shutdownAndUpdateParent();
+                    });
+                }
+            }else {
+                VM.resultObject.interimStop = null;
+                VM.shutdownAndUpdateParent();
+            }
+        })/*.then(function() {
+            if (VM.shipment.status == "Ended") {
+                //--trigger shutdown
+                webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
+                    if (data.status.code == 0) {
+                        toastr.success("Success. The shutdown process has been triggered for this device");
+                    } else {
+                        toastr.error("You have no permission to shutdown this device!");
+                    }
+                    VM.resultObject.shipment = VM.shipment;
+                    //--close anyway
+                    //$uibModalInstance.close(VM.shipment);
+                    $uibModalInstance.close(VM.resultObject);
+                })
+            } else {
+                VM.resultObject.shipment = VM.shipment;
+                $uibModalInstance.close(VM.resultObject);
+            }
+        });*/
+    }
+
+    VM.updateInterimStop = function() {
+        if (VM.interimStop) {
+            var stopLocation = filter(VM.InterimLocationList, {locationId: VM.interimStop}, true);
+            if (stopLocation && stopLocation.length > 0) {
+                stopLocation = stopLocation[0];
+            }
+            if (stopLocation.location) {
+                VM.interimStopLatitude = stopLocation.location.lat;
+                VM.interimStopLongitude = stopLocation.location.lon;
+            }
+            if (VM.dateTimeStopped) {
+                VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD hh:mm');
+            }
+            //-- filter interimStops
+            //var currentStop = filter(VM.interimStops, {locationId: VM.interimStop}, true);
+            var currentStop = null; // VM.interimStops[0];
+            if (VM.interimStops && VM.interimStops.length > 0) {
+                currentStop = VM.interimStops[0];
+            }
+            console.log("VM.interimStop", VM.interimStop);
+            console.log("currentStop", currentStop);
+            console.log("VM.interimStops", VM.interimStops);
+            if (currentStop) {
+                currentStop.shipmentId = VM.shipmentId;
+                currentStop.locationId = VM.interimStop;
+                currentStop.time = VM.elapsedTime;
+                currentStop.stopDate = VM.stoppedTime;
+
+                return webSvc.deleteInterimStop(currentStop.id, VM.shipmentId).success(function(data) {
+                    var status = data.status;
+                    if (status.code == 0) {
+
+                    } else {
+
+                    }
+                }).then(function(){
+                    webSvc.saveInterimStop(currentStop).success(function(data) {
+                        if (data.status.code == 0) {
+                            toastr.success("Success to update the interimStop")
+                            VM.resultObject.interimStop = currentStop;
+                            VM.resultObject.interimStop.location = stopLocation;
+                        } else {
+                            console.log("Errored");
+                        }
+                    }).then(VM.shutdownAndUpdateParent());
+                });
+            } else {
+                // need to add new stop
                 //add to interimStops
                 var params = {
                     "shipmentId": VM.shipmentId,
@@ -156,30 +319,38 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter) {
                     "time": VM.elapsedTime,
                     "stopDate": VM.stoppedTime //"2016-09-28 06:13"
                 };
-                webSvc.addInterimStop(params).success(function(data) {
+                return webSvc.addInterimStop(params).success(function(data) {
                     var status = data.status;
                     console.log("Interim", data);
                     if (status.code == 0) {
+                        params.location = stopLocation;
+                        VM.resultObject.interimStop = params;
                         toastr.success("Success to add an interimStop");
                     }
-                });
+                }).then(VM.shutdownAndUpdateParent());
             }
-        }).then(function() {
-            if (VM.shipment.status == "Ended") {
-                //--trigger shutdown
-                webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
-                    if (data.status.code == 0) {
-                        toastr.success("Success. The shutdown process has been triggered for this device");
-                    } else {
-                        toastr.error("You have no permission to shutdown this device!");
-                    }
-                    //--close anyway
-                    $uibModalInstance.close(VM.shipment);
-                })
-            } else {
-                $uibModalInstance.close(VM.shipment);
-            }
-        });
+        } else {
+            return null;
+        }
+    }
+    VM.shutdownAndUpdateParent = function() {
+        VM.resultObject.shipment = VM.shipment;
+        if (VM.shipment.status == "Ended") {
+            //--trigger shutdown
+            webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
+                if (data.status.code == 0) {
+                    toastr.success("Success. The shutdown process has been triggered for this device");
+                } else {
+                    toastr.error("You have no permission to shutdown this device!");
+                }
+                //--close anyway
+                //$uibModalInstance.close(VM.shipment);
+                $uibModalInstance.close(VM.resultObject);
+            })
+        } else {
+            //VM.resultObject.shipment = VM.shipment;
+            $uibModalInstance.close(VM.resultObject);
+        }
     }
     //-- cancel
     VM.cancel = function() {
