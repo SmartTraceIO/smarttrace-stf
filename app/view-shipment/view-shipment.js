@@ -957,7 +957,7 @@
         htmlContent += '</tr>';
         //-- interim stop here
 
-        if (shipment.interimStops) {
+        if (shipment.interimStops && shipment.interimStops[0]) {
             var v = shipment.interimStops[0];
             //angular.forEach(shipment.interimStops, function(v, k) {
                 htmlContent += '<tr>';
