@@ -883,13 +883,21 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
             info = graphData.response;
             if (info == null) {
-                $log.debug('Current user does not own this shipment!');
+                //$log.debug('Current user does not own this shipment!');
                 $state.go('viewshipment'); //move to shipment-list
                 return;
             }
         }).then(function() {
-            calculateAndDraw();
+            //load alert profile
+            loadAlertProfile(info.alertProfileId);
         });
+
+        function loadAlertProfile(profileId) {
+            webSvc.getAlertProfile(profileId).success(function(alertProfileData) {
+                info.alertProfile = alertProfileData.response;
+                calculateAndDraw();
+            });
+        }
 
         function calculateAndDraw() {
             if (!info) return;
@@ -1131,8 +1139,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         },
                         tickInterval: tickInterval,
                         plotBands: [{
-                            from: 0,
-                            to: 5,
+                            from: info.alertProfile.lowerTemperatureLimit, //0
+                            to: info.alertProfile.upperTemperatureLimit, //5,
                             color: 'rgba(0, 255, 0, 0.2)',
                         }, {
                             from: -25,
