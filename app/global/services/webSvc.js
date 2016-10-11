@@ -248,6 +248,16 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 			return $http.post(url, params);
 		},
 
+		getPerformanceReport: function(data) {
+			var url = Api.url + 'getPerformanceReport/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					month: data
+				}
+			}
+			return $http.get(url, params);
+		},
+
 		getNotes: function(params) {
 			var url = Api.url + 'getNotes/' + localDbSvc.getToken();
 			return $http.get(url, params);

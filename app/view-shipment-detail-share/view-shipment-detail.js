@@ -133,7 +133,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.shareReport = function($e) {
         $e.preventDefault();
-
         var modalInstance = $uibModal.open({
             templateUrl: 'app/view-shipment-detail-share/share-report.html',
             controller: 'ShareReportCtrl as VM',

@@ -1,0 +1,38 @@
+<div class="modal-header green">
+    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+    <span>Performance report for month: {{VM.report.sn}} ({{VM.report.trip}})</span>
+    <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </span>
+</div>
+<div class="modal-body">
+    <form name="frmShareReport">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">
+                    <span>Select a month for report:</span>
+                    <i uib-tooltip="List of existing user that would receive this share"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <div class="input-group">
+                    <input show-button-bar="false" id="txtDateFrom" type="text" class="form-control"
+                           max="maxDate" placeholder="Select a month for report" uib-datepicker-popup="MMM-yyyy"
+                           is-open="from.opened"
+                           datepicker-options="{minMode: 'month'}" datepicker-mode="'month'"
+                           ng-click="from.opened = true";
+                           ng-model="VM.monthReport" close-text="Close" />
+                    <label for="txtDateFrom" class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn green" ng-click="VM.viewReport()">View Report</button>
+    <button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
+</div>

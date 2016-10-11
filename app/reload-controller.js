@@ -1,5 +1,5 @@
 ﻿appCtrls.controller('reloadCtrl', function ($scope, $state, $rootScope, $location, $interval, $window, $log, $q,
-                                            localDbSvc, webSvc, $timeout, $document, $templateCache, $http, Role) {
+                                            localDbSvc, webSvc, $timeout, $document, $templateCache, $http, $uibModal) {
     $rootScope.closeText = "";
     $rootScope.loading = false;
     $scope.showRead = false;
@@ -34,6 +34,28 @@
             $state.go('login');
         });
     };
+
+    $scope.performanceReports = function($e) {
+        $e.preventDefault();
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/preference/performance-report.html',
+            controller: 'PerformanceReportCtrl as VM',
+            /*resolve: {
+                sn: function() {
+                    return $scope.sn;
+                },
+                trip: function() {
+                    return $scope.trip;
+                }
+                //note : function() {
+                //    return note;
+                //}
+            }*/
+        });
+        modalInstance.result.then(
+            //
+        );
+    }
 
     $scope.clearCache = function() {
         $templateCache.removeAll();
@@ -108,3 +130,21 @@
         }
     };
 });
+
+appCtrls.controller("PerformanceReportCtrl", PerformanceReportCtrl);
+function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
+    var VM=this;
+    VM.monthReport = new Date();
+    VM.viewReport = function() {
+        var month = moment(VM.monthReport).format('YYYY-MM');
+        var url = Api.url + 'getPerformanceReport/' + localDbSvc.getToken() + "?month="+month;
+        var w = window.innerWidth * 0.7; //70% of fullwidth
+        var h = window.innerHeight * 0.95;
+        var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
+        window.open(url,"_blank", options);
+    }
+    //-- cancel
+    VM.cancel = function() {
+        $uibModalInstance.dismiss("cancel");
+    }
+}
