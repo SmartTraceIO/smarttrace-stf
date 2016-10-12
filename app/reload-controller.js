@@ -142,6 +142,7 @@ function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
         var h = window.innerHeight * 0.95;
         var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
         window.open(url,"_blank", options);
+        $uibModalInstance.close();
     }
     //-- cancel
     VM.cancel = function() {
