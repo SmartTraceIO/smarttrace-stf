@@ -1,6 +1,6 @@
 <div class="modal-header green">
     <i class="fa fa-bar-chart" aria-hidden="true"></i>
-    <span>Performance report for month: {{VM.report.sn}} ({{VM.report.trip}})</span>
+    <span>Performance Report</span>
     <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
         <i class="fa fa-times" aria-hidden="true"></i>
     </span>
@@ -10,26 +10,31 @@
         <div class="row">
             <div class="col-md-5">
                 <label class="control-label">
-                    <span>Select a year for report:</span>
-                    <i uib-tooltip="Year for report"
+                    <span>Period:</span>
+                    <i uib-tooltip="Period for performance report"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <div class="input-group">
-                    <input show-button-bar="false" id="yearDate" type="text" class="form-control"
-                           max="maxDate" placeholder="Select a month for report" uib-datepicker-popup="yyyy"
-                           is-open="year.opened"
-                           datepicker-options="{minMode: 'year'}" datepicker-mode="'year'"
-                           ng-click="year.opened = true";
-                           ng-model="VM.monthReport" close-text="Close" />
-                </div>
+                <select class="form-control" ng-model="VM.period" ng-disabled="AutoStartShipment.startOnLeavingLocation">
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="quarter">Quarter</option>
+                </select>
+                <!--<div class="input-group">-->
+                    <!--<input show-button-bar="false" id="yearDate" type="text" class="form-control"-->
+                           <!--max="maxDate" placeholder="Select a month for report" uib-datepicker-popup="yyyy"-->
+                           <!--is-open="year.opened"-->
+                           <!--datepicker-options="{minMode: 'year'}" datepicker-mode="'year'"-->
+                           <!--ng-click="year.opened = true";-->
+                           <!--ng-model="VM.monthReport" close-text="Close" />-->
+                <!--</div>-->
             </div>
             <div class="col-md-7">
                 <label class="control-label">
-                    <span>Select a month for report:</span>
-                    <i uib-tooltip="Month for report"
+                    <span>Date to:</span>
+                    <i uib-tooltip="Performance report till date/"
                        tooltip-append-to-body="true"
                        tooltip-trigger="mouseenter"
                        tooltip-placement="top"
@@ -38,7 +43,6 @@
                 <div class="input-group">
                     <div uib-datepicker ng-model="VM.monthReport"
                          show-button-bar="false"
-                         datepicker-options="{minMode: 'month'}" datepicker-mode="'month'"
                          datepicker-options="options"></div>
                 </div>
             </div>

@@ -932,10 +932,11 @@
                                    class="fa fa-info-circle"></i>
                             </div>
                             <div class="tools">
-                                <a href="javascript:;" class="expand"> </a>
+                                <a href="javascript:" ng-class="{collapse: hasSibling, expand: !hasSibling}"> </a>
+                                <!--<a href="javascript:" class="collapse"> </a>-->
                             </div>
                         </div>
-                        <div class="portlet-body" style="display:none;">
+                        <div class="portlet-body" ng-style="{display: sDisplay}">
                             <div class="portlet box grey sub-portlet" ng-repeat="t in trackers" ng-hide="t.index == MI">
                                 <div class="portlet-title">
                                     <!--<a href="" class="tracker-info" ng-click="switchTracker(t.index)">-->

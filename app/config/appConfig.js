@@ -28,7 +28,7 @@ app.constant("Color", [
     {"name": "Gray", "code":"#808080"},
     //{"name": "Green", "code":"#008000"}, //-- default color
     {"name": "HotPink", "code":"#FF69B4"},
-    {"name": "IndianRed ", "code":"#CD5C5C"},
+    //{"name": "IndianRed ", "code":"#CD5C5C"},
     {"name": "Indigo ", "code":"#4B0082"},
     //{"name": "Lime", "code":"#00FF00"},
     //{"name": "Magenta", "code":"#FF00FF"},
@@ -114,7 +114,7 @@ app.config(['$locationProvider', '$stateProvider', '$controllerProvider', '$prov
     appConstants.constant = $provide.constant;
 
     //--enable debug
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(false);
 
     //#endregion Register Controllers,Services,Factorys,Values,Constants,Directives & Filters
 

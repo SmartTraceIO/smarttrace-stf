@@ -134,10 +134,18 @@
 appCtrls.controller("PerformanceReportCtrl", PerformanceReportCtrl);
 function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
     var VM=this;
+    VM.period = 'week';
     VM.monthReport = new Date();
+
     VM.viewReport = function() {
-        var month = moment(VM.monthReport).format('YYYY-MM');
-        var url = Api.url + 'getPerformanceReport/' + localDbSvc.getToken() + "?month="+month;
+        var month = moment(VM.monthReport).format('YYYY-MM-DD');
+        var url = Api.url + 'getPerformanceReport/' + localDbSvc.getToken();// + "?month="+month;
+        if (VM.monthReport) {
+            url += ('?anchor=' + month);
+        }
+        if (VM.period) {
+            url += ('&period=' + VM.period);
+        }
         var w = window.innerWidth * 0.7; //70% of fullwidth
         var h = window.innerHeight * 0.95;
         var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
