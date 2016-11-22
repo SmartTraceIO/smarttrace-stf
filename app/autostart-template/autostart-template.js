@@ -497,6 +497,8 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             if (data.status.code == 0) {
                 $scope.LocationList = data.response;
 
+                $log.debug("LocationList", $scope.LocationList);
+
                 $scope.FromLocationList = [];
                 $scope.ToLocationList = [];
                 $scope.InterimLocationList = [];
@@ -601,10 +603,13 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
                     });
                 }
                 if ($scope.AutoStartShipment.endLocations) {
-                    $scope.AutoStartShipment.end_locations = $scope.AutoStartShipment.endLocations.map(function (val) {
+                    var end_locations = $scope.AutoStartShipment.endLocations.map(function (val) {
+                        $log.debug("$scope.ToLocationList#", $scope.ToLocationList);
+                        $log.debug("end-location#", val);
                         var loc = filter($scope.ToLocationList, {locationId: val}, true);
                         if (loc && loc.length > 0) return loc[0];
                     });
+                    $scope.AutoStartShipment.end_locations = end_locations.filter(function(n){ return n != undefined });
                 }
                 if ($scope.AutoStartShipment.arrivalNotificationSchedules) {
                     console.log('Arrival Notification Schedules#', $scope.AutoStartShipment.arrivalNotificationSchedules)
