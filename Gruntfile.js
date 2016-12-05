@@ -39,12 +39,12 @@ module.exports = function(grunt) {
                     {expand: true, cwd: 'Scripts/', src: ['**'], dest: '<%= distdir %>/Scripts'},
                 ]
             },
-            html: {
+            /*html: {
                 files: [
-                    {expand: true, cwd: 'app/', src: ['**/*.json'], dest: '<%= distdir %>/app'},
-                    {expand: true, cwd: 'app/', src: ['**/*.html'], dest: '<%= distdir %>/app'},
+                    {expand: true, cwd: 'app/', src: ['**!/!*.json'], dest: '<%= distdir %>/app'},
+                    {expand: true, cwd: 'app/', src: ['**!/!*.html'], dest: '<%= distdir %>/app'},
                 ]
-            }
+            }*/
         },
     //    htmlmin
         htmlmin : {
@@ -65,8 +65,8 @@ module.exports = function(grunt) {
                 options: {                                 // Target options
                     removeComments: false,
                     collapseWhitespace: false,
-                    minifyJS: true,
-                    minifyCSS:true
+                    minifyJS: false,
+                    minifyCSS:false
                 },
                 files: {
                     '<%= distdir %>/index.html': 'index.html'
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify', /*'htmlmin',*/ 'cssmin']);
+    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin', 'cssmin']);
     grunt.registerTask('default', ['build']);
 
 };

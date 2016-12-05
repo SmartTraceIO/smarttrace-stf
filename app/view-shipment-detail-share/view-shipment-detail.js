@@ -1925,10 +1925,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
             //startTime:"12:27 1 Jun 2016"
             if (result.startDate) {
-                $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+                $scope.trackerInfo.startTime = moment.tz(result.startDate,'YYYY-MM-DDTHH:mm', $rootScope.RunningTimeZoneId).format('HH:mm DD MMM YYYY');
             }
             if (result.endDate) {
-                $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).format('hh:mm DD MMM YYYY');
+                $scope.trackerInfo.arrivalTime = moment.tz(result.endDate,'YYYY-MM-DDTHH:mm', $rootScope.RunningTimeZoneId).format('HH:mm DD MMM YYYY');
             }
 
             $scope.trackerInfo.status = result.status;

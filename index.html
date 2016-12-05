@@ -73,10 +73,15 @@
                                 <li class="menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">AutoStart Shipment</a></li>
                             </ul>
                         </li>-->
-                        <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Shipment'}">
-                            <a href="#/new-autostart-shipment">
-                                New Shipment
-                                <span class="selected"> </span>
+                        <!--<li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Shipment'}">-->
+                            <!--<a href="#/new-autostart-shipment">-->
+                                <!--New Shipment-->
+                                <!--<span class="selected"> </span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <li>
+                            <a href="/" ng-click="performanceReports($event)">
+                                Performance Report
                             </a>
                         </li>
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
@@ -106,11 +111,7 @@
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/user">Users</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="/" ng-click="performanceReports($event)">
-                                Performance Report
-                            </a>
-                        </li>
+
                         <!--<li class="classic-menu-dropdown" ng-click="reload()" ng-hide="!isSmartTraceAdmin"><a href="#/manage/simulator">Manage Simulator</a></li>-->
                     </ul>
                 </div>
@@ -190,10 +191,16 @@
             <div class="page-sidebar navbar-collapse collapse">
                 <div class="page-sidebar-wrapper">
                     <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed">
-                        <li class="nav-item">
-                            <a href="#/new-autostart-shipment" class="nav-link">
-                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                <span class="title">New Shipment</span>
+                        <!--<li class="nav-item">-->
+                            <!--<a href="#/new-autostart-shipment" class="nav-link">-->
+                                <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
+                                <!--<span class="title">New Shipment</span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <li class="nav-item ">
+                            <a href="/" ng-click="performanceReports($event)">
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                Performance Report
                             </a>
                         </li>
                         <li class="nav-item ">
@@ -257,12 +264,7 @@
                                 <span class="title">Manage Simulator</span>
                             </a>
                         </li>-->
-                        <li class="nav-item ">
-                            <a href="/" ng-click="performanceReports($event)">
-                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                Performance Report
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

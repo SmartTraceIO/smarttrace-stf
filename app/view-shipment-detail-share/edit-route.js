@@ -30,13 +30,13 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                     if (VM.shipment.startDate) {
                         //startDate:"2016-06-01T12:27"
                         //VM.dateTimeFrom = moment.tz(VM.shipment.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).toDate();
-                        VM.dateTimeFrom = moment(VM.shipment.shipmentDate,'YYYY-MM-DDThh:mm').toDate();
+                        VM.dateTimeFrom = moment(VM.shipment.shipmentDate,'YYYY-MM-DDTHH:mm').toDate();
                     } else {
                         VM.dateTimeFrom = null;
                     }
 
                     if (VM.shipment.actualArrivalDate) {
-                        VM.dateTimeTo = moment(VM.shipment.actualArrivalDate,'YYYY-MM-DDThh:mm').toDate();
+                        VM.dateTimeTo = moment(VM.shipment.actualArrivalDate,'YYYY-MM-DDTHH:mm').toDate();
                     } else {
                         VM.dateTimeTo = null;
                     }
@@ -94,7 +94,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                    VM.interimStop = VM.interimStops[0].locationId;
                    VM.elapsedTime = VM.interimStops[0].time;
                    //"2016-10-04 10:32"
-                   VM.dateTimeStopped = moment(VM.interimStops[0].stopDate,'YYYY-MM-DD hh:mm').toDate();
+                   VM.dateTimeStopped = moment(VM.interimStops[0].stopDate,'YYYY-MM-DD HH:mm').toDate();
                }
            }
         });
@@ -137,11 +137,13 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
 
         if (VM.dateTimeFrom) {
             //startDate:"2016-06-01T12:27"
-            VM.shipment.startDate = moment(VM.dateTimeFrom).format('YYYY-MM-DDThh:mm');
+            console.log("SAVING-DATE#", VM.dateTimeFrom);
+            VM.shipment.startDate = moment(VM.dateTimeFrom).format('YYYY-MM-DDTHH:mm');
+            console.log("SAVING-DATE2#", VM.shipment.startDate);
         }
         if (VM.dateTimeTo) {
-            VM.shipment.actualArrivalDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
-            VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDThh:mm');
+            VM.shipment.actualArrivalDate = moment(VM.dateTimeTo).format('YYYY-MM-DDTHH:mm');
+            VM.shipment.endDate = moment(VM.dateTimeTo).format('YYYY-MM-DDTHH:mm');
         }
 
         /*if (VM.interimStop) {
@@ -180,7 +182,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                     VM.interimStopLongitude = stopLocation.location.lon;
                 }
                 if (VM.dateTimeStopped) {
-                    VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD hh:mm');
+                    VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD HH:mm');
                 }
                 //-- filter interimStops
                 //var currentStop = filter(VM.interimStops, {locationId: VM.interimStop}, true);
@@ -273,7 +275,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                 VM.interimStopLongitude = stopLocation.location.lon;
             }
             if (VM.dateTimeStopped) {
-                VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD hh:mm');
+                VM.stoppedTime = moment(VM.dateTimeStopped).format('YYYY-MM-DD HH:mm');
             }
             //-- filter interimStops
             //var currentStop = filter(VM.interimStops, {locationId: VM.interimStop}, true);
