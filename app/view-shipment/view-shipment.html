@@ -571,11 +571,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="text-center">
-                    <uib-pagination ng-hide="vm.viewMap" ng-model="vm.ViewShipment.pageIndex"
+                    <ul uib-pagination ng-hide="vm.viewMap" ng-model="vm.ViewShipment.pageIndex"
                                     ng-change="vm.PageChanged()" total-items="vm.ShipmentList.totalCount"
                                     items-per-page="vm.ViewShipment.pageSize"
                                     boundary-links="true" rotate="false" first-text="<<" last-text=">>" next-text=">" previous-text="<">
-                    </uib-pagination>
+                    </ul>
                 </div>
             </div>
         </div>

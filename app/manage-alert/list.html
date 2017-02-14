@@ -92,11 +92,11 @@
                 </tr>
             </table>
         </div>
-        <uib-pagination total-items="AlertList.totalCount"
+        <ul uib-pagination total-items="AlertList.totalCount"
                         boundary-links="true"
                         items-per-page="PageSize"
                         ng-model="PageIndex" ng-change="PageChanged()"
-                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
+                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></ul>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

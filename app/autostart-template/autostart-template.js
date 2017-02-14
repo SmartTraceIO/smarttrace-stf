@@ -277,7 +277,14 @@ appCtrls.controller('AddAutoTempCtrl', function ($scope, rootSvc, webSvc, localD
             } else {
                 $scope.AutoStartShipment.alertsNotificationSchedules = [];
             }
-            console.log('Before Adding AutoStart', $scope.AutoStartShipment);
+
+            if ($scope.set50km) {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm=50;
+            } else {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm=null;
+            }
+
+            //console.log('Before Adding AutoStart', $scope.AutoStartShipment);
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(
                 function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
@@ -739,6 +746,13 @@ appCtrls.controller('EditAutoTempCtrl', function ($scope, rootSvc, localDbSvc, $
             }
 
             $log.debug('UpdateAutostart', $scope.AutoStartShipment);
+
+            if ($scope.set50km) {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm=50;
+            } else {
+                $scope.AutoStartShipment.arrivalNotificationWithinKm=null;
+            }
+
             webSvc.saveAutoStartShipment($scope.AutoStartShipment).success(function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code == 0) {
                     toastr.success("Auto Start Shipment updated successfully")

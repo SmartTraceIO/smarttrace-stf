@@ -227,7 +227,7 @@
 
                     <div class="col-sm-4">
                         <label class="control-label">
-                            <span>Notification Schedule(s) For Alerts</span>
+                            <span>Schedule(s) For Alerts</span>
                             <i uib-tooltip="Enter the schedule to be used for sending out alerts."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
@@ -330,7 +330,43 @@
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-3">
-                        <label class="control-label">Arrival Notification&nbsp;
+                        <label class="checkbox-inline" style="margin-left: 10px;" for="chk-arrival-report">
+                            <input ng-model="AutoStartShipment.sendArrivalReport" type="checkbox" id="chk-arrival-report">
+                            Send arrival report upon arrival&nbsp;
+                            <i uib-tooltip="Send out arrival report when shipment get arrived."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </label>
+                        <label class="checkbox-inline" for="chk-only-alert-report">
+                            <input ng-model="AutoStartShipment.arrivalReportOnlyIfAlerts" type="checkbox" id="chk-only-alert-report">
+                            Only send report if alerts fired&nbsp;
+                            <i uib-tooltip="Only send arrival report if temperature alerts have fired."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </label>
+                        <!--<label class="checkbox-inline" for="send-notification-50km-only">
+                            <input ng-model="set50km" type="checkbox" id="send-notification-50km-only">
+                            Send notification when less than 50km from destination&nbsp;
+                            <i uib-tooltip="Send notification when the shipment is less than 50km far from destination."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </label>
+                        <label class="checkbox-inline" for="exc-noti">
+                            <input ng-model="AutoStartShipment.excludeNotificationsIfNoAlerts" type="checkbox" id="exc-noti">
+                            Only notify if alerts fired&nbsp;
+                            <i uib-tooltip="Only send arrival notification if temperature alerts have fired."
+                               tooltip-append-to-body="true"
+                               tooltip-trigger="mouseenter"
+                               tooltip-placement="top"
+                               class="fa fa-info-circle"></i>
+                        </label>-->
+                        <!--<label class="control-label">Arrival Notification&nbsp;
                             <i uib-tooltip="Enter the distance from specified destination that the arrival notification should be sent out. If a destination is not specified, the arrival notification will be sent out upon arrival."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
@@ -353,12 +389,12 @@
                                    tooltip-trigger="mouseenter"
                                    tooltip-placement="top"
                                    class="fa fa-info-circle"></i>
-                        </label>
+                        </label>-->
                     </div>
                     <div class="col-sm-12 visible-xs">&nbsp;</div>
                     <div class="col-sm-4">
                         <label class="control-label">
-                            <span>Schedule(s) For Arrival Notification</span>
+                            <span>Schedule(s) For Arrival Report</span>
                             <i uib-tooltip="Enter the schedule to be used for sending out arrival notification."
                                tooltip-append-to-body="true"
                                tooltip-trigger="mouseenter"
@@ -441,7 +477,7 @@
                             <option value="28800">Shutdown 20 days after start</option>
                         </select>
                     </div>
-                    <div class="col-sm-4" style="margin-top: 30px">
+                    <!--<div class="col-sm-4" style="margin-top: 30px">
                         <input ng-model="AutoStartShipment.startOnLeavingLocation" type="checkbox" ng-change="changeStateOnLeaving()">
                         Start on leaving location
                         <i uib-tooltip="Automatically create a new shipment if device departs after arrival."
@@ -449,7 +485,7 @@
                            tooltip-trigger="mouseenter"
                            tooltip-placement="top"
                            class="fa fa-info-circle"></i>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="clearfix"></div>
             </div>

@@ -243,12 +243,12 @@
         <div ng-if="lastView==3">
             <div id="trackerMap" style="height: 500px" ng-init="initMap()"></div>
         </div>
-        <uib-pagination total-items="TrackerList.totalCount"
-                        ng-if="lastView==1"
+        <ul uib-pagination total-items="TrackerList.totalCount"
                         items-per-page="PageSize"
+                        ng-if="lastView==1"
                         boundary-links="true"
                         ng-model="PageIndex" ng-change="PageChanged()"
-                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
+                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></ul>
     </div>
 </div>
 <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">

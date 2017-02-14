@@ -104,10 +104,10 @@
                 </tr>
             </table>
         </div>
-        <uib-pagination total-items="GroupList.totalCount"
+        <ul uib-pagination total-items="GroupList.totalCount"
                         items-per-page="GroupList.params.pageSize"
                         boundary-links="true"
                         ng-model="GroupList.params.pageIndex" ng-change="GroupList.PageChanged()"
-                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></uib-pagination>
+                        first-text="<<" last-text=">>" next-text=">" previous-text="<"></ul>
     </div>
 </div>
