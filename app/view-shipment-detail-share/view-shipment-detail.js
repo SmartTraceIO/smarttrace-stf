@@ -20,9 +20,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     var tempUnits = localDbSvc.getDegreeUnits();
     if (tempUnits == 'Celsius') {
-        tempUnits = 'C';
+        // tempUnits = 'C';
+        tempUnits = '\u2103';
     } else {
-        tempUnits = 'F';
+        // tempUnits = 'F';
+        tempUnits = '\u2109';
     }
 
     var orderBy = $filter('orderBy');
@@ -635,7 +637,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             //prepare tracker message data
             var obj = {};
             obj.title = "Tracker " + info[i].deviceSN + "(" + info[i].tripCount + ")";
-            obj.lines = ['<div><span class="tt_temperature">' + info[i].y.toFixed(1) + '<sup>o</sup>C</span><span>' + formatDate(info[i].x) + '</span></div>'];
+            obj.lines = ['<div><span class="tt_temperature">' + info[i].y.toFixed(1) + tempUnits + '</span><span>' + formatDate(info[i].x) + '</span></div>'];
             $scope.trackerMsg.push([obj]);
         }
     }
@@ -1130,7 +1132,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                         title: {
                             align: 'middle',
                             offset: 40,
-                            text: 'Temperature °'+ tempUnits,
+                            text: 'Temperature'+ tempUnits,
                             y: -10
                         },
                         labels:{
