@@ -79,11 +79,8 @@
                                 <!--<span class="selected"> </span>-->
                             <!--</a>-->
                         <!--</li>-->
-                        <li>
-                            <a href="/" ng-click="performanceReports($event)">
-                                Performance Report
-                            </a>
-                        </li>
+                        <li class="classic-menu-dropdown menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">New Manual Shipment</a></li>
+                        <!--<li><a href="/" ng-click="performanceReports($event)">Performance Report</a></li>-->
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
                             <a href="#/view-shipment">
                                 View Shipments
@@ -96,6 +93,7 @@
                                 <span class="selected"> </span>
                             </a>
                         </li>
+                        <li><a href="/" ng-click="performanceReports($event)">Performance Report</a></li>
                         <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Setup'}">
                             <a href="javascript:void(0)" onclick="return false;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 Setup<span class="caret"></span>
@@ -328,7 +326,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.7/angular-local-storage.min.js"></script>
 
     <script src="app/modules.js?version=3.2"></script>
-    <script src="app/config/appConfig.js?version=3.2"></script>
+    <script src="app/config/appConfig.js?version=3.3"></script>
     <script src="app/config/routeConfig.js?version=3.6"></script>
     <script src="app/global/services/rootSvc.js?version=3.2"></script>
     <script src="app/global/services/webSvc.js?version=3.2"></script>

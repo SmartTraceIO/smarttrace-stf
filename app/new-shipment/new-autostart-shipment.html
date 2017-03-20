@@ -2,7 +2,7 @@
     <div class="portlet box green ">
         <div class="portlet-title">
             <div class="caption">
-                <img style="margin-top:-8px" src="theme/img/headerNewShipment.png" /> Create new shipment with autostart shipment template
+                <img style="margin-top:-8px" src="theme/img/headerNewShipment.png" /> Create a new shipment manually and stop current shipment
             </div>
             <div class="tools hidden-print">
                 <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">
@@ -13,11 +13,11 @@
         </div>
         <div class="portlet-body">
             <div class="container-fluid">
-                <div class="row">
+                <!--<div class="row">
                     <span>Shipments are based on Autostart Templates, which are assigned to each device in
                         <a ng-href="#/tracker">Trackers</a>
                     page.</span>
-                </div>
+                </div>-->
                 <div class="row">&nbsp;</div>
                 <div class="row">
                     <span style="font-weight: 700">There are two ways to create a Shipment:</span>
@@ -28,7 +28,8 @@
                             <tr>
                                 <td width="33%" class="text-center">
                                     <p>
-                                        <span class="word">1.</span> Switch on a tracker. This creates a Shipment using the Autostart Template.</p>
+                                        <span class="word">1.</span><strong>Autostart Shipment</strong></p>
+                                    Switch on a tracker. This creates a Shipment using the Autostart Template.
                                 </td>
                                 <td width="4%">
                                     <div class="wrapper">
@@ -37,17 +38,18 @@
                                     </div>
                                     ​</td>
                                 <td width="63%" style="padding-left: 50px;">
-                                    <p>
-                                        <span class="word"> 2.</span> If the tracker is already switched on, choose it below and hit "Create Shipment".
-                                    </p>
-                                    <p>This will stop the current shipment and create a new shipment using the Autostart Template.</p>
+                                    <div class="text-center">
+                                        <p><span class="word"> 2.</span><strong>Manual Shipment</strong></p>
+                                        <p>If the tracker is already switched on, choose it below and hit "Create Shipment".</p>
+                                        <p>This will stop the current shipment and create a new shipment using the Autostart Template.</p>
+                                    </div>
                                     <form role="form" name="frmAddNewShipment" id="frmAddNewShipment" novalidate class="form-horizontal">
                                         <div class="form-body">
                                             <div class="form-group">
                                                 <div class="col-md-10">
                                                     <label class="control-label">
                                                         <span>Tracker</span>
-                                                        <i uib-tooltip="Choose a tracker from the list below to create an autostart shipment"
+                                                        <i uib-tooltip="Choose a tracker from the list to create a Manual Shipment"
                                                            tooltip-append-to-body="true"
                                                            tooltip-trigger="mouseenter"
                                                            tooltip-placement="top"
@@ -99,7 +101,7 @@
 
                                         </div>
                                         <div class="form-actions text-center ab">
-                                            <button class="btn green" form="frmAddNewShipment" ng-click="VM.createNewAutoStartShipment(frmAddNewShipment.$valid)" type="submit">Create Shipment</button>
+                                            <button class="btn green" form="frmAddNewShipment" ng-click="VM.createNewAutoStartShipment(frmAddNewShipment.$valid)" type="submit">Create Manual Shipment</button>
                                             <button class="btn default" type="button" ng-click="VM.ResetForm()">Reset</button>
                                         </div>
                                     </form>

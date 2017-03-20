@@ -27,12 +27,11 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                     VM.shipment.shutDownAfterStartMinutes = (VM.shipment.shutDownAfterStartMinutes && !isNaN(VM.shipment.shutDownAfterStartMinutes)) ? VM.shipment.shutDownAfterStartMinutes.toString() : '';
 
                     console.log('Date-Time', VM.shipment.startDate);
-                    if (VM.shipment.startDate) {
+                    if (!VM.shipment.startDate) {
                         //startDate:"2016-06-01T12:27"
-                        //VM.dateTimeFrom = moment.tz(VM.shipment.startDate,'YYYY-MM-DDThh:mm', $rootScope.RunningTimeZoneId).toDate();
                         VM.dateTimeFrom = moment(VM.shipment.shipmentDate,'YYYY-MM-DDTHH:mm').toDate();
                     } else {
-                        VM.dateTimeFrom = null;
+                        VM.dateTimeFrom = moment(VM.shipment.startDate,'YYYY-MM-DDTHH:mm').toDate();
                     }
 
                     if (VM.shipment.actualArrivalDate) {
@@ -137,9 +136,10 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
 
         if (VM.dateTimeFrom) {
             //startDate:"2016-06-01T12:27"
-            console.log("SAVING-DATE#", VM.dateTimeFrom);
+            // console.log("SAVING-DATE#", VM.dateTimeFrom);
             VM.shipment.startDate = moment(VM.dateTimeFrom).format('YYYY-MM-DDTHH:mm');
-            console.log("SAVING-DATE2#", VM.shipment.startDate);
+            VM.shipment.shipmentDate = moment(VM.dateTimeFrom).format('YYYY-MM-DDTHH:mm');
+            // console.log("SAVING-DATE2#", VM.shipment.startDate);
         }
         if (VM.dateTimeTo) {
             VM.shipment.actualArrivalDate = moment(VM.dateTimeTo).format('YYYY-MM-DDTHH:mm');

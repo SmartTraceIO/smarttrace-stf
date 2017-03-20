@@ -12,7 +12,7 @@ app.constant("Color", [
     {"name": "DarkCyan", "code": "#008B8B"},
     {"name": "DarkGoldenrod", code: "#B8860B"},
     {"name": "DarkGreen", "code":"#006400"},
-    {"name": "DarkKhaki", "code": "#BDB76B"},
+    //{"name": "DarkKhaki", "code": "#BDB76B"}, //server named DarkHhaki
     {"name": "DarkMagenta", "code": "#8B008B"},
     {"name": "DarkOlivegreen", "code": "#556B2F"},
     {"name": "DarkOrange", "code":"#FF8C00"},
@@ -65,7 +65,7 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
 
     $rootScope.go = function(url){
         $state.go(url);
-    }
+    };
 
     $rootScope.$on('$routeChangeStart', function (event, next, current) { 
         $rootScope.$storage = $localStorage; 
@@ -84,7 +84,7 @@ app.run(function ($state, $rootScope, $resource, localDbSvc, $timeout, $template
             }
             else {
                 $rootScope.previousState = fromState
-            };
+            }
 
             /*if ($rootScope.modalInstance)
                 $rootScope.modalInstance.close('cancel');*/
