@@ -76,7 +76,7 @@
             $rootScope.closeText = "";
             $rootScope.closedNotification = [];
         }
-        console.log('Changing notification',$scope.showRead, $rootScope.closedNotification);
+        // console.log('Changing notification',$scope.showRead, $rootScope.closedNotification);
     }
 
     markAsRead = function(data){
@@ -132,9 +132,10 @@
 });
 
 appCtrls.controller("PerformanceReportCtrl", PerformanceReportCtrl);
-function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
+function PerformanceReportCtrl($uibModalInstance, $filter, webSvc, Api, localDbSvc) {
     var VM=this;
     VM.period = 'week';
+    VM.location = null;
     VM.monthReport = new Date();
 
     VM.viewReport = function() {
@@ -146,6 +147,9 @@ function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
         if (VM.period) {
             url += ('&period=' + VM.period);
         }
+        if (VM.location) {
+            url += ('&location=' + VM.location);
+        }
         var w = window.innerWidth * 0.7; //70% of fullwidth
         var h = window.innerHeight * 0.95;
         var options = "toolbar=0, titlebar=0, scrollbars=1, location=0, resizable=no, menubar=0, status=0, height="+ h +", width=" + w;
@@ -155,5 +159,39 @@ function PerformanceReportCtrl($uibModalInstance, webSvc, Api, localDbSvc) {
     //-- cancel
     VM.cancel = function() {
         $uibModalInstance.dismiss("cancel");
+    };
+
+    var BindLocations = function (cb) {
+        webSvc.getLocations(1000, 1, 'locationName', 'asc').success(function(data){
+            if (data.status.code == 0) {
+                var LocationList = data.response;
+                VM.FromLocationList = [];
+                VM.ToLocationList = [];
+                VM.InterimLocationList = [];
+
+                angular.forEach(LocationList, function (val, key) {
+                    if (val.companyName) {
+                        var dots = val.companyName.length > 20 ? '...' : '';
+                        var companyName = $filter('limitTo')(val.companyName, 20) + dots;
+                        LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
+                    }
+                    else {
+                        LocationList[key].DisplayText = val.locationName;
+                    }
+
+                    if (val.startFlag == "Y")
+                        VM.FromLocationList.push(val);
+                    if (val.endFlag == "Y")
+                        VM.ToLocationList.push(val);
+                    if (val.interimFlag == 'Y') {
+                        VM.InterimLocationList.push(val);
+                    }
+                });
+
+                if (cb)
+                    cb;
+            }
+        });
     }
+    BindLocations();
 }

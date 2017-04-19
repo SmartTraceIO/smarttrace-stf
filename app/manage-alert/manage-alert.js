@@ -23,7 +23,7 @@
         webSvc.getAlertProfiles($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
             if (data.status.code == 0) {
                 $scope.AlertList = data.response;
-                //console.log('AlertList', data.response);
+                //$log.debug('AlertList', data.response);
                 $scope.AlertList.totalCount = data.totalCount;
                 angular.forEach($scope.AlertList, function (val, key) {
                     var rule;
@@ -217,7 +217,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
     }
 
     $scope.SaveData = function (isValid, closeModalPopup) {
-        console.log('IsValid', isValid);
+        $log.debug('IsValid', isValid);
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
             for (var i = 0; i < $scope.coldAlerts.length; i++) {
@@ -236,7 +236,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
                 $scope.Alert.temperatureIssues.push(val);
             }
 
-            //console.log('Alert', $scope.Alert);
+            //$log.debug('Alert', $scope.Alert);
 
             webSvc.saveAlertProfile($scope.Alert).success(function (data, textStatus, XmlHttpRequest) {
                 if (data.status.code==0) {
@@ -335,7 +335,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
 
             webSvc.getAlertProfile(alertId).success(function (data) {
                 if (data.status.code == 0) {
-                    //console.log('Alert', data.response);
+                    //$log.debug('Alert', data.response);
                     $scope.Alert = data.response;
                     $scope.coldAlerts = [];
                     $scope.hotAlerts = [];
@@ -389,7 +389,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
     }
 
     $scope.SaveData = function (isValid, closeModalPopup) {
-        console.log('IsValid', isValid);
+        $log.debug('IsValid', isValid);
         if (isValid) {
             $scope.Alert.temperatureIssues = [];
             for (var i = 0; i < $scope.coldAlerts.length; i++) {

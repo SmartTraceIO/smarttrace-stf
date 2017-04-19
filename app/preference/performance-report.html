@@ -17,7 +17,7 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <select class="form-control" ng-model="VM.period" ng-disabled="AutoStartShipment.startOnLeavingLocation">
+                <select class="form-control" ng-model="VM.period">
                     <option value="week">Week</option>
                     <!--<option value="month">Month</option>-->
                     <!--<option value="quarter">Quarter</option>-->
@@ -30,6 +30,18 @@
                            <!--ng-click="year.opened = true";-->
                            <!--ng-model="VM.monthReport" close-text="Close" />-->
                 <!--</div>-->
+
+                <label class="control-label">
+                    <span>Destination:</span>
+                    <i uib-tooltip="Destination for performance report"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <select class="form-control" ng-model="VM.location">
+                    <option ng-repeat="location in VM.ToLocationList" ng-value="location.locationId">{{location.DisplayText}}</option>
+                </select>
             </div>
             <div class="col-md-7">
                 <label class="control-label">

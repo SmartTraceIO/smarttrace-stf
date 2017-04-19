@@ -39,6 +39,11 @@ module.exports = function(grunt) {
                     {expand: true, cwd: 'Scripts/', src: ['**'], dest: '<%= distdir %>/Scripts'},
                 ]
             },
+            version: {
+                files: [
+                    {expand: true, cwd: 'app/', src: ['**!/!*.json'], dest: '<%= distdir %>/app'},
+                ]
+            }
             /*html: {
                 files: [
                     {expand: true, cwd: 'app/', src: ['**!/!*.json'], dest: '<%= distdir %>/app'},
@@ -63,8 +68,8 @@ module.exports = function(grunt) {
             },
             my_index: {
                 options: {                                 // Target options
-                    removeComments: false,
-                    collapseWhitespace: false,
+                    removeComments: true,
+                    collapseWhitespace: true,
                     minifyJS: false,
                     minifyCSS:false
                 },

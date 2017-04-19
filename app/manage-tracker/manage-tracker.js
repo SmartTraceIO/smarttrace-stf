@@ -21,7 +21,6 @@
         var BindTrackerList = function () {
             webSvc.getDevices($scope.PageSize, $scope.PageIndex, $scope.Sc, $scope.So).success(function(data){
                 if (data.status.code == 0) {
-                    $log.debug('TrackerList', data.response);
                     $scope.TrackerList = data.response;
                     $scope.TrackerList.totalCount = data.totalCount;
 
@@ -130,8 +129,12 @@
             BindTrackerList();
         }
 
-        $scope.PageChanged = function (page) {
-            $scope.PageIndex = page;
+        $scope.PageChanged = function () {
+            $log.debug("Total", $scope.TrackerList.totalCount);
+            $log.debug("PageSize", $scope.PageSize);
+            $log.debug("PageIndex", $scope.PageIndex);
+            $log.debug("Sc", $scope.Sc);
+            $log.debug("So", $scope.So);
             BindTrackerList();
         }
 
@@ -149,7 +152,7 @@
         $scope.DeleteDevice = function () {
             $("#confirmModel").modal("hide");
             webSvc.deleteDevice($scope.deviceImei).success(function(data){
-                console.log('DELETE-DEVICE', data);
+                $log.debug('DELETE-DEVICE', data);
                 if (data.status.code == 0) {
                     toastr.success("Device deleted successfully")
                 } else {
@@ -419,7 +422,7 @@
                         var stop = null;
                         for (var i = 0; i < shipment.interimStops.length; i++) {
                             var id = shipment.interimStops[i];
-                            console.log("ID", id);
+                            $log.debug("ID", id);
                             stop = filter($scope.LocationListInterim, {locationId: id}, true);
                             if (stop && stop.length > 0) {
                                 stop = stop[0];
@@ -691,7 +694,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
         }).then(function() {
             webSvc.getAutoStartShipments(param).success(function(data) {
                 if (data.status.code == 0) {
-                    console.log('AutoShipment', data.response);
+                    $log.debug('AutoShipment', data.response);
                     $scope.AutoStartShipmentList = data.response;
                     $scope.tracker.autoStartShipment = filter($scope.AutoStartShipmentList, {id:$scope.tracker.autostartTemplateId}, true)[0];
                 }
@@ -749,7 +752,7 @@ appCtrls.controller('EditTrackerCtrl', function($scope, $rootScope, $state, $fil
                 toastr.error('No Shipment for this device');
             } else {
                 webSvc.getShipment(shipmentId).success(function(resp) {
-                    console.log('DATA', resp);
+                    $log.debug('DATA', resp);
                     if (resp.status.code == 0) {
                         $scope.shutdownTimeISO = resp.response.shutdownTimeISO;
                     } else {

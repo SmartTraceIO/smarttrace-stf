@@ -341,7 +341,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
             //--trigger shutdown
             webSvc.shutdownDevice(VM.shipmentId).success(function(data) {
                 if (data.status.code == 0) {
-                    toastr.success("Success. The shutdown process has been triggered for this device");
+                    // toastr.success("Success. The shutdown process has been triggered for this device");
                 } else {
                     toastr.error("You have no permission to shutdown this device!");
                 }
