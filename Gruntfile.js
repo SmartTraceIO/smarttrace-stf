@@ -7,7 +7,9 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 mangle: false,
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                sourceMap: true,
+                compress: true,
+                // banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             my_target: {
                 files: [
@@ -55,8 +57,10 @@ module.exports = function(grunt) {
         htmlmin : {
             dist: {
                 options: {                                 // Target options
-                    removeComments: false,
-                    collapseWhitespace: false
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    keepClosingSlash: true,
+                    minifyJS: true
                 },
                 files: [{
                     expand: true,
