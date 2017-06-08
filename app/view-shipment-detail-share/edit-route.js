@@ -43,7 +43,7 @@ function EditShipmentRoute($uibModalInstance, webSvc, shipmentId, $filter, $q) {
                     if (VM.shipment.status == "Arrived") {
                         VM.posibleStatus = ["Arrived", "Ended"];
                     } else if (VM.shipment.status == "Ended") {
-                        VM.posibleStatus = ["Ended"];
+                        VM.posibleStatus = ["Ended", "Arrived"];
                     } else {
                         VM.posibleStatus = ["Default", "Arrived", "Ended"];
                     }
