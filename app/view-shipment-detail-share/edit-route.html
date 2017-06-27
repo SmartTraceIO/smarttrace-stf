@@ -1,194 +1,205 @@
 <div class="modal-header green">
-    <i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
-    <span>Edit route for shipment {{VM.shipment.deviceSN}} ({{VM.shipment.tripCount}})</span>
-    <span class="pull-right" style="cursor: pointer" ng-click="VM.cancel()">
-        <i class="fa fa-times" aria-hidden="true"></i>
-    </span>
+	<i class="fa fa-archive" aria-hidden="true" style="font-size: 20px"></i>
+	<span>Edit route for shipment {{VM.shipment.deviceSN}}
+		({{VM.shipment.tripCount}})</span> <span class="pull-right"
+		style="cursor: pointer" ng-click="VM.cancel()"> <i
+		class="fa fa-times" aria-hidden="true"></i>
+	</span>
 </div>
 <div class="modal-body">
-    <form name="frmEditGoods">
-        <div class="row">
-            <div class="col-md-6">
-                <label class="control-label">
-                    <span>Shipment From:</span>
-                    <i uib-tooltip="Location where the shipment was launched. The origin"
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <select class="form-control"
-                        ng-model="VM.shipment.shippedFrom"
-                        ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
-            </div>
+	<form name="frmEditGoods">
+		<div class="row">
+			<div class="col-md-6">
+				<label class="control-label"> <span>Shipment From:</span> <i
+					uib-tooltip="Location where the shipment was launched. The origin"
+					tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+					tooltip-placement="top" class="fa fa-info-circle"></i>
+				</label> <select class="form-control" ng-model="VM.shipment.shippedFrom"
+					ng-options="location.locationId as location.DisplayText for location in VM.FromLocationList">
+					<option value="">-- Please Select --</option>
+				</select>
+			</div>
 
-            <div class="col-md-6">
-                <label class="control-label">
-                    <span>Shipment To:</span>
-                    <i uib-tooltip="Location where the shipment ended. The destination."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <select class="form-control"
-                        ng-model="VM.shipment.shippedTo"
-                        ng-options="location.locationId as location.DisplayText for location in VM.ToLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 15px;">
-            <div class="col-md-4">
-                <label class="control-label">
-                    <span>Interim Stop:</span>
-                    <i uib-tooltip="Location where the shipment temporarily stopped such as a cross-docking site."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <select class="form-control"
-                        ng-model="VM.interimStop"
-                        ng-options="location.locationId as location.DisplayText for location in VM.InterimLocationList">
-                    <option value="">-- Please Select --</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="control-label">
-                    <span>Elapsed time:</span>
-                    <i uib-tooltip="Number of minutes that the shipment was stopped."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <input class="form-control" type="number" ng-model="VM.elapsedTime">
-            </div>
-            <div class="col-md-5">
-                <label class="control-label">
-                    <span>Stopped time:</span>
-                    <i uib-tooltip="The time that the shipment has stopped at."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <table>
-                    <tr>
-                        <td>
-                            <div class="input-group">
-                                <input show-button-bar="false" id="txtDateStopped" type="text" class="form-control"
-                                       max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
-                                       is-open="stop.opened"
-                                       ng-click="stop.opened = true";
-                                       ng-model="VM.dateTimeStopped" close-text="Close" />
-                                <label for="txtDateStopped" class="input-group-addon">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div uib-timepicker ng-model="VM.dateTimeStopped" show-meridian='true' show-spinners="false"/>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-1" style="margin-top: 25px;">
-                <button type="submit" class="btn btn-danger" ng-click="VM.deleteInterimStop()">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 15px;">
-            <div class="col-md-6 col-sm-12">
-                <label class="control-label">Start Date:
-                    <i uib-tooltip="The date and time the shipment started"
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <table>
-                    <tr>
-                        <td>
-                            <div class="input-group">
-                                <input show-button-bar="false" id="txtDateFrom" type="text" class="form-control"
-                                       max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
-                                       is-open="from.opened"
-                                       ng-click="from.opened = true";
-                                       ng-model="VM.dateTimeFrom" close-text="Close" />
-                                <label for="txtDateFrom" class="input-group-addon">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div uib-timepicker ng-model="VM.dateTimeFrom" show-spinners="false"/>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+			<div class="col-md-6">
+				<label class="control-label"> <span>Shipment To:</span> <i
+					uib-tooltip="Location where the shipment ended. The destination."
+					tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+					tooltip-placement="top" class="fa fa-info-circle"></i>
+				</label> <select class="form-control" ng-model="VM.shipment.shippedTo"
+					ng-options="location.locationId as location.DisplayText for location in VM.ToLocationList">
+					<option value="">-- Please Select --</option>
+				</select>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 15px;">
+			<table>
+				<thead>
+					<tr>
+						<td class="col-md-4">
+							<label class="control-label"> <span>Interim
+									Stop:</span> <i
+								uib-tooltip="Location where the shipment temporarily stopped such as a cross-docking site."
+								tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+								tooltip-placement="top" class="fa fa-info-circle"></i>
+							</label>
+						</td>
+						<td class="col-md-2">
+							<label class="control-label"> <span>Elapsed
+									time:</span> <i
+								uib-tooltip="Number of minutes that the shipment was stopped."
+								tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+								tooltip-placement="top" class="fa fa-info-circle"></i>
+						</td>
+						<td class="col-md-5">
+							<label class="control-label"> <span>Stopped
+									time:</span> <i
+								uib-tooltip="The time that the shipment has stopped at."
+								tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+								tooltip-placement="top" class="fa fa-info-circle"></i>
+							</label>
+						</td>
+						<td class="col-md-1">
+							<label> </label>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat = "stp in VM.interimStops">
+						<td class="col-md-4">
+							<select class="form-control" ng-model="stp.interimStop"
+								ng-options="location.locationId as location.DisplayText for location in VM.InterimLocationList">
+								<option value="">-- Please Select --</option>
+							</select>
+						</td>
+						<td class="col-md-2">
+							<input class="form-control" type="number" ng-model="stp.elapsedTime">
+						</td>
+						<td class="col-md-5">
+							<table>
+								<tr>
+									<td>
+										<div class="input-group">
+											<input show-button-bar="false" id="txtDateStopped"
+												type="text" class="form-control" max="maxDate"
+												placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
+												is-open="stop.opened" ng-click="stop.opened = true"
+												ng-model="stp.dateTimeStopped"
+												close-text="Close" /> <label for="txtDateStopped"
+												class="input-group-addon"> <i
+												class="glyphicon glyphicon-calendar"></i>
+											</label>
+										</div>
+									</td>
+									<td>
+										<div uib-timepicker ng-model="stp.dateTimeStopped"
+											show-meridian='true' show-spinners="false" />
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td class="col-md-1">
+							<button type="submit" class="btn btn-danger"
+								ng-click="VM.deleteInterimStop(stp)">
+								<span class="glyphicon glyphicon-remove"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="col-md-4" colspan="4">
+							<div class="pull-left bold" style="font-size: 18px">
+					            <span class="link" onClick="VM.addInterimStop()">
+					                <h5 style="background-color: #5BCA45; color: #ffffff">Add Interim Stop</h5>
+					            </span>
+					        </div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
 
-            <div class="col-md-6 col-sm-12">
-                <label class="control-label">
-                    <span>Arrival Date:</span>
-                    <i uib-tooltip="The date and time of arrival."
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                </label>
-                <table>
-                    <tr>
-                        <td>
-                            <div class="input-group">
-                                <input show-button-bar="false" id="txtDateTo" type="text" class="form-control"
-                                       max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
-                                       is-open="to.opened"
-                                       ng-click="to.opened = true";
-                                       ng-model="VM.dateTimeTo" close-text="Close" />
-                                <label for="txtDateTo" class="input-group-addon">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div uib-timepicker ng-model="VM.dateTimeTo" show-spinners="false" />
-                        </td>
-                    </tr>
-                </table>
+		<div class="row" style="margin-top: 15px;">
+			<div class="col-md-6 col-sm-12">
+				<label class="control-label">Start Date: <i
+					uib-tooltip="The date and time the shipment started"
+					tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+					tooltip-placement="top" class="fa fa-info-circle"></i>
+				</label>
+				<table>
+					<tr>
+						<td>
+							<div class="input-group">
+								<input show-button-bar="false" id="txtDateFrom" type="text"
+									class="form-control" max="maxDate" placeholder="Select Date"
+									uib-datepicker-popup="dd-MMM-yyyy" is-open="from.opened"
+									ng-click="from.opened = true"
+                                    ng-model="VM.dateTimeFrom"
+									close-text="Close" /> <label for="txtDateFrom"
+									class="input-group-addon"> <i
+									class="glyphicon glyphicon-calendar"></i>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div uib-timepicker ng-model="VM.dateTimeFrom"
+								show-spinners="false" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<label class="control-label"> <span>Arrival Date:</span> <i
+					uib-tooltip="The date and time of arrival."
+					tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+					tooltip-placement="top" class="fa fa-info-circle"></i>
+				</label>
+				<table>
+					<tr>
+						<td>
+							<div class="input-group">
+								<input show-button-bar="false" id="txtDateTo" type="text"
+									class="form-control" max="maxDate" placeholder="Select Date"
+									uib-datepicker-popup="dd-MMM-yyyy" is-open="to.opened"
+									ng-click="to.opened = true"
+                                    ng-model="VM.dateTimeTo"
+									close-text="Close" /> <label for="txtDateTo"
+									class="input-group-addon"> <i
+									class="glyphicon glyphicon-calendar"></i>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div uib-timepicker ng-model="VM.dateTimeTo"
+								show-spinners="false" />
+						</td>
+					</tr>
+				</table>
 
-            </div>
-        </div>
-        <div class="row" style="margin-top: 15px;">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="form-group">
-                    <label class="control-label">
-                        <span>Status</span>
-                        <i uib-tooltip=" 'Default' is an active shipment. 'Arrived' is a completed shipment with a destination. 'Ended' is a completed shipment without a destination. Note that only some changes are possible to status."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"></i>
-                    </label>
-                    <ui-select ng-model="VM.shipment.status"
-                               ng-disabled="disabled"
-                               theme="bootstrap">
-                        <ui-select-match placeholder="Change status">{{$select.selected}}</ui-select-match>
-                        <ui-select-choices repeat="status in VM.posibleStatus | filter: $select.search">
-                            <div ng-bind-html="status | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 15px;">
+			<div class="col-md-4 col-md-offset-4">
+				<div class="form-group">
+					<label class="control-label"> <span>Status</span> <i
+						uib-tooltip=" 'Default' is an active shipment. 'Arrived' is a completed shipment with a destination. 'Ended' is a completed shipment without a destination. Note that only some changes are possible to status."
+						tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+						tooltip-placement="top" class="fa fa-info-circle"></i>
+					</label>
+					<ui-select ng-model="VM.shipment.status" ng-disabled="disabled"
+						theme="bootstrap"> <ui-select-match
+						placeholder="Change status">{{$select.selected}}</ui-select-match>
+					<ui-select-choices
+						repeat="status in VM.posibleStatus | filter: $select.search">
+					<div ng-bind-html="status | highlight: $select.search"></div>
+					</ui-select-choices> </ui-select>
 
-                </div>
-            </div>
-        </div>
-    </form>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn green" ng-click="VM.saveShipment()">Save</button>
-    <button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
+	<button type="button" class="btn green" ng-click="VM.saveShipment()">Save</button>
+	<button type="button" class="btn default" ng-click="VM.cancel()">Cancel</button>
 </div>

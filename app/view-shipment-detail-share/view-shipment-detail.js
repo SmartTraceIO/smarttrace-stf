@@ -461,10 +461,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             $scope.trackerInfo.startLocationText = $scope.trackerInfo.startLocation;
         }
 
-        //update interimStops //TODO
-        if ($scope.trackerInfo.interimStops && $scope.trackerInfo.interimStops.length > 1) {
-            var item = $scope.trackerInfo.interimStops.slice(0, 1);
-            $scope.trackerInfo.interimStops = item;
+        //update interimStops
+        if ($scope.trackerInfo.interimStops) {
+            var items = $scope.trackerInfo.interimStops.slice();
+            $scope.trackerInfo.interimStops = items;
         }
     }
 
