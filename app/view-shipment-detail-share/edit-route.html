@@ -33,8 +33,8 @@
 		</div>
 		<div class="row" style="margin-top: 15px;">
 			<table>
-				<thead>
-					<tr>
+				<tbody>
+					<tr ng-repeat-start = "stp in VM.interimStops">
 						<td class="col-md-4">
 							<label class="control-label"> <span>Interim
 									Stop:</span> <i
@@ -62,9 +62,7 @@
 							<label> </label>
 						</td>
 					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat = "stp in VM.interimStops">
+					<tr ng-repeat-end = "stp in VM.interimStops">
 						<td class="col-md-4">
 							<select class="form-control" ng-model="stp.interimStop"
 								ng-options="location.locationId as location.DisplayText for location in VM.InterimLocationList">
@@ -84,9 +82,11 @@
 												placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy"
 												is-open="stop.opened" ng-click="stop.opened = true"
 												ng-model="stp.dateTimeStopped"
-												close-text="Close" /> <label for="txtDateStopped"
-												class="input-group-addon"> <i
-												class="glyphicon glyphicon-calendar"></i>
+												close-text="Close" /> 
+											<label class="input-group-addon"
+												ng-model="stp.dateTimeStopped"
+												ng-click="stop.opened = true"> 
+												<i class="glyphicon glyphicon-calendar"></i>
 											</label>
 										</div>
 									</td>
@@ -110,7 +110,7 @@
 						<td class="col-md-4" colspan="4">
 							<div class="pull-left bold" style="font-size: 18px">
 					            <span class="link" onClick="VM.addInterimStop()">
-					                <h5 style="background-color: #5BCA45; color: #ffffff">Add Interim Stop</h5>
+					                <h5>Add Interim Stop</h5>
 					            </span>
 					        </div>
 						</td>

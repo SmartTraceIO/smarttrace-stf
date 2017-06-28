@@ -111,7 +111,8 @@ i{
     display: inline;
 }
 .link > h5{
-    color: #5BCA45;
+    color: #382584;
+    font-weight: 500;
     display: inline;
     text-decoration: underline;
 }
