@@ -1034,12 +1034,12 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             events: {
                                 mouseOut: function () {
                                     $scope.showAlerts(-1);
-                                },
+                                }
                             }
                         }
                     },
                     scrollbar : {
-                        enabled : false,
+                        enabled : false
                     },
                     credits: {
                         enabled: false
@@ -1292,15 +1292,15 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 lineWidth: 1,
                 data: subSeries[i],
                 enableMouseTracking: false
-            });   
+            });
         }
 
-        // console.log(chartSeries);
         chartSeries.push({
             data: gap,
             enableMouseTracking: false,
             color: gapColor
         });
+        console.log(chartSeries);
 
         for(i = 0; i < alertData.length; i++){
             chartSeries.push({
@@ -1346,6 +1346,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
     function prepareNoteChartSeries() {
         noteData.length = 0; //reset noteData
+        console.log('$scope.shipmentNotes',$scope.shipmentNotes);
         angular.forEach($scope.shipmentNotes, function(val, key) {
             $scope.shipmentNotes[key].x = parseDate(val.timeOnChart);
         });
@@ -1441,7 +1442,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 var msg = {};
 
                 msg.title = "<table><tr><td valign='middle'><img style='float: left; padding-right: 3px' src='theme/img/tiny" + alert + str + ".png'/></td><td valign='middle'>" + alertinfo[0].title + "</td></tr></table>";
-                msg.lines = [alertinfo[0].Line1];   
+                msg.lines = [alertinfo[0].Line1];
                 if(alertinfo[0].Line2 != undefined){
                     msg.lines.push(alertinfo[0].Line2);
                 }
@@ -1487,11 +1488,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     }
                     alertmsg.push(msg);
                 }
-                
+
                 $scope.trackerMsg[i] = alertmsg;
             }
         }
-        
+
         lastPoint = subSeries[$scope.MI].length - 1;
         //console.log('LastPoint', lastPoint);
         //Destination

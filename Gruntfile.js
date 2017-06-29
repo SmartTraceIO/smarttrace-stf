@@ -2,6 +2,12 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        connect: {
+            example: {
+                port: 1337,
+                base: 'dist'
+            }
+        },
         distdir: 'dist',
         //tasks
         uglify: {
@@ -102,8 +108,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-connect');
     // Default task(s).
     grunt.registerTask('build', ['copy', 'uglify', 'htmlmin', 'cssmin']);
-    grunt.registerTask('default', ['build']);
+    grunt.registerTask('default', ['build','connect:example']);
+
+
+
 
 };

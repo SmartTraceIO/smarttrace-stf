@@ -653,7 +653,9 @@
                                     </td>
                                 </tr>
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
-                                    <td valign="top"><img src="theme/img/tinyInterimLocation.png"></td>
+                                    <td valign="top">
+                                        <div style="border-radius: 50% !important; text-align: center; border: 1px solid black; font-weight: bold">{{$index + 1}}</div>
+                                    </td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
                                         <span style="color:#AAA">
@@ -1053,7 +1055,8 @@
                 </div>
                 <div class="col-md-9 col-sm-12 col-xs-12">
                     <highchart id="chart1" config="chartConfig"
-                               style="min-width: 200px; height: 400px; margin: 0 auto"></highchart>
+                               style="min-width: 200px; height: 400px; margin: 0 auto">
+                    </highchart>
                     <div class="" style="margin-left: 50px; margin-right: 10px; margin-bottom: 10px; margin-top: 10px;;">
                         <ng-map id="shipment-detail-map"
                                 disable-default-u-i="true"
@@ -1062,7 +1065,7 @@
                                 zoom="10"
                                 map-type-control-options="mapTypeIds: ['ROADMAP']}">
 
-                            <!-- end marker -->
+                             <!--end marker -->
                             <custom-marker id="end-location"
                                            position="{{trackerInfo.endLocationForMap.latitude}},{{trackerInfo.endLocationForMap.longitude}}"
                                            optimized="false"
@@ -1071,17 +1074,16 @@
                                     <table class="end-marker-content"><tr>
                                         <td>
                                             <b>{{trackerInfo.endLocation}}</b><br/>
-                                            <!-- {{trackerInfo.eta}} -->
                                         </td>
-                                        <!--<td><img src="theme/img/tinyLocationStop.png" class="rev-horizon"></td>-->
                                     </tr></table>
                                 </div>
                             </custom-marker>
+
                             <marker position="{{trackerInfo.endLocationForMap.latitude}},{{trackerInfo.endLocationForMap.longitude}}"
                                     optimized="false"
                                     icon="{{trackerInfo.endLocationIcon}}"></marker>
 
-                            <!--special markers -->
+                            <!--special markers-->
                             <marker ng-if="specialMarkers.length != 0"
                                     ng-repeat="p in specialMarkers"
                                     position="{{p.pos}}"
@@ -1089,8 +1091,29 @@
                                     data="{{p}}"
                                     zIndex="103"
                                     on-mouseover="showAlertsUI();"
-                                    on-mouseout="hideAlertsUI();"
-                            ></marker>
+                                    on-mouseout="hideAlertsUI();"></marker>
+
+
+                            <custom-marker id="interimStops"
+                                           ng-repeat="item in trackerInfo.interimStops" position="{{item.latitude}},{{item.longitude}}"
+                                           optimized="false"
+                                           z-index="101">
+                                <div class="end-loc-box">
+                                    <table class="end-marker-content"><tr>
+                                        <td>
+                                            <b>{{item.location.locationName}}</b><br/>
+                                        </td>
+                                    </tr></table>
+                                </div>
+                            </custom-marker>
+                            <custom-marker id="interimStops"
+                                           ng-repeat="item in trackerInfo.interimStops" position="{{item.latitude}},{{item.longitude}}"
+                                           optimized="false"
+                                           z-index="101">
+                                <div style="border-radius: 50% !important; text-align: center; border: 1px solid black;
+                                font-weight: bold; background: white; width: 20px; height: 20px">
+                                    {{$index + 1}}</div>
+                            </custom-marker>
 
                             <!-- start marker -->
                             <custom-marker id="start-location"
@@ -1101,9 +1124,7 @@
                                     <table class="end-marker-content"><tr>
                                         <td>
                                             <b>{{trackerInfo.startLocation}}</b><br/>
-                                            <!-- {{mapInfo.eta}} -->
                                         </td>
-                                        <!--<td><img src="theme/img/locationStart.png" class="rev-horizon"></td>-->
                                     </tr></table>
                                 </div>
                             </custom-marker>
@@ -1133,11 +1154,8 @@
                             </custom-marker>
                         </ng-map>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
-    
 </div>
