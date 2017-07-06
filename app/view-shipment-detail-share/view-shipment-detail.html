@@ -654,7 +654,8 @@
                                 </tr>
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
                                     <td valign="top">
-                                        <div style="border-radius: 50% !important; text-align: center; border: 1px solid black; font-weight: bold">{{$index + 1}}</div>
+                                        <div style="border-radius: 50% !important; text-align: center;
+                                         border: 1px solid black; font-weight: bold; width: 20px; height: 20px"">{{$index + 1}}</div>
                                     </td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
@@ -1110,7 +1111,8 @@
                                            ng-repeat="item in trackerInfo.interimStops" position="{{item.latitude}},{{item.longitude}}"
                                            optimized="false"
                                            z-index="101">
-                                <div style="border-radius: 50% !important; text-align: center; border: 1px solid black;
+                                <div style="display: table-cell; vertical-align: middle;
+                                border-radius: 50% !important; text-align: center; border: 1px solid black;
                                 font-weight: bold; background: white; width: 20px; height: 20px">
                                     {{$index + 1}}</div>
                             </custom-marker>

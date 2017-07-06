@@ -239,7 +239,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 $scope.trackerInfo.startLocationForMap.longitude = locations[i].lng;
             }
             var ll = new google.maps.LatLng(locations[i].lat, locations[i].lng);
-            if (!refinePath(ll, trackerPath) || (locations[i].alerts.length > 0)) {
+            if (locations[i].notOptimize === true || !refinePath(ll, trackerPath)
+            		|| locations[i].alerts.length > 0) {
                 trackerPath.push(ll);
                 bounds.extend(ll);
                 //markers
@@ -515,6 +516,33 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 x: -10
             }
         });
+
+        //TODO add interim stops
+        for (var i = 0; i < $scope.trackerInfo.interimStops.length; i++) {
+        	var stp = $scope.trackerInfo.interimStops[i];
+
+        	plotLines.push({
+                color: color, // Color value
+                dashStyle: 'solid', // Style of the plot line. Default to solid
+                value: parseDate(stp.stopDateISO), // Value of where the line will appear
+                //value: parseDate($scope.mapInfo.startTimeISO), // Value of where the line will appear
+                width: width, // Width of the line
+                label: {
+                    text: '<div style="display: table-cell; vertical-align: middle;' + 
+                    		' border-radius: 50% !important; text-align: center;' + 
+                    		' border: 1px solid black;font-weight: bold; background: white;' +
+                    		' width: 20px; height: 20px">' + 
+                    		(i + 1) + 
+                            '<div>',
+                    rotation: 0,
+                    useHTML: true,
+                    align: 'left',
+                    y: -20,
+                    x: -10
+                }
+            });
+        }
+        
         var startLocationText='';
         if ($scope.trackerInfo.startLocation) {
             startLocationText = $scope.trackerInfo.startLocation;
@@ -947,9 +975,37 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 child.index = index;
             });
 
+            //set interim stop information
+            angular.forEach(tempObj.interimStops, function(stp, index){
+                protectNearestReading(stp, info.locations);
+            });
+
             $scope.isLoading = false;
             $scope.changeActiveTracker(0); //load first
             loadSibling();
+        }
+        
+        function protectNearestReading(stp, locations) {
+        	var d = 10000000.0;
+        	var nearest = null;
+        	
+        	for (var i = 0; i < locations.length; i++) {
+        		var loc = locations[i];
+        		var dlat = stp.latitude - loc.lat;
+        		var dlon = stp.longitude - loc.long;
+        		var dt = parseDate(stp.stopDateISO) - parseDate(loc.timeISO);
+
+        		//the distance in (x, y, time) coordinates. The sqrt is avoided for optimization.
+        		var dist = dlat * dlat + dlon * dlon + dt * dt;
+        		if (dist < d) {
+        			d = dist;
+        			nearest = loc;
+        		}
+        	}
+        	
+        	if (nearest != null) {
+        		nearest.notOptimize = true;
+        	}
         }
 
         function loadSibling() {
