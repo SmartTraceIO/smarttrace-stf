@@ -65,15 +65,15 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 ###Testing
 
 1. Name input field (is required).
-2. Description input field can be empty.
-3. Low temperature for reports input field must contain an integer value in a current temperature measurement unit.
-4. High temperatures for reports input field must contain an integer value in a current temperature measurement unit.
-5. Low temperature alerts:
-   1. Less than input field must contain an integer value in a current temperature measurement unit.
-   2. Less than input field(is required).
-   3. In How often can the alert fire  can be set  a maximum number of times the alert can fire.
-   4. Mins field must contain an itager value in minutes.
-   5. Mark as critical checkbox can stay unchecked.
-   6. If the Mark as critical checkbox is unchecked, the Actions to take when the alert fires input field must be unable.
-   7. If the Mark as critical checkbox is checked, the Actions to take when the alert fires input field must contain a number of actions and one empty option.
+1. Description input field can be empty.
+1. Low temperature for reports input field must contain an integer value in a current temperature measurement unit.
+1. High temperatures for reports input field must contain an integer value in a current temperature measurement unit.
+1. Low temperature alerts:
+  1. Less than input field must contain an integer value in a current temperature measurement unit.
+  1. Less than input field(is required).
+  1. In How often can the alert fire  can be set  a maximum number of times the alert can fire.
+  1. Mins field must contain an itager value in minutes.
+  1. Mark as critical checkbox can stay unchecked.
+  1. If the Mark as critical checkbox is unchecked, the Actions to take when the alert fires input field must be unable.
+  1. If the Mark as critical checkbox is checked, the Actions to take when the alert fires input field must contain a number of actions and one empty option.
 
