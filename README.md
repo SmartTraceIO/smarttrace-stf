@@ -1,4 +1,4 @@
-1. #SMARTTRACE CLIENT ON ANGULARJS PROJECT
+#SMARTTRACE CLIENT ON ANGULARJS PROJECT
 
 ##Caching solution
 
@@ -153,7 +153,11 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
     |  3. Enter any integer value  from -273 to 100  | 3. The changes save with integer values                   |
     |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
-==============================================================================================================================
+    
+    
+    
+    
+*****************************************************************************************************************
 ####Low Temperature Rules####
 
 1. **Less than field:**
@@ -214,7 +218,11 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |-----------------------------|-------------------------------------|
     | 1. Click **Delete** button  | 1. The low temperature rule deletes |
     
-=====================================================================================================================
+    
+    
+    
+    
+*************************************************************************************
 ####High Temperature Rules####
 
 1. **More than field:**
@@ -273,7 +281,9 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 1. Click **Delete** button  | 1. The High temperature rule deletes|
     
     
-==========================================================================================================================
+    
+    
+******************************************************************************************
 
 
 
