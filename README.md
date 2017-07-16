@@ -153,7 +153,9 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
     |  3. Enter any integer value  from -273 to 100  | 3. The changes save with integer values                   |
     |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
-    
+==============================================================================================================================
+####Low Temperature Rules####
+
 1. **Less than field:**
 
     |   Actions:                                     | Expected Result:                                          |
@@ -201,14 +203,19 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 2. Untick the **Mark as critical** | 2. The **Actions to take field** is unable |
     
 1. **Add another button:**
+
     | Actions:                          | Expected Result:                     |
     |-----------------------------------|--------------------------------------|
     | 1. Click **Add another** button   | 1. New Low temperature rule appeares |
     
 1. **Delete button:**
+
     | Actions:                    | Expected Result:                    |
     |-----------------------------|-------------------------------------|
     | 1. Click **Delete** button  | 1. The low temperature rule deletes |
+    
+=====================================================================================================================
+####High Temperature Rules####
 
 1. **More than field:**
     |   Actions:                                     | Expected Result:                                          |
@@ -264,6 +271,9 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | Actions:                    | Expected Result:                    |
     |-----------------------------|-------------------------------------|
     | 1. Click **Delete** button  | 1. The High temperature rule deletes|
+    
+    
+==========================================================================================================================
 
 
 
