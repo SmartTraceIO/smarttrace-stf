@@ -62,7 +62,8 @@ In file `app/config/routeConfig.js` we implement lazy loading solution by adding
 Web-Browser like google-chrome, Firefox do cache for static file (html, javascript, css) and refer them back to render website as needed. Browser base on url to refer caching. By adding version information to the end of url we can force browser reload cached files
 
 
-###Testing
+##Testing
+###Add/Edit Alert Profile Screen
 
 1. **Name input** field (is required).
 1. **Description** field can be empty.
@@ -81,7 +82,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. **Mins** field must contain an itager value in minutes.
 1. If the **Mark as critical** is unchecked, the **Actions to take when the alert fires** field must be unable.
 1. If the **Mark as critical** is checked, the **Actions to take when the alert fires** field must contain a number of actions and one empty option.
-1. **Add another** button must open one more **Less than** form.
+1. **Add another** button must open one more low temperature rule.
 1. In **High temperatures** field **More than** input field must contain an intager number in a current temperature measurement unit.
 1. **More than** input field (is required).
 1. **Time type check** input field options:
@@ -95,14 +96,14 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. **Mins** field must contain an itager value in minutes.
 1. If the **Mark as critical** is unchecked, the **Actions to take when the alert fires** input field must be unable.
 1. If the **Mark as critical** is checked, the **Actions to take when the alert fires** input field must contain a number of actions and one empty option.
-1. **Add another** button must open one more **Less than** form.
+1. **Add another** button must open one more high temperature rule.
 1. *Other Alerts ->* **Enter Bright Environment** can stay unchecked.
 1. *Other Alerts ->* **Low Battery** can stay unchecked.
 1. If  the **Enter Bright Environment** is unchecked, the **Actions to take when the alerts fires**  field must be unable.
-1. If the  **Enter Bright Environment** is checked, the **Actions to take when the alerts fires**  field must contain a number of actions and one empty option.
+1. If the  **Enter Bright Environment** is checked, the **Actions to take when the alerts fires**  field must contaia number of actions and one empty option.
 1. If  the **Low Battery** is unchecked, the **Actions to take when the alerts fires**  field must be unable.
 1. If the  **Low Battery** is checked, the **Actions to take when the alerts fires**  field must contain a number of actions and one empty option.
-1. **Save** button sends the data form to the server, without page refresh.
+1. **Save** button sends the data to the server, without page refresh.
 1. **Cancel** button gives prompt message with "Any unsaved changes will be lost including delete, are you sure you want to cancel?" question.
      * *Ok* button in the prompt form closes the editing page without saving the changes and opens the *List of Alerts profiles*.
      * *Cancel* button in the prompt form closes the prompt form and returnes to the Editing page.
