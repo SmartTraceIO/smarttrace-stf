@@ -228,6 +228,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 
 
 1. **More than field:**
+
     |   Actions:                                     | Expected Result:                                          |
     |------------------------------------------------|-----------------------------------------------------------|
     |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
