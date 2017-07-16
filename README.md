@@ -69,11 +69,11 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. Low temperature for reports input field must contain an integer value in a current temperature measurement unit.
 1. High temperatures for reports input field must contain an integer value in a current temperature measurement unit.
 1. Low temperature alerts:
-  1. Less than input field must contain an integer value in a current temperature measurement unit.
-  1. Less than input field(is required).
-  1. In How often can the alert fire  can be set  a maximum number of times the alert can fire.
-  1. Mins field must contain an itager value in minutes.
-  1. Mark as critical checkbox can stay unchecked.
-  1. If the Mark as critical checkbox is unchecked, the Actions to take when the alert fires input field must be unable.
-  1. If the Mark as critical checkbox is checked, the Actions to take when the alert fires input field must contain a number of actions and one empty option.
+  * Less than input field must contain an integer value in a current temperature measurement unit.
+  * Less than input field(is required).
+  * In How often can the alert fire  can be set  a maximum number of times the alert can fire.
+  * Mins field must contain an itager value in minutes.
+  * Mark as critical checkbox can stay unchecked.
+  * If the Mark as critical checkbox is unchecked, the Actions to take when the alert fires input field must be unable.
+  * If the Mark as critical checkbox is checked, the Actions to take when the alert fires input field must contain a number of actions and one empty option.
 
