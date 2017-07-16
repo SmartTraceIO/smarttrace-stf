@@ -193,6 +193,14 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
     |  5. Clear the field                            | 5. The changes are not saving, **Mins** is required       |
     
+1. **Mark as critical:**
+
+    | Actions:                         | Expacted Result:                           |
+    |----------------------------------|--------------------------------------------|
+    | 1. Tick the Mark as critical     | 1. The **Actions to take field** is active |
+    | 2. Untick the Mark as critical   | 2. The **Actions to take field** is unable |
+    
+    
 
 
 
