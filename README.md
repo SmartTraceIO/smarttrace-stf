@@ -119,7 +119,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
         
 1. **Name input field:**
         
-    |   Actions:                                              | Expacted Result:                                                    |
+    |   Actions:                                              | Expected Result:                                                    |
     |---------------------------------------------------------|---------------------------------------------------------------------|
     |  1. Click **Edit** button on the profile                | 1. Opens the page with the rules of the profile                     |
     |  2. Clear the **Name** Field empty  and click **Save**  | 2. The page is not saving. The **Name** field ask for the alert name|
@@ -130,7 +130,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 1. **Discription input field:** 
 
-    |   Actions:                                                       | Expacted Result:                                                |
+    |   Actions:                                                       | Expected Result:                                                |
     |------------------------------------------------------------------|-----------------------------------------------------------------|
     |  1. Clear the description field and click **Save**               | 1. The changes can be saved with an empty **Description** field |
     |  2. The max length of the description is not more than 120 signs | 2. Max number of signs is 120                                   |
@@ -138,7 +138,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 1. **Low temperature of report field:**
 
-    |   Actions:                                     | Expacted Result:                                          |
+    |   Actions:                                     | Expected Result:                                          |
     |------------------------------------------------|-----------------------------------------------------------|
     |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
@@ -147,7 +147,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 
 1. **High temperature of report field:**
 
-    |   Actions:                                     | Expacted Result:                                          |
+    |   Actions:                                     | Expected Result:                                          |
     |------------------------------------------------|-----------------------------------------------------------|
     |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
@@ -156,7 +156,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 1. **Less than field:**
 
-    |   Actions:                                     | Expacted Result:                                          |
+    |   Actions:                                     | Expected Result:                                          |
     |------------------------------------------------|-----------------------------------------------------------|
     |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
@@ -167,10 +167,22 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 1. **Time type of check:**
 
-    |  ACtions:               | Expacted Result:                                          |
-    |-------------------------|-----------------------------------------------------------|
-    |  1. Choose an option:   | 1. The option can be chosen and the the changes are saved |
-    |     * Continiously for  |                                                           |
-    |     * For a total of    |                                                           |
+    |  ACtions:                 | Expected Result:                                          |
+    |---------------------------|-----------------------------------------------------------|
+    |  1. Choose an option:     | 1. The option can be chosen and the changes are saved |
+    |       * Continiously for  |                                                           |
+    |       * For a total of    |                                                           |
+
+1. **How often can the alert fire:**
+
+    | Actions:                  | Expected Result                                                        |
+    |---------------------------|------------------------------------------------------------------------|
+    | 1. Choose an option:      | 1. Any option can be chosen and the  changes are saved  with the option| 
+    |        * Once per trip    |                                                                        |
+    |        * Once every 24hrs |                                                                        |
+    |        * Once every 48hrs |                                                                        |
+    |        * Once every 7days |                                                                        |
+
+
 
     
