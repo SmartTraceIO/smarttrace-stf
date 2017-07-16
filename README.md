@@ -130,6 +130,7 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
     
 1. **Discription input field:** 
+
     |   Actions:                                                       | Expacted Result:                                                |
     |------------------------------------------------------------------|-----------------------------------------------------------------|
     |  1. Clear the description field and click **Save**               | 1. The changes can be saved with an empty **Description** field |
