@@ -175,13 +175,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 
 1. **How often can the alert fire:**
 
-    | Actions:                  | Expected Result                                                        |
-    |---------------------------|------------------------------------------------------------------------|
-    | 1. Choose an option:      | 1. Any option can be chosen and the  changes are saved  with the option| 
-    |     * Once per trip       |                                                                        |
-    |     * Once every 24hrs    |                                                                        |
-    |     * Once every 48hrs    |                                                                        |
-    |     * Once every 7days    |                                                                        |
+    | Actions:                        | Expected Result                                                        |
+    |---------------------------------|------------------------------------------------------------------------|
+    | 1. Choose an option:            | 1. Any option can be chosen and the  changes are saved  with the option| 
+    |     * Once per trip             |                                                                        |
+    |     * Once every 24hrs          |                                                                        |
+    |     * Once every 48hrs          |                                                                        |
+    |     * Once every 7days          |                                                                        |
     
 1. **Mins field:**
 
@@ -195,10 +195,10 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 1. **Mark as critical:**
 
-    | Actions:                         | Expacted Result:                           |
-    |----------------------------------|--------------------------------------------|
-    | 1. Tick the Mark as critical     | 1. The **Actions to take field** is active |
-    | 2. Untick the Mark as critical   | 2. The **Actions to take field** is unable |
+    | Actions:                           | Expacted Result:                           |
+    |------------------------------------|--------------------------------------------|
+    | 1. Tick the **Mark as critical**   | 1. The **Actions to take field** is active |
+    | 2. Untick the **Mark as critical** | 2. The **Actions to take field** is unable |
     
     
 
