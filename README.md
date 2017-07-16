@@ -71,13 +71,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. **Less than** input field must contain an integer value in a current temperature measurement unit.
 1. **Less than** input field(is required).
 1. **Time type check** input field options:
-   *Item *Continiously for*;
-   *Item *For a total of*;
+   * *Continiously for*;
+   * *For a total of*;
 1. In **How often can the alert fire** include:
-   *Item *Once per trip*;
-   *Item *Once every 24hrs*;
-   *Item *Once every 48hrs*;
-   *Item *Once every 7days*;
+   * *Once per trip*;
+   * *Once every 24hrs*;
+   * *Once every 48hrs*;
+   * *Once every 7days*;
 1. **Mins** field must contain an itager value in minutes.
 1. If the **Mark as critical** is unchecked, the **Actions to take when the alert fires** field must be unable.
 1. If the **Mark as critical** is checked, the **Actions to take when the alert fires** field must contain a number of actions and one empty option.
@@ -85,13 +85,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. In **High temperatures** field **More than** input field must contain an intager number in a current temperature measurement unit.
 1. **More than** input field (is required).
 1. **Time type check** input field options:
-   *Item *Continiously for*;
-   *Item *For a total of*;.
+   * *Continiously for*;
+   * *For a total of*;.
 1. In **How often can the alert fire**  contains a  maximum number of times the alert can fire:
-   *Item *Once per trip*;
-   *Item *Once every 24hrs*;
-   *Item *Once every 48hrs*;
-   *Item *Once every 7days*;
+   * *Once per trip*;
+   * *Once every 24hrs*;
+   * *Once every 48hrs*;
+   * *Once every 7days*;
 1. **Mins** field must contain an itager value in minutes.
 1. If the **Mark as critical** is unchecked, the **Actions to take when the alert fires** input field must be unable.
 1. If the **Mark as critical** is checked, the **Actions to take when the alert fires** input field must contain a number of actions and one empty option.
@@ -104,5 +104,5 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. If the  **Low Battery** is checked, the **Actions to take when the alerts fires**  field must contain a number of actions and one empty option.
 1. **Save** button sends the data form to the server, without page refresh.
 1. **Cancel** button gives prompt message with "Any unsaved changes will be lost including delete, are you sure you want to cancel?" question.
-     *Item *Ok* button in the prompt form closes the editing page without saving the changes and opens the *List of Alerts profiles*.
-     *Item *Cancel* button in the prompt form closes the prompt form and returnes to the Editing page.
+     * *Ok* button in the prompt form closes the editing page without saving the changes and opens the *List of Alerts profiles*.
+     * *Cancel* button in the prompt form closes the prompt form and returnes to the Editing page.
