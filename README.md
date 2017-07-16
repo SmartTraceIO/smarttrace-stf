@@ -178,10 +178,22 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | Actions:                  | Expected Result                                                        |
     |---------------------------|------------------------------------------------------------------------|
     | 1. Choose an option:      | 1. Any option can be chosen and the  changes are saved  with the option| 
-    |        * Once per trip    |                                                                        |
-    |        * Once every 24hrs |                                                                        |
-    |        * Once every 48hrs |                                                                        |
-    |        * Once every 7days |                                                                        |
+    |     * Once per trip       |                                                                        |
+    |     * Once every 24hrs    |                                                                        |
+    |     * Once every 48hrs    |                                                                        |
+    |     * Once every 7days    |                                                                        |
+    
+1. **Mins field:**
+
+    | Actions:                                       | Expected Result:                                          |
+    |------------------------------------------------|-----------------------------------------------------------|
+    |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
+    |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
+    |  3. Enter any integer value  less 10           | 3. The changes are not saved with less than 10 number     |
+    |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
+    |  5. Clear the field                            | 5. The changes are not saving, **Mins** is required       |
+    
+
 
 
 
