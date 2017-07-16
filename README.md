@@ -111,10 +111,10 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 ##Test Cases for Alert Profiles
 1. Launch site and on alert profiles page:
         
-        Actions:                                                           | Expected Result
-    ---------------------------------------------------------------------- | -----------------------------
-       1. Go to file:///home/ilona/smarttrace-stf/index.html#/manage/alert | 1. Site opens
-       2. Choose Alert Profiles in the Setup dropdown list                 | 2. List of alert profiles opens
+    |    Actions:                                                           | Expected Result                 |
+    |---------------------------------------------------------------------- | --------------------------------|
+    |   1. Go to file:///home/ilona/smarttrace-stf/index.html#/manage/alert | 1. Site opens                   |
+    |   2. Choose Alert Profiles in the Setup dropdown list                 | 2. List of alert profiles opens |
         
         
 1. **Name** input field:
