@@ -83,7 +83,6 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 1. If the **Mark as critical** is unchecked, the **Actions to take when the alert fires** field must be unable.
 1. If the **Mark as critical** is checked, the **Actions to take when the alert fires** field must contain a number of actions and one empty option.
 1. **Add another** button must open one more low temperature rule.
-1. In **High temperatures** field **More than** input field must contain an intager number in a current temperature measurement unit.
 1. **More than** input field (is required).
 1. **Time type check** input field options:
       * Continiously for
@@ -136,4 +135,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  1. Clear the description field and click **Save**               | 1. The changes can be saved with an empty **Description** field |
     |  2. The max length of the description is not more than 120 signs | 2. Max number of signs is 120                                   |
     |  3. Enter any numbers and signs                                  | 3. The description field can include numbers and signs          |
+    
+1. **Low temperature of report field:**
+
+    |   Actions:                                     | Expacted Result:                                          |
+    |------------------------------------------------|-----------------------------------------------------------|
+    |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
+    |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
+    |  3. Enter any integer value                    | 3. The changes save with integer values                   |
+    |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
     
