@@ -225,6 +225,8 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 *************************************************************************************
 ####High Temperature Rules####
 
+
+
 1. **More than field:**
     |   Actions:                                     | Expected Result:                                          |
     |------------------------------------------------|-----------------------------------------------------------|
@@ -271,11 +273,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 2. Untick the **Mark as critical** | 2. The **Actions to take field** is unable |
     
 1. **Add another button:**
+
     | Actions:                          | Expected Result:                     |
     |-----------------------------------|--------------------------------------|
     | 1. Click **Add another** button   | 1. New High temperature rule appeares|
     
 1. **Delete button:**
+
     | Actions:                    | Expected Result:                    |
     |-----------------------------|-------------------------------------|
     | 1. Click **Delete** button  | 1. The High temperature rule deletes|
