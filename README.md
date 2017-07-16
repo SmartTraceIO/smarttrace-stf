@@ -1,4 +1,4 @@
-#SMARTTRACE CLIENT ON ANGULARJS PROJECT
+1. #SMARTTRACE CLIENT ON ANGULARJS PROJECT
 
 ##Caching solution
 
@@ -142,6 +142,25 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |------------------------------------------------|-----------------------------------------------------------|
     |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
     |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
-    |  3. Enter any integer value                    | 3. The changes save with integer values                   |
+    |  3. Enter any integer value  from -273 to 100  | 3. The changes save with integer values                   |
     |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
+
+1. **High temperature of report field:**
+
+    |   Actions:                                     | Expacted Result:                                          |
+    |------------------------------------------------|-----------------------------------------------------------|
+    |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
+    |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
+    |  3. Enter any integer value  from -273 to 100  | 3. The changes save with integer values                   |
+    |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
+    
+1. **Less than field:**
+
+    |   Actions:                                     | Expacted Result:                                          |
+    |------------------------------------------------|-----------------------------------------------------------|
+    |  1. Enter any  not integer number to the field | 1. The changes must not be saved with not integer numbers |
+    |  2. Enter any symbols                          | 2. The changes must not be saved with symbols             |
+    |  3. Enter any integer value  from -273 to 100  | 3. The changes save with integer values                   |
+    |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
+    |  5. Clear the field                            | 5. The changes are not saving, **Less than** is required  |
     
