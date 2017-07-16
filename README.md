@@ -164,3 +164,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  4. Change the temperature measurement unit    | 4. The measurement unit and the value must be changed     |
     |  5. Clear the field                            | 5. The changes are not saving, **Less than** is required  |
     
+    
+1. **Time type of check:**
+
+    |  ACtions:               | Expacted Result:                                          |
+    |-------------------------|-----------------------------------------------------------|
+    |  1. Choose an option:   | 1. The option can be chosen and the the changes are saved |
+    |     * Continiously for  |                                                           |
+    |     * For a total of    |                                                           |
+
+    
