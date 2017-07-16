@@ -109,15 +109,16 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
      * *Cancel* button in the prompt form closes the prompt form and returnes to the Editing page.
      
 ##Test Cases for Alert Profiles
-1. Launch site and on alert profiles page:
+1. **Launch site and open alert profiles page:**
         
     |    Actions:                                                           | Expected Result:                |
     |---------------------------------------------------------------------- | --------------------------------|
     |   1. Go to file:///home/ilona/smarttrace-stf/index.html#/manage/alert | 1. Site opens                   |
     |   2. Choose **Alert Profiles** in the **Setup** dropdown list         | 2. List of alert profiles opens |
+   
+   
         
-        
-1. **Name** input field:
+1. **Name input field:**
         
     |   Actions:                                              | Expacted Result:                                                    |
     |---------------------------------------------------------|---------------------------------------------------------------------|
@@ -125,3 +126,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     |  2. Clear the **Name** Field empty  and click **Save**  | 2. The page is not saving. The **Name** field ask for the alert name|
     |  3. Enter any profile name that is longer than 40 signs | 3. The Profile name fills only with 40signs                         |
     |  4. Enter any numbers to the field and click **Save**   | 4. The alert to be saved, having numbers in its name                |
+    
+    
+    
+1. **Discription input field:** 
+    |   Actions:                                                       | Expacted Result:                                                |
+    |------------------------------------------------------------------|-----------------------------------------------------------------|
+    |  1. Clear the description field and click **Save**               | 1. The changes can be saved with an empty **Description** field |
+    |  2. The max length of the description is not more than 120 signs | 2. Max number of signs is 120                                   |
+    |  3. Enter any numbers and signs                                  | 3. The description field can include numbers and signs          |
+    
