@@ -290,6 +290,18 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 ******************************************************************************************
 
+###Add/Edit corrective action list page:###
+
+1. **Name** input field restriction length is 40 symbols. Can include signs/numbers.(is required)
+2. *Description* input field can be empty. Can include signs/numbers. The length is 120signs.
+3. **Add another** button opens a new empty corrective action field.
+4. **Corrective Action** input field has no restricted length. Can include signs/numbers.( is required)
+5. **Arrows Up and Down** buttons move the action up/down.
+6. **Requires verification** can be checked or unchecked.
+7. **Delete** button deletes the action after saving the changes in the list.
+8. **Save** button saves the changes made in the list.
+9. **Cancel** button gives a prompt message asking to save/not to save the changes. If **Cancel-> OK**  - the changes in the list are not saved and opens the page of **Corrective Action List**. If **Cancel->Cancel** - opens the editing page of the already opened list.
+
 
 
     
