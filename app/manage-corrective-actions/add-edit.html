@@ -1,0 +1,189 @@
+﻿<style>
+    .form-horizontal .control-label.alert1 {
+        margin-bottom: 0;
+        padding-top: 31px;
+        text-align: right;
+    }
+
+    hr.normal {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    .portlet-title {
+        border-bottom: 2px solid #a6d053;
+    }
+
+    @media (min-width:768px) {
+        .no-padding {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+</style>
+
+<!--<h3 class="page-title" ng-if="!fromModalPopup" >
+    {{Action}}&nbsp;Alert
+</h3>-->
+    <div class="portlet box green" ng-init="Init()">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-bell"></i> {{Action}}&nbsp;corrective action list
+            </div>
+            <div class="pull-right" ng-if="fromModalPopup">
+                <button type="button" style="vertical-align:middle;color:white" class="close" ng-click="close()">Close</button>
+            </div>
+            <div class="tools hidden-print" ng-if="!fromModalPopup">
+                <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="container">
+                <form role="form" name="frmAddEditList" id="frmAddEditList" novalidate class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-3">
+                                <label class="pull-left">Name:&nbsp;
+                                    <i uib-tooltip="List name"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"></i>
+                                </label>
+                                <label class="control-label pull-right"><span class="text-error">*</span></label>
+                                <input maxlength="40" type="text" name="Name" class="form-control" placeholder="Enter List Name" ng-model="CorrectiveActionsList.listName" required />
+                                <span ng-cloak ng-if="frmAddEditList.$invalid && frmAddEditList.$submitted">
+                                    <span ng-cloak class="text-danger" ng-if="frmAddEditList.Name.$error.required">Please enter list name name</span>
+                                    <span ng-cloak class="text-danger" ng-if="frmAddEditList.Name.$error.maxlength">List name must be less than or equal to 40 chars</span>
+                                </span>
+                            </div>
+                            <div class="visible-xs col-md-12">&nbsp;</div>
+                            <div class="col-md-3">
+                                <label>Description:&nbsp;
+                                    <i uib-tooltip="List Description"
+                                       tooltip-append-to-body="true"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top"
+                                       class="fa fa-info-circle"></i>
+                                </label>
+                                <label class="control-label pull-right"><span class="text-error">&nbsp;</span></label>
+                                <input maxlength="120" type="text" name="Description" class="form-control" placeholder="Enter List Description" ng-model="CorrectiveActionsList.description" />
+                                <span ng-cloak ng-if="frmAddEditList.$invalid && frmAddEditList.$submitted">
+                                    <span ng-cloak class="text-danger" ng-if="frmAddEditList.Description.$error.maxlength">List description must be less than or equal to 120 chars</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <h3 class="caption-subject font-green-sharp bold">Actions<span class="info">&nbsp;
+                                            <i uib-tooltip="List of corrective actions"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"></i>
+                                        </span></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div  class="form-group" ng-repeat="correctiveAction in CorrectiveActionsList.actions">
+                            	<div class="col-md-1">
+                            		<br/>
+                            		<div>
+										<img src="theme/img/arrow-up.png" ng-click="MoveUp(correctiveAction)"/>
+										<img src="theme/img/arrow-down.png" ng-click="MoveDown(correctiveAction)"/>
+                            		</div>
+                            	</div>
+                           		<div class="col-md-6">
+                           			<div class="row">
+		                                <label class="pull-left">Corrective Action:&nbsp;
+		                                    <i uib-tooltip="List name"
+		                                       tooltip-append-to-body="true"
+		                                       tooltip-trigger="mouseenter"
+		                                       tooltip-placement="top"
+		                                       class="fa fa-info-circle"></i>
+		                                </label>
+		                                <label class="control-label pull-right"><span class="text-error">*</span></label>
+		                                <div class="col-md-12 no-padding">
+			                                <input type="text" class="form-control"
+			                                	placeholder="Enter Action Name" ng-model="correctiveAction.action" required />
+		                                </div>
+                           			</div>
+	                            </div>
+                                <div class="visible-xs col-md-12">&nbsp;</div>
+                           		<!-- Requires verification -->
+                           		<div class="col-md-3 text-right">
+                           			<div class="col-md-12">
+	                                    <span>Requires verification</span>
+                           			</div>
+                           			<div>
+                           				<div class="col-md-4 col-xs-push-6">
+		                                    <input type="checkbox" ng-true-value="true" ng-false-value="false"
+		                                    	ng-model="correctiveAction.requestVerification" id="criticalCold"/>
+		                                    <i uib-tooltip="Tick this box if an action requires verification."
+		                                        tooltip-append-to-body="true"
+		                                        tooltip-trigger="mouseenter"
+		                                        tooltip-placement="top"
+		                                        class="fa fa-info-circle"></i>
+                           				</div>
+                           			</div>
+                           		</div>
+                                <div class="visible-xs col-md-12">&nbsp;</div>
+                           		<!-- Delete -->
+                                <div class="col-md-2 text-right">
+                                	<br/>
+                                	<div>
+	                                    <label class="control-label" ng-click="DeleteAction(correctiveAction)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
+	                                    <label class="control-label">
+	                                        <span style="color:black;text-decoration:none">&nbsp;
+	                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
+	                                           tooltip-append-to-body="true"
+	                                           tooltip-trigger="mouseenter"
+	                                           tooltip-placement="top"
+	                                           class="fa fa-info-circle"></i>
+	                                    	</span>
+	                                    </label>
+                                	</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-if="coldAlerts.length > 0">
+                                <hr />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label" ng-click="AddAction()" style="color:#87B04C;cursor:pointer;text-decoration:underline;margin-top:-7px"><i class="fa fa-plus"></i>&nbsp;Add Another</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center" ng-if="!fromModalPopup" style="padding-top:70px">
+                <div class="form-actions">
+                    <button class="btn green" form="frmAddEditList" ng-click="SaveData(frmAddEditList.$valid,false)" type="submit">Save</button>
+                    <a class="btn default" data-toggle="modal" data-target="#confirmModel">Cancel</a>
+                </div>
+            </div>
+            <div class="text-center" style="padding-top:70px" ng-if="fromModalPopup">
+                <div class="form-actions">
+                    <button class="btn green" form="frmAddEditList" ng-click="SaveData(frmAddEditList.$valid,true)" type="submit">Save & Close</button>
+                    <a class="btn default" ng-click="close()">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="confirmModel" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Any unsaved changes will be lost including delete, are you sure you want to cancel?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="WarnUserAndRedirectToListPage()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>

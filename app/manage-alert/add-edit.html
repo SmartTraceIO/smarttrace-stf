@@ -133,83 +133,146 @@
                             </div>
                         </div>
                         <div>
-                            <div class="form-group" ng-repeat="coldAlert in coldAlerts">
-                                <div class="col-md-2">
-                                    <label class="control-label"><img src="theme/img/alertCold.png" />&nbsp;Less than</label>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <input type="number" ng-pattern="/^(-{0,1})?[0-9]+(\.[0-9]{1,2})?$/" min="{{minRange}}" max="{{maxRange}}" ng-init="lowTemperature = 'lowTemperature'+ $index" name="{{lowTemperature}}" class="form-control" required ng-model="coldAlert.temperature" />
-                                        </div>
-                                        <div class="col-md-4 no-left-padding">
-                                            <label class="control-label"> &deg;{{TempType}}</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.required">Please enter temperature</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.number">Please enter only numbers</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.pattern">Please enter only number (positive, negative or decimal (upto 2 decimal point))</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.min">Minimum temprature value is {{minRange}}&nbsp;&deg;{{TempType}}</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.max">Maximum temprature value is {{maxRange}}&nbsp;&deg;{{TempType}}</span>
-                                        </span>
+                            <div ng-repeat="coldAlert in coldAlerts">
+                            	<div class="form-group" style="margin-bottom: 10px">
+                            		<!-- Less then -->
+                            		<div class="col-md-3">
+		                                <div class="col-md-6 no-padding">
+		                                    <label class="control-label"><img src="theme/img/alertCold.png" />&nbsp;Less than</label>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-6 no-padding">
+		                                    <div class="row">
+		                                        <div class="col-md-9 no-padding">
+		                                            <input type="number" ng-pattern="/^(-{0,1})?[0-9]+(\.[0-9]{1,2})?$/" min="{{minRange}}" max="{{maxRange}}" ng-init="lowTemperature = 'lowTemperature'+ $index" name="{{lowTemperature}}" class="form-control" required ng-model="coldAlert.temperature" />
+		                                        </div>
+		                                        <div class="col-md-3">
+		                                            <label class="control-label"> &deg;{{TempType}}</label>
+		                                        </div>
+		                                        <div class="clearfix"></div>
+		                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.required">Please enter temperature</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.number">Please enter only numbers</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.pattern">Please enter only number (positive, negative or decimal (upto 2 decimal point))</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.min">Minimum temprature value is {{minRange}}&nbsp;&deg;{{TempType}}</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.max">Maximum temprature value is {{maxRange}}&nbsp;&deg;{{TempType}}</span>
+		                                        </span>
+		                                    </div>
+		                                </div>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- for total of -->
+                            		<div class="col-md-5">
+		                                <div class="col-md-7 no-padding">
+		                                    <div class="row">
+		                                        <div class="col-md-12">
+		                                            <select class="form-control"
+		                                                    ng-options="cF.val as cF.name for cF in [{ name: 'continuously for', val: false }, { name: 'for a total of', val: true }]" ng-model="coldAlert.cumulativeFlag"></select>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-1 no-padding">
+		                                    <i uib-tooltip='"continuously for" means the temperature remains at that level for that period of time. "for a total of" means each period of time at thet level is summed together eg. 20min yesterday plus 30min today'
+		                                        tooltip-append-to-body="true"
+		                                        tooltip-trigger="mouseenter"
+		                                        tooltip-placement="top"
+		                                        class="fa fa-info-circle"></i>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-4 no-padding">
+		                                    <div class="row no-padding">
+		                                        <div class="col-md-9">
+		                                            <input type="number" min="10" required ng-init="lowTemperatureMinutes = 'lowTemperatureMinutes'+ $index" name="{{lowTemperatureMinutes}}" class="form-control" ng-model="coldAlert.timeOutMinutes" />
+		                                        </div>
+		                                        <div class="col-md-3 no-padding">
+		                                            <label class="control-label">Mins</label>
+		                                        </div>
+		                                        <div class="clearfix"></div>
+		                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.required">Please enter minutes</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.number">Please enter only positive number</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.min">Please enter value greater than 10</span>
+		                                        </span>
+		                                    </div>
+		                                </div>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- mark as critical -->
+                            		<div class="col-md-2 text-right">
+	                                    <input type="checkbox" ng-true-value="'CriticalCold'" ng-false-value="'Cold'" ng-model="coldAlert.type" id="criticalCold">&nbsp;
+	                                    <!--<img src="theme/img/alertCriticalCold.png" />-->
+	                                    <span>Mark as critical</span>
+	                                    <i uib-tooltip="Tick this box if you want this alert to be shown as Critical."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- Delete -->
+	                                <div class="col-md-2 text-right">
+	                                    <label class="control-label" ng-click="DeleteColdObject(coldAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
+	                                    <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
+	                                    <label class="control-label">
+	                                        <span style="color:black;text-decoration:none">&nbsp;
+	                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
+	                                           tooltip-append-to-body="true"
+	                                           tooltip-trigger="mouseenter"
+	                                           tooltip-placement="top"
+	                                           class="fa fa-info-circle"></i>
+	                                    	</span>
+	                                    </label>
+	                                </div>
+                            	</div>
+                            	<!-- Second row -->
+                            	<div class="form-group">
+                            		<!-- Max rate limit -->
+                            		<div class="col-md-3 text-right">
+	                                    <label class="control-label">How often can alert fire?</label>
+                            		</div>
+                                    <div class="col-md-2">
+                                    	<div class="row">
+		                                    <select class="form-control"
+		                                            ng-options="cF.val as cF.name for cF in [{name: 'Once per trip', val: null}, {name: 'Once every 24hr', val: 24 * 60}, {name: 'Once every 48hr', val: 48* 60}, {name: 'Once every 7days', val: 7 * 24 * 60 }]"
+		                                            ng-model="coldAlert.maxRateMinutes">
+		                                    </select>
+                                    	</div>
+	                                </div>
+	                                <div class="col-md-1 no-padding">
+	                                    <i uib-tooltip="The maximum number of times this alert can fire."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>
+	                                </div>
+
+                                    <!-- Corrective actions -->
+                            		<div class="col-md-3 text-right">
+	                                    <label class="control-label">Action to take when alert fires</label>
+                            		</div>
+                                   	<div class="col-md-2">
+                                   		<div class="row">
+		                                    <select class="form-control"
+		                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
+		                                            ng-model="coldAlert.correctiveAction">
+		                                            <option></option>
+		                                    </select>
+                                   		</div>
+                                   	</div>
+	                                <div class="col-md-1 no-padding">
+	                                    <i uib-tooltip="Action to take when alert fires."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>                                    
+	                                </div>
+                            	</div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <hr>
                                     </div>
                                 </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <select class="form-control"
-                                                    ng-options="cF.val as cF.name for cF in [{ name: 'continuously for', val: false }, { name: 'for a total of', val: true }]" ng-model="coldAlert.cumulativeFlag"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <input type="number" min="10" required ng-init="lowTemperatureMinutes = 'lowTemperatureMinutes'+ $index" name="{{lowTemperatureMinutes}}" class="form-control" ng-model="coldAlert.timeOutMinutes" />
-                                        </div>
-                                        <div class="col-md-3 no-left-padding">
-                                            <label class="control-label">Mins</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.required">Please enter minutes</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.number">Please enter only positive number</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.min">Please enter value greater than 10</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2 text-right">
-                                    <input type="checkbox" ng-true-value="'CriticalCold'" ng-false-value="'Cold'" ng-model="coldAlert.type" id="criticalCold">&nbsp;
-                                    <!--<img src="theme/img/alertCriticalCold.png" />-->
-                                    <span>Mark as critical</span>
-                                    <i uib-tooltip="Tick this box if you want this alert to be shown as Critical."
-                                        tooltip-append-to-body="true"
-                                        tooltip-trigger="mouseenter"
-                                        tooltip-placement="top"
-                                        class="fa fa-info-circle"></i>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2 text-right">
-                                    <label class="control-label" ng-click="DeleteColdObject(coldAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
-                                    <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
-                                    <label class="control-label">
-                                        <span style="color:black;text-decoration:none">&nbsp;
-                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
-                                           tooltip-append-to-body="true"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top"
-                                           class="fa fa-info-circle"></i>
-                                    </span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-12" ng-if="coldAlerts.length > 0">
-                                <hr />
                             </div>
                             <div class="col-md-12">
                                 <label class="control-label" ng-click="AddColdObject()" style="color:#87B04C;cursor:pointer;text-decoration:underline;margin-top:-7px"><i class="fa fa-plus"></i>&nbsp;Add Another</label>
@@ -231,82 +294,142 @@
                             </div>
                         </div>
                         <div>
-                            <div class="form-group" ng-repeat="hotAlert in hotAlerts">
-                                <div class="col-md-2">
-                                    <label class="control-label"><img src="theme/img/alertHot.png" />&nbsp;More than</label>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <input type="number" required ng-pattern="/^(-{0,1})?[0-9]+(\.[0-9]{1,2})?$/" ng-init="highTemperature = 'highTemperature'+ $index" name="{{highTemperature}}" min="{{minRange}}" max="{{maxRange}}" class="form-control" ng-model="hotAlert.temperature" />
-                                        </div>
-                                        <div class="col-md-4 no-left-padding">
-                                            <label class="control-label"> &deg;{{TempType}}</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperature].$error.required">Please enter temperature</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperature].$error.number">Please enter only numbers</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperature].$error.pattern">Please enter only number (positive, negative or decimal (upto 2 decimal point))</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperature].$error.min">Minimum temprature value is {{minRange}}&nbsp;&deg;{{TempType}}</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperature].$error.max">Maximum temprature value is {{maxRange}}&nbsp;&deg;{{TempType}}</span>
-                                        </span>
+                        	<div ng-repeat="hotAlert in hotAlerts">
+                            	<div class="form-group">
+                            		<!-- Less then -->
+                            		<div class="col-md-3">
+		                                <div class="col-md-6 no-padding">
+		                                    <label class="control-label"><img src="theme/img/alertHot.png" />&nbsp;More than</label>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-6 no-padding">
+		                                    <div class="row">
+		                                        <div class="col-md-9 no-padding">
+		                                            <input type="number" required ng-pattern="/^(-{0,1})?[0-9]+(\.[0-9]{1,2})?$/" ng-init="highTemperature = 'highTemperature'+ $index" name="{{highTemperature}}" min="{{minRange}}" max="{{maxRange}}" class="form-control" ng-model="hotAlert.temperature" />
+		                                        </div>
+		                                        <div class="col-md-3">
+		                                            <label class="control-label"> &deg;{{TempType}}</label>
+		                                        </div>
+		                                        <div class="clearfix"></div>
+		                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.required">Please enter temperature</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.number">Please enter only numbers</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.pattern">Please enter only number (positive, negative or decimal (upto 2 decimal point))</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.min">Minimum temprature value is {{minRange}}&nbsp;&deg;{{TempType}}</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperature].$error.max">Maximum temprature value is {{maxRange}}&nbsp;&deg;{{TempType}}</span>
+		                                        </span>
+		                                    </div>
+		                                </div>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- for total of -->
+                            		<div class="col-md-5">
+		                                <div class="col-md-7 no-padding">
+		                                    <div class="row">
+		                                        <div class="col-md-12">
+		                                            <select class="form-control"
+		                                                    ng-options="cF.val as cF.name for cF in [{ name: 'continuously for', val: false }, { name: 'for a total of', val: true }]" ng-model="hotAlert.cumulativeFlag"></select>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-1 no-padding">
+		                                    <i uib-tooltip='"continuously for" means the temperature remains at that level for that period of time. "for a total of" means each period of time at thet level is summed together eg. 20min yesterday plus 30min today'
+		                                        tooltip-append-to-body="true"
+		                                        tooltip-trigger="mouseenter"
+		                                        tooltip-placement="top"
+		                                        class="fa fa-info-circle"></i>
+		                                </div>
+		                                <div class="visible-xs col-md-12">&nbsp;</div>
+		                                <div class="col-md-4 no-padding">
+		                                    <div class="row no-padding">
+		                                        <div class="col-md-9">
+		                                            <input type="number" required min="10" ng-init="highTemperatureMinutes = 'highTemperatureMinutes'+ $index" name="{{highTemperatureMinutes}}" class="form-control" ng-model="hotAlert.timeOutMinutes" />
+		                                        </div>
+		                                        <div class="col-md-3 no-padding">
+		                                            <label class="control-label">Mins</label>
+		                                        </div>
+		                                        <div class="clearfix"></div>
+		                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.required">Please enter minutes</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.number">Please enter only positive number</span>
+		                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[lowTemperatureMinutes].$error.min">Please enter value greater than 10</span>
+		                                        </span>
+		                                    </div>
+		                                </div>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- mark as critical -->
+                            		<div class="col-md-2 text-right">
+	                                    <input type="checkbox" ng-true-value="'CriticalHot'" ng-false-value="'Hot'" ng-model="hotAlert.type" id="criticalHot">&nbsp;
+	                                    <span>Mark as critical</span>
+	                                    <i uib-tooltip="Tick this box if you want this alert to be shown as Critical."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>
+                            		</div>
+	                                <div class="visible-xs col-md-12">&nbsp;</div>
+                            		<!-- Delete -->
+	                                <div class="col-md-2 text-right">
+	                                    <label class="control-label" ng-click="DeleteHotObject(hotAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
+	                                    <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;
+	                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
+	                                           tooltip-append-to-body="true" tooltip-trigger="mouseenter"
+	                                           tooltip-placement="top" class="fa fa-info-circle"></i></span>
+	                                    </label>
+	                                    <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
+	                                </div>
+                            	</div>
+                            	<!-- Second row -->
+                            	<div class="form-group">
+                            		<!-- Max rate limit -->
+                            		<div class="col-md-3 text-right">
+	                                    <label class="control-label">How often can alert fire?</label>
+                            		</div>
+                                    <div class="col-md-2">
+                                    	<div class="row">
+		                                    <select class="form-control"
+		                                            ng-options="cF.val as cF.name for cF in [{name: 'Once per trip', val: null}, {name: 'Once every 24hr', val: 24 * 60}, {name: 'Once every 48hr', val: 48* 60}, {name: 'Once every 7days', val: 7 * 24 * 60 }]"
+		                                            ng-model="hotAlert.maxRateMinutes">
+		                                    </select>
+                                    	</div>
+	                                </div>
+	                                <div class="col-md-1 no-padding">
+	                                    <i uib-tooltip="The maximum number of times this alert can fire."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>
+	                                </div>
+
+                                    <!-- Corrective actions -->
+                            		<div class="col-md-3 text-right">
+	                                    <label class="control-label">Action to take when alert fires</label>
+                            		</div>
+                                   	<div class="col-md-2">
+                                   		<div class="row">
+		                                    <select class="form-control"
+		                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
+		                                            ng-model="hotAlert.correctiveAction">
+		                                            <option></option>
+		                                    </select>
+                                   		</div>
+                                   	</div>
+	                                <div class="col-md-1 no-padding">
+	                                    <i uib-tooltip="Action to take when alert fires."
+	                                        tooltip-append-to-body="true"
+	                                        tooltip-trigger="mouseenter"
+	                                        tooltip-placement="top"
+	                                        class="fa fa-info-circle"></i>                                    
+	                                </div>
+                            	</div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    	<hr>
                                     </div>
                                 </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <select class="form-control"
-                                                    ng-options="cF.val as cF.name for cF in [{ name: 'continuously for', val: false }, { name: 'for a total of', val: true }]" ng-model="hotAlert.cumulativeFlag"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <input type="number" required min="10" ng-init="highTemperatureMinutes = 'highTemperatureMinutes'+ $index" name="{{highTemperatureMinutes}}" class="form-control" ng-model="hotAlert.timeOutMinutes" />
-                                        </div>
-                                        <div class="col-md-3 no-left-padding">
-                                            <label class="control-label">Mins</label>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <span ng-cloak ng-if="frmAddEditAlert.$invalid && frmAddEditAlert.$submitted">
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperatureMinutes].$error.required">Please enter minutes</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperatureMinutes].$error.number">Please enter only positive number</span>
-                                            <span ng-cloak class="text-danger" ng-if="frmAddEditAlert[highTemperatureMinutes].$error.min">Please enter value greater than 10</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2 text-right">
-                                    <input type="checkbox" ng-true-value="'CriticalHot'" ng-false-value="'Hot'" ng-model="hotAlert.type" id="criticalHot">&nbsp;
-                                    <!--<img src="theme/img/alertCriticalHot.png" />&nbsp;critical-->
-                                    <!--<label for="criticalHot" class="control-label">-->
-                                    <!--</label>-->
-                                    <span>Mark as critical</span>
-                                    <i uib-tooltip="Tick this box if you want this alert to be shown as Critical."
-                                       tooltip-append-to-body="true"
-                                       tooltip-trigger="mouseenter"
-                                       tooltip-placement="top"
-                                       class="fa fa-info-circle"></i>
-                                </div>
-                                <div class="visible-xs col-md-12">&nbsp;</div>
-                                <div class="col-md-2 text-right">
-                                    <label class="control-label" ng-click="DeleteHotObject(hotAlert)" style="color:#87B04C;cursor:pointer;text-decoration:underline">Delete</label>
-                                    <label class="control-label"><span style="color:black;text-decoration:none">&nbsp;
-                                        <i uib-tooltip="Delete this row. The Delete action is finalised when page is saved."
-                                           tooltip-append-to-body="true" tooltip-trigger="mouseenter"
-                                           tooltip-placement="top" class="fa fa-info-circle"></i></span>
-                                    </label>
-                                    <!--<small class="text-info">&nbsp;(Please SAVE the form after DELETE)</small>-->
-                                </div>
-                            </div>
-                            <div class="col-md-12" ng-if="hotAlerts.length > 0">
-                                <hr />
-                            </div>
+                        	</div>
                             <div class="col-md-12">
                                 <label class="control-label" ng-click="AddHotObject()" style="color:#87B04C;cursor:pointer;text-decoration:underline;margin-top:-7px"><i class="fa fa-plus"></i>&nbsp;Add Another</label>
                             </div>
@@ -324,7 +447,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="col-md-offset-3 col-md-6 ">
+                                        <div class="col-md-offset-2 col-md-4">
                                             <div class="checkbox-list">
                                                 <label for="enterbrightenv">
                                                     <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;
@@ -336,6 +459,28 @@
                                                        class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
+                                        </div>
+	                                    <!-- Corrective actions -->
+                                        <div class="col-md-6 col-md-pull-1">
+		                            		<div class="col-md-6 text-right">
+			                                    <label class="control-label">Action to take when alert fires</label>
+		                            		</div>
+		                                   	<div class="col-md-5">
+		                                   		<div class="row">
+				                                    <select class="form-control"
+				                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
+				                                            ng-model="Alert.lightOnCorrectiveActions">
+			                                            <option></option>
+				                                    </select>
+		                                   		</div>
+		                                   	</div>
+			                                <div class="col-md-1 no-padding">
+			                                    <i uib-tooltip="Action to take when alert fires."
+			                                        tooltip-append-to-body="true"
+			                                        tooltip-trigger="mouseenter"
+			                                        tooltip-placement="top"
+			                                        class="fa fa-info-circle"></i>                                    
+			                                </div>
                                         </div>
                                         <!--<div class="col-md-3">
                                             <div class="checkbox-list">
@@ -360,7 +505,7 @@
                                                 </label>
                                             </div>
                                         </div>-->
-                                        <div class="col-md-offset-3 col-md-3">
+                                        <div class="col-md-offset-2 col-md-4">
                                             <div class="checkbox-list">
                                                 <label for="btrlow">
                                                     <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;
@@ -372,6 +517,28 @@
                                                        class="fa fa-info-circle"></i>
                                                 </label>
                                             </div>
+                                        </div>
+	                                    <!-- Corrective actions -->
+                                        <div class="col-md-6 col-md-pull-1">
+		                            		<div class="col-md-6 text-right">
+			                                    <label class="control-label">Action to take when alert fires</label>
+		                            		</div>
+		                                   	<div class="col-md-5">
+		                                   		<div class="row">
+				                                    <select class="form-control"
+				                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
+				                                            ng-model="Alert.batteryLowCorrectiveActions">
+			                                            <option></option>
+				                                    </select>
+		                                   		</div>
+		                                   	</div>
+			                                <div class="col-md-1 no-padding">
+			                                    <i uib-tooltip="Action to take when alert fires."
+			                                        tooltip-append-to-body="true"
+			                                        tooltip-trigger="mouseenter"
+			                                        tooltip-placement="top"
+			                                        class="fa fa-info-circle"></i>                                    
+			                                </div>
                                         </div>
                                     </div>
                                 </div>

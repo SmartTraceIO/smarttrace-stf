@@ -118,6 +118,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
     }
 
     $scope.Action = "Add";
+    $scope.correctiveActionLists = [];
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
@@ -149,12 +150,15 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
         $scope.Alert.watchEnterDarkEnvironment = true;
         $scope.Alert.watchMovementStart = false;
         $scope.Alert.watchMovementStop = true;
+        $scope.Alert.lightOnCorrectiveActions = null;
+        $scope.Alert.batteryLowCorrectiveActions = null;
 
         $scope.coldAlerts = [
              {
                  type: "Cold",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              },
         ]
@@ -164,9 +168,12 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
                  type: "Hot",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              },
-        ]
+        ];
+        
+        loadCorrectiveActionLists($scope, webSvc);
     }
 
     $scope.AddColdObject = function () {
@@ -175,6 +182,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
                  type: "Cold",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              });
     }
@@ -192,6 +200,7 @@ appCtrls.controller('AddAlertCtrl', function ($rootScope, $scope, rootSvc, local
                  type: "Hot",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              });
     }
@@ -286,7 +295,8 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
 
     $scope.AuthToken = localDbSvc.getToken();
     $scope.Action = "Edit";
-
+    $scope.correctiveActionLists = [];
+    
     if ($rootScope.modalInstance) {
         $scope.fromModalPopup = true;
     }
@@ -352,6 +362,8 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
                 }
             })
         }
+        
+        loadCorrectiveActionLists($scope, webSvc);
     }
 
     $scope.AddColdObject = function () {
@@ -360,6 +372,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
                  type: "Cold",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              });
     }
@@ -377,6 +390,7 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
                  type: "Hot",
                  temperature: 0,
                  timeOutMinutes: "",
+                 maxRateMinutes: null,
                  cumulativeFlag: false
              });
     }
@@ -427,6 +441,16 @@ appCtrls.controller('EditAlertCtrl', function ($rootScope, $scope, rootSvc, loca
         }
     }
 });
+
+function loadCorrectiveActionLists(scope, webSvc) {
+	webSvc.getCorrectiveActionLists().success(function (data, textStatus, xmlHttp){
+        if (data.status.code == 0) {
+            scope.correctiveActionLists = data.response;
+        } else {
+        	alert(data.status);
+        }
+	});
+}
 
 /*function F2C(fah) {
     return (fah - 32) * 5 / 9;

@@ -560,7 +560,44 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 		saveUser: function(data){
 			var url = Api.url + 'saveUser/' + localDbSvc.getToken();
 			return $http.post(url, data);
-		}
-	}
+		},
 
+        getCorrectiveActionLists: function(pageSize, pageIndex, sc, so){
+			var url = Api.url + 'getCorrectiveActionLists/' + localDbSvc.getToken();
+			var params = {
+				params: {
+					pageSize: pageSize,
+					pageIndex: pageIndex,
+					sc: sc,
+					so: so
+				}
+			};
+			return $http.get(url, params);
+		},
+		
+		deleteCorrectiveActionList: function(listId) {
+            var url = Api.url + 'deleteCorrectiveActionList/' + localDbSvc.getToken();
+            var params = {
+                params: {
+                	id: listId
+                }
+            }
+            return $http.get(url, params);
+        },
+        
+		getCorrectiveActionList: function(listId) {
+            var url = Api.url + 'getCorrectiveActionList/' + localDbSvc.getToken();
+            var params = {
+                params: {
+                	id: listId
+                }
+            }
+            return $http.get(url, params);
+        },
+        
+        saveCorrectiveActionList: function(data){
+			var url = Api.url + 'saveCorrectiveActionList/' + localDbSvc.getToken();
+			return $http.post(url, data);
+        }
+	}
 });

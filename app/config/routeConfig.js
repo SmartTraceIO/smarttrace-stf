@@ -610,7 +610,52 @@ appConstants.constant('routes', [
         dependencies: [
             'app/simulator/manage-simulator.js?v=' + version
         ]
-    }
+    },
+    {
+        name: 'manage.correctiveactions',
+        config: {
+            url: "/correctiveactions"
+            , views: {
+                "sub-content": {
+                    templateUrl: "app/manage-corrective-actions/list.html?v="+ version
+                     , controller: 'ListCorrectiveActionListsCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+        ]
+    },
+    {
+        name: 'manage.addcorrectiveactions',
+        config: {
+            url: "/add-correctiveactions"
+            , views: {
+                "sub-content": {
+                    templateUrl: "app/manage-corrective-actions/add-edit.html?v="+ version
+                     , controller: 'EditCorrectiveActionListCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+        ]
+    },
+    {
+        name: 'manage.editcorrectiveactions',
+        config: {
+            url: "/edit-correctiveactions/:aId"
+            , views: {
+                "sub-content": {
+                    templateUrl: "app/manage-corrective-actions/add-edit.html?v="+ version
+                     , controller: 'EditCorrectiveActionListCtrl'
+                }
+            }
+        },
+        dependencies: [
+            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+        ]
+    }    
 ]);
 
 //#endregion Register Routes Here
