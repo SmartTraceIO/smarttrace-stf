@@ -333,5 +333,13 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | Actions:                         | Expected Result:                                |
     |----------------------------------|-------------------------------------------------|
     | 1. Click **Add another** button  | 1. Opens a new empty **Corrective Action** field|
+    
+5. **Corrective Actions field**
+
+    | Actions:                                 | Expected Result:                                                                         |
+    |------------------------------------------|------------------------------------------------------------------------------------------|
+    | 1. Enter any signs/ numbers and **Save** | 1. The list saves with numbers/signs                                                     |
+    | 2. Enter a text of any length            | 2. The length of the field is not restricted. The **Corrective Action** field is required|
+
 
     
