@@ -341,5 +341,19 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 1. Enter any signs/ numbers and **Save** | 1. The list saves with numbers/signs                                                     |
     | 2. Enter a text of any length            | 2. The length of the field is not restricted. The **Corrective Action** field is required|
 
+6. **Required verification checkbox:** 
 
+
+    | Actions:                                     | Expected Result:                                 |
+    |----------------------------------------------|--------------------------------------------------|
+    | 1. Tick on/off the checkbox and **Save**     | 1. The list saves with checkbox checked/unchecked|
+    
+    
+7. **Delete button:**
+
+    | Actions:                         | Expected Result:                                      |
+    |----------------------------------|-------------------------------------------------------|
+    | 1. Click **Delete** button       | 1. The chosen list **Corrective Action** field deletes|
+    
+8. **Save button:**
     
