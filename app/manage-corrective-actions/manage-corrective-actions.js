@@ -121,7 +121,7 @@ appCtrls.controller('EditCorrectiveActionListCtrl', function ($rootScope, $scope
     $scope.WarnUserAndRedirectToListPage = function () {
         $("#confirmModel").modal("hide");
         setTimeout(function () { 
-            $state.go($scope.routeCfgName);
+            $state.go('manage.correctiveactions');
         }, 200)
     }
 
