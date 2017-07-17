@@ -362,3 +362,9 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 1. Click **Save** button after the corrections were made  | 1. **Corrective Action** list saves and opens the page of **Corrective Action lists**|
     
 9. **Cancel button:**
+
+    | Actions:                                   | Expected Result:                                                                              |
+    |--------------------------------------------|-----------------------------------------------------------------------------------------------|
+    | 1. Click **Cancel**                        | 1. Opens a prompt message                                                                     |
+    | 2. CLick **OK** in the prompt message      | 2. The chages made in the list are not saved and opens the page of **Corrective Action Lists**|
+    | 3. Click **Cancel** in the prompt message  | 3. The prompt message box closes and opens the editing page of the list                       |
