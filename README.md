@@ -368,3 +368,18 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 1. Click **Cancel**                        | 1. Opens a prompt message                                                                     |
     | 2. CLick **OK** in the prompt message      | 2. The chages made in the list are not saved and opens the page of **Corrective Action Lists**|
     | 3. Click **Cancel** in the prompt message  | 3. The prompt message box closes and opens the editing page of the list                       |
+    
+    
+    
+###List of Corrective Action Lists###
+
+1. **Show** dropdown list include options:
+          * 10
+          * 20
+          * 50
+          * 100
+2. **Add New Corrective Action List** button opens a tab of new corrective action list.
+3. Table rows **ID, Name, Description** can be ordered alphabeticaly or non-alphabeticaly order with a click on one of them.
+4. **Edit** button opens a chosen list for editing.
+5. **Delete** button deletes the chosen list.
+          
