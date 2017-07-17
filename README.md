@@ -374,10 +374,10 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
 ###List of Corrective Action Lists###
 
 1. **Show** dropdown list include options:
-          * 10
-          * 20
-          * 50
-          * 100
+      * 10
+      * 20
+      * 50
+      * 100
 2. **Add New Corrective Action List** button opens a tab of new corrective action list.
 3. Table rows **ID, Name, Description** can be ordered alphabeticaly or non-alphabeticaly order with a click on one of them.
 4. **Edit** button opens a chosen list for editing.
