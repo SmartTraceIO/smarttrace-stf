@@ -356,4 +356,9 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     | 1. Click **Delete** button       | 1. The chosen list **Corrective Action** field deletes|
     
 8. **Save button:**
+
+    | Actions:                                                  | Expected Result:                                                                     |
+    |-----------------------------------------------------------|--------------------------------------------------------------------------------------|
+    | 1. Click **Save** button after the corrections were made  | 1. **Corrective Action** list saves and opens the page of **Corrective Action lists**|
     
+9. **Cancel button:**
