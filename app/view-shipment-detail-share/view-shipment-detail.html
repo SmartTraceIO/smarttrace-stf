@@ -1048,14 +1048,68 @@
                                 <a href="javascript:;" class="expand"> </a>
                             </div>
                         </div>
-                        <div class="portlet-body text-center" style="display:none;">
-                        	<div class="caption uppercase">
-								<a href="" class="pull-right" ng-click="showCorrectiveActionsDialog()">Test corrective actions</a>
-                        	</div>
+                        <div class="portlet-body text-center" style="display:none; padding-top: 0px;">
                         	<div ng-repeat="alert in alertsWithCorrectiveActions">
-                                <div class="portlet-title row">
-                                	{{alert.description}}
-                                </div>
+                        		<!-- Alert that fired -->
+                        		<div class="bg-grey-silver row">
+                        			<div>
+		                        		<table>
+		                        			<tr>
+			                        			<td>
+													<span class="bold-font">Alert that fired:&nbsp;</span>
+			                        			</td>
+			                        			<td>
+				                        			<img class="tiny-icon17" ng-src="theme/img/alert{{alert.type}}.png"/>
+				                        			{{alert.description}}
+			                        			</td>
+		                        			</tr>
+		                        			<tr>
+			                        			<td>
+													<span class="bold-font">Alert Time:&nbsp;</span>
+			                        			</td>
+			                        			<td>
+				                        			{{alert.timeStr}}
+			                        			</td>
+		                        			</tr>
+		                        		</table>
+                        			</div>
+                        		</div>
+                        		<!-- Taken actions for given alert -->
+                        		<table ng-repeat="action in alert.actions">
+                        			<tr>
+                        				<td>
+		                            		<span class="bold-font">Action Taken:&nbsp;</span>
+                        				</td>
+                        				<td>
+		                            		<span class="bold-font">{{action.action}}</span>
+                        				</td>
+                        			</tr>
+                       				<tr>
+                       					<td colspan="2">
+		                            		<div class="col-md-6">
+		                            			by <a href="">{{action.confirmedByName}}</a>
+		                            		</div>
+		                            		<div ng-if="action.verifiedByName != null" class="col-md-6">
+		                            			verified by <a href="">{{action.verifiedByName}}</a>
+		                            		</div>
+		                            		<div ng-if="action.verifiedByName == null && action.action.requestVerification"
+		                            			class="col-md-6">
+		                            			<a href="" ng-click="verifyActionTaken(action)">verify</a>
+		                            		</div>
+                       					</td>
+                       				</tr>
+                       				<tr>
+                       					<td><hr/></td>
+                       				</tr>
+                        		</table>
+		                        <div class="row">
+		                        	<a href="" ng-click="showAddActionTakenDialog(alert)" ng-if="alert.actions.length > 0">
+		                        		Add another action taken
+		                        	</a>
+		                        	<a href="" ng-click="showAddActionTakenDialog(alert)" ng-if="alert.actions.length == 0">
+		                        		+ Add an action taken
+		                        	</a>
+		                        </div>
                         	</div>
                         </div>
                     </div>
