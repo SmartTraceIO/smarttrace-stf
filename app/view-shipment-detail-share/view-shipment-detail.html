@@ -993,7 +993,6 @@
                         </div>
                     </div>
                     <!---->
-
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
@@ -1050,7 +1049,10 @@
                             </div>
                         </div>
                         <div class="portlet-body text-center" style="display:none;">
-                        	<div ng-repeat="alert in sentAlerts">
+                        	<div class="caption uppercase">
+								<a href="" class="pull-right" ng-click="showCorrectiveActionsDialog()">Test corrective actions</a>
+                        	</div>
+                        	<div ng-repeat="alert in alertsWithCorrectiveActions">
                                 <div class="portlet-title row">
                                 	{{alert.description}}
                                 </div>

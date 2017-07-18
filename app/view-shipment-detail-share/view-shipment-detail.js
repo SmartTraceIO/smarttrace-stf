@@ -928,13 +928,13 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 webSvc.getAlertProfile(profileId).success(function(alertProfileData) {
                     info.alertProfile = alertProfileData.response;
                     calculateAndDraw();
-                }).then($scope.updateActionTaken);
+                }).then($scope.updateActionTakens);
             } else {
                 calculateAndDraw();
             }
         }
 
-    	$scope.updateActionTaken = function(){
+    	$scope.updateActionTakens = function(){
         	webSvc.getActionTakens(info.shipmentId).success(function(resp) {
                 createActionTakensModel(info, resp.response);
             });
@@ -2205,4 +2205,17 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         return false;
     }
+    $scope.showCorrectiveActionsDialog = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/new-action-taken.html',
+            controller: 'NewActionTakenController as VM',
+            resolve: {
+            	currentAlert: function() { return null;},
+            	actionList:function() {return [];}
+            }
+        });
+        modalInstance.result.then(function() {
+           $scope.updateActionTakens();
+        });
+    };
 }
