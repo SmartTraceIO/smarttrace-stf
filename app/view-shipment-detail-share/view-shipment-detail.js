@@ -44,6 +44,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     var plotLines = [];
     $scope.specialMarkers = [];
+    $scope.alertsWithCorrectiveActions = [];
     $scope.normalMarkers = [];
     $scope.previousActiveMarker = -1;
     //includes all tracker info here
@@ -927,13 +928,19 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 webSvc.getAlertProfile(profileId).success(function(alertProfileData) {
                     info.alertProfile = alertProfileData.response;
                     calculateAndDraw();
-                });
+                }).then($scope.updateActionTaken);
             } else {
                 calculateAndDraw();
             }
         }
 
-        function calculateAndDraw() {
+    	$scope.updateActionTaken = function(){
+        	webSvc.getActionTakens(info.shipmentId).success(function(resp) {
+                createActionTakensModel(info, resp.response);
+            });
+    	};
+
+    	function calculateAndDraw() {
             if (!info) return;
             var numberOfSiblings = info.siblings.length;
             if (numberOfSiblings >= 5) {
@@ -1006,6 +1013,34 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         	if (nearest != null) {
         		nearest.notOptimize = true;
         	}
+        }
+
+        function createActionTakensModel(shipmentInfo, actionTakens) {
+        	var alerts = [];
+        	for(var i = 0; i < shipmentInfo.alertsWithCorrectiveActions.length; i++) {
+        		var a = shipmentInfo.alertsWithCorrectiveActions[i];
+        		alerts.push({
+    				id: a.id,
+    				type: a.type,
+    				time: parseDate(a.timeISO),
+    				timeStr: a.time,
+    				description: a.description,
+    				actions: getActionTakensForAlert(a, actionTakens)
+        		});
+        	}
+        	
+        	$scope.alertsWithCorrectiveActions = alerts;
+        }
+        
+        function getActionTakensForAlert(alert, actionTakens) {
+        	var actions = [];
+        	for (var i = 0; i < actionTakens.length; i++) {
+        		if (alert.id == actionTakens[i].alert) {
+        			actions.push(actionTakens[i]);
+        		}
+        	}
+        	
+        	return actions;
         }
 
         function loadSibling() {

@@ -1050,7 +1050,11 @@
                             </div>
                         </div>
                         <div class="portlet-body text-center" style="display:none;">
-                            Under development
+                        	<div ng-repeat="alert in sentAlerts">
+                                <div class="portlet-title row">
+                                	{{alert.description}}
+                                </div>
+                        	</div>
                         </div>
                     </div>
                 </div>

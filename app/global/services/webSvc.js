@@ -598,6 +598,22 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
         saveCorrectiveActionList: function(data){
 			var url = Api.url + 'saveCorrectiveActionList/' + localDbSvc.getToken();
 			return $http.post(url, data);
+        },
+        
+    	getActionTakens: function(shipmentId){
+            var url = Api.url + 'getActionTakens/' + localDbSvc.getToken();
+            var params = {
+                params: {
+                	shipment: shipmentId
+                }
+            }
+            return $http.get(url, params);
+        },
+        
+        saveActionTaken: function(data){
+			var url = Api.url + 'saveActionTaken/' + localDbSvc.getToken();
+			return $http.post(url, data);
         }
+        
 	}
 });
