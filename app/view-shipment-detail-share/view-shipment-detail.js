@@ -2222,20 +2222,37 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 reject(data.status);
             }
     	});
-        modalInstance.result.then(function() {
-           $scope.updateActionTakens();
-        });
     };
+    $scope.showVerifyActionTakenDialog = function(action) {
+    	//TODO.
+    }
 
     $scope.verifyActionTaken = function(action) {
-    	//prepare action taken before save
-    	//webSvc.saveActionTaken(a)
-    	var a = action;
-    	$scope.saveActionTaken(a);
+    	var a = {
+			action: action.action,
+			comments: action.comments,
+			alert: action.alert,
+			confirmedBy: action.confirmedBy,
+			verifiedBy: $rootScope.User.id,
+			time: action.time
+    	};
+    	saveActionTaken(a);
     };
     
     $scope.saveActionTaken = function(action) {
     	//prepare action taken before save
-    	//webSvc.saveActionTaken(a);
+    	var a = {
+			action: action.action,
+			comments: action.comments,
+			alert: action.alert,
+			confirmedBy: $rootScope.User.id,
+			time: moment(action.time).format('YYYY-MM-DDTHH:mm')
+    	};
+
+    	saveActionTaken(a);
+    };
+    
+    function saveActionTaken (action) {
+    	webSvc.saveActionTaken(action).then($scope.updateActionTakens);
     };
 }

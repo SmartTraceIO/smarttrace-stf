@@ -1081,7 +1081,7 @@
 		                            		<span class="bold-font">Action Taken:&nbsp;</span>
                         				</td>
                         				<td>
-		                            		<span class="bold-font">{{action.action}}</span>
+		                            		<span class="bold-font">{{action.action.action}}</span>
                         				</td>
                         			</tr>
                        				<tr>
@@ -1089,12 +1089,12 @@
 		                            		<div class="col-md-6">
 		                            			by <a href="">{{action.confirmedByName}}</a>
 		                            		</div>
-		                            		<div ng-if="action.verifiedByName != null" class="col-md-6">
+		                            		<div ng-if="action.verifiedBy != null" class="col-md-6">
 		                            			verified by <a href="">{{action.verifiedByName}}</a>
 		                            		</div>
-		                            		<div ng-if="action.verifiedByName == null && action.action.requestVerification"
+		                            		<div ng-if="action.verifiedBy == null && action.action.requestVerification"
 		                            			class="col-md-6">
-		                            			<a href="" ng-click="verifyActionTaken(action)">verify</a>
+		                            			<a href="" ng-click="showVerifyActionTakenDialog(action)">verify</a>
 		                            		</div>
                        					</td>
                        				</tr>

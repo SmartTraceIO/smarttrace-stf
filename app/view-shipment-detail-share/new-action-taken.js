@@ -8,6 +8,7 @@ function NewActionTakenController($uibModalInstance, $scope, rootScope, currentA
 
     $scope.actionTaken = {
         action: null,
+        alert: currentAlert.id,
         comments: null,
         date: null
     };
@@ -19,5 +20,6 @@ function NewActionTakenController($uibModalInstance, $scope, rootScope, currentA
     
     $scope.saveActionTaken = function() {
         rootScope.saveActionTaken($scope.actionTaken);
+        $uibModalInstance.dismiss();
     };
 }
