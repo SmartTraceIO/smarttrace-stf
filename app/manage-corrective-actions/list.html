@@ -31,25 +31,25 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th ng-click="Sorting('listId')">
-                        <span class="pull-left">ID</span>
-                        <i uib-tooltip="An ID of corrective action list."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"></i>
-                        <span class="pull-right" style="position:relative;">
-                            <a ng-class="{'active-sort':So=='asc' && Sc=='listId'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
-                            <a ng-class="{'active-sort':So=='desc' && Sc=='listId'}"><i class="fa fa-sort-desc"></i></a>
-                        </span>
-                    </th>
+                    <!--<th ng-click="Sorting('listId')">-->
+                        <!--<span class="pull-left">ID</span>-->
+                        <!--<i uib-tooltip="An ID of corrective action list."-->
+                           <!--tooltip-append-to-body="true"-->
+                           <!--tooltip-trigger="mouseenter"-->
+                           <!--tooltip-placement="top"-->
+                           <!--class="fa fa-info-circle"></i>-->
+                        <!--<span class="pull-right" style="position:relative;">-->
+                            <!--<a ng-class="{'active-sort':So=='asc' && Sc=='listId'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>-->
+                            <!--<a ng-class="{'active-sort':So=='desc' && Sc=='listId'}"><i class="fa fa-sort-desc"></i></a>-->
+                        <!--</span>-->
+                    <!--</th>-->
                     <th ng-click="Sorting('listName')">
-                        <span class="pull-left">Name</span>
-                        <i uib-tooltip="A name for corrective actions list."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"></i>
+                        <span class="pull-left">List Name</span>
+                        <!--<i uib-tooltip="A name for corrective actions list."-->
+                           <!--tooltip-append-to-body="true"-->
+                           <!--tooltip-trigger="mouseenter"-->
+                           <!--tooltip-placement="top"-->
+                           <!--class="fa fa-info-circle"></i>-->
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='listName'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='listName'}"><i class="fa fa-sort-desc"></i></a>
@@ -57,21 +57,24 @@
                     </th>
                     <th ng-click="Sorting('description')">
                         <span class="pull-left">Description</span>
-                        <i uib-tooltip="A description for corrective actions list."
-                           tooltip-append-to-body="true"
-                           tooltip-trigger="mouseenter"
-                           tooltip-placement="top"
-                           class="fa fa-info-circle"></i>
+                        <!--<i uib-tooltip="A description for corrective actions list."-->
+                           <!--tooltip-append-to-body="true"-->
+                           <!--tooltip-trigger="mouseenter"-->
+                           <!--tooltip-placement="top"-->
+                           <!--class="fa fa-info-circle"></i>-->
                         <span class="pull-right" style="position:relative;">
                             <a ng-class="{'active-sort':So=='asc' && Sc=='description'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
                             <a ng-class="{'active-sort':So=='desc' && Sc=='description'}"><i class="fa fa-sort-desc"></i></a>
                         </span>
                     </th>
-                    <th class="text-center hidden-print"></th>
+
+                    <th>
+                        <span class="pull-left">Corrective Actions</span>
+                    </th>
                     <th class="text-center hidden-print"></th>
                 </tr>
                 <tr ng-repeat="list in CorrectiveActionLists">
-                    <td ng-bind="list.listId"></td>
+                    <!--<td ng-bind="list.listId"></td>-->
                     <td ng-bind="list.listName"></td>
                     <td ng-bind="list.description"></td>
                     <td>

@@ -30,10 +30,7 @@
             <div class="caption">
                 <i class="fa fa-bell"></i> {{Action}}&nbsp;corrective action list
             </div>
-            <div class="pull-right" ng-if="fromModalPopup">
-                <button type="button" style="vertical-align:middle;color:white" class="close" ng-click="close()">Close</button>
-            </div>
-            <div class="tools hidden-print" ng-if="!fromModalPopup">
+            <div class="tools hidden-print">
                 <button class="btn default btn-sm uppercase" type="button" ng-click="Print()">Print</button>
             </div>
         </div>
@@ -44,7 +41,7 @@
                         <div class="form-group">
                             <div class="col-md-offset-3 col-md-3">
                                 <label class="pull-left">Name:&nbsp;
-                                    <i uib-tooltip="List name"
+                                    <i uib-tooltip="Enter a meaningful name for this list"
                                        tooltip-append-to-body="true"
                                        tooltip-trigger="mouseenter"
                                        tooltip-placement="top"
@@ -100,7 +97,7 @@
                            		<div class="col-md-6">
                            			<div class="row">
 		                                <label class="pull-left">Corrective Action:&nbsp;
-		                                    <i uib-tooltip="List name"
+		                                    <i uib-tooltip="Enter the action that should be taken then sort the actions according to their priority"
 		                                       tooltip-append-to-body="true"
 		                                       tooltip-trigger="mouseenter"
 		                                       tooltip-placement="top"
@@ -159,16 +156,10 @@
                     </div>
                 </form>
             </div>
-            <div class="text-center" ng-if="!fromModalPopup" style="padding-top:70px">
+            <div class="text-center" style="padding-top:70px">
                 <div class="form-actions">
                     <button class="btn green" form="frmAddEditList" ng-click="SaveData(frmAddEditList.$valid,false)" type="submit">Save</button>
                     <a class="btn default" data-toggle="modal" data-target="#confirmModel">Cancel</a>
-                </div>
-            </div>
-            <div class="text-center" style="padding-top:70px" ng-if="fromModalPopup">
-                <div class="form-actions">
-                    <button class="btn green" form="frmAddEditList" ng-click="SaveData(frmAddEditList.$valid,true)" type="submit">Save & Close</button>
-                    <a class="btn default" ng-click="close()">Cancel</a>
                 </div>
             </div>
         </div>

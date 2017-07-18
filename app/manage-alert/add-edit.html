@@ -122,11 +122,11 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <h3 class="caption-subject font-green-sharp bold">Low Temperature Alerts<span class="info">&nbsp;
-                                            <i uib-tooltip="Low Temperature Alerts"
-                                               tooltip-append-to-body="true"
-                                               tooltip-trigger="mouseenter"
-                                               tooltip-placement="top"
-                                               class="fa fa-info-circle"></i>
+                                            <!--<i uib-tooltip="Low Temperature Alerts"-->
+                                               <!--tooltip-append-to-body="true"-->
+                                               <!--tooltip-trigger="mouseenter"-->
+                                               <!--tooltip-placement="top"-->
+                                               <!--class="fa fa-info-circle"></i>-->
                                         </span></h3>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                     	</div>
 	                                </div>
 	                                <div class="col-md-1 no-padding">
-	                                    <i uib-tooltip="The maximum number of times this alert can fire."
+	                                    <i uib-tooltip="The period of time to wait after this alert fires before monitoring for this alert again"
 	                                        tooltip-append-to-body="true"
 	                                        tooltip-trigger="mouseenter"
 	                                        tooltip-placement="top"
@@ -261,7 +261,7 @@
                                    		</div>
                                    	</div>
 	                                <div class="col-md-1 no-padding">
-	                                    <i uib-tooltip="Action to take when alert fires."
+	                                    <i uib-tooltip="Choose a list of possible corrective actions that might be taken when this alert fires"
 	                                        tooltip-append-to-body="true"
 	                                        tooltip-trigger="mouseenter"
 	                                        tooltip-placement="top"
@@ -283,11 +283,11 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <h3 class="caption-subject font-green-sharp bold">High Temperature Alerts<span class="info">&nbsp;
-                                            <i uib-tooltip="High Temperature Alerts"
-                                               tooltip-append-to-body="true"
-                                               tooltip-trigger="mouseenter"
-                                               tooltip-placement="top"
-                                               class="fa fa-info-circle"></i>
+                                            <!--<i uib-tooltip="High Temperature Alerts"-->
+                                               <!--tooltip-append-to-body="true"-->
+                                               <!--tooltip-trigger="mouseenter"-->
+                                               <!--tooltip-placement="top"-->
+                                               <!--class="fa fa-info-circle"></i>-->
                                         </span></h3>
                                     </div>
                                 </div>
@@ -396,7 +396,7 @@
                                     	</div>
 	                                </div>
 	                                <div class="col-md-1 no-padding">
-	                                    <i uib-tooltip="The maximum number of times this alert can fire."
+	                                    <i uib-tooltip="The period of time to wait after this alert fires before monitoring for this alert again"
 	                                        tooltip-append-to-body="true"
 	                                        tooltip-trigger="mouseenter"
 	                                        tooltip-placement="top"
@@ -411,13 +411,13 @@
                                    		<div class="row">
 		                                    <select class="form-control"
 		                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
-		                                            ng-model="hotAlert.correctiveActionshigh">
+		                                            ng-model="hotAlert.correctiveActions">
 		                                            <option></option>
 		                                    </select>
                                    		</div>
                                    	</div>
 	                                <div class="col-md-1 no-padding">
-	                                    <i uib-tooltip="Action to take when alert fires."
+	                                    <i uib-tooltip="Choose a list of possible corrective actions that might be taken when this alert fires"
 	                                        tooltip-append-to-body="true"
 	                                        tooltip-trigger="mouseenter"
 	                                        tooltip-placement="top"
@@ -452,7 +452,7 @@
                                                 <label for="enterbrightenv">
                                                     <input type="checkbox" ng-model="Alert.watchEnterBrightEnvironment" id="enterbrightenv">&nbsp;&nbsp;
                                                     <img src="theme/img/alertLightOn.png" /> &nbsp;&nbsp;Enter Bright Environment&nbsp;&nbsp;
-                                                    <i uib-tooltip="Alert For Enter Bright Environment"
+                                                    <i uib-tooltip="Highlight on the temperature chart when the device is within a bright environment (eg. door openings)"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
                                                        tooltip-placement="top"
@@ -461,27 +461,27 @@
                                             </div>
                                         </div>
 	                                    <!-- Corrective actions -->
-                                        <div class="col-md-6 col-md-pull-1">
-		                            		<div class="col-md-6 text-right">
-			                                    <label class="control-label">Action to take when alert fires</label>
-		                            		</div>
-		                                   	<div class="col-md-5">
-		                                   		<div class="row">
-				                                    <select class="form-control"
-				                                            ng-options="list as list.listName for list in correctiveActionLists track by list.listId"
-				                                            ng-model="Alert.lightOnCorrectiveActions">
-			                                            <option></option>
-				                                    </select>
-		                                   		</div>
-		                                   	</div>
-			                                <div class="col-md-1 no-padding">
-			                                    <i uib-tooltip="Action to take when alert fires."
-			                                        tooltip-append-to-body="true"
-			                                        tooltip-trigger="mouseenter"
-			                                        tooltip-placement="top"
-			                                        class="fa fa-info-circle"></i>                                    
-			                                </div>
-                                        </div>
+                                        <!--<div class="col-md-6 col-md-pull-1">-->
+		                            		<!--<div class="col-md-6 text-right">-->
+			                                    <!--<label class="control-label">Action to take when alert fires</label>-->
+		                            		<!--</div>-->
+		                                   	<!--<div class="col-md-5">-->
+		                                   		<!--<div class="row">-->
+				                                    <!--<select class="form-control"-->
+				                                            <!--ng-options="list as list.listName for list in correctiveActionLists track by list.listId"-->
+				                                            <!--ng-model="Alert.lightOnCorrectiveActions">-->
+			                                            <!--<option></option>-->
+				                                    <!--</select>-->
+		                                   		<!--</div>-->
+		                                   	<!--</div>-->
+			                                <!--<div class="col-md-1 no-padding">-->
+			                                    <!--<i uib-tooltip="Action to take when alert fires."-->
+			                                        <!--tooltip-append-to-body="true"-->
+			                                        <!--tooltip-trigger="mouseenter"-->
+			                                        <!--tooltip-placement="top"-->
+			                                        <!--class="fa fa-info-circle"></i>-->
+			                                <!--</div>-->
+                                        <!--</div>-->
                                         <!--<div class="col-md-3">
                                             <div class="checkbox-list">
                                                 <label for="darkenv">
@@ -510,7 +510,7 @@
                                                 <label for="btrlow">
                                                     <input type="checkbox" ng-checked="Alert.watchBatteryLow" ng-model="Alert.watchBatteryLow" id="btrlow">&nbsp;&nbsp;
                                                     <img src="theme/img/alertBattery.png" />&nbsp;&nbsp;Battery Low&nbsp;&nbsp;
-                                                    <i uib-tooltip="Alert For Battery Low"
+                                                    <i uib-tooltip="Send an alert notification when the battery reaches a critically low level"
                                                        tooltip-append-to-body="true"
                                                        tooltip-trigger="mouseenter"
                                                        tooltip-placement="top"
@@ -533,7 +533,7 @@
 		                                   		</div>
 		                                   	</div>
 			                                <div class="col-md-1 no-padding">
-			                                    <i uib-tooltip="Action to take when alert fires."
+			                                    <i uib-tooltip="Choose a list of possible corrective actions that might be taken when this alert fires"
 			                                        tooltip-append-to-body="true"
 			                                        tooltip-trigger="mouseenter"
 			                                        tooltip-placement="top"
