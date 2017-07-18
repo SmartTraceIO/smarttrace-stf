@@ -6,18 +6,19 @@ function NewActionTakenController($uibModalInstance, $scope, webSvc, currentAler
     $scope.alert = {
         type: 'Hot',
         description: '> 5C for more than 10mins',
-        time: new Date()
+        timeStr: '2012/07/12'
     };
+var a1={action: 'Action 1',requestVerification: true};
 
     $scope.actions = [
-        {action: 'Action 1',requestVerification: true},
+        a1,
         {action: 'Action 2',requestVerification: false}
     ];
 
     $scope.actionTaken = {
-        action: null,
-        comments: null,
-        date: null
+        action: a1,
+        comments: 'any comment',
+        date: new Date()
     };
 
     //-- cancel
