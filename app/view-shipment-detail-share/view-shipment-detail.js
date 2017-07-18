@@ -1022,6 +1022,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         		alerts.push({
     				id: a.id,
     				type: a.type,
+    				actionListId: a.correctiveActionListId,
     				time: parseDate(a.timeISO),
     				timeStr: a.time,
     				description: a.description,
@@ -2205,17 +2206,36 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
         return false;
     }
-    $scope.showCorrectiveActionsDialog = function() {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'app/view-shipment-detail-share/new-action-taken.html',
-            controller: 'NewActionTakenController as VM',
-            resolve: {
-            	currentAlert: function() { return null;},
-            	actionList:function() {return [];}
+    $scope.showAddActionTakenDialog = function(alert) {
+    	webSvc.getCorrectiveActionList(alert.actionListId).success(function(data) {
+            if (data.status.code == 0) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'app/view-shipment-detail-share/new-action-taken.html',
+                    controller: 'NewActionTakenController as VM',
+                    resolve: {
+                    	currentAlert: function() {return alert;},
+                    	actionList:function() {return data.response.actions;},
+                    	rootScope: function() {return $scope;}
+                    }
+                });
+            } else {
+                reject(data.status);
             }
-        });
+    	});
         modalInstance.result.then(function() {
            $scope.updateActionTakens();
         });
+    };
+
+    $scope.verifyActionTaken = function(action) {
+    	//prepare action taken before save
+    	//webSvc.saveActionTaken(a)
+    	var a = action;
+    	$scope.saveActionTaken(a);
+    };
+    
+    $scope.saveActionTaken = function(action) {
+    	//prepare action taken before save
+    	//webSvc.saveActionTaken(a);
     };
 }
