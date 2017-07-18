@@ -2223,8 +2223,16 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
     	});
     };
-    $scope.showVerifyActionTakenDialog = function(action) {
-    	//TODO.
+    $scope.showVerifyActionTakenDialog = function(action, currentAlert) {
+        $uibModal.open({
+            templateUrl: 'app/view-shipment-detail-share/verify-action-taken.html',
+            controller: 'VerifyActionTakenController as VM',
+            resolve: {
+            	currentAction: function() {return action;},
+            	rootScope: function() {return $scope;},
+            	alert: function() {return currentAlert;}
+            }
+        });
     }
 
     $scope.verifyActionTaken = function(action) {
