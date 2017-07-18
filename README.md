@@ -290,6 +290,96 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 ******************************************************************************************
 
+###Add/Edit corrective action list page:###
+
+1. **Name** input field restriction length is 40 symbols. Can include signs/numbers.(is required)
+2. *Description* input field can be empty. Can include signs/numbers. The length is 120signs.
+3. **Add another** button opens a new empty corrective action field.
+4. **Corrective Action** input field has no restricted length. Can include signs/numbers.( is required)
+5. **Arrows Up and Down** buttons move the action up/down.
+6. **Requires verification** can be checked or unchecked.
+7. **Delete** button deletes the action after saving the changes in the list.
+8. **Save** button saves the changes made in the list.
+9. **Cancel** button gives a prompt message asking to save/not to save the changes. If **Cancel-> OK**  - the changes in the list are not saved and opens the page of **Corrective Action List**. If **Cancel->Cancel** - opens the editing page of the already opened list.
 
 
+####Test Cases####
+
+1. **Corrective action lists edit:**
+
+    | Actions:                                                      | Expected Result:                                  |
+    |---------------------------------------------------------------|---------------------------------------------------|
+    | 1. Choose **Correct Action List** in **Setup** dropdown menu  | 1. Opens the page with **Corrective Action Lists**|
+    | 2. Click **Edit** on any list                                 | 2. Opens the chosen list                          |
     
+2. **Name input field:**
+
+    | Actions:                                   | Expected Result:                                         |
+    |--------------------------------------------|----------------------------------------------------------|
+    | 1. Clear the field and click **Save**      | 1. The list not to be saved (**Name** is required field) |
+    | 2. Enter list name no longer than 40 signs | 2. Restricted length of the field is 40 signs            |
+    | 3. Enter any signs/numbers                 | 3. The **Name** field can be saved with any signs/numbers|
+    
+3. **Description input field:**
+
+    | Actions:                                            | Expected Result:                                                    |
+    |-----------------------------------------------------|---------------------------------------------------------------------|
+    | 1. Clear the **Description** field and **Save**     | 1. The list saves without description                               |
+    | 2. Enter any discription no longer than 120 symbols | 2. The **Description** field has  a length restriction of 120 signs |
+    | 3. Enter any signs/numbers                          | 3. The list saves with signs/numbers in the **Description** field   |
+
+4. **Add another:**
+
+    | Actions:                         | Expected Result:                                |
+    |----------------------------------|-------------------------------------------------|
+    | 1. Click **Add another** button  | 1. Opens a new empty **Corrective Action** field|
+    
+5. **Corrective Actions field**
+
+    | Actions:                                 | Expected Result:                                                                         |
+    |------------------------------------------|------------------------------------------------------------------------------------------|
+    | 1. Enter any signs/ numbers and **Save** | 1. The list saves with numbers/signs                                                     |
+    | 2. Enter a text of any length            | 2. The length of the field is not restricted. The **Corrective Action** field is required|
+
+6. **Required verification checkbox:** 
+
+
+    | Actions:                                     | Expected Result:                                 |
+    |----------------------------------------------|--------------------------------------------------|
+    | 1. Tick on/off the checkbox and **Save**     | 1. The list saves with checkbox checked/unchecked|
+    
+    
+7. **Delete button:**
+
+    | Actions:                         | Expected Result:                                      |
+    |----------------------------------|-------------------------------------------------------|
+    | 1. Click **Delete** button       | 1. The chosen list **Corrective Action** field deletes|
+    
+8. **Save button:**
+
+    | Actions:                                                  | Expected Result:                                                                     |
+    |-----------------------------------------------------------|--------------------------------------------------------------------------------------|
+    | 1. Click **Save** button after the corrections were made  | 1. **Corrective Action** list saves and opens the page of **Corrective Action lists**|
+    
+9. **Cancel button:**
+
+    | Actions:                                   | Expected Result:                                                                              |
+    |--------------------------------------------|-----------------------------------------------------------------------------------------------|
+    | 1. Click **Cancel**                        | 1. Opens a prompt message                                                                     |
+    | 2. CLick **OK** in the prompt message      | 2. The chages made in the list are not saved and opens the page of **Corrective Action Lists**|
+    | 3. Click **Cancel** in the prompt message  | 3. The prompt message box closes and opens the editing page of the list                       |
+    
+    
+    
+###List of Corrective Action Lists###
+
+1. **Show** dropdown list include options:
+      * 10
+      * 20
+      * 50
+      * 100
+2. **Add New Corrective Action List** button opens a tab of new corrective action list.
+3. Table rows **ID, Name, Description** can be ordered alphabeticaly or non-alphabeticaly order with a click on one of them.
+4. **Edit** button opens a chosen list for editing.
+5. **Delete** button deletes the chosen list.
+          
