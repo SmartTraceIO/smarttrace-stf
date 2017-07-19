@@ -54,15 +54,22 @@
             <tbody><tr>
                 <td>
                     <div class="input-group">
-                        <input show-button-bar="false" id="txtDateStopped" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-date" max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy" is-open="stop.opened" ng-click="stop.opened = true" ng-model="stp.dateTimeStopped" close-text="Close" style="" type="text"><div uib-datepicker-popup-wrap="" ng-model="date" ng-change="dateSelection(date)" template-url="uib/template/datepickerPopup/popup.html" class="ng-pristine ng-untouched ng-valid ng-scope ng-not-empty" style=""><!-- ngIf: isOpen -->
+                        <input show-button-bar="false" id="txtDateStopped" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-date" max="maxDate" placeholder="Select Date" uib-datepicker-popup="dd-MMM-yyyy" is-open="dateDialog.opened"
+                         	ng-click="dateDialog.opened = true" ng-model="actionTaken.date" close-text="Close" style="" type="text"><div uib-datepicker-popup-wrap="" ng-model="date" ng-change="dateSelection(date)" template-url="uib/template/datepickerPopup/popup.html" class="ng-pristine ng-untouched ng-valid ng-scope ng-not-empty" style=""><!-- ngIf: isOpen -->
                     </div>
-                        <label class="input-group-addon ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="stp.dateTimeStopped" ng-click="stop.opened = true" style="">
+                        <label class="input-group-addon ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="actionTaken.date" ng-click="dateDialog.opened = true" style="">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </label>
                     </div>
                 </td>
                 <td>
-                    <div uib-timepicker="" ng-model="stp.dateTimeStopped" show-meridian="true" show-spinners="false" class="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-time" style=""><table class="uib-timepicker">
+                    <div uib-timepicker=""
+                    	ng-model="actionTaken.date" 
+                    	show-meridian="true" 
+                    	show-spinners="false" 
+                    	class="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-time"
+                    	style="">
+                    	<table class="uib-timepicker">
                         <tbody>
                         <tr class="text-center ng-hide" ng-show="::showSpinners" style="">
                             <td class="uib-increment hours"><a ng-click="incrementHours()" ng-class="{disabled: noIncrementHours()}" class="btn btn-link" ng-disabled="noIncrementHours()" tabindex="-1"><span class="glyphicon glyphicon-chevron-up"></span></a></td>

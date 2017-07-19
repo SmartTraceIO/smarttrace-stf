@@ -7,10 +7,10 @@ function NewActionTakenController($uibModalInstance, $scope, rootScope, currentA
     $scope.actions = actionList;
 
     $scope.actionTaken = {
-        action: null,
+        action: actionList[0],
         alert: currentAlert.id,
         comments: null,
-        date: null
+        date: new Date()
     };
 
     //-- cancel

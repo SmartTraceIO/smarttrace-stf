@@ -2237,6 +2237,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.verifyActionTaken = function(action) {
     	var a = {
+    		id: action.id,
 			action: action.action,
 			comments: action.comments,
 			alert: action.alert,

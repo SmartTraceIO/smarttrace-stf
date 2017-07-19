@@ -4,18 +4,17 @@
 appCtrls.controller('VerifyActionTakenController', VerifyActionTakenController);
 function VerifyActionTakenController($uibModalInstance, $scope, rootScope, currentAction, alert) {
     $scope.actionTaken = currentAction;
-    console.log(currentAction.action);
     $scope.alert = alert;
-
-
+    $scope.dateDialog = {
+		opened: false
+    };
 
     //-- cancel
     $scope.cancel = function() {
         $uibModalInstance.dismiss();
     };
     $scope.verifyActionTaken = function() {
-    	$scope.cancel();
-//        rootScope.verifyActionTaken($scope.actionTaken);
-//        $uibModalInstance.dismiss();
+        rootScope.verifyActionTaken($scope.actionTaken);
+        $uibModalInstance.dismiss();
     };
 }
