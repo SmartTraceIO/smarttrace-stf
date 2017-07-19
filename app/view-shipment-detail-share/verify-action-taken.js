@@ -4,7 +4,10 @@
 appCtrls.controller('VerifyActionTakenController', VerifyActionTakenController);
 function VerifyActionTakenController($uibModalInstance, $scope, rootScope, currentAction, alert) {
     $scope.actionTaken = currentAction;
+    console.log(currentAction.action);
     $scope.alert = alert;
+
+
 
     //-- cancel
     $scope.cancel = function() {

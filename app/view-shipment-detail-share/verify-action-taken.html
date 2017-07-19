@@ -2,11 +2,90 @@
     <div class="modal-header green" style="border: none">
         <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 20px"></i>
         <span>Verify action taken</span>
-        <span class="pull-right" style="cursor: pointer" ng-click="saveActionTaken()">
+        <span class="pull-right" style="cursor: pointer" ng-click="cancel()">
              <i class="fa fa-times" aria-hidden="true"></i>
         </span>
     </div>
+    <div class="modal-header bg-grey-silver text-center" style="border: none">
+        <span>Alert that fired:</span>
+        <img class="tiny-icon17" ng-src="theme/img/alert{{alert.type}}.png"/>
+        {{alert.description}}</br>
+        <span>Time of alert:</span>
+        {{alert.timeStr}}
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-11">
+                <div class="form-group">
+                    <label>Action taken:</label>
+                    <i uib-tooltip="Actions that were taken when the alert fired"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                    <input value="{{actionTaken.action.action}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
 
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-11">
+                <label class="control-label">Comments:&nbsp;
+                    <i uib-tooltip="Comments for the taken action"
+                       tooltip-append-to-body="true"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top"
+                       class="fa fa-info-circle"></i>
+                </label>
+                <input value="{{actionTaken.comments}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-11">
+            <div class="col-sm-4">
+                <label class="control-label">By:&nbsp;
+                </label>
+                <input required="" maxlength="120" value="{{actionTaken.confirmedBy}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+
+            </div>
+            <div class="col-sm-5 pull-right">
+                <label class="control-label">Time:&nbsp;
+                </label>
+                <input value="{{actionTaken.alertTime}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+            </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+        <div class="col-md-3 text-center" >
+           <label class="control-label">Verify:&nbsp;
+            <i uib-tooltip="Tick this box if an action requires verification."
+               tooltip-append-to-body="true"
+               tooltip-trigger="mouseenter"
+               tooltip-placement="top"
+               class="fa fa-info-circle"></i>
+           </label>
+            <br>
+            <input type="checkbox" ng-true-value="true" ng-false-value="false"/>
+            <label class="control-label"><span class="text-error">*</span></label>
+
+
+        </div>
+            <div class="col-md-8">
+        <label class="control-label pull-left">Comments by verifier:&nbsp;
+            <i uib-tooltip="Comments by verifier"
+               tooltip-append-to-body="true"
+               tooltip-trigger="mouseenter"
+               tooltip-placement="top"
+               class="fa fa-info-circle"></i>
+        </label>
+        <input required="" maxlength="120" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched pull-left" style="" type="text">
+        </div>
+        </div>
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn green" ng-click="verifyActionTaken()">Save</button>
         <button type="button" class="btn default" ng-click="cancel()">Cancel</button>
