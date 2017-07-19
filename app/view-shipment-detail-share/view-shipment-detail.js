@@ -2236,6 +2236,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     $scope.verifyActionTaken = function(action) {
+    	//prepare action taken before save
     	var a = {
     		id: action.id,
 			action: action.action,
@@ -2243,6 +2244,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 			alert: action.alert,
 			confirmedBy: action.confirmedBy,
 			verifiedBy: $rootScope.User.id,
+			verifiedTime: moment(new Date()).format('YYYY-MM-DDTHH:mm'),
+			//in this case the action.time is not touched string from server
 			time: action.time
     	};
     	saveActionTaken(a);
@@ -2255,6 +2258,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 			comments: action.comments,
 			alert: action.alert,
 			confirmedBy: $rootScope.User.id,
+			//in this string the action.time is the date object from dialog, need to be converted to string.
 			time: moment(action.time).format('YYYY-MM-DDTHH:mm')
     	};
 
