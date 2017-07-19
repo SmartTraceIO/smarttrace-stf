@@ -3388,13 +3388,38 @@ see [Ordinary Alert Object](#markdown-header-alert), [Temperature Alert Object](
         "companyName": "C2"
       }
     ],
-    "correctiveActionInfo": [
+    "alertsWithCorrectiveActions": [
       {
-        "id": 478,
+        "id": 1063,
         "description": "battery low",
-        "time": "14:10 16 Jul 2017",
-        "timeISO": "2017-07-16 14:10",
+        "time": "13:03 18 Jul 2017",
+        "timeISO": "2017-07-18 13:03",
+        "correctiveActionListId": null,
         "type": "Battery"
+      },
+      {
+        "id": 1064,
+        "description": "entering bright environment",
+        "time": "13:03 18 Jul 2017",
+        "timeISO": "2017-07-18 13:03",
+        "correctiveActionListId": null,
+        "type": "LightOn"
+      },
+      {
+        "id": 1066,
+        "description": ">18.0°C for 0 min in total",
+        "time": "16:50 19 Jul 2017",
+        "timeISO": "2017-07-19 16:50",
+        "correctiveActionListId": 222,
+        "type": "CriticalHot"
+      },
+      {
+        "id": 1067,
+        "description": ">17.0°C for 1 min in total",
+        "time": "16:50 19 Jul 2017",
+        "timeISO": "2017-07-19 16:50",
+        "correctiveActionListId": 222,
+        "type": "CriticalHot"
       }
     ]
   }
@@ -4693,4 +4718,3 @@ Response:
   "totalCount": 2
 }
 ```
-

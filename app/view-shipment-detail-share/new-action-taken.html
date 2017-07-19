@@ -24,7 +24,7 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                     <select class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                            ng-options="action as action.action for action in actions"
+                            ng-options="a as (a.action + (a.requestVerification ? ' (required verification)' : '')) for a in actions"
                             ng-model="actionTaken.action"></select>
                 </div>
             </div>
