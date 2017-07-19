@@ -1078,28 +1078,36 @@
                         		<table ng-repeat="action in alert.actions">
                         			<tr>
                         				<td>
-		                            		<span class="bold-font">Action Taken:&nbsp;</span>
+		                            		<span class="bold-font pull-left">Action Taken:&nbsp;</span>
                         				</td>
                         				<td>
-		                            		<span class="bold-font">{{action.action.action}}</span>
                         				</td>
                         			</tr>
+                                    <tr>
+                                        <td><span class="bold-font pull-left " style="color:#5BCA45">{{action.action.action}}</span></td>
+                                        <td></td>
+                                    </tr>
                        				<tr>
-                       					<td colspan="2">
-		                            		<div class="col-md-6">
-		                            			by <a href="">{{action.confirmedByName}}</a>
-		                            		</div>
-		                            		<div ng-if="action.verifiedBy != null" class="col-md-6">
-		                            			verified by <a href="">{{action.verifiedByName}}</a>
-		                            		</div>
-		                            		<div ng-if="action.verifiedBy == null && action.action.requestVerification"
-		                            			class="col-md-6">
-		                            			<a href="" ng-click="showVerifyActionTakenDialog(action, alert)">verify</a>
-		                            		</div>
-                       					</td>
+                       					<td>
+
+                                            <span class="pull-left">by <a href="">{{action.confirmedByName}}</a>
+                                            <img class="tiny-icon15" ng-src="theme/img/clock.png"/>
+                                            </span>
+                                        </td>
+                                        <td class="text-right">
+                                            <div ng-if="action.verifiedBy != null">
+                                            verified by <a href="">{{action.verifiedByName}}</a>
+                                                <img class="tiny-icon15" ng-src="theme/img/clock.png"/>
+
+                                            </div>
+                                            <div ng-if="action.verifiedBy == null && action.action.requestVerification">
+                                                <a href="" class="text-error  pull-right" style="margin-left: 80%" ng-click="showVerifyActionTakenDialog(action, alert)">Verify</a>
+                                            </div>
+                                        </td>
                        				</tr>
                        				<tr>
                        					<td><hr/></td>
+                                        <td><hr/></td>
                        				</tr>
                         		</table>
 		                        <div class="row">
