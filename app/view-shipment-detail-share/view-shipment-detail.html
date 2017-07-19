@@ -1091,14 +1091,21 @@
                        					<td>
 
                                             <span class="pull-left">by <a href="">{{action.confirmedByName}}</a>
-                                            <img class="tiny-icon15" ng-src="theme/img/clock.png"/>
+                                            <img class="tiny-icon15" ng-src="theme/img/clock.png"
+                                                 uib-tooltip="{{action.time}}"
+                                                 tooltip-append-to-body="true"
+                                                 tooltip-trigger="mouseenter"
+                                                 tooltip-placement="top"/>
                                             </span>
                                         </td>
                                         <td class="text-right">
                                             <div ng-if="action.verifiedBy != null">
                                             verified by <a href="">{{action.verifiedByName}}</a>
-                                                <img class="tiny-icon15" ng-src="theme/img/clock.png"/>
-
+                                                <img class="tiny-icon15" ng-src="theme/img/clock.png"
+                                                 uib-tooltip="{{action.verifiedTime}}"
+                                                   tooltip-append-to-body="true"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="top"/>
                                             </div>
                                             <div ng-if="action.verifiedBy == null && action.action.requestVerification">
                                                 <a href="" class="text-error  pull-right" style="margin-left: 80%" ng-click="showVerifyActionTakenDialog(action, alert)">Verify</a>
