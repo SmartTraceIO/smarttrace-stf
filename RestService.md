@@ -4604,7 +4604,10 @@ Response:
 ```json
 {
   "id": 117,
-  "action": "Check the door opened",
+  "action": {
+    "action": "Check the door opened",
+    "requestVerification": false
+  },
   "time": "2017-06-14T09:25",
   "comments": "Any comments",
   "alert": 576,
