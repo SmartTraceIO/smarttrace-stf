@@ -675,6 +675,11 @@ Method *POST*, method name *saveActionTaken*. Request body JSON serialized reque
 Response is [Standard JSON response](#markdown-header-response-message)  
 [(example)](#markdown-header-save-action-taken-example)
 
+### Verify Action Taken ###
+Method *POST*, method name *verifyActionTaken*. Request body JSON serialized request.  
+Response is [Standard JSON response](#markdown-header-response-message)  
+[(example)](#markdown-header-verify-action-taken-example)
+
 ### Delete Action Taken ###
 Method *GET*, method name *deleteActionTaken*. Request parameters:  
 1. id - Action Taken ID  
@@ -4609,6 +4614,7 @@ Response:
     },
     "time": "2017-06-14T09:25",
     "comments": "Any comments",
+    "verifiedComments": "Verified comments",
     "alert": 582,
     "confirmedBy": 1714,
     "verifiedBy": null,
@@ -4635,6 +4641,7 @@ Response:
   },
   "time": "2017-06-14T09:25",
   "comments": "Any comments",
+  "verifiedComments": "Verified comments",
   "alert": 576,
   "confirmedBy": 1705,
   "verifiedBy": null
@@ -4650,6 +4657,26 @@ Response:
   "response": {
     "actionTakenId": 117
   }
+}
+```
+
+### Verify Action Taken example ###
+**POST /vf/rest/verifyActionTaken/${accessToken}**  
+**Request:**  
+```json
+{
+  "id": 152,
+  "comments": "Other comment"
+}
+```  
+**Response:**  
+```json
+{
+  "status": {
+    "code": 0,
+    "message": "Success"
+  },
+  "response": null
 }
 ```
 ### Delete Action Taken example ###
@@ -4682,6 +4709,7 @@ Response:
       },
       "time": "2017-06-14T09:25",
       "comments": "Any comments",
+      "verifiedComments": "Verified comments",
       "alert": 578,
       "confirmedBy": 1708,
       "verifiedBy": null,
@@ -4702,6 +4730,7 @@ Response:
       },
       "time": "2017-06-14T09:40",
       "comments": "Any comments",
+      "verifiedComments": "Verified comments",
       "alert": 579,
       "confirmedBy": 1708,
       "verifiedBy": null,

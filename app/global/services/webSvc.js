@@ -613,6 +613,11 @@ appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
         saveActionTaken: function(data){
 			var url = Api.url + 'saveActionTaken/' + localDbSvc.getToken();
 			return $http.post(url, data);
+        },
+
+        verifyActionTaken: function(data) {
+			var url = Api.url + 'verifyActionTaken/' + localDbSvc.getToken();
+			return $http.post(url, data);
         }
         
 	}

@@ -1,10 +1,10 @@
 ﻿<div class="note">
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
-            <div class="pull-left bold" style="font-size: 18px">
+            <div class="pull-left bold" style="font-size: 18px;">
                 <span class="uppercase link"><i class="fa fa-search"></i>&nbsp;Search</span>
             </div>
-            <div class="pull-right bold" style="font-size: 18px">
+            <div class="pull-right bold" style="font-size: 18px;">
                 <span class="link" ng-show="!vm.AdvanceSearch" ng-click="vm.toggleSearch()">
                     <img src="theme/img/searchAdvanced.png" tooltip="Swap to Advance Search" tooltip-append-to-body="true" tooltip-trigger="mouseenter" tooltip-placement="top" />
                     <h5 style="background-color: #5BCA45; color: #ffffff">More options</h5>
@@ -209,10 +209,10 @@
             <div class="col-sm-12">
                 <table width="100%">
                     <tr>
-                        <td><div class="uppercase bold pull-left" style="font-size: 18px"><i class="fa fa-truck fa-lg"></i> Shipments</div></td>
+                        <td><div class="uppercase bold pull-left" style="font-size: 18px;"><i class="fa fa-truck fa-lg"></i> Shipments</div></td>
                         <td style="text-align: center"><span class="text-error" ng-if="vm.loading">Retrieving your shipment data...</span></td>
                         <td>
-                            <div style="font-size: 18px" class="pull-right">
+                            <div style="font-size: 18px;" class="pull-right">
                                 <button class="btn btn-switch" ng-class="{selected:(vm.lastView==1)}" ng-click="vm.showTable()"><i class="fa fa-table"></i></button>
                                 <!--<button class="btn btn-switch" ng-class="{selected:(vm.lastView==2)}" ng-click="vm.showCard()"><i class="fa fa-th-large"></i></button>-->
                                 <button class="btn btn-switch" ng-class="{selected:(vm.lastView==3)}" ng-click="vm.showMap()"><i class="fa fa-map" aria-hidden="true"></i></button>

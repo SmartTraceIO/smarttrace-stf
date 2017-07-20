@@ -2237,18 +2237,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.verifyActionTaken = function(action) {
     	//prepare action taken before save
-    	var a = {
+    	var req = {
     		id: action.id,
-			action: action.action,
-			comments: action.comments,
-			alert: action.alert,
-			confirmedBy: action.confirmedBy,
-			verifiedBy: $rootScope.User.id,
-			verifiedTime: moment(new Date()).format('YYYY-MM-DDTHH:mm'),
-			//in this case the action.time is not touched string from server
-			time: action.time
+			action: action.verifiedComments
     	};
-    	saveActionTaken(a);
+    	webSvc.verifyActionTaken(req).then($scope.updateActionTakens);
     };
     
     $scope.saveActionTaken = function(action) {
@@ -2268,4 +2261,14 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     function saveActionTaken (action) {
     	webSvc.saveActionTaken(action).then($scope.updateActionTakens);
     };
+    
+    $scope.showViewUserDetailsDialog = function(theUserId) {
+        $rootScope.modalInstance = $uibModal.open({
+            templateUrl: 'app/user-view/user-view.html',
+            controller: 'UserViewCtrl',
+            resolve: {
+            	userId: function() {return theUserId;}
+            }
+        });
+    }
 }

@@ -188,6 +188,7 @@ appConstants.constant('routes', [
             'app/view-shipment-detail-share/edit-goods.js?v=' + version,
             'app/view-shipment-detail-share/edit-route.js?v=' + version,
             'app/view-shipment-detail-share/share-report.js?v=' + version,
+            'app/user-view/user-view.js?v=' + version,
             'app/global/filters/filters.js?v=' + version,
         ]
     },
@@ -542,7 +543,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js?v=' + version,
+              'app/manage-user/manage-user.js?v=' + version
           ]
       },
       {

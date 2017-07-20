@@ -1090,7 +1090,8 @@
                        				<tr>
                        					<td>
 
-                                            <span class="pull-left">by <a href="">{{action.confirmedByName}}</a>
+                                            <span class="pull-left">by <a href=""
+                                            	ng-click="showViewUserDetailsDialog(action.confirmedBy)">{{action.confirmedByName}}</a>
                                             <img class="tiny-icon15" ng-src="theme/img/clock.png"
                                                  uib-tooltip="{{action.time}}"
                                                  tooltip-append-to-body="true"
@@ -1100,7 +1101,8 @@
                                         </td>
                                         <td class="text-right">
                                             <div ng-if="action.verifiedBy != null">
-                                            verified by <a href="">{{action.verifiedByName}}</a>
+                                            verified by <a href=""
+                                            	ng-click="showViewUserDetailsDialog(action.verifiedBy)">{{action.verifiedByName}}</a>
                                                 <img class="tiny-icon15" ng-src="theme/img/clock.png"
                                                  uib-tooltip="{{action.verifiedTime}}"
                                                    tooltip-append-to-body="true"
