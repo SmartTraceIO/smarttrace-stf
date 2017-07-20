@@ -407,27 +407,31 @@ Web-Browser like google-chrome, Firefox do cache for static file (html, javascri
     
 ##Add another action taken window##
 
-    | Actions:                                   | Expected Result:                               |
-    |--------------------------------------------|------------------------------------------------|
-    | 1. Click **Add another action taken**      | 1. Opens an **Add another action taken window**|
-    | 2. Choose one of action taken              | 2. One action taken can be chosen              |
-    | 3. Add any comment                         | 3. Comment has no length restriction           |
-    | 4. Set time                                | 4. Time sets in the dd-mm-yy, hr:mn format     |
+    | Actions:                                   | Expected Result:                                              |
+    |--------------------------------------------|---------------------------------------------------------------|
+    | 1. Click **Add another action taken**      | 1. Opens an **Add another action taken window**               |
+    | 2. Choose one of action taken              | 2. One action taken can be chosen                             |
+    | 3. Add any comment                         | 3. Comment has no length restriction                          |
+    | 4. Set time                                | 4. Time sets in the dd-mm-yy, hr:mn format                    |
     | 5. Click **Save**                          | 5. Saves one more action taken, adds to the corrective actions|
-    | 6. Click **Cancel**                        | 6. Cancel all the changes. Does not add another action taken|
+    | 6. Click **Cancel**                        | 6. Cancel all the changes. Does not add another action taken  |
     
 ##Verify##
 
-    | Actions:                                   | Expected Result:                               |
-    |--------------------------------------------|------------------------------------------------|
-    | 1. Click **Verify**                        | 1. Opens a **Verify window**.  Fields: ACtion taken, Comments, By, Time-> are disabled |
-    | 2. Tick **Verify**                         | 2. The button **Save** is active                                                       |
-    | 3. Tick off  **Verify**                    | 3. The button **Save** is disabled                                                     |
-    | 4. Add any comment                         | 4. Comment saves after clicking **Save**                                               |
-    | 5. Click **Save**                          | 5. Verifies the action taken                                                           |
-    | 6. Click **Cancel**                        | 6. Cancel all the changes. Does not verify  action taken                               | 
+    | Actions:                                   | Expected Result:                                                                           |
+    |--------------------------------------------|--------------------------------------------------------------------------------------------|
+    | 1. Click **Verify**                        | 1. Opens a **Verify window**.  Fields: ACtion taken, Comments, By, Time can not be changed |
+    | 2. Tick **Verify**                         | 2. The button **Save** is active                                                           |
+    | 3. Tick off  **Verify**                    | 3. The button **Save** is disabled                                                         |
+    | 4. Add any comment                         | 4. Comment saves after clicking **Save**                                                   |
+    | 5. Click **Save**                          | 5. Verifies the action taken                                                               |
+    | 6. Click **Cancel**                        | 6. Cancel all the changes. Does not verify  action taken                                   | 
 
-    
+##User Details##
 
+    | Actions:                                                        | Expected Result:                                                                                                      |
+    |-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+    | 1. Click **Name** of the user who verified/commited action      | 1. Opens an **User Datails** window. Fields Name, Position, Company, Email,Mobile, SmartTrace Role can not be changed |
+    | 2. Click **Cancel**                                             | 2. Closes the window                                                                                                  |
 
     
