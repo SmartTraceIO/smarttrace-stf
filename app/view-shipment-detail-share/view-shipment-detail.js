@@ -2239,7 +2239,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     	//prepare action taken before save
     	var req = {
     		id: action.id,
-			action: action.verifiedComments
+			comments: action.verifiedComments
     	};
     	webSvc.verifyActionTaken(req).then($scope.updateActionTakens);
     };
