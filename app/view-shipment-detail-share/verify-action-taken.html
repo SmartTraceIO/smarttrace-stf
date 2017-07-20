@@ -13,17 +13,18 @@
         <span>Time of alert:</span>
         {{alert.timeStr}}
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="color: darkgrey">
         <div class="row">
             <div class="col-sm-11">
-                <div class="form-group">
-                    <label>Action taken:</label>
-                    <i uib-tooltip="Actions that were taken when the alert fired"
-                       tooltip-append-to-body="true"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top"
-                       class="fa fa-info-circle"></i>
-                    <input value="{{actionTaken.action.action}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+                <label>Action taken:</label>
+                <i uib-tooltip="Actions that were taken when the alert fired"
+                   tooltip-append-to-body="true"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"
+                   class="fa fa-info-circle"></i>
+                <div class="form-group" style="border: lightgrey solid 1px; padding: 1%">
+
+                    {{actionTaken.action.action}}
 
                 </div>
             </div>
@@ -37,22 +38,23 @@
                        tooltip-placement="top"
                        class="fa fa-info-circle"></i>
                 </label>
-                <input value="{{actionTaken.comments}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+                <div style="border: lightgrey solid 1px; padding: 2%">{{actionTaken.comments}}</div>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-11">
-            <div class="col-sm-4">
-                <label class="control-label">By:&nbsp;
-                </label>
-                <input  maxlength="120" value="{{actionTaken.confirmedByName}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
-
+                <div class="col-md-5"><label class="pull-left">By:&nbsp;</label></div>
+               <div class="col-md-5 pull-right"><label class="control-label">Time:&nbsp;</label></div>
             </div>
-            <div class="col-sm-5 pull-right">
-                <label class="control-label">Time:&nbsp;
-                </label>
-                <input value="{{actionTaken.alertTime}}" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched" style="" type="text">
+            <div  class="col-md-11">
+            <div class="col-sm-5" style="border: lightgrey solid 1px; padding: 1%">
+
+               {{actionTaken.confirmedByName}}
+            </div>
+            <div class="col-sm-5 pull-right" style="border: lightgrey solid 1px; padding: 1%">
+
+                {{actionTaken.alertTime}}
             </div>
             </div>
         </div>
@@ -69,7 +71,9 @@
                class="fa fa-info-circle"></i>
            </label>
             <br>
-            <input type="checkbox" ng-true-value="true" ng-false-value="false"/>
+            <input type="checkbox" ng-required="true"
+                   ng-model="verifyCheckbox.checked"
+                   ng-true-value="true" ng-false-value="false"/>
             <label class="control-label"><span class="text-error">*</span></label>
 
 
@@ -82,12 +86,18 @@
                tooltip-placement="top"
                class="fa fa-info-circle"></i>
         </label>
-        <input required="required" maxlength="120" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched pull-left" style="" type="text">
+        <input  maxlength="120"
+               ng-model="actionTaken.verifiedComments" class="form-control ng-pristine ng-valid-maxlength ng-not-empty ng-valid ng-valid-required ng-touched pull-left" style="" type="text">
         </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn green" ng-click="verifyActionTaken()">Save</button>
+        <button type="button" class="btn green"
+                ng-if="verifyCheckbox.checked==true"
+                ng-click="verifyActionTaken()">Save</button>
+        <button type="button" class="btn green"
+                ng-if="!verifyCheckbox.checked==true"
+                ng-disabled="verifyActionTaken">Save </button>
         <button type="button" class="btn default" ng-click="cancel()">Cancel</button>
     </div>
 </div>

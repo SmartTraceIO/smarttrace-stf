@@ -41,11 +41,20 @@ function VerifyActionTakenController($uibModalInstance, $scope, rootScope, curre
 		opened: false
     };
 
+
+    //--verifyCheckbox
+
+    $scope.verifyCheckbox={
+        checked: false
+    }
+
+
     //-- cancel
     $scope.cancel = function() {
         $uibModalInstance.dismiss();
     };
     $scope.verifyActionTaken = function() {
+
         rootScope.verifyActionTaken($scope.actionTaken);
         $uibModalInstance.dismiss();
     };
