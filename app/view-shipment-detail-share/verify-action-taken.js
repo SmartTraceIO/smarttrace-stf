@@ -26,6 +26,7 @@ function VerifyActionTakenController($uibModalInstance, $scope, rootScope, curre
 	//    "shipmentTripCount": 1 //view only parameter
 	// }	
     $scope.actionTaken = currentAction;
+    $scope.actionTaken.confirmedComments = null;
 	//alert with corrective action info object.
 	//{
 	//    "id": 1063,
