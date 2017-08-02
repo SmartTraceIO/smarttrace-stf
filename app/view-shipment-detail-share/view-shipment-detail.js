@@ -386,17 +386,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         $scope.trackerInfo.shutdownDeviceAfterMinutesText = parseInt($scope.trackerInfo.shutdownDeviceAfterMinutes/60) + " hr(s) after arrival";
         $scope.trackerInfo.shutDownAfterStartMinutesText = parseInt($scope.trackerInfo.shutDownAfterStartMinutes/60) + " hr(s) after start";
 
-        $scope.trackerInfo.isNotifying = false;
-        if ($scope.trackerInfo.arrivalNotificationWithinKm) {
-            $scope.trackerInfo.arrivalNotificationText = $scope.trackerInfo.arrivalNotificationWithinKm + "km away";
-            $scope.trackerInfo.isNotifying = true;
-        } else if ($scope.trackerInfo.arrivalNotificationWithinKm==0){
-            $scope.trackerInfo.arrivalNotificationText = "Upon Arrival";
-            $scope.trackerInfo.isNotifying = true;
-        } else {
-            $scope.trackerInfo.arrivalNotificationText = "Don't notify";
-            $scope.trackerInfo.isNotifying = false;
-        }
+        setArrivalNotificationInfo($scope.trackerInfo);
 
         //check if latest shipment here
         $scope.shutdownAlready=false;
@@ -416,6 +406,29 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         updatePlotLines();
         updateMapData($scope.MI);
     };
+
+    function setArrivalNotificationInfo(trackerInfo) {
+    	trackerInfo.arrivalNotificationLabel = 'Report sent';
+        trackerInfo.arrivalNotificationText = "No";
+
+        if (trackerInfo.arrivalReportSent) {
+            trackerInfo.arrivalNotificationText = "Yes";
+        } else if (trackerInfo.status == 'Default' || trackerInfo.status == 'InProgress') {
+        	trackerInfo.arrivalNotificationLabel = 'Send report';
+        	if (trackerInfo.sendArrivalReport) {
+                trackerInfo.arrivalNotificationText = "On arrival";
+                
+                if (trackerInfo.arrivalReportOnlyIfAlerts) {
+                	trackerInfo.arrivalNotificationText += ", if alerts";
+                }
+        	}
+        }
+
+        trackerInfo.isNotifying = false;
+        if (trackerInfo.arrivalNotificationWithinKm) {
+            trackerInfo.isNotifying = true;
+        }
+    }
 
     function updateTrackerInfo() {
         //update trackerInfo

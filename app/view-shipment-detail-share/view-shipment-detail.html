@@ -832,20 +832,12 @@
                                         {{trackerInfo.arrivalTime}}
                                     </td>
                                 </tr>
-                                <tr ng-show="trackerInfo.isNotifying">
+                                <tr>
                                     <td>
-                                        <span>Notify when</span>
+                                        <span>{{trackerInfo.arrivalNotificationLabel}}</span>
                                     </td>
                                     <td>
                                         {{trackerInfo.arrivalNotificationText}}
-                                    </td>
-                                </tr>
-                                <tr ng-show="!trackerInfo.isNotifying">
-                                    <td>
-                                        <span>Notify when</span>
-                                    </td>
-                                    <td>
-                                        {{trackerInfo.arrivalNotificationTime}}
                                     </td>
                                 </tr>
                                 <tr ng-show="trackerInfo.isNotifying">
