@@ -869,35 +869,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     loadTrackerData();
     function loadTrackerData() {
+        //initialize locations by empty arrays
         $scope.LocationListFrom = [];
         $scope.LocationListTo = [];
         $scope.LocationListInterim = [];
-        webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
-            $log.debug("LocationList", data);
-            if (data.status.code == 0) {
-                $scope.LocationList = data.response;
-                angular.forEach($scope.LocationList, function (val, key) {
-                    if (val.companyName) {
-                        var dots = val.companyName.length > 20 ? '...' : '';
-                        var companyName = $filter('limitTo')(val.companyName, 20) + dots;
-                        $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
-                    }
-                    else {
-                        $scope.LocationList[key].DisplayText = val.locationName;
-                    }
-
-                    if (val.startFlag=='Y') {
-                        $scope.LocationListFrom.push(val);
-                    }
-                    if (val.endFlag == 'Y') {
-                        $scope.LocationListTo.push(val)
-                    }
-                    if (val.interimFlag == 'Y') {
-                        $scope.LocationListInterim.push(val);
-                    }
-                })
-            }
-        });
 
         console.log('start load tracker data');
         var params = null;
@@ -933,25 +908,45 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             }
         }).then(function() {
             //load alert profile
-            loadAlertProfile(info.alertProfileId);
+            calculateAndDraw();
+            loadLocations();
+            $scope.updateActionTakens();
         });
-
-        function loadAlertProfile(profileId) {
-            if (profileId) {
-                webSvc.getAlertProfile(profileId).success(function(alertProfileData) {
-                    info.alertProfile = alertProfileData.response;
-                    calculateAndDraw();
-                }).then($scope.updateActionTakens);
-            } else {
-                calculateAndDraw();
-            }
-        }
 
     	$scope.updateActionTakens = function(){
         	webSvc.getActionTakens(info.shipmentId).success(function(resp) {
                 createActionTakensModel(info, resp.response);
             });
     	};
+
+    	function loadLocations() {
+         webSvc.getLocations(1000000, 1, 'locationName', 'asc').success( function (data) {
+            $log.debug("LocationList", data);
+            if (data.status.code == 0) {
+                $scope.LocationList = data.response;
+                angular.forEach($scope.LocationList, function (val, key) {
+                    if (val.companyName) {
+                        var dots = val.companyName.length > 20 ? '...' : '';
+                        var companyName = $filter('limitTo')(val.companyName, 20) + dots;
+                        $scope.LocationList[key].DisplayText = val.locationName + ' (' + companyName + ')';
+                    }
+                    else {
+                        $scope.LocationList[key].DisplayText = val.locationName;
+                    }
+
+                    if (val.startFlag=='Y') {
+                        $scope.LocationListFrom.push(val);
+                    }
+                    if (val.endFlag == 'Y') {
+                        $scope.LocationListTo.push(val)
+                    }
+                    if (val.interimFlag == 'Y') {
+                        $scope.LocationListInterim.push(val);
+                    }
+                })
+            }
+        });
+      }
 
     	function calculateAndDraw() {
             if (!info) return;

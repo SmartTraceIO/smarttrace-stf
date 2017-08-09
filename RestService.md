@@ -3068,6 +3068,18 @@ see [Ordinary Alert Object](#markdown-header-alert), [Temperature Alert Object](
     "trackerPositionLeftPercent": 100,
     "alertProfileId": 3985,
     "alertProfileName": "AnyAlert",
+    "alertProfile": {
+      "alertProfileId": 3985,
+      "alertProfileName": "AnyAlert",
+      "alertProfileDescription": "Any description",
+      "watchBatteryLow": true,
+      "watchEnterBrightEnvironment": true,
+      "watchEnterDarkEnvironment": true,
+      "watchMovementStart": true,
+      "watchMovementStop": true,
+      "lowerTemperatureLimit": 0.0,
+      "upperTemperatureLimit": 5.0
+    },
     "alertSuppressionMinutes": 55,
     "alertPeopleToNotify": "Alexander Suvorov, Alexander Suvorov",
     "alertsNotificationSchedules": [
