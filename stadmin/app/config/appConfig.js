@@ -29,7 +29,7 @@ app.constant("Color", [
     //{"name": "Green", "code":"#008000"}, //-- default color
     {"name": "HotPink", "code":"#FF69B4"},
     {"name": "IndianRed ", "code":"#CD5C5C"},
-    {"name": "Indigo ", "code":"#4B0082"},
+    {"name": "Indigo", "code":"#4B0082"},
     //{"name": "Lime", "code":"#00FF00"},
     //{"name": "Magenta", "code":"#FF00FF"},
     {"name": "Maroon", "code":"#800000"},
