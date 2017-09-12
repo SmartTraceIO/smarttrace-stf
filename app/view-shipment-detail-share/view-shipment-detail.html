@@ -1081,13 +1081,21 @@
                                         <td><span class="bold-font pull-left " style="color:#5BCA45">{{action.action.action}}</span></td>
                                         <td></td>
                                     </tr>
+                                    <tr>
+                                        <td><span class="bold-font pull-left " style="color:#5BCA45">On</span></td>
+                                        <td>{{action.timePretty}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold-font pull-left " style="color:#5BCA45">Comments:</span></td>
+                                        <td>{{action.comments}}</td>
+                                    </tr>
                        				<tr>
                        					<td>
 
                                             <span class="pull-left">by <a href=""
                                             	ng-click="showViewUserDetailsDialog(action.confirmedBy)">{{action.confirmedByName}}</a>
                                             <img class="tiny-icon15" ng-src="theme/img/clock.png"
-                                                 uib-tooltip="{{action.time}}"
+                                                 uib-tooltip="{{action.createdOnPretty}}"
                                                  tooltip-append-to-body="true"
                                                  tooltip-trigger="mouseenter"
                                                  tooltip-placement="top"/>
@@ -1098,7 +1106,7 @@
                                             verified by <a href=""
                                             	ng-click="showViewUserDetailsDialog(action.verifiedBy)">{{action.verifiedByName}}</a>
                                                 <img class="tiny-icon15" ng-src="theme/img/clock.png"
-                                                 uib-tooltip="{{action.verifiedTime}}"
+                                                 uib-tooltip="{{action.verifiedTimePretty}}"
                                                    tooltip-append-to-body="true"
                                                    tooltip-trigger="mouseenter"
                                                    tooltip-placement="top"/>
