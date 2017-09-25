@@ -147,7 +147,7 @@ appConstants.constant('routes', [
     {
         name: 'viewshipmentdetailtable',
         config: {
-            url: "/view-shipment-detail-table?sn&trip"
+            url: "/view-shipment-detail-table?sn&trip&vsId"
             , views: {
                 "content": {
                     templateUrl: "app/view-shipment-detail-table/view-shipment-detail.html?v="+ version
@@ -163,7 +163,7 @@ appConstants.constant('routes', [
     {
         name: 'viewshipmentdetailshare',
         config: {
-            url: "/view-shipment-detail?sn&trip",
+            url: "/view-shipment-detail?sn&trip&vsId",
             reloadOnSearch: false,
             views: {
                 "content": {
