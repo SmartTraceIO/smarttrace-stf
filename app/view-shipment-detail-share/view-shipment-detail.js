@@ -141,10 +141,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             controller: 'ShareReportCtrl as VM',
             resolve: {
                 sn: function() {
-                    return $scope.sn;
+                    return $scope.trackerInfo.deviceSN;
                 },
                 trip: function() {
-                    return $scope.trip;
+                    return $scope.trackerInfo.tripCount;
                 }
                 //note : function() {
                 //    return note;
