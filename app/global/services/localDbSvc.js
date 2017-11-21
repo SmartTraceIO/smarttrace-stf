@@ -20,10 +20,13 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', 'localStorageService', 
 
     //set token to the cookie
     this.setToken = function(token, expireDate){
-        var exp = new Date(expireDate);
-        //$cookies.put('Token', token);
-        localStorageService.cookie.set('Token', token);
-    }
+       var exp = new Date(expireDate);
+       //$cookies.put('Token', token);
+       localStorageService.cookie.set('Token', token);
+   }
+    this.setInstance = function(instance){
+       localStorageService.cookie.set('Instance', instance);
+   }
     // expire now
     this.expireNow = function() {
         this.setToken('_', -1);
@@ -33,6 +36,12 @@ appSvcs.service("localDbSvc", ["$cookies", "$log", '$q', 'localStorageService', 
         if(localStorageService.cookie.get('Token') == undefined)
             return "_";
         return localStorageService.cookie.get('Token');
+    }
+    //get token from the cookie
+    this.getInstance = function(){
+        if(localStorageService.cookie.get('Instance') == undefined)
+            return null;
+        return localStorageService.cookie.get('Instance');
     }
     //set username
     this.setUsername = function(username, isSave){

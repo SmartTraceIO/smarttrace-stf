@@ -1,13 +1,16 @@
 appSvcs.service("webSvc", function (Api, $http, localDbSvc) {
 
 	return {
-		login: function(email, password){
+		login: function(email, password, instance){
 			var params = {
 					params: {
 						email: email,
 						password: password
 					}
 				};
+			if (instance) {
+			   params.params.instance = instance;
+			}
 			return $http.get(Api.url + '/login', params);
 		},
 

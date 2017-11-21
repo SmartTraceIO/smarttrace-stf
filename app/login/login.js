@@ -27,11 +27,14 @@ appCtrls.controller('LoginCtrl', function ($scope, rootSvc, webSvc, localDbSvc, 
             localDbSvc.setPassword($scope.password, false);
         }*/
         loginTimer = $timeout(loginTimeOut, 5000);
-        var promise0 = webSvc.login($scope.username, $scope.password).success(function(data) {
+        var promise0 = webSvc.login($scope.username, $scope.password, localDbSvc.getInstance()).success(function(data) {
 				$timeout.cancel(loginTimer);
 				if (data.status.code == 0) {
                     console.log('Login', data);
 					localDbSvc.setToken(data.response.token, data.response.expired);
+					if (data.response.instance) {
+	               localDbSvc.setInstance(data.response.instance);
+					}
 					toastr.success("Successfully logged in.");
 				} else {
                     $log.debug(data);
