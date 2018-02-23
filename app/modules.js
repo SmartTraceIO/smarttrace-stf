@@ -1,4 +1,10 @@
-﻿var appCtrls = angular.module('appCtrls', []);
+﻿var lodash = angular.module('lodash', []);
+lodash.factory('_', ['$window', function ($window) {
+    return $window._;
+}]);
+
+
+var appCtrls = angular.module('appCtrls', []);
 var appDirs = angular.module('appDirs', []);
 var appSvcs = angular.module('appSvcs', []);
 var appProviders = angular.module('appProviders', []);
@@ -7,6 +13,7 @@ var appConstants = angular.module('appConstants', []);
 var appFilters = angular.module('appFilters', []);
 var app = angular.module("app",
     [
+        'lodash',
         'highcharts-ng',
         'ngMap',
         'ui.select',

@@ -1,5 +1,7 @@
 ﻿body{
     background: #EEE;
+    max-height: 100%;
+    height: 100%;
 }
 .show-block{
     display: block !important;

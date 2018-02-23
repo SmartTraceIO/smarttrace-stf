@@ -895,7 +895,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         //var deviceSnListSameGroup = [];
         var info = null;
         webSvc.getSingleShipmentShare(params).success(function(graphData) {
-            $log.debug("SINGLE-SHIPMENT", graphData);
+            console.log("SINGLE-SHIPMENT", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -914,9 +914,11 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         });
 
     	$scope.updateActionTakens = function(){
-        	webSvc.getActionTakens(info.shipmentId).success(function(resp) {
-                createActionTakensModel(info, resp.response);
-            });
+    	    if (info) {
+                webSvc.getActionTakens(info.shipmentId).success(function(resp) {
+                    createActionTakensModel(info, resp.response);
+                });
+            }
     	};
 
     	function loadLocations() {

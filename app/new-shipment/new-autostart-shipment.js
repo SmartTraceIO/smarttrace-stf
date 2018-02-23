@@ -1,4 +1,4 @@
-﻿appCtrls.controller('NewAutoStartShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state,
+﻿appCtrls.controller('NewAutoStartShipmentCtrl', function ($scope, rootSvc, arrayToStringFilter, localDbSvc, webSvc, $state, _,
                                                  $filter, $timeout, $interval, $rootScope, $window, $log, $controller, $location) {
     rootSvc.SetPageTitle('New Shipment');
     rootSvc.SetActiveMenu('New Shipment');
@@ -26,15 +26,16 @@
 
     //-- load all tracker
     VM.loadAllDevices = function() {
-        return webSvc.getDevices(9999, 1, '', '').success(function(data) {
+        return webSvc.getDevices(9999, 1, 'sn', '').success(function(data) {
             $log.debug(data);
             if (data.status.code == 0) {
                 //VM.trackers = data.response;
                 angular.forEach(data.response, function(v, k) {
                     if (v.active) {
-                        if (!isNaN(v.sn)) {
-                            v.sn = parseInt(v.sn, 10);
-                        }
+                        // if (!isNaN(v.sn)) {
+                        //     v.sn = parseInt(v.sn, 10);
+                        // }
+                        v.sn = _.padStart(v.sn, 6, '0');
                         VM.trackers.push(v);
                     }
                 });

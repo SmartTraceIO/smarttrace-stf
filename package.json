@@ -3,17 +3,21 @@
   "version": "1.0.0",
   "description": "SmartTrace AngularJS WebApp",
   "main": "index.html",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-connect": "^0.2.0",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.1",
     "grunt-contrib-htmlmin": "^1.4.0",
     "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-nodeunit": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
+    "grunt-include-source": "^1.1.0",
     "grunt-watcher": "^1.0.0"
   },
   "scripts": {
