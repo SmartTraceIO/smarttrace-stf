@@ -1220,7 +1220,7 @@
     }
 });
 
-appFilters.filter('propsFilter', function() {
+appFilters.filter('propsFilter', function(_) {
     return function(items, props) {
         var out = [];
 
@@ -1232,7 +1232,8 @@ appFilters.filter('propsFilter', function() {
                 for (var i = 0; i < keys.length; i++) {
                     var prop = keys[i];
                     var text = props[prop].toLowerCase();
-                    if (item[prop].toString().toLowerCase().startsWith(text)/* !== -1*/) {
+                    // if (item[prop].toString().toLowerCase().startsWith(text)/* !== -1*/) {
+                    if (_.startsWith(item[prop].toString().toLowerCase(), text)) {
                         itemMatches = true;
                         break;
                     }

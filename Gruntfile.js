@@ -121,11 +121,17 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                sourceMap: true
+                sourceMap: false
             },
             vendor_js: {
                 src: [
                     'node_modules/lodash/lodash.min.js',
+                    'node_modules/jquery/dist/jquery.min.js',
+                    'node_modules/moment/min/moment.min.js',
+                    'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
+                    'node_modules/bootstrap/dist/js/bootstrap.min.js',
+                    'node_modules/highcharts/highstock.js',
+                    'theme/assets/global/plugins/bootstrap-toastr/toastr.js'
                 ],
                 dest: '<%= config.dist %>/vendor.js'
             },
