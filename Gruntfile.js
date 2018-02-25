@@ -3,8 +3,9 @@ module.exports = function(grunt) {
 
     var CONFIG = {
         app: 'app',
-        dist: 'dist'
-    }
+        dist: 'dist',
+        version: 1
+    };
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -14,13 +15,6 @@ module.exports = function(grunt) {
                 port: 1337,
                 base: 'dist'
             }
-        },
-
-        app: {
-            scripts: [
-                'vendor.js',
-                'angular.bundle.js'
-            ]
         },
 
         //tasks
@@ -40,25 +34,6 @@ module.exports = function(grunt) {
             }
         },
 
-        uglify: {
-            options: {
-                mangle: false,
-                sourceMap: true,
-                compress: true,
-                // banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-            },
-            my_target: {
-                files: [
-                    {
-                        expand:true,
-                        cwd: 'app',
-                        src: '**/*.js',
-                        dest: '<%= config.dist %>/app'
-                    }
-                ],
-            }
-        },
-    //    copy
         copy : {
             theme: {
                 files : [
@@ -82,26 +57,25 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, cwd: 'app/', src: ['**!/!*.json'], dest: '<%= config.dist %>/app'},
                 ]
-            }
-            /*html: {
+            },
+            app_js: {
                 files: [
-                    {expand: true, cwd: 'app/', src: ['**!/!*.json'], dest: '<%= config.dist %>/app'},
-                    {expand: true, cwd: 'app/', src: ['**!/!*.html'], dest: '<%= config.dist %>/app'},
+                    {expand: true, cwd: 'app', src: ['**/*.js'], dest: '<%= config.dist %>/app'}
                 ]
-            }*/
+            }
         },
-    //    htmlmin
+
         htmlmin : {
             dist: {
                 options: {                                 // Target options
                     removeComments: true,
                     collapseWhitespace: true,
-                    keepClosingSlash: true,
+                    //keepClosingSlash: true,
                     minifyJS: true
                 },
                 files: [{
                     expand: true,
-                    cwd: 'app/',
+                    cwd: 'app',
                     src: ['**/*.html'],
                     dest: '<%= config.dist %>/app'
                 }]
@@ -111,18 +85,42 @@ module.exports = function(grunt) {
                 options: {                                 // Target options
                     removeComments: true,
                     collapseWhitespace: true,
-                    minifyJS: false,
-                    minifyCSS:false
+                    minifyJS: true,
+                    minifyCSS:true
                 },
                 files: {
-                    '<%= config.dist %>/index.html': 'index.html'
+                    '<%= config.dist %>/index.html': '<%= config.dist %>/index.html'
                 }
             }
         },
-
+        uglify: {
+            options: {
+                mangle: false,
+                sourceMap: false,
+                compress: true,
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+            },
+            app: {
+                files: [
+                    {
+                        expand:true,
+                        cwd: '.',
+                        src: '<%= config.dist %>/app/**/*.js',
+                        dest: '<%= config.dist %>/app',
+                        rename: function (dst, src) {
+                            // To keep the source js files and make new files as `*.min.js`:
+                            // return dst + '/' + src.replace('.js', '.min.js');
+                            // Or to override to src:
+                            return src;
+                        }
+                    }]
+            }
+        },
         concat: {
             options: {
-                sourceMap: false
+                sourceMap: false,
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                '<%= grunt.template.today("yyyy-mm-dd") %> */',
             },
             vendor_js: {
                 src: [
@@ -134,7 +132,7 @@ module.exports = function(grunt) {
                     'node_modules/highcharts/highstock.js',
                     'theme/assets/global/plugins/bootstrap-toastr/toastr.js'
                 ],
-                dest: '<%= config.dist %>/vendor.js'
+                dest: '<%= config.dist %>/vendor-<%= pkg.version %>.js'
             },
             angular_bundle: {
                 src: [
@@ -152,7 +150,7 @@ module.exports = function(grunt) {
                     'Scripts/highcharts-ng/dist/highcharts-ng.js'
 
                 ],
-                dest: '<%= config.dist %>/angular.bundle.js'
+                dest: '<%= config.dist %>/angular.bundle-<%= pkg.version %>.js'
             }
         },
         includeSource: {
@@ -179,19 +177,26 @@ module.exports = function(grunt) {
                     ext: '.css'
                 }]
             }
+        },
+
+        clean: {
+            dist: ['<%= config.dist %>'],
+            node: ['node_modules']
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-include-source');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    // grunt.loadNpmTasks('grunt-common-html2js');
+    grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-connect');
     // Default task(s).
-    grunt.registerTask('build', ['copy', 'uglify', 'htmlmin', 'cssmin', 'concat', 'includeSource']);
+    grunt.registerTask('build', ['clean:dist', 'copy', 'concat', 'includeSource', 'uglify', 'htmlmin', 'cssmin']);
     grunt.registerTask('default', ['build','connect:example']);
 
 
