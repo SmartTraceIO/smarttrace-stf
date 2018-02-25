@@ -18,7 +18,8 @@ module.exports = function(grunt) {
 
         app: {
             scripts: [
-                'vendor.js'
+                'vendor.js',
+                'angular.bundle.js'
             ]
         },
 
@@ -135,6 +136,24 @@ module.exports = function(grunt) {
                 ],
                 dest: '<%= config.dist %>/vendor.js'
             },
+            angular_bundle: {
+                src: [
+                    'node_modules/angular/angular.min.js',
+                    'node_modules/angular-animate/angular-animate.min.js',
+                    'node_modules/angular-cookies/angular-cookies.min.js',
+                    'node_modules/angular-resource/angular-resource.min.js',
+                    'node_modules/angular-sanitize/angular-sanitize.min.js',
+                    'node_modules/angular-touch/angular-touch.min.js',
+                    'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+                    'node_modules/angular-local-storage/dist/angular-local-storage.min.js',
+                    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+
+                    'Scripts/google-map/ng-map.min.js',
+                    'Scripts/highcharts-ng/dist/highcharts-ng.js'
+
+                ],
+                dest: '<%= config.dist %>/angular.bundle.js'
+            }
         },
         includeSource: {
             // Task to include files into index.html
