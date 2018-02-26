@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 mangle: false,
-                sourceMap: true,
+                sourceMap: false,
                 compress: true
             },
             app: {
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                sourceMap: true,
+                sourceMap: false,
                 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */',
             },
@@ -141,7 +141,8 @@ module.exports = function(grunt) {
                     'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
                     'node_modules/bootstrap/dist/js/bootstrap.min.js',
                     'node_modules/highcharts/highstock.js',
-                    'theme/assets/global/plugins/bootstrap-toastr/toastr.js'
+                    'theme/assets/global/plugins/bootstrap-toastr/toastr.js',
+                    'theme/assets/global/scripts/app.js'
                 ],
                 dest: '<%= config.dist %>/vendor-<%= pkg.version %>.js'
             },
