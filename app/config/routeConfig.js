@@ -7,7 +7,7 @@ appConstants.constant('routes', [
               url: "/login"
               , views: {
                   "content": {
-                      templateUrl: "app/login/login.html?v="+ version
+                      templateUrl: "app/login/login.html"
                        , controller: 'LoginCtrl'
                   }
               }
@@ -22,7 +22,7 @@ appConstants.constant('routes', [
               url: "/preference"
               , views: {
                   "content": {
-                      templateUrl: "app/preference/preference.html?v="+ version
+                      templateUrl: "app/preference/preference.html"
                        , controller: 'PreferenceCtrl'
                   }
               }
@@ -37,7 +37,7 @@ appConstants.constant('routes', [
               url: "/user-update"
               , views: {
                   "content": {
-                      templateUrl: "app/user-update/user-update.html?v="+ version
+                      templateUrl: "app/user-update/user-update.html"
                        , controller: 'UserUpdateCtrl'
                   }
               }
@@ -52,7 +52,7 @@ appConstants.constant('routes', [
               url: "/forget-password"
               , views: {
                   "content": {
-                      templateUrl: "app/forget-password/forget-password.html?v="+ version
+                      templateUrl: "app/forget-password/forget-password.html"
                        , controller: 'ForgetCtrl'
                   }
               }
@@ -67,7 +67,7 @@ appConstants.constant('routes', [
               url: "/change-password"
               , views: {
                   "content": {
-                      templateUrl: "app/change-password/change-password.html?v="+ version
+                      templateUrl: "app/change-password/change-password.html"
                        , controller: 'ChangePWCtrl'
                   }
               }
@@ -82,7 +82,7 @@ appConstants.constant('routes', [
               url: "/new-shipment"
               , views: {
                   "content": {
-                      templateUrl: "app/new-shipment/new-shipment.html?v="+ version
+                      templateUrl: "app/new-shipment/new-shipment.html"
                        , controller: 'NewShipmentCtrl'
                   }
               }
@@ -98,7 +98,7 @@ appConstants.constant('routes', [
             url: "/new-autostart-shipment",
             views: {
                 'content': {
-                    templateUrl: 'app/new-shipment/new-autostart-shipment.html?v='+version,
+                    templateUrl: 'app/new-shipment/new-autostart-shipment.html',
                     controller: 'NewAutoStartShipmentCtrl as VM'
                 }
             }
@@ -114,7 +114,7 @@ appConstants.constant('routes', [
               url: "/view-shipment"
               , views: {
                   "content": {
-                      templateUrl: "app/view-shipment/view-shipment.html?v="+ version
+                      templateUrl: "app/view-shipment/view-shipment.html"
                        , controller: 'ViewShipmentCtrl as vm'
                   }
               }
@@ -135,7 +135,7 @@ appConstants.constant('routes', [
               url: "/view-shipment-detail/:vsId"
               , views: {
                   "content": {
-                      templateUrl: "app/view-shipment-detail/view-shipment-detail.html?v="+ version
+                      templateUrl: "app/view-shipment-detail/view-shipment-detail.html"
                        , controller: 'ViewShipmentDetailCtrl as vm'
                   }
               }
@@ -150,7 +150,7 @@ appConstants.constant('routes', [
             url: "/view-shipment-detail-table?sn&trip&vsId"
             , views: {
                 "content": {
-                    templateUrl: "app/view-shipment-detail-table/view-shipment-detail.html?v="+ version
+                    templateUrl: "app/view-shipment-detail-table/view-shipment-detail.html"
                     , controller: 'ViewShipmentDetailTableCtrl as vm'
                 }
             }
@@ -167,7 +167,7 @@ appConstants.constant('routes', [
             reloadOnSearch: false,
             views: {
                 "content": {
-                    templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html?v="+ version,
+                    templateUrl: "app/view-shipment-detail-share/view-shipment-detail.html",
                     controller: 'ViewShipmentDetailShareCtrl as VM',
                 }
             }
@@ -199,7 +199,7 @@ appConstants.constant('routes', [
               abstract:true
               , views: {
                   "content": {
-                      templateUrl: "app/global/layout/manage.html?v="+ version
+                      templateUrl: "app/global/layout/manage.html"
                   }
               }
           }
@@ -211,7 +211,7 @@ appConstants.constant('routes', [
             url: "/tracker",
             views: {
                 "content": {
-                    templateUrl: "app/manage-tracker/list.html?v="+version,
+                    templateUrl: "app/manage-tracker/list.html",
                     controller: 'ListTrackerCtrl'
                 }
             }
@@ -233,7 +233,7 @@ appConstants.constant('routes', [
             url: "/add-tracker"
             , views: {
                 "content": {
-                    templateUrl: "app/manage-tracker/add-edit.html?v="+ version
+                    templateUrl: "app/manage-tracker/add-edit.html"
                     , controller: 'AddTrackerCtrl'
                 }
             }
@@ -250,7 +250,7 @@ appConstants.constant('routes', [
             url: "/edit-tracker/:imei"
             , views: {
                 "content": {
-                    templateUrl: "app/manage-tracker/add-edit.html?v="+ version,
+                    templateUrl: "app/manage-tracker/add-edit.html",
                     controller: 'EditTrackerCtrl'
                 }
             }
@@ -267,7 +267,7 @@ appConstants.constant('routes', [
               url: "/alert"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-alert/list.html?v="+ version
+                      templateUrl: "app/manage-alert/list.html"
                        , controller: 'ListAlertCtrl'
                   }
               }
@@ -282,7 +282,7 @@ appConstants.constant('routes', [
               url: "/add-alert"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-alert/add-edit.html?v="+ version
+                      templateUrl: "app/manage-alert/add-edit.html"
                        , controller: 'AddAlertCtrl'
                   }
               }
@@ -297,7 +297,7 @@ appConstants.constant('routes', [
               url: "/edit-alert/:aId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-alert/add-edit.html?v="+ version
+                      templateUrl: "app/manage-alert/add-edit.html"
                        , controller: 'EditAlertCtrl'
                   }
               }
@@ -312,7 +312,7 @@ appConstants.constant('routes', [
             url: '/trackers-group',
             views: {
                 "sub-content": {
-                    templateUrl: 'app/manage-group/list.html?v='+version,
+                    templateUrl: 'app/manage-group/list.html',
                     controller: 'ListGroupCtrl as GroupList',
                 }
             }
@@ -329,7 +329,7 @@ appConstants.constant('routes', [
             url: '/add-group',
             views: {
                 "sub-content": {
-                    templateUrl: 'app/manage-group/add-group.html?v='+version,
+                    templateUrl: 'app/manage-group/add-group.html',
                     controller: 'AddGroupCtrl as AddGroup',
                 }
             }
@@ -344,7 +344,7 @@ appConstants.constant('routes', [
             url: '/edit-group/:id',
             views: {
                 "sub-content": {
-                    templateUrl: 'app/manage-group/edit-group.html?v='+version,
+                    templateUrl: 'app/manage-group/edit-group.html',
                     controller: 'EditGroupCtrl as EditGroup'
                 }
             }
@@ -359,7 +359,7 @@ appConstants.constant('routes', [
               url: "/notification"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-notification/list.html?v="+ version
+                      templateUrl: "app/manage-notification/list.html"
                        , controller: 'ListNotiCtrl'
                   }
               }
@@ -374,7 +374,7 @@ appConstants.constant('routes', [
               url: "/add-notification"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-notification/add-edit.html?v="+ version
+                      templateUrl: "app/manage-notification/add-edit.html"
                        , controller: 'AddNotiCtrl'
                   }
               }
@@ -390,7 +390,7 @@ appConstants.constant('routes', [
               url: "/edit-notification/:nId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-notification/add-edit.html?v="+ version
+                      templateUrl: "app/manage-notification/add-edit.html"
                        , controller: 'EditNotiCtrl'
                   }
               }
@@ -406,7 +406,7 @@ appConstants.constant('routes', [
               url: "/location"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-location/list.html?v="+ version
+                      templateUrl: "app/manage-location/list.html"
                        , controller: 'ListLocCtrl'
                   }
               }
@@ -421,7 +421,7 @@ appConstants.constant('routes', [
               url: "/add-location"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-location/add-edit.html?v="+ version
+                      templateUrl: "app/manage-location/add-edit.html"
                        , controller: 'AddLocCtrl'
                   }
               }
@@ -436,7 +436,7 @@ appConstants.constant('routes', [
               url: "/edit-location/:lId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-location/add-edit.html?v="+ version
+                      templateUrl: "app/manage-location/add-edit.html"
                        , controller: 'EditLocCtrl'
                   }
               }
@@ -451,7 +451,7 @@ appConstants.constant('routes', [
               url: "/shipment-template"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-shipment-template/list.html?v="+ version
+                      templateUrl: "app/manage-shipment-template/list.html"
                        , controller: 'ListShipTempCtrl'
                   }
               }
@@ -467,7 +467,7 @@ appConstants.constant('routes', [
               url: "/add-shipment-template"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-shipment-template/add-edit.html?v="+ version
+                      templateUrl: "app/manage-shipment-template/add-edit.html"
                        , controller: 'AddShipTempCtrl'
                   }
               }
@@ -487,7 +487,7 @@ appConstants.constant('routes', [
               url: "/edit-shipment-template/:stId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-shipment-template/add-edit.html?v="+ version
+                      templateUrl: "app/manage-shipment-template/add-edit.html"
                        , controller: 'EditShipTempCtrl'
                   }
               }
@@ -507,7 +507,7 @@ appConstants.constant('routes', [
               url: "/user"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-user/list.html?v="+ version
+                      templateUrl: "app/manage-user/list.html"
                        , controller: 'ListUserCtrl'
                   }
               }
@@ -522,7 +522,7 @@ appConstants.constant('routes', [
               url: "/add-user"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-user/add-edit.html?v="+ version
+                      templateUrl: "app/manage-user/add-edit.html"
                        , controller: 'AddUserCtrl'
                   }
               }
@@ -537,7 +537,7 @@ appConstants.constant('routes', [
               url: "/edit-user/:uId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/manage-user/add-edit.html?v="+ version
+                      templateUrl: "app/manage-user/add-edit.html"
                        , controller: 'EditUserCtrl'
                   }
               }
@@ -552,7 +552,7 @@ appConstants.constant('routes', [
               url: "/autostart-template"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/autostart-template/list.html?v="+ version
+                      templateUrl: "app/autostart-template/list.html"
                        , controller: 'ListAutoTempCtrl'
                   }
               }
@@ -573,7 +573,7 @@ appConstants.constant('routes', [
               url: "/add-autostart-template"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/autostart-template/add-edit.html?v="+ version
+                      templateUrl: "app/autostart-template/add-edit.html"
                        , controller: 'AddAutoTempCtrl'
                   }
               }
@@ -589,7 +589,7 @@ appConstants.constant('routes', [
               url: "/edit-autostart-template/:stId"
               , views: {
                   "sub-content": {
-                      templateUrl: "app/autostart-template/add-edit.html?v="+ version
+                      templateUrl: "app/autostart-template/add-edit.html"
                        , controller: 'EditAutoTempCtrl'
                   }
               }
@@ -605,7 +605,7 @@ appConstants.constant('routes', [
             url: '/simulator',
             'views': {
                 'sub-content': {
-                    templateUrl: 'app/simulator/list.html?v='+version,
+                    templateUrl: 'app/simulator/list.html',
                     controller: 'ListSimulatorCtrl as VM'
                 }
             }
@@ -620,7 +620,7 @@ appConstants.constant('routes', [
             url: "/correctiveactions"
             , views: {
                 "sub-content": {
-                    templateUrl: "app/manage-corrective-actions/list.html?v="+ version
+                    templateUrl: "app/manage-corrective-actions/list.html"
                      , controller: 'ListCorrectiveActionListsCtrl'
                 }
             }
@@ -635,7 +635,7 @@ appConstants.constant('routes', [
             url: "/add-correctiveactions"
             , views: {
                 "sub-content": {
-                    templateUrl: "app/manage-corrective-actions/add-edit.html?v="+ version
+                    templateUrl: "app/manage-corrective-actions/add-edit.html"
                      , controller: 'EditCorrectiveActionListCtrl'
                 }
             }
@@ -650,7 +650,7 @@ appConstants.constant('routes', [
             url: "/edit-correctiveactions/:aId"
             , views: {
                 "sub-content": {
-                    templateUrl: "app/manage-corrective-actions/add-edit.html?v="+ version
+                    templateUrl: "app/manage-corrective-actions/add-edit.html"
                      , controller: 'EditCorrectiveActionListCtrl'
                 }
             }

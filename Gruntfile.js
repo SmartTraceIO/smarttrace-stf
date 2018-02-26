@@ -116,6 +116,17 @@ module.exports = function(grunt) {
                     }]
             }
         },
+
+        html2js: {
+            options: {
+                base: '.'
+            },
+            main: {
+                src: ['app/**/*.html'],
+                dest: '<%= config.dist %>/templates-<%= pkg.version %>.js'
+            }
+        },
+
         concat: {
             options: {
                 sourceMap: false,
@@ -196,7 +207,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-connect');
     // Default task(s).
-    grunt.registerTask('build', ['clean:dist', 'copy', 'concat', 'includeSource', 'uglify', 'htmlmin', 'cssmin']);
+    grunt.registerTask('build', ['clean:dist', 'copy', 'concat', 'html2js', 'includeSource', 'uglify', 'cssmin']);
     grunt.registerTask('default', ['build','connect:example']);
 
 
