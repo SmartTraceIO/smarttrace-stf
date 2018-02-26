@@ -103,8 +103,8 @@
                             }
                         }
                         //-- remove invalid
-                        if (v.lastReadingLat && v.lastReadingLong) {
-                            tmpList.push(v);
+                        if (t.lastReadingLat && t.lastReadingLong) {
+                            tmpList.push(t);
                         }
                     });
                     $scope.TrackerListOnMap = tmpList;

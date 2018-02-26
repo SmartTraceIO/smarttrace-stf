@@ -49,7 +49,7 @@ module.exports = function(grunt) {
             },
             scripts : {
                 files: [
-                    {expand: true, cwd: 'Scripts/', src: ['**'], dest: '<%= config.dist %>/Scripts'},
+                    {expand: true, cwd: 'Scripts/', src: ['google-map/**/*'], dest: '<%= config.dist %>/Scripts'},
                 ]
             },
 
@@ -81,7 +81,7 @@ module.exports = function(grunt) {
                 }]
 
             },
-            my_index: {
+            index: {
                 options: {                                 // Target options
                     removeComments: true,
                     collapseWhitespace: true,
@@ -96,9 +96,8 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 mangle: false,
-                sourceMap: false,
-                compress: true,
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                sourceMap: true,
+                compress: true
             },
             app: {
                 files: [
@@ -129,7 +128,7 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                sourceMap: false,
+                sourceMap: true,
                 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */',
             },
@@ -137,6 +136,7 @@ module.exports = function(grunt) {
                 src: [
                     'node_modules/lodash/lodash.min.js',
                     'node_modules/jquery/dist/jquery.min.js',
+                    'Scripts/tipsy/jquery.tipsy.js',
                     'node_modules/moment/min/moment.min.js',
                     'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
                     'node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -144,6 +144,13 @@ module.exports = function(grunt) {
                     'theme/assets/global/plugins/bootstrap-toastr/toastr.js'
                 ],
                 dest: '<%= config.dist %>/vendor-<%= pkg.version %>.js'
+            },
+            vendor_css: {
+                src: [
+                    'Scripts/select2/select2.css',
+                    'Scripts/tipsy/tipsy.css',
+                ],
+                dest: '<%= config.dist %>/vendor-<%= pkg.version %>.css'
             },
             angular_bundle: {
                 src: [
@@ -162,6 +169,15 @@ module.exports = function(grunt) {
 
                 ],
                 dest: '<%= config.dist %>/angular.bundle-<%= pkg.version %>.js'
+            },
+            app_bundle: {
+                src: [
+                    '<%= config.dist %>/app/*.js',
+                    '<%= config.dist %>/app/config/*.js',
+                    '<%= config.dist %>/app/global/**/*.js',
+                    // '<%= config.dist %>/app/**/*.js'
+                ],
+                dest: '<%= config.dist %>/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         },
         includeSource: {
@@ -207,7 +223,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-connect');
     // Default task(s).
-    grunt.registerTask('build', ['clean:dist', 'copy', 'concat', 'html2js', 'includeSource', 'uglify', 'cssmin']);
+    grunt.registerTask('build', ['clean:dist', 'copy', 'uglify', 'concat', 'html2js', 'includeSource', 'cssmin']);
     grunt.registerTask('default', ['build','connect:example']);
 
 

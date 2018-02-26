@@ -3,8 +3,6 @@ lodash.factory('_', ['$window', function ($window) {
     return $window._;
 }]);
 
-
-
 var appCtrls = angular.module('appCtrls', []);
 var appDirs = angular.module('appDirs', []);
 var appSvcs = angular.module('appSvcs', []);

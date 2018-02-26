@@ -1,6 +1,4 @@
-﻿//var version = (new Date()).getTime();
-//console.log(version);
-appConstants.constant('routes', [
+﻿appConstants.constant('routes', [
     {
           name: 'login',
           config: {
@@ -13,7 +11,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/login/login.js?v=' + version,
+              'app/login/login.js',
           ]
       },
       {
@@ -28,7 +26,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/preference/preference.js?v=' + version,
+              'app/preference/preference.js',
           ]
       },
       {
@@ -43,7 +41,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/user-update/user-update.js?v=' + version,
+              'app/user-update/user-update.js',
           ]
       },
       {
@@ -58,7 +56,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/forget-password/forget-password.js?v=' + version,
+              'app/forget-password/forget-password.js',
           ]
       },
       {
@@ -73,7 +71,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/change-password/change-password.js?v=' + version,
+              'app/change-password/change-password.js',
           ]
       },
       {
@@ -88,8 +86,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/new-shipment/new-shipment.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/new-shipment/new-shipment.js',
+              'app/global/filters/filters.js'
           ]
       },
     {
@@ -104,8 +102,8 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/new-shipment/new-autostart-shipment.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/new-shipment/new-autostart-shipment.js',
+            'app/global/filters/filters.js'
         ]
     },
       {
@@ -125,8 +123,8 @@ appConstants.constant('routes', [
               'Scripts/google-map/infobubble.js',
               'Scripts/google-map/richmarker.js',
               'Scripts/google-map/maplabel.js',
-              'app/view-shipment/view-shipment.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version,
+              'app/view-shipment/view-shipment.js',
+              'app/global/filters/filters.js',
           ]
       },
       {
@@ -141,7 +139,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/view-shipment-detail/view-shipment-detail.js?v=' + version,
+              'app/view-shipment-detail/view-shipment-detail.js',
           ]
       },
     {
@@ -156,8 +154,8 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/view-shipment-detail-table/view-shipment-detail.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/view-shipment-detail-table/view-shipment-detail.js',
+            'app/global/filters/filters.js'
         ]
     },
     {
@@ -175,21 +173,21 @@ appConstants.constant('routes', [
         dependencies: [
             'Scripts/google-map/richmarker.js',
             'Scripts/google-map/maplabel.js',
-            'app/view-shipment-detail-share/view-shipment-detail.js?v=' + version,
-            'app/view-shipment-detail-share/confirm-shutdown.js?v=' + version,
-            'app/view-shipment-detail-share/confirm-suppress.js?v=' + version,
-            'app/view-shipment-detail-share/create-note.js?v=' + version,
-            'app/view-shipment-detail-share/edit-note.js?v=' + version,
-            'app/view-shipment-detail-share/delete-note.js?v=' + version,
-            'app/view-shipment-detail-share/edit-alerts.js?v=' + version,
-            'app/view-shipment-detail-share/edit-arrival.js?v=' + version,
-            'app/view-shipment-detail-share/new-action-taken.js?v=' + version,
-            'app/view-shipment-detail-share/verify-action-taken.js?v=' + version,
-            'app/view-shipment-detail-share/edit-goods.js?v=' + version,
-            'app/view-shipment-detail-share/edit-route.js?v=' + version,
-            'app/view-shipment-detail-share/share-report.js?v=' + version,
-            'app/user-view/user-view.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version,
+            'app/view-shipment-detail-share/view-shipment-detail.js',
+            'app/view-shipment-detail-share/confirm-shutdown.js',
+            'app/view-shipment-detail-share/confirm-suppress.js',
+            'app/view-shipment-detail-share/create-note.js',
+            'app/view-shipment-detail-share/edit-note.js',
+            'app/view-shipment-detail-share/delete-note.js',
+            'app/view-shipment-detail-share/edit-alerts.js',
+            'app/view-shipment-detail-share/edit-arrival.js',
+            'app/view-shipment-detail-share/new-action-taken.js',
+            'app/view-shipment-detail-share/verify-action-taken.js',
+            'app/view-shipment-detail-share/edit-goods.js',
+            'app/view-shipment-detail-share/edit-route.js',
+            'app/view-shipment-detail-share/share-report.js',
+            'app/user-view/user-view.js',
+            'app/global/filters/filters.js',
         ]
     },
       {
@@ -222,9 +220,9 @@ appConstants.constant('routes', [
             'Scripts/google-map/infobubble.js',
             'Scripts/google-map/richmarker.js',
             'Scripts/google-map/maplabel.js',
-            'app/manage-tracker/manage-tracker.js?v=' + version,
-            'app/manage-tracker/confirm-deactivate.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/manage-tracker/manage-tracker.js',
+            'app/manage-tracker/confirm-deactivate.js',
+            'app/global/filters/filters.js'
         ]
     },
     {
@@ -239,9 +237,9 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-tracker/manage-tracker.js?v=' + version,
-            'app/manage-tracker/confirm-deactivate.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/manage-tracker/manage-tracker.js',
+            'app/manage-tracker/confirm-deactivate.js',
+            'app/global/filters/filters.js'
         ]
     },
     {
@@ -256,9 +254,9 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-tracker/manage-tracker.js?v=' + version,
-            'app/manage-tracker/confirm-deactivate.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/manage-tracker/manage-tracker.js',
+            'app/manage-tracker/confirm-deactivate.js',
+            'app/global/filters/filters.js'
         ]
     },
       {
@@ -273,7 +271,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + version,
+              'app/manage-alert/manage-alert.js',
           ]
       },
       {
@@ -288,7 +286,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + version,
+              'app/manage-alert/manage-alert.js',
           ]
       },
       {
@@ -303,7 +301,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js?v=' + version,
+              'app/manage-alert/manage-alert.js',
           ]
       },
     /*{
@@ -318,9 +316,9 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-group/group-list.js?v=' + version,
-            'app/manage-group/delete-group.js?v=' + version,
-            'app/global/filters/filters.js?v=' + version
+            'app/manage-group/group-list.js',
+            'app/manage-group/delete-group.js',
+            'app/global/filters/filters.js'
         ]
     },*/
     {
@@ -335,7 +333,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-group/add-group.js?v='+version
+            'app/manage-group/add-group.js'
         ]
     },
     {
@@ -350,7 +348,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-group/edit-group.js?v='+version
+            'app/manage-group/edit-group.js'
         ]
     },
       {
@@ -365,7 +363,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + version,
+              'app/manage-notification/manage-notification.js',
           ]
       },
       {
@@ -380,8 +378,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + version,
-              'app/global/directives/weekdays.js?v=' + version
+              'app/manage-notification/manage-notification.js',
+              'app/global/directives/weekdays.js'
           ]
       },
       {
@@ -396,8 +394,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js?v=' + version,
-              'app/global/directives/weekdays.js?v=' + version
+              'app/manage-notification/manage-notification.js',
+              'app/global/directives/weekdays.js'
           ]
       },
       {
@@ -412,7 +410,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + version,
+              'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -427,7 +425,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + version,
+              'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -442,7 +440,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + version,
+              'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -457,8 +455,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/manage-shipment-template/manage-shipment-template.js',
+              'app/global/filters/filters.js'
           ]
       },
       {
@@ -473,12 +471,12 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + version,
-              'app/manage-alert/manage-alert.js?v=' + version,
-              'app/manage-notification/manage-notification.js?v=' + version,
-              'app/global/directives/weekdays.js?v=' + version,
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version,
+              'app/manage-location/manage-location.js',
+              'app/manage-alert/manage-alert.js',
+              'app/manage-notification/manage-notification.js',
+              'app/global/directives/weekdays.js',
+              'app/manage-shipment-template/manage-shipment-template.js',
+              'app/global/filters/filters.js',
           ]
       },
       {
@@ -493,12 +491,12 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js?v=' + version,
-              'app/manage-alert/manage-alert.js?v=' + version,
-              'app/manage-notification/manage-notification.js?v=' + version,
-              'app/global/directives/weekdays.js?v=' + version,
-              'app/manage-shipment-template/manage-shipment-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version,
+              'app/manage-location/manage-location.js',
+              'app/manage-alert/manage-alert.js',
+              'app/manage-notification/manage-notification.js',
+              'app/global/directives/weekdays.js',
+              'app/manage-shipment-template/manage-shipment-template.js',
+              'app/global/filters/filters.js',
           ]
       },
       {
@@ -528,7 +526,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js?v=' + version,
+              'app/manage-user/manage-user.js',
           ]
       },
       {
@@ -543,7 +541,7 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js?v=' + version
+              'app/manage-user/manage-user.js'
           ]
       },
       {
@@ -558,13 +556,13 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + version,
-              'app/autostart-template/confirm-delete.js?v=' + version,
-              'app/manage-location/manage-location.js?v=' + version,
-              'app/manage-alert/manage-alert.js?v=' + version,
-              'app/manage-notification/manage-notification.js?v=' + version,
-              'app/global/directives/weekdays.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/autostart-template/autostart-template.js',
+              'app/autostart-template/confirm-delete.js',
+              'app/manage-location/manage-location.js',
+              'app/manage-alert/manage-alert.js',
+              'app/manage-notification/manage-notification.js',
+              'app/global/directives/weekdays.js',
+              'app/global/filters/filters.js'
           ]
       },
       {
@@ -579,8 +577,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/autostart-template/autostart-template.js',
+              'app/global/filters/filters.js'
           ]
       },
       {
@@ -595,8 +593,8 @@ appConstants.constant('routes', [
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js?v=' + version,
-              'app/global/filters/filters.js?v=' + version
+              'app/autostart-template/autostart-template.js',
+              'app/global/filters/filters.js'
           ]
       },
     {
@@ -611,7 +609,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/simulator/manage-simulator.js?v=' + version
+            'app/simulator/manage-simulator.js'
         ]
     },
     {
@@ -626,7 +624,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+            'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     },
     {
@@ -641,7 +639,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+            'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     },
     {
@@ -656,7 +654,7 @@ appConstants.constant('routes', [
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js?v=' + version
+            'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     }    
 ]);

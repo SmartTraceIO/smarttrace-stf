@@ -15,7 +15,8 @@
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <![endif]-->
-    <script>
+
+    <!--script>
         var version = 0;
         var v = (new Date()).getTime();
         var xobj = new XMLHttpRequest();
@@ -32,25 +33,24 @@
             }
         };
         xobj.send(null);
-    </script>
+    </script-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet" type="text/css">
 
-    <link href="theme/assets/pages/css/login.css" rel="stylesheet" type="text/css" />
-    <link href="theme/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="theme/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="theme/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <!--<link href="theme/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
-
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
-
-    <link href="theme/assets/global/css/components.css" rel="stylesheet" type="text/css" />
     <link href="theme/assets/layouts/layout/css/layout.css" rel="stylesheet" type="text/css" />
     <link href="theme/assets/layouts/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="theme/assets/pages/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="theme/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="theme/assets/global/css/components.css" rel="stylesheet" type="text/css" />
     <link href="theme/site.css?version=3.2" rel="stylesheet" />
-    <link rel="shortcut icon" href="favicon.png" />
-    <link href="Scripts/select2/select2.css" rel="stylesheet" />
     <link href="theme/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" />
-    <link href="Scripts/tipsy/tipsy.css" rel="stylesheet" />
+
+    <!--CSS files-->
+    <link href="vendor-1.0.0.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png" />
 </head>
 
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width" ng-controller="reloadCtrl">
@@ -311,21 +311,22 @@
     <script src="vendor-1.0.0.js"></script>
     <script src="angular.bundle-1.0.0.js"></script>
     <script src="templates-1.0.0.js"></script>
+    <script src="smarttrace-stf-1.0.0.js"></script>
 
     <script src="https://use.edgefonts.net/source-code-pro.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC061Eu8i3E8_CXtZK_-ceh8YnYXs2Nj2s&libraries=places,geometry"></script>
-    <script src="app/modules.js?version=3.2"></script>
-    <script src="app/config/appConfig.js?version=3.3"></script>
-    <script src="app/config/routeConfig.js?version=3.6"></script>
-    <script src="app/global/services/rootSvc.js?version=3.2"></script>
-    <script src="app/global/services/webSvc.js?version=3.2"></script>
-    <script src="app/global/services/authSvc.js?version=3.3"></script>
-    <script src="app/global/services/localDbSvc.js?version=3.2"></script>
-    <script src="app/base-controller.js?version=23"></script>
-    <script src="Scripts/tipsy/jquery.tipsy.js"></script>
-    <script src="app/reload-controller.js?v=23"></script>
+    <!--<script src="app/app.js?version=3.2"></script>-->
+    <!--<script src="app/config/appConfig.js?version=3.3"></script>-->
+    <!--<script src="app/config/routeConfig.js?version=3.6"></script>-->
+    <!--<script src="app/global/services/rootSvc.js?version=3.2"></script>-->
+    <!--<script src="app/global/services/webSvc.js?version=3.2"></script>-->
+    <!--<script src="app/global/services/authSvc.js?version=3.3"></script>-->
+    <!--<script src="app/global/services/localDbSvc.js?version=3.2"></script>-->
+    <!--<script src="app/base-controller.js?version=23"></script>-->
+    <!--<script src="Scripts/tipsy/jquery.tipsy.js"></script>-->
+    <!--<script src="app/reload-controller.js?v=23"></script>-->
     <script>
         $("#setup").on("click", function () {
             if ($("#setup").hasClass("open") || $("#setup span.arrow").hasClass("open")) {
