@@ -137,9 +137,15 @@
                 </ui-select>
             </div>
             <div class="col-sm-2">
-                <label>Goods</label>
+
+                <span class="pull-left">
+                    <label>Device/Goods</label>
+                    <i uib-tooltip="Enter details such as device number, goods description or po num."
+                       tooltip-placement="top-left"
+                       class="fa fa-info-circle"></i>
+                </span>
                 <!--<input type="text" class="form-control" ng-model="vm.ViewShipment.shipmentDescription" placeholder="Desc/PalletID/Asset Num" />-->
-                <input type="text" class="form-control" ng-model="vm.ViewShipment.goods" placeholder="Desc/PalletID/Asset Num" />
+                <input type="text" class="form-control" ng-model="vm.ViewShipment.goods" placeholder="Device/Desc/PalletID" />
             </div>
             <div class="col-sm-2">
                 <label>Device</label>

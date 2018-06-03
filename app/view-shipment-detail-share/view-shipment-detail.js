@@ -359,6 +359,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
 
     $scope.switchTracker = function($event, index){
         $event.preventDefault();
+        $location.search('vsId', null);
         $location.search('sn', $scope.trackers[index].deviceSN);
         $location.search('trip', $scope.trackers[index].tripCount);
         $scope.chartConfig.redraw= true;
@@ -1655,6 +1656,10 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             var temPath = [];
             var oldX = 0;
             for(j = 0; j < locations.length; j++){
+
+                if (locations[j].temperature >= 100) {
+                    continue;
+                }
                 //-- update shipmentNotes
                 var check = updateNote(locations[j]);
                 var isLightEvent = false;

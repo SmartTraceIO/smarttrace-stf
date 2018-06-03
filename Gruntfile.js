@@ -96,7 +96,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 mangle: false,
-                sourceMap: false,
+                sourceMap: true,
                 compress: true
             },
             app: {
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                sourceMap: false,
+                sourceMap: true,
                 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */',
             },
@@ -136,11 +136,12 @@ module.exports = function(grunt) {
                 src: [
                     'node_modules/lodash/lodash.min.js',
                     'node_modules/jquery/dist/jquery.min.js',
-                    'Scripts/tipsy/jquery.tipsy.js',
                     'node_modules/moment/min/moment.min.js',
                     'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
                     'node_modules/bootstrap/dist/js/bootstrap.min.js',
                     'node_modules/highcharts/highstock.js',
+
+                    'Scripts/tipsy/jquery.tipsy.js',
                     'theme/assets/global/plugins/bootstrap-toastr/toastr.js',
                     'theme/assets/global/scripts/app.js'
                 ],
@@ -167,7 +168,6 @@ module.exports = function(grunt) {
 
                     'Scripts/google-map/ng-map.min.js',
                     'Scripts/highcharts-ng/dist/highcharts-ng.js'
-
                 ],
                 dest: '<%= config.dist %>/angular.bundle-<%= pkg.version %>.js'
             },
@@ -176,7 +176,8 @@ module.exports = function(grunt) {
                     '<%= config.dist %>/app/*.js',
                     '<%= config.dist %>/app/config/*.js',
                     '<%= config.dist %>/app/global/**/*.js',
-                    // '<%= config.dist %>/app/**/*.js'
+
+                    '<%= config.dist %>/app/**/*.js'
                 ],
                 dest: '<%= config.dist %>/<%= pkg.name %>-<%= pkg.version %>.js'
             }

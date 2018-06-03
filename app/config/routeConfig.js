@@ -11,7 +11,7 @@
               }
           },
           dependencies: [
-              'app/login/login.js',
+              // 'app/login/login.js',
           ]
       },
       {
@@ -26,7 +26,7 @@
               }
           },
           dependencies: [
-              'app/preference/preference.js',
+              // 'app/preference/preference.js',
           ]
       },
       {
@@ -41,7 +41,7 @@
               }
           },
           dependencies: [
-              'app/user-update/user-update.js',
+              // 'app/user-update/user-update.js',
           ]
       },
       {
@@ -56,7 +56,7 @@
               }
           },
           dependencies: [
-              'app/forget-password/forget-password.js',
+              // 'app/forget-password/forget-password.js',
           ]
       },
       {
@@ -71,7 +71,7 @@
               }
           },
           dependencies: [
-              'app/change-password/change-password.js',
+              // 'app/change-password/change-password.js',
           ]
       },
       {
@@ -86,8 +86,8 @@
               }
           },
           dependencies: [
-              'app/new-shipment/new-shipment.js',
-              'app/global/filters/filters.js'
+              // 'app/new-shipment/new-shipment.js',
+              // 'app/global/filters/filters.js'
           ]
       },
     {
@@ -102,8 +102,8 @@
             }
         },
         dependencies: [
-            'app/new-shipment/new-autostart-shipment.js',
-            'app/global/filters/filters.js'
+            // 'app/new-shipment/new-autostart-shipment.js',
+            // 'app/global/filters/filters.js'
         ]
     },
       {
@@ -123,8 +123,8 @@
               'Scripts/google-map/infobubble.js',
               'Scripts/google-map/richmarker.js',
               'Scripts/google-map/maplabel.js',
-              'app/view-shipment/view-shipment.js',
-              'app/global/filters/filters.js',
+              // 'app/view-shipment/view-shipment.js',
+              // 'app/global/filters/filters.js',
           ]
       },
       {
@@ -139,7 +139,7 @@
               }
           },
           dependencies: [
-              'app/view-shipment-detail/view-shipment-detail.js',
+              // 'app/view-shipment-detail/view-shipment-detail.js',
           ]
       },
     {
@@ -154,8 +154,8 @@
             }
         },
         dependencies: [
-            'app/view-shipment-detail-table/view-shipment-detail.js',
-            'app/global/filters/filters.js'
+            // 'app/view-shipment-detail-table/view-shipment-detail.js',
+            // 'app/global/filters/filters.js'
         ]
     },
     {
@@ -173,21 +173,21 @@
         dependencies: [
             'Scripts/google-map/richmarker.js',
             'Scripts/google-map/maplabel.js',
-            'app/view-shipment-detail-share/view-shipment-detail.js',
-            'app/view-shipment-detail-share/confirm-shutdown.js',
-            'app/view-shipment-detail-share/confirm-suppress.js',
-            'app/view-shipment-detail-share/create-note.js',
-            'app/view-shipment-detail-share/edit-note.js',
-            'app/view-shipment-detail-share/delete-note.js',
-            'app/view-shipment-detail-share/edit-alerts.js',
-            'app/view-shipment-detail-share/edit-arrival.js',
-            'app/view-shipment-detail-share/new-action-taken.js',
-            'app/view-shipment-detail-share/verify-action-taken.js',
-            'app/view-shipment-detail-share/edit-goods.js',
-            'app/view-shipment-detail-share/edit-route.js',
-            'app/view-shipment-detail-share/share-report.js',
-            'app/user-view/user-view.js',
-            'app/global/filters/filters.js',
+            // 'app/view-shipment-detail-share/view-shipment-detail.js',
+            // 'app/view-shipment-detail-share/confirm-shutdown.js',
+            // 'app/view-shipment-detail-share/confirm-suppress.js',
+            // 'app/view-shipment-detail-share/create-note.js',
+            // 'app/view-shipment-detail-share/edit-note.js',
+            // 'app/view-shipment-detail-share/delete-note.js',
+            // 'app/view-shipment-detail-share/edit-alerts.js',
+            // 'app/view-shipment-detail-share/edit-arrival.js',
+            // 'app/view-shipment-detail-share/new-action-taken.js',
+            // 'app/view-shipment-detail-share/verify-action-taken.js',
+            // 'app/view-shipment-detail-share/edit-goods.js',
+            // 'app/view-shipment-detail-share/edit-route.js',
+            // 'app/view-shipment-detail-share/share-report.js',
+            // 'app/user-view/user-view.js',
+            // 'app/global/filters/filters.js',
         ]
     },
       {
@@ -220,9 +220,9 @@
             'Scripts/google-map/infobubble.js',
             'Scripts/google-map/richmarker.js',
             'Scripts/google-map/maplabel.js',
-            'app/manage-tracker/manage-tracker.js',
-            'app/manage-tracker/confirm-deactivate.js',
-            'app/global/filters/filters.js'
+            // 'app/manage-tracker/manage-tracker.js',
+            // 'app/manage-tracker/confirm-deactivate.js',
+            // 'app/global/filters/filters.js'
         ]
     },
     {
@@ -237,9 +237,9 @@
             }
         },
         dependencies: [
-            'app/manage-tracker/manage-tracker.js',
-            'app/manage-tracker/confirm-deactivate.js',
-            'app/global/filters/filters.js'
+            // 'app/manage-tracker/manage-tracker.js',
+            // 'app/manage-tracker/confirm-deactivate.js',
+            // 'app/global/filters/filters.js'
         ]
     },
     {
@@ -254,9 +254,9 @@
             }
         },
         dependencies: [
-            'app/manage-tracker/manage-tracker.js',
-            'app/manage-tracker/confirm-deactivate.js',
-            'app/global/filters/filters.js'
+            // 'app/manage-tracker/manage-tracker.js',
+            // 'app/manage-tracker/confirm-deactivate.js',
+            // 'app/global/filters/filters.js'
         ]
     },
       {
@@ -271,7 +271,7 @@
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js',
+              // 'app/manage-alert/manage-alert.js',
           ]
       },
       {
@@ -286,7 +286,7 @@
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js',
+              // 'app/manage-alert/manage-alert.js',
           ]
       },
       {
@@ -301,7 +301,7 @@
               }
           },
           dependencies: [
-              'app/manage-alert/manage-alert.js',
+              // 'app/manage-alert/manage-alert.js',
           ]
       },
     /*{
@@ -316,9 +316,9 @@
             }
         },
         dependencies: [
-            'app/manage-group/group-list.js',
-            'app/manage-group/delete-group.js',
-            'app/global/filters/filters.js'
+            // 'app/manage-group/group-list.js',
+            // 'app/manage-group/delete-group.js',
+            // 'app/global/filters/filters.js'
         ]
     },*/
     {
@@ -333,7 +333,7 @@
             }
         },
         dependencies: [
-            'app/manage-group/add-group.js'
+            // 'app/manage-group/add-group.js'
         ]
     },
     {
@@ -348,7 +348,7 @@
             }
         },
         dependencies: [
-            'app/manage-group/edit-group.js'
+            // 'app/manage-group/edit-group.js'
         ]
     },
       {
@@ -363,7 +363,7 @@
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js',
+              // 'app/manage-notification/manage-notification.js',
           ]
       },
       {
@@ -378,8 +378,8 @@
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js',
-              'app/global/directives/weekdays.js'
+              // 'app/manage-notification/manage-notification.js',
+              // 'app/global/directives/weekdays.js'
           ]
       },
       {
@@ -394,8 +394,8 @@
               }
           },
           dependencies: [
-              'app/manage-notification/manage-notification.js',
-              'app/global/directives/weekdays.js'
+              // 'app/manage-notification/manage-notification.js',
+              // 'app/global/directives/weekdays.js'
           ]
       },
       {
@@ -410,7 +410,7 @@
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js',
+              // 'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -425,7 +425,7 @@
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js',
+              // 'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -440,7 +440,7 @@
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js',
+              // 'app/manage-location/manage-location.js',
           ]
       },
       {
@@ -455,8 +455,8 @@
               }
           },
           dependencies: [
-              'app/manage-shipment-template/manage-shipment-template.js',
-              'app/global/filters/filters.js'
+              // 'app/manage-shipment-template/manage-shipment-template.js',
+              // 'app/global/filters/filters.js'
           ]
       },
       {
@@ -471,12 +471,12 @@
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js',
-              'app/manage-alert/manage-alert.js',
-              'app/manage-notification/manage-notification.js',
-              'app/global/directives/weekdays.js',
-              'app/manage-shipment-template/manage-shipment-template.js',
-              'app/global/filters/filters.js',
+              // 'app/manage-location/manage-location.js',
+              // 'app/manage-alert/manage-alert.js',
+              // 'app/manage-notification/manage-notification.js',
+              // 'app/global/directives/weekdays.js',
+              // 'app/manage-shipment-template/manage-shipment-template.js',
+              // 'app/global/filters/filters.js',
           ]
       },
       {
@@ -491,12 +491,12 @@
               }
           },
           dependencies: [
-              'app/manage-location/manage-location.js',
-              'app/manage-alert/manage-alert.js',
-              'app/manage-notification/manage-notification.js',
-              'app/global/directives/weekdays.js',
-              'app/manage-shipment-template/manage-shipment-template.js',
-              'app/global/filters/filters.js',
+              // 'app/manage-location/manage-location.js',
+              // 'app/manage-alert/manage-alert.js',
+              // 'app/manage-notification/manage-notification.js',
+              // 'app/global/directives/weekdays.js',
+              // 'app/manage-shipment-template/manage-shipment-template.js',
+              // 'app/global/filters/filters.js',
           ]
       },
       {
@@ -511,7 +511,7 @@
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js',
+              // 'app/manage-user/manage-user.js',
           ]
       },
       {
@@ -526,7 +526,7 @@
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js',
+              // 'app/manage-user/manage-user.js',
           ]
       },
       {
@@ -541,7 +541,7 @@
               }
           },
           dependencies: [
-              'app/manage-user/manage-user.js'
+              // 'app/manage-user/manage-user.js'
           ]
       },
       {
@@ -556,13 +556,13 @@
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js',
-              'app/autostart-template/confirm-delete.js',
-              'app/manage-location/manage-location.js',
-              'app/manage-alert/manage-alert.js',
-              'app/manage-notification/manage-notification.js',
-              'app/global/directives/weekdays.js',
-              'app/global/filters/filters.js'
+              // 'app/autostart-template/autostart-template.js',
+              // 'app/autostart-template/confirm-delete.js',
+              // 'app/manage-location/manage-location.js',
+              // 'app/manage-alert/manage-alert.js',
+              // 'app/manage-notification/manage-notification.js',
+              // 'app/global/directives/weekdays.js',
+              // 'app/global/filters/filters.js'
           ]
       },
       {
@@ -577,8 +577,8 @@
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js',
-              'app/global/filters/filters.js'
+              // 'app/autostart-template/autostart-template.js',
+              // 'app/global/filters/filters.js'
           ]
       },
       {
@@ -593,8 +593,8 @@
               }
           },
           dependencies: [
-              'app/autostart-template/autostart-template.js',
-              'app/global/filters/filters.js'
+              // 'app/autostart-template/autostart-template.js',
+              // 'app/global/filters/filters.js'
           ]
       },
     {
@@ -609,7 +609,7 @@
             }
         },
         dependencies: [
-            'app/simulator/manage-simulator.js'
+            // 'app/simulator/manage-simulator.js'
         ]
     },
     {
@@ -624,7 +624,7 @@
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js'
+            // 'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     },
     {
@@ -639,7 +639,7 @@
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js'
+            // 'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     },
     {
@@ -654,7 +654,7 @@
             }
         },
         dependencies: [
-            'app/manage-corrective-actions/manage-corrective-actions.js'
+            // 'app/manage-corrective-actions/manage-corrective-actions.js'
         ]
     }    
 ]);

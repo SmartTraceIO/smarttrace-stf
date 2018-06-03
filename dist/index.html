@@ -16,24 +16,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <![endif]-->
 
-    <!--script>
-        var version = 0;
-        var v = (new Date()).getTime();
-        var xobj = new XMLHttpRequest();
-        if (xobj.overrideMimeType) {
-            xobj.overrideMimeType("application/json");
-        }
-        xobj.open('GET', 'app/config/version.json?v='+v, true);
-        xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                var jsonVer = JSON.parse(xobj.responseText);
-                if (jsonVer) {
-                    version = jsonVer.version;
-                }
-            }
-        };
-        xobj.send(null);
-    </script-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.css" rel="stylesheet" type="text/css" />
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet" type="text/css">
@@ -49,7 +31,7 @@
     <link href="theme/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" />
 
     <!--CSS files-->
-    <link href="vendor-1.0.0.css" rel="stylesheet" type="text/css">
+    <link href="vendor-1.0.4.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="favicon.png" />
 </head>
 
@@ -308,25 +290,15 @@
     </div>
 
     <!--JS files-->
-    <script src="vendor-1.0.0.js"></script>
-    <script src="angular.bundle-1.0.0.js"></script>
-    <script src="templates-1.0.0.js"></script>
-    <script src="smarttrace-stf-1.0.0.js"></script>
+    <script src="vendor-1.0.4.js"></script>
+    <script src="angular.bundle-1.0.4.js"></script>
+    <script src="templates-1.0.4.js"></script>
+    <script src="smarttrace-stf-1.0.4.js"></script>
 
     <script src="https://use.edgefonts.net/source-code-pro.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.16.1/select.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC061Eu8i3E8_CXtZK_-ceh8YnYXs2Nj2s&libraries=places,geometry"></script>
-    <!--<script src="app/app.js?version=3.2"></script>-->
-    <!--<script src="app/config/appConfig.js?version=3.3"></script>-->
-    <!--<script src="app/config/routeConfig.js?version=3.6"></script>-->
-    <!--<script src="app/global/services/rootSvc.js?version=3.2"></script>-->
-    <!--<script src="app/global/services/webSvc.js?version=3.2"></script>-->
-    <!--<script src="app/global/services/authSvc.js?version=3.3"></script>-->
-    <!--<script src="app/global/services/localDbSvc.js?version=3.2"></script>-->
-    <!--<script src="app/base-controller.js?version=23"></script>-->
-    <!--<script src="Scripts/tipsy/jquery.tipsy.js"></script>-->
-    <!--<script src="app/reload-controller.js?v=23"></script>-->
     <script>
         $("#setup").on("click", function () {
             if ($("#setup").hasClass("open") || $("#setup span.arrow").hasClass("open")) {
