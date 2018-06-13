@@ -102,12 +102,12 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="!vm.AdvanceSearch">
+    <!--div class="row" ng-show="!vm.AdvanceSearch">
         <div class="col-sm-12 text-center">
             <button class="btn green" type="button" ng-click="vm.SearchBasic()"><i class="fa fa-search"></i>&nbsp;Search</button>
             <button class="btn default" type="button" ng-click="vm.ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
         </div>
-    </div>
+    </div-->
     <div ng-if="vm.AdvanceSearch">
         <div class="row" style="margin-bottom: 10px">
             <div class="col-sm-3">
@@ -196,22 +196,47 @@
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <label style="margin-bottom: 10px; margin-right: 50px;">
-                    <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipments">
-                    <span>Include Tracker Shipments</span>
-                </label>
 
-                <label style="margin-bottom: 10px; margin-right: 50px;">
-                    <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipments">
-                    <span>Include Tracker Shipments</span>
-                </label>
+                <span>
+                    <label style="margin-bottom: 10px; margin-right: 50px;">
+                        <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipments">
+                        <span>Include Tracker Shipments</span>
+                    </label>
+                    <i uib-tooltip="Include Tracker Shipments."
+                       tooltip-placement="top-left"
+                       class="fa fa-info-circle"></i>
+                </span>
+
+                <span>
+                    <label style="margin-bottom: 10px; margin-right: 50px;">
+                        <input type="checkbox" ng-model="vm.ViewShipment.excludePriorShipments">
+                        <span>Include Beacon Shipments</span>
+                    </label>
+                    <i uib-tooltip="Include Tracker Shipments."
+                       tooltip-placement="top-left"
+                       class="fa fa-info-circle"></i>
+                </span>
+
+                <div class="col-sm-3">
+                    <label>Status</label>
+                    <select class="form-control input-sm" ng-model="vm.ViewShipment.status">
+                        <option value="">-- Please Select --</option>
+                        <!--<option value="AutoStart">AutoStart</option>-->
+                        <option value="Default">Default</option>
+                        <option value="Arrived">Arrived</option>
+                        <option value="Ended">Ended</option>
+                    </select>
+                </div>
+
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <button class="btn green" type="button" ng-click="vm.SearchAdvance()"><i class="fa fa-search"></i>&nbsp;Search</button>
-                <button class="btn default" type="button" ng-click="vm.ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
-            </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <button class="btn green" type="button" ng-click="vm.SearchAdvance()"><i class="fa fa-search"></i>&nbsp;Search</button>
+            <button class="btn default" type="button" ng-click="vm.ResetSearchCriteria()"><i class="fa fa-times"></i>&nbsp;Reset</button>
         </div>
     </div>
 </div>
