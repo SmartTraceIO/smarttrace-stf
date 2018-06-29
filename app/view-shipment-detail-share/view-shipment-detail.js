@@ -1,7 +1,8 @@
 ﻿appCtrls.controller('ViewShipmentDetailShareCtrl', ViewShipmentDetailShareCtrl);
 
-function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
+function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $stateParams, $uibModal, $state, $q, $log,
               $filter, $sce, $rootScope, $timeout, $window, $location, $interval, $controller, NgMap, Api, localStorageService) {
+
     rootSvc.SetPageTitle('View Shipment Detail');
     rootSvc.SetActiveMenu('View Shipment');
     rootSvc.SetPageHeader("View Shipment Detail");
@@ -17,6 +18,8 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
         this.location = $location;
         $controller('BaseCtrl', {VM:this});
     }
+
+
 
     var tempUnits = localDbSvc.getDegreeUnits();
     if (tempUnits == 'Celsius') {
@@ -63,6 +66,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     //------CHART SERIES DATA  ------
     var chartSeries = [];
     var subSeries = [];
+    var humidityData = [];
     var alertData = [];
     var lightPlotBand = [];
     var noteData = [];
@@ -1161,12 +1165,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                     navigator: {
                         enabled: true
                     },
-                    // yAxis: {
-                    //  title: {
-                    //      align: 'left',
-                    //      text: "Temperature <sup>o</sup>C"
-                    //  }
-                    // },
                     tooltip: {
                         style: {
                             padding: '0px',
@@ -1228,7 +1226,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             }
                         }
                     },
-                    yAxis:{
+                    yAxis:[{
                         labelAlign: 'left',
                         opposite: false,
                         gridLineColor: '#CCC',
@@ -1256,7 +1254,38 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                             to: -18,
                             color: 'rgba(0, 0, 255, 0.2)',
                         }]
-                    },
+                    }, {
+                        labelAlign: 'right',
+                        opposite: true,
+                        // gridLineColor: '#14da00',
+                        // lineColor:"#16cb00",
+                        // tickColor:"#16cb00",
+                        lineWidth:2,
+                        tickWidth: 1,
+                        title: {
+                            align: 'middle',
+                            offset: 40,
+                            text: 'Humidity %',
+                            y: -10
+                        },
+                        labels:{
+                            align:'right',
+                            x:-10
+                        },
+                        // tickInterval: tickInterval,
+                        // plotBands: [{
+                        //     // from: info.alertProfile ? info.alertProfile.lowerTemperatureLimit : 0, //0
+                        //     from: 15,
+                        //     // to: info.alertProfile ? info.alertProfile.upperTemperatureLimit : 5, //5,
+                        //     to: 20,
+                        //     // color: 'rgba(0, 255, 0, 0.2)',
+                        //     color: 'rgba(0, 255, 0, 0.2)',
+                        // }, {
+                        //     from: -25,
+                        //     to: -18,
+                        //     color: 'rgba(0, 0, 255, 0.2)',
+                        // }]
+                    }],
                     xAxis:{
                         type: 'datetime',
                         labels: {
@@ -1335,7 +1364,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             marker: {
                 symbol: 'url(theme/img/dot.png)'
             },
-            //color: $scope.trackers[$scope.MI].siblingColor,
             color: $scope.trackers[$scope.MI].deviceColor,
             lineWidth: 3,
             data: subSeries[$scope.MI],
@@ -1390,7 +1418,6 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             if(i == $scope.MI || !$scope.trackers[i].loaded) continue;
             chartSeries.push({
                 name: "Tracker " + $scope.trackers[i].deviceSN + "(" + $scope.trackers[i].tripCount + ")",
-                //color: $scope.trackers[i].siblingColor,
                 color: $scope.trackers[i].deviceColor,
                 lineWidth: 1,
                 data: subSeries[i],
@@ -1403,7 +1430,7 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
             enableMouseTracking: false,
             color: gapColor
         });
-        console.log(chartSeries);
+        //console.log(chartSeries);
 
         for(i = 0; i < alertData.length; i++){
             chartSeries.push({
@@ -1445,7 +1472,21 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
                 textAlign: 'center',
             },
             data:noteData
-        })
+        });
+
+        console.log('Lodash', _.add(4, 8));
+
+        chartSeries.push({
+            name: 'Humidity',
+            type: 'spline',
+            color: $scope.trackers[$scope.MI].deviceColor,
+            yAxis: 1,
+            data: humidityData[$scope.MI],
+            dashStyle: 'shortdot',
+            tooltip: {
+                valueSuffix: '%'
+            }
+        });
     }
     function prepareNoteChartSeries() {
         noteData.length = 0; //reset noteData
@@ -1624,6 +1665,20 @@ function ViewShipmentDetailShareCtrl($scope, rootSvc, webSvc, localDbSvc, $state
     }
 
     function prepareMainHighchartSeries(){
+        humidityData.length = 0;
+        humidityData = _.map($scope.trackers, function(tracker){
+            if (!tracker.loaded) {
+                return [];
+            }
+            var locations1 = tracker.locations;
+            return _.map(locations1, function (loc) {
+                return {
+                    x: parseDate(loc.timeISO),
+                    y: loc.humidity
+                }
+            });
+        });
+
         subSeries.length = 0;
         //calculate chart arrange and cut down the others
         var startTime = parseDate($scope.trackers[$scope.MI].locations[0].timeISO);

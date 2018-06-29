@@ -1,0 +1,203 @@
+<table class="table table-bordered table-striped">
+    <tr>
+        <th ng-click="vm.Sorting('deviceSN')">
+                                    <span class="pull-left">
+                                        <div>Beacon Shipment</div>
+                                        <div>Tracker Shipment</div>
+                                        <i uib-tooltip="Click to view the temperature chart for this shipment.
+                                         The ShipmentNumber consists of TrackerNumber and TripCount."
+                                           tooltip-placement="top-left"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+
+        <th ng-click="vm.Sorting('deviceSN')">
+                                    <span class="pull-left">
+                                        <div>Nearest Tracker during trip</div>
+                                        <i uib-tooltip="Click to view the temperature chart for this shipment.
+                                         The ShipmentNumber consists of TrackerNumber and TripCount."
+                                           tooltip-placement="top-left"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='deviceSN'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+
+        <th ng-click="vm.Sorting('shipmentDescription')">
+                                    <span class="pull-left">Description
+                                        <i uib-tooltip="The default value of ShipmentDescription includes Autostart Template Description and Shipment Date. Shipment Description can be modified in the chart page."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shipmentDescription'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('shippedFrom')">
+                                    <span class="pull-left">Shipped From
+                                        <i uib-tooltip="Shipment From is detected when the tracker is switched on. It can be modified in the chart page."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shippedFrom'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('shipmentDate')">
+                                    <span class="pull-left">Shipment Date
+                                        <i uib-tooltip=" The default value of Shipment Date is the time the tracker is switched on. Shipment Date can be modified in the chart page."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shipmentDate'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('shippedTo')">
+                                    <span class="pull-left">Shipped To
+                                        <i uib-tooltip=" Shipment To is detected when the tracker reaches a destination listed in the Autostart Template. Shipment To can be modified in the chart page."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='shippedTo'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('actualArrivalDate')">
+                                    <span class="pull-left">Arrival Date
+                                        <i uib-tooltip="Arrival Date is the time the system detects arrival at a destination listed in the Autostart Template. Arrival Date can be modified in the chart page."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='actualArrivalDate'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('status')">
+                                    <span class="pull-left">Status
+                                        <i uib-tooltip="Shipment Status can be either Default (an active shipment), Arrived (when arrival is detected) or Ended (when shipment ends but no arrival is detected)."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='status'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='status'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <!--th ng-click="vm.Sorting('siblingCount')">
+                                    <span class="pull-left">Siblings
+                                        <i uib-tooltip="Siblings are the number of other trackers that appear to be travelling on the same vehicle"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='siblingCount'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th-->
+        <th ng-click="vm.Sorting('lastReadingTimeISO')">
+                                    <span class="pull-left">Last Reading
+                                        <i uib-tooltip="The time of the last reading for this tracker."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='lastReadingTimeISO'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('lastReadingTemperature')">
+                                    <span class="pull-left">Temp.
+                                        <i uib-tooltip="The Temperature on this last reading"
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='lastReadingTemperature'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+        <th ng-click="vm.Sorting('alertSummary')">
+                                    <span class="pull-left">Alerts
+                                        <i uib-tooltip=" Alerts that have fired during this shipment."
+                                           tooltip-append-to-body="true"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top-right"
+                                           class="fa fa-info-circle"></i>
+                                    </span>
+            <span class="pull-right" style="position:relative;">
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='asc' && vm.ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-asc" style="position:absolute"></i></a>
+                                        <a ng-class="{'active-sort':vm.ViewShipment.so=='desc' && vm.ViewShipment.sc=='alertSummary'}"><i class="fa fa-sort-desc"></i></a>
+                                    </span>
+        </th>
+    </tr>
+    <tr ng-repeat="shipment in vm.ShipmentList">
+        <td class="text-left">
+            <m-shipment shipment="shipment"></m-shipment>
+        </td>
+
+        <td class="text-left">
+            <m-shipment shipment="shipment"></m-shipment>
+        </td>
+
+        <td class="text-left">
+            <span>{{shipment.shipmentDescription}}</span>
+            <span ng-show="shipment.palletId!=null">(PalletID={{shipment.palletId}})</span>
+            <span ng-show="shipment.assetNum!=null">(AssetNum={{shipment.assetNum}})</span>
+        </td>
+        <td class="text-left">{{shipment.shippedFrom}}</td>
+        <td class="text-left">{{shipment.shipmentDate}}</td>
+        <td class="text-left">{{shipment.shippedTo}}</td>
+        <td class="text-left" ng-if="shipment.actualArrivalDate==null"></td>
+        <td class="text-left" ng-if="shipment.actualArrivalDate!=null">{{shipment.actualArrivalDate}}</td>
+        <td class="text-left">{{shipment.status}}</td>
+
+        <!--<td class="text-left" ng-if="shipment.siblingCount!=0">{{shipment.siblingCount}}</td>-->
+        <!--<td class="text-left" ng-if="shipment.siblingCount==0"></td>-->
+
+        <td class="text-left">{{shipment.lastReadingTime}}</td>
+        <td class="text-left">{{shipment.lastReadingTemperature | temperature}}</td>
+        <td class="text-left">
+            <!--<div>-->
+                <!--<img ng-src="theme/img/alertLightOn.png" ng-if="shipment.alertSummary.LightOn" />-->
+                <!--<img ng-src="theme/img/alertLightOff.png" ng-if="shipment.alertSummary.LightOff" />-->
+                <!--<img ng-src="theme/img/alertCold.png" ng-if="shipment.alertSummary.Cold" />-->
+                <!--<img ng-src="theme/img/alertHot.png" ng-if="shipment.alertSummary.Hot" />-->
+                <!--<img ng-src="theme/img/alertCriticalCold.png" ng-if="shipment.alertSummary.CriticalCold" />-->
+                <!--<img ng-src="theme/img/alertCriticalHot.png" ng-if="shipment.alertSummary.CriticalHot" />-->
+                <!--<img ng-src="theme/img/alertBattery.png" ng-if="shipment.alertSummary.Battery" />-->
+                <!--<img ng-src="theme/img/alertShock.png" ng-if="shipment.alertSummary.MovementStart" />-->
+            <!--</div>-->
+            <m-alert alert="shipment.alertSummary"></m-alert>
+        </td>
+    </tr>
+</table>

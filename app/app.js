@@ -1,5 +1,5 @@
-﻿var lodash = angular.module('lodash', []);
-lodash.factory('_', ['$window', function ($window) {
+﻿angular.module('lodash', [])
+    .factory('_', ['$window', function ($window) {
     return $window._;
 }]);
 
@@ -10,6 +10,15 @@ var appProviders = angular.module('appProviders', []);
 var appValues = angular.module('appValues', []);
 var appConstants = angular.module('appConstants', []);
 var appFilters = angular.module('appFilters', []);
+
+// appSvcs.factory("_", ["$window", function ($window) {
+//     if (!$window._) {
+//         return null;
+//     }
+//     return $window._;
+// }]);
+
+
 var app = angular.module("app",
     [
         'lodash',

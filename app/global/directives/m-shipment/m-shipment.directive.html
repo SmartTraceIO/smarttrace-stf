@@ -1,0 +1,19 @@
+<table>
+    <tr>
+        <td width="20px">
+            <div ng-show="shipment.status == 'Ended'" ng-style="{'background-color':shipment.color}" style="border:1px solid #5e5e5e; width:16px; height: 16px; cursor: pointer; position:relative;">
+                <span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 3px;;">&times;</span>
+            </div>
+            <div ng-show="shipment.status == 'Arrived'" ng-style="{'background-color':shipment.color}" style="border:1px solid #5e5e5e; width:16px; height: 16px; cursor: pointer; position:relative;">
+                <span style="color: #ffffff; font-size: 15px; font-weight: 600; position: absolute; top: -4px; left: 2px;;">&check;</span>
+            </div>
+            <div ng-show="shipment.status != 'Ended' && shipment.status != 'Arrived'" ng-style="{'background-color':shipment.color}" style="border:1px solid #5e5e5e; width:16px; height: 16px; cursor: pointer; position:relative;">
+            </div>
+        </td>
+        <td>
+            <a ng-href="#/view-shipment-detail?vsId={{shipment.shipmentId}}&sn={{shipment.deviceSN}}&trip={{shipment.tripCount}}">
+                <u>{{shipment.deviceSN}} ({{shipment.tripCount}})</u>
+            </a>
+        </td>
+    </tr>
+</table>
