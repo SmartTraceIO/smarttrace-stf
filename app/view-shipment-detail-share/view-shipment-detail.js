@@ -19,6 +19,7 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
         $controller('BaseCtrl', {VM:this});
     }
 
+    var chart1 = {};
 
 
     var tempUnits = localDbSvc.getDegreeUnits();
@@ -43,6 +44,7 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
         $scope.downloadPdfUrl = Api.url + 'getShipmentReport/' + localDbSvc.getToken() + "?sn="+$scope.sn + "&trip="+$scope.trip;
     }
 
+    $scope.showHumidity = true;
 
 
     var plotLines = [];
@@ -301,7 +303,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
 
         var color = $scope.trackers[index].deviceColor;
         color = colourNameToHex(color);
-        console.log("Color", color);
         var arrowIcon = {
             path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
             scale: 2,
@@ -771,14 +772,10 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
     // the actual callback for a double-click event
     var ondbclick = function(e, point) {
         if (!point.noteNum) {
-            //var point = point;
-            //var chart1 = document.getElementById("chart1");
             var modalInstance = $uibModal.open({
                 templateUrl: 'app/view-shipment-detail-share/create-note.html',
                 controller: 'CreateNoteCtrl',
                 backdrop: false,
-                //size: 'sm',
-                //appendTo: chart1,
                 resolve: {
                     point: function () {
                         return point;
@@ -879,7 +876,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
         $scope.LocationListTo = [];
         $scope.LocationListInterim = [];
 
-        console.log('start load tracker data');
         var params = null;
         if ($scope.ShipmentId) {
             params = {
@@ -896,11 +892,9 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
             };
         }
 
-        //var groupList = [];
-        //var deviceSnListSameGroup = [];
         var info = null;
         webSvc.getSingleShipmentShare(params).success(function(graphData) {
-            console.log("SINGLE-SHIPMENT", graphData);
+            //console.log("SINGLE-SHIPMENT", graphData);
             if(graphData.status.code !=0){
                 toastr.error(graphData.status.message, "Error");
                 return;
@@ -1091,8 +1085,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                 promiseSibling.push(p);
             });
             $q.all(promiseSibling).then(function() {
-                //update color of tracker here
-                //var promiseTrackers = [];
                 angular.forEach($scope.trackers, function(tracker, k) {
                     $scope.trackers[k].index = k;
                     //-- update deviceSN
@@ -1127,12 +1119,7 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
             //google map data
             $scope.firstPoint = locations[0];
             $scope.currentPoint.loc = locations[0];
-            //$scope.currentPoint.iconUrl = "theme/img/edot.png";
 
-            //$scope.changeActiveTracker($scope.MI);
-
-
-            // console.log($scope.trackerPath);
             $scope.chartConfig = {
                 redraw: false,
                 options:{
@@ -1175,7 +1162,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                         useHTML: true,
                         hideDelay: 1000,
                         formatter: function () {
-                            //console.log("Tooltip", this);
                             if (this.points) {
                                 var index, length = subSeries[$scope.MI].length;
 
@@ -1190,7 +1176,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
 
                                 var color = this.points[0].series.color;
                                 msg = $scope.trackerMsg[index];
-
                                 var message = "";
                                 for(var j = 0; (j < msg.length); j ++){
                                     //if this message is for alert show title
@@ -1257,9 +1242,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                     }, {
                         labelAlign: 'right',
                         opposite: true,
-                        // gridLineColor: '#14da00',
-                        // lineColor:"#16cb00",
-                        // tickColor:"#16cb00",
                         lineWidth:2,
                         tickWidth: 1,
                         title: {
@@ -1272,19 +1254,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                             align:'right',
                             x:-10
                         },
-                        // tickInterval: tickInterval,
-                        // plotBands: [{
-                        //     // from: info.alertProfile ? info.alertProfile.lowerTemperatureLimit : 0, //0
-                        //     from: 15,
-                        //     // to: info.alertProfile ? info.alertProfile.upperTemperatureLimit : 5, //5,
-                        //     to: 20,
-                        //     // color: 'rgba(0, 255, 0, 0.2)',
-                        //     color: 'rgba(0, 255, 0, 0.2)',
-                        // }, {
-                        //     from: -25,
-                        //     to: -18,
-                        //     color: 'rgba(0, 0, 255, 0.2)',
-                        // }]
                     }],
                     xAxis:{
                         type: 'datetime',
@@ -1312,9 +1281,8 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                 series: chartSeries,
                 useHighStocks: true,
                 func : function(chart) {
-                    //#--
-                    //var hChart = $("#chart-print").highcharts();
-                    //hChart.
+                    chart1 = chart;
+
                     if (!$scope.loaded) {
                         $scope.loaded = true;
                         if (window.matchMedia) {
@@ -1474,8 +1442,6 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
             data:noteData
         });
 
-        console.log('Lodash', _.add(4, 8));
-
         chartSeries.push({
             name: 'Humidity',
             type: 'spline',
@@ -1485,17 +1451,36 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
             dashStyle: 'shortdot',
             tooltip: {
                 valueSuffix: '%'
-            }
+            },
+            // point: {
+            //     mouseOver: function () {
+            //         var idx, length = subSeries[$scope.MI].length;
+            //         for(idx = 0; idx < length; idx ++){
+            //             var x = subSeries[$scope.MI][idx].x;
+            //             if (idx == 0 && this.x < x) {
+            //                 break;
+            //             }
+            //             var x1 = (idx + 1 < subSeries[$scope.MI].length) ? subSeries[$scope.MI][idx+1].x : 0;
+            //             if ((x <= this.x) && (this.x < x1)) {
+            //                 break;
+            //             }
+            //             if (idx == length-1) {
+            //                 break
+            //             }
+            //         }
+            //         $scope.showAlerts(idx);
+            //     },
+            // }
         });
     }
     function prepareNoteChartSeries() {
         noteData.length = 0; //reset noteData
-        console.log('$scope.shipmentNotes',$scope.shipmentNotes);
+        //console.log('$scope.shipmentNotes',$scope.shipmentNotes);
         angular.forEach($scope.shipmentNotes, function(val, key) {
             $scope.shipmentNotes[key].x = parseDate(val.timeOnChart);
         });
         var sortedNotes = orderBy($scope.shipmentNotes, 'x');
-        $log.debug('SortedNotes', sortedNotes);
+        //$log.debug('SortedNotes', sortedNotes);
 
 
         noteData = sortedNotes.map(function(val) {
@@ -1838,6 +1823,15 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
 
         return curr_hour + ":" + curr_min + ampm + "<br/>" + curr_date + "." + m_names[curr_month] + "." + curr_year;
     }
+
+    $scope.showHideHumidity = function () {
+        var humIdx = chart1.series.length -1;
+        if ($scope.showHumidity) {
+            chart1.series[humIdx].show();
+        } else {
+            chart1.series[humIdx].hide();
+        }
+    };
 
     $scope.confirmShutdown = function(shipmentId) {
         if ($scope.trackerInfo.isLatestShipment) {

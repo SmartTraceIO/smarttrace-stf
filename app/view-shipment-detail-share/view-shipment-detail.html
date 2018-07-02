@@ -1134,8 +1134,12 @@
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-12 col-xs-12">
-                    <highchart id="chart1" config="chartConfig"
-                               style="min-width: 200px; height: 400px; margin: 0 auto">
+                    <div class="">
+                        <input type="checkbox" ng-click="showHideHumidity()" ng-model="showHumidity">
+                        <span>Show Humidity</span>
+                    </div>
+
+                    <highchart id="chart1" config="chartConfig" style="min-width: 200px; height: 400px; margin: 0 auto">
                     </highchart>
                     <div class="" style="margin-left: 50px; margin-right: 10px; margin-bottom: 10px; margin-top: 10px;;">
                         <ng-map id="shipment-detail-map"
