@@ -1162,53 +1162,58 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
                         useHTML: true,
                         hideDelay: 1000,
                         formatter: function () {
-                            if (this.points) {
-                                var index, length = subSeries[$scope.MI].length;
+                            if (this.points[0].series.name !== 'Humidity') {
+                                if (this.points) {
+                                    var index, length = subSeries[$scope.MI].length;
 
-                                for (index = 0; index < length; index++) {
-                                    var x = subSeries[$scope.MI][index].x;
-                                    if (x < this.x) {
+                                    for (index = 0; index < length; index++) {
+                                        var x = subSeries[$scope.MI][index].x;
+                                        if (x < this.x) {
 
-                                    } else {
-                                        break;
+                                        } else {
+                                            break;
+                                        }
                                     }
+
+                                    var color = this.points[0].series.color;
+                                    msg = $scope.trackerMsg[index];
+                                    var message = "";
+                                    for(var j = 0; (j < msg.length); j ++){
+                                        //if this message is for alert show title
+                                        if(msg[j].title.indexOf(".png") != -1){
+                                            message += "<div class='tt_title' style='background-color:" + color + "'>"
+                                                + msg[j].title + "<div style='clear:both;'></div></div>";
+                                        }
+                                        message += "<div class='tt_body'>";
+                                        for(var k = 0; k < msg[j].lines.length; k ++){
+                                            message += "<div>" + msg[j].lines[k] + "</div>";
+                                        }
+                                        message += "</div>";
+                                    }
+
+                                    var cont = "";
+                                    cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
+                                    cont += message;
+                                    cont += "</div>";
+                                    return cont;
+                                } else {
+                                    //--flags
+                                    var color = this.point.color;
+                                    var c = "";
+                                    c += "<div class='ttbox' style='z-index: 100; min-width: 300px; border-color:" + color + "'>";
+                                    c += "<div class='tt_title' style='background-color:" + color + "'>";
+                                    c += "Note " + this.point.noteNum + "</div>";
+                                    c += "<div style='clear:both;'></div>";
+                                    c += "<div class='tt_body wordwrap'>";
+                                    c += this.point.noteText;
+                                    c += "</div>";
+                                    c += "</div>";
+                                    return c;
                                 }
-
-                                var color = this.points[0].series.color;
-                                msg = $scope.trackerMsg[index];
-                                var message = "";
-                                for(var j = 0; (j < msg.length); j ++){
-                                    //if this message is for alert show title
-                                    if(msg[j].title.indexOf(".png") != -1){
-                                        message += "<div class='tt_title' style='background-color:" + color + "'>"
-                                            + msg[j].title + "<div style='clear:both;'></div></div>";
-                                    }
-                                    message += "<div class='tt_body'>";
-                                    for(var k = 0; k < msg[j].lines.length; k ++){
-                                        message += "<div>" + msg[j].lines[k] + "</div>";
-                                    }
-                                    message += "</div>";
-                                }
-
-                                var cont = "";
-                                cont += "<div class='ttbox' style='z-index: 100; border-color:" + color + "'>";
-                                cont += message;
-                                cont += "</div>";
-                                return cont;
                             } else {
-                                //--flags
-                                var color = this.point.color;
-                                var c = "";
-                                c += "<div class='ttbox' style='z-index: 100; min-width: 300px; border-color:" + color + "'>";
-                                c += "<div class='tt_title' style='background-color:" + color + "'>";
-                                c += "Note " + this.point.noteNum + "</div>";
-                                c += "<div style='clear:both;'></div>";
-                                c += "<div class='tt_body wordwrap'>";
-                                c += this.point.noteText;
-                                c += "</div>";
-                                c += "</div>";
-                                return c;
+                                return '';
                             }
+
                         }
                     },
                     yAxis:[{
@@ -1325,7 +1330,9 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
     }
 
     function refreshHighchartSeries(){
-        chartSeries.length=0;
+        chartSeries.length = 0;
+
+
         chartSeries.push({
             name: "Tracker " + $scope.trackers[$scope.MI].deviceSN + "(" + $scope.trackers[$scope.MI].tripCount + ")",
             id: 'dataseries',
@@ -1444,14 +1451,21 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
 
         chartSeries.push({
             name: 'Humidity',
+            id: 'humidity',
             type: 'spline',
             color: $scope.trackers[$scope.MI].deviceColor,
             yAxis: 1,
             data: humidityData[$scope.MI],
             dashStyle: 'shortdot',
+            enableMouseTracking: false,
             tooltip: {
-                valueSuffix: '%'
+                //valueSuffix: '%',
+                followPointer: false,
+                followTouchMove: false
             },
+            // options: {
+            //     showCheckbox: true
+            // }
             // point: {
             //     mouseOver: function () {
             //         var idx, length = subSeries[$scope.MI].length;
@@ -1825,11 +1839,18 @@ function ViewShipmentDetailShareCtrl(_, $scope, rootSvc, webSvc, localDbSvc, $st
     }
 
     $scope.showHideHumidity = function () {
-        var humIdx = chart1.series.length -1;
         if ($scope.showHumidity) {
-            chart1.series[humIdx].show();
+            _.forEach(chart1.series, function (x) {
+                if (x.name === 'Humidity') {
+                    x.show();
+                }
+            });
         } else {
-            chart1.series[humIdx].hide();
+            _.forEach(chart1.series, function (x) {
+                if (x.name === 'Humidity') {
+                    x.hide();
+                }
+            });
         }
     };
 
