@@ -2,7 +2,7 @@
   "name": "smarttrace-stf",
   "version": "1.0.7",
   "description": "SmartTrace AngularJS WebApp",
-  "main": "index.html",
+  "main": "app/index.html",
   "dependencies": {
     "angular": "~1.5.8",
     "angular-animate": "~1.5.8",
