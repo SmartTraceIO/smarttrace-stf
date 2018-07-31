@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         config: CONFIG,
+
         connect: {
             example: {
                 port: 1337,
@@ -191,7 +192,7 @@ module.exports = function(grunt) {
             },
             app: {
                 files: {
-                    'dist/index.html': 'index.html'
+                    'dist/index.html': 'app/index.html'
                 }
             }
         },
@@ -226,7 +227,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-connect');
     // Default task(s).
     grunt.registerTask('build', ['clean:dist', 'copy', 'uglify', 'concat', 'html2js', 'includeSource', 'cssmin']);
-    grunt.registerTask('default', ['build','connect:example']);
+    grunt.registerTask('default', ['build','connect:example', 'connect:watch']);
 
 
 
