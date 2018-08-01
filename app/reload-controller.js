@@ -5,34 +5,14 @@
     $scope.showRead = false;
 
     $scope.logout = function() {
-        var promise = localDbSvc.expireNow();
-        var v = (new Date()).getTime();
-        var promise2 = $http.get('app/config/version.json?v='+v, {noCancelOnRouteChange:true}).then(
-            function(response) {
-                $log.debug('Logout...', $rootScope.loadedNotification);
-                if ($rootScope.loadedNotification) {
-                    $rootScope.loadedNotification = false;
-                    $rootScope.readNotification = [];
-                    $rootScope.unreadNotification = [];
-                    $log.debug('Logout...', $rootScope.loadedNotification);
-                }
-                var nxt = response.data.version;
-                if (nxt != version) {
-                    $rootScope.isOut = true;
-                }
-            },
-            function(response) {
-                //$rootScope = $rootScope.$new(true);
-                $rootScope.isOut = true;
-            }
-        ).then(function() {
-            $rootScope.isSmartTraceAdmin = false;
-        });
-
-        $q.all([promise2]).then(function() {
-            $log.debug('start logout!');
-            $state.go('login');
-        });
+        if ($rootScope.loadedNotification) {
+            $rootScope.loadedNotification = false;
+            $rootScope.readNotification = [];
+            $rootScope.unreadNotification = [];
+            $log.debug('Logout...', $rootScope.loadedNotification);
+        }
+        $rootScope.isSmartTraceAdmin = false;
+        $state.go('login');
     };
 
     $scope.performanceReports = function($e) {

@@ -46,23 +46,7 @@
                 </div>
                 <div class="hor-menu hidden-sm hidden-xs" ng-init="init()">
                     <ul class="nav navbar-nav">
-                        <!--<li class="classic-menu-dropdown"  ng-class="{'active':ActiveMenu == 'New Shipment'}">
-                            <a href="#" ng-click="$event.preventDefault();" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                New Shipment<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="menu-li" ng-click="reload()"><a href="#/new-shipment">Manual Shipment</a></li>
-                                <li class="menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">AutoStart Shipment</a></li>
-                            </ul>
-                        </li>-->
-                        <!--<li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'New Shipment'}">-->
-                            <!--<a href="#/new-autostart-shipment">-->
-                                <!--New Shipment-->
-                                <!--<span class="selected"> </span>-->
-                            <!--</a>-->
-                        <!--</li>-->
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()"><a href="#/new-autostart-shipment">New Manual Shipment</a></li>
-                        <!--<li><a href="/" ng-click="performanceReports($event)">Performance Report</a></li>-->
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'View Shipment'}">
                             <a href="#/view-shipment">
                                 View Shipments
@@ -70,10 +54,7 @@
                             </a>
                         </li>
                         <li class="classic-menu-dropdown menu-li" ng-click="reload()" ng-class="{'active':ActiveMenu == 'Trackers'}">
-                            <a href="#/tracker">
-                                Trackers
-                                <span class="selected"> </span>
-                            </a>
+                            <a href="#/tracker">Trackers<span class="selected"></span></a>
                         </li>
                         <li><a href="/" ng-click="performanceReports($event)">Performance Report</a></li>
                         <li class="classic-menu-dropdown" ng-class="{'active':ActiveMenu == 'Setup'}">
@@ -85,15 +66,11 @@
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/alert">Alert Profiles</a></li>
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/notification">Notification Schedules</a></li>
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/location">Locations</a></li>
-                                <!--<li class="menu-li" ng-click="reload()"><a href="#/manage/shipment-template">Manual Shipment Templates</a></li>-->
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/autostart-template">AutoStart Templates</a></li>
-                                <!--<li class="menu-li" ng-click="reload()"><a href="#/manage/trackers-group">Tracker Groups</a></li>-->
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/user">Users</a></li>
                                 <li class="menu-li" ng-click="reload()"><a href="#/manage/correctiveactions">Corrective Action Lists</a></li>
                             </ul>
                         </li>
-
-                        <!--<li class="classic-menu-dropdown" ng-click="reload()" ng-hide="!isSmartTraceAdmin"><a href="#/manage/simulator">Manage Simulator</a></li>-->
                     </ul>
                 </div>
                 <a href="javascript:void(0);" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
@@ -155,9 +132,6 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <!--<a href="#/login">
-                                        <i class="icon-key"></i> Log Out
-                                    </a>-->
                                     <a href="#" ng-click="logout()">
                                         <i class="icon-key"></i> Log Out
                                     </a>
@@ -172,12 +146,6 @@
             <div class="page-sidebar navbar-collapse collapse">
                 <div class="page-sidebar-wrapper">
                     <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed">
-                        <!--<li class="nav-item">-->
-                            <!--<a href="#/new-autostart-shipment" class="nav-link">-->
-                                <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
-                                <!--<span class="title">New Shipment</span>-->
-                            <!--</a>-->
-                        <!--</li>-->
                         <li class="nav-item">
                             <a href="#/new-autostart-shipment" class="nav-link">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
@@ -224,21 +192,11 @@
                                         <span class="title">Locations</span>
                                     </a>
                                 </li>
-                                <!--<li class="nav-item  ">
-                                    <a href="#/manage/shipment-template" class="nav-link">
-                                        <span class="title">Shipment Templates</span>
-                                    </a>
-                                </li>-->
                                 <li class="nav-item  ">
                                     <a href="#/manage/autostart-template" class="nav-link">
                                         <span class="title">AutoStart Templates</span>
                                     </a>
                                 </li>
-                                <!--<li class="nav-item">
-                                    <a href="#/manage/trackers-group" class="nav-link">
-                                        <span class="title">Tracker Groups</span>
-                                    </a>
-                                </li>-->
                                 <li class="nav-item  ">
                                     <a href="#/manage/user" class="nav-link">
                                         <span class="title">Users</span>
@@ -251,12 +209,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <!--<li class="nav-item" ng-hide="!isSmartTraceAdmin">
-                            <a href="#/manage/simulator" class="nav-link">
-                                <span class="title">Manage Simulator</span>
-                            </a>
-                        </li>-->
-
                     </ul>
                 </div>
             </div>
@@ -268,9 +220,6 @@
                     <span style="color:#5BCA45;">
                         Time:&nbsp;
                     </span>
-                    <!--<span ng-cloak>
-                        {{RunningTime | date:'dd-MMM-yy h:mma' }} ({{RunningTimeZoneId}})
-                    </span>-->
                     <span>
                         {{RunningTime}} ({{RunningTimeZoneId}})
                     </span>
