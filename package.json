@@ -1,6 +1,6 @@
 {
   "name": "smarttrace-stf",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "SmartTrace AngularJS WebApp",
   "main": "index.html",
   "dependencies": {
