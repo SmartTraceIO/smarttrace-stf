@@ -655,7 +655,7 @@
                                 <tr ng-repeat="itm in trackerInfo.interimStops">
                                     <td valign="top">
                                         <div style="border-radius: 50% !important; text-align: center;
-                                         border: 1px solid black; font-weight: bold; width: 20px; height: 20px"">{{$index + 1}}</div>
+                                         border: 1px solid black; font-weight: bold; width: 20px; height: 20px">{{$index + 1}}</div>
                                     </td>
                                     <td>
                                         <div class="strong">{{itm.location.locationName}}</div>
@@ -712,6 +712,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="portlet box grey">
+                        <div class="portlet-title">
+                            <div class="caption uppercase">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <span>Trackers & Beacons on trip</span>
+                                            <i uib-tooltip="Trackers & Beacons on trip"
+                                               tooltip-append-to-body="true"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               class="fa fa-info-circle"></i>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="expand"> </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="portlet box grey">
                         <div class="portlet-title">
                             <div class="caption uppercase">
