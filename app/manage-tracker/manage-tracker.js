@@ -33,9 +33,9 @@
                             var t = temShipmentNumber.substr(0, idx1);
                             $scope.TrackerList[k].tripCount = parseInt(n, 10);
                         }
-                        if (!isNaN(v.sn)) {
-                            $scope.TrackerList[k].sn = parseInt(v.sn, 10);
-                        }
+                        // if (!isNaN(v.sn)) {
+                        //     //$scope.TrackerList[k].sn = parseInt(v.sn, 10);
+                        // }
                         if (!v.color) {
                             $scope.TrackerList[k].color = Color[0].name;
                         }
